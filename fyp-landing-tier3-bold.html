@@ -33,8 +33,8 @@
     line-height: 1.6;
     font-size: 16px;
   }
-  .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
-  .container-narrow { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 20px; box-sizing: border-box; }
+  .container-narrow { max-width: 760px; margin: 0 auto; padding: 0 20px; box-sizing: border-box; }
   .icon-inline { width: 16px; height: 16px; margin-right: 6px; vertical-align: -3px; display: inline-block; }
 
   /* Site Header */
@@ -57,6 +57,9 @@
     white-space: nowrap;
   }
   .site-header .nav-right strong { color: var(--terracotta); font-weight: 700; }
+  @media (max-width: 480px) {
+    .site-header .nav-right { display: none; }
+  }
 
   /* HERO */
   .hero {
@@ -99,7 +102,7 @@
   h1.hero-title {
     font-family: 'Fraunces', serif;
     font-weight: 500;
-    font-size: clamp(38px, 8vw, 96px);
+    font-size: clamp(34px, 9vw, 96px);
     line-height: 1;
     color: var(--ink);
     max-width: 900px;
@@ -120,58 +123,82 @@
   }
   .hero-sub strong { color: var(--ink); font-weight: 500; }
 
-  /* REGISTER FORM */
+  /* REGISTER FORM — mobile-first, stacks by default */
   .register {
     background: white;
     border-radius: 16px;
-    padding: 28px 28px 24px;
-    max-width: 520px;
+    padding: 22px 18px 20px;
+    max-width: 480px;
+    width: 100%;
     margin: 0 auto;
     box-shadow: 0 20px 50px rgba(42, 35, 32, 0.12);
+    box-sizing: border-box;
   }
-  .register label {
+  .register label.form-label {
     display: block;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--muted);
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     text-align: left;
   }
   .register-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
   }
+  .register-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .register-row > * { min-width: 0; width: 100%; box-sizing: border-box; }
   .register input[type="text"],
+  .register input[type="tel"],
   .register input[type="email"] {
-    grid-column: span 1;
-    min-width: 0;
     width: 100%;
-    padding: 14px 16px;
+    min-width: 0;
+    padding: 14px 14px;
     border: 1px solid var(--border);
     border-radius: 10px;
     font-family: inherit;
-    font-size: 15px;
+    font-size: 16px;
     color: var(--ink);
     background: var(--cream);
     transition: all 0.2s;
-  }
-  .register input[type="email"] { grid-column: span 2; }
-  .register-form button { grid-column: span 2; min-width: 0; max-width: none !important; }
-  @media (max-width: 480px) {
-    .register-form { grid-template-columns: 1fr; }
-    .register input[type="text"],
-    .register input[type="email"],
-    .register-form button { grid-column: span 1; }
-    .register { padding: 22px 20px 20px; }
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
   }
   .register input:focus {
     outline: none;
     border-color: var(--terracotta);
     background: white;
+  }
+  .sms-opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 4px;
+    padding: 2px 2px 0;
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.4;
+    text-align: left;
+  }
+  .sms-opt input[type="checkbox"] {
+    accent-color: var(--terracotta);
+    width: 16px; height: 16px;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  @media (min-width: 560px) {
+    .register { padding: 26px 24px 22px; }
+    .register-row { flex-direction: row; }
+    .register-row > * { flex: 1 1 0; }
   }
   .btn {
     display: inline-flex;
@@ -602,12 +629,19 @@
 
     <!-- REGISTRATION FORM -->
     <div class="register">
-      <label>Register free — takes 10 seconds</label>
+      <label class="form-label">Register free — takes 10 seconds</label>
       <form class="register-form" onsubmit="event.preventDefault();">
-        <input type="text" placeholder="First name" required />
-        <input type="text" placeholder="Last name" required />
-        <input type="email" placeholder="Your email address" required />
-        <button class="btn btn-primary" type="submit" style="grid-column: span 2;">Save My Seat — Free</button>
+        <div class="register-row">
+          <input type="text" name="fname" placeholder="First name" autocomplete="given-name" required />
+          <input type="text" name="lname" placeholder="Last name" autocomplete="family-name" required />
+        </div>
+        <input type="email" name="email" placeholder="Your email address" autocomplete="email" required />
+        <input type="tel" name="phone" placeholder="Mobile (optional)" autocomplete="tel" />
+        <label class="sms-opt">
+          <input type="checkbox" name="sms" checked />
+          <span>Text me reminders before each night starts. Reply STOP anytime.</span>
+        </label>
+        <button class="btn btn-primary" type="submit">Save My Seat — Free</button>
       </form>
     </div>
 
@@ -714,7 +748,7 @@
     </div>
     <div class="why-item">
       <h3>You're 25 or 55</h3>
-      <p>Half our last cohort was 40+. Whether you're starting or starting over — this is built for both.</p>
+      <p>Half our last gathering was 40+. Whether you're starting or starting over — this is built for both.</p>
     </div>
     <div class="why-item">
       <h3>You want to date with purpose</h3>
@@ -776,7 +810,7 @@
     </details>
     <details class="faq-item">
       <summary>Will you pitch something?</summary>
-      <p>Yes — on Night 4 we'll share School of Dating for anyone who wants to go deeper after the challenge. Zero pressure. The 4 nights stand alone.</p>
+      <p>Yes — on Night 3 we'll share School of Dating for anyone who wants to go deeper after the challenge. Zero pressure. The 4 nights stand alone.</p>
     </details>
     <details class="faq-item">
       <summary>I'm 40+ — is this for me?</summary>
@@ -792,12 +826,19 @@
     <p class="sub">Come meet them — or at least meet the version of you who's ready to.</p>
 
     <div class="register">
-      <label>Save your seat — free</label>
+      <label class="form-label">Save your seat — free</label>
       <form class="register-form" onsubmit="event.preventDefault();">
-        <input type="text" placeholder="First name" required />
-        <input type="text" placeholder="Last name" required />
-        <input type="email" placeholder="Your email address" required />
-        <button class="btn btn-primary" type="submit" style="grid-column: span 2;">Register Free — May 26</button>
+        <div class="register-row">
+          <input type="text" name="fname" placeholder="First name" autocomplete="given-name" required />
+          <input type="text" name="lname" placeholder="Last name" autocomplete="family-name" required />
+        </div>
+        <input type="email" name="email" placeholder="Your email address" autocomplete="email" required />
+        <input type="tel" name="phone" placeholder="Mobile (optional)" autocomplete="tel" />
+        <label class="sms-opt">
+          <input type="checkbox" name="sms" checked />
+          <span>Text me reminders before each night starts. Reply STOP anytime.</span>
+        </label>
+        <button class="btn btn-primary" type="submit">Register Free — May 26</button>
       </form>
     </div>
 
