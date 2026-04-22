@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FYP Landing — 3 Tier Compare</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0a0a0a;
+    color: white;
+    min-height: 100vh;
+  }
+  header {
+    padding: 24px;
+    border-bottom: 1px solid #222;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  h1 { font-size: 18px; letter-spacing: -0.01em; }
+  .toggles { display: flex; gap: 8px; }
+  .toggles button {
+    background: #1a1a1a;
+    color: white;
+    border: 1px solid #333;
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .toggles button.active {
+    background: #CC835C;
+    border-color: #CC835C;
+  }
+
+  .wrap {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    padding: 32px 24px 60px;
+    max-width: 1600px;
+    margin: 0 auto;
+    transition: all 0.3s;
+  }
+  .wrap.desktop {
+    grid-template-columns: 1fr;
+  }
+
+  .col {
+    background: #111;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #222;
+  }
+  .col-head {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid #222;
+  }
+  .col-head .tier {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #CC835C;
+    margin-bottom: 6px;
+  }
+  .col-head h2 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .col-head p {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.4;
+  }
+  .col-head a {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 11px;
+    color: #CC835C;
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .col-frame {
+    background: #000;
+    padding: 14px;
+    display: flex;
+    justify-content: center;
+  }
+  .frame-device {
+    border-radius: 24px;
+    background: #000;
+    padding: 8px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  }
+  .frame-device iframe {
+    border: none;
+    border-radius: 16px;
+    display: block;
+    background: white;
+  }
+  .wrap.mobile .frame-device iframe { width: 360px; height: 780px; }
+  .wrap.desktop .frame-device iframe { width: 90vw; max-width: 1280px; height: 80vh; }
+
+  @media (max-width: 1200px) {
+    .wrap.mobile { grid-template-columns: 1fr; justify-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>FYP Landing Page — 3 Mockup Comparison</h1>
+  <div class="toggles">
+    <button id="m-btn" class="active" onclick="setMode('mobile')">Mobile (priority)</button>
+    <button id="d-btn" onclick="setMode('desktop')">Desktop</button>
+  </div>
+</header>
+
+<div class="wrap mobile" id="wrap">
+
+  <div class="col">
+    <div class="col-head">
+      <div class="tier">Tier 1 · Refresh</div>
+      <h2>Same page, updated for May 2026</h2>
+      <p>Minimal risk. Drop-in replacement. Just dates, speakers, topics swapped. Zero surprises.</p>
+      <a href="fyp-landing-tier1-refresh.html" target="_blank">Open full page →</a>
+    </div>
+    <div class="col-frame">
+      <div class="frame-device"><iframe src="fyp-landing-tier1-refresh.html"></iframe></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="col-head">
+      <div class="tier">Tier 2 · Consultant Upgrade</div>
+      <h2>Same bones, upgraded execution</h2>
+      <p>What a good consultant delivers: same structure + flow, but elevated typography, warmer palette, better hierarchy, improved mobile.</p>
+      <a href="fyp-landing-tier2-upgrade.html" target="_blank">Open full page →</a>
+    </div>
+    <div class="col-frame">
+      <div class="frame-device"><iframe src="fyp-landing-tier2-upgrade.html"></iframe></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="col-head">
+      <div class="tier">Tier 3 · Full Reimagining</div>
+      <h2>"Your page was trash, watch this"</h2>
+      <p>Modern 2026 Christian funnel. New structure. Scale-forward hero, speakers-as-hero, Ark speed dating lever, hosts moved to their own section.</p>
+      <a href="fyp-landing-tier3-bold.html" target="_blank">Open full page →</a>
+    </div>
+    <div class="col-frame">
+      <div class="frame-device"><iframe src="fyp-landing-tier3-bold.html"></iframe></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function setMode(mode) {
+  const w = document.getElementById('wrap');
+  w.className = 'wrap ' + mode;
+  document.getElementById('m-btn').classList.toggle('active', mode === 'mobile');
+  document.getElementById('d-btn').classList.toggle('active', mode === 'desktop');
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+{
+  "vip_fall25": {
+    "unique_buyers": 2016,
+    "transactions": 2022,
+    "date_range": [
+      "2025-10-20",
+      "2026-01-21"
+    ],
+    "revenue_usd": 10110.0,
+    "by_month": {
+      "2026-01": 1,
+      "2025-12": 1,
+      "2025-11": 399,
+      "2025-10": 1621
+    }
+  },
+  "sod": {
+    "lifetime_unique_buyers": 390,
+    "buyers_nov25_feb26": 193,
+    "buyers_since_2025_10_20": 212
+  },
+  "vip_to_sod": {
+    "overlap_window": 96,
+    "overlap_post_vip": 103,
+    "overlap_lifetime": 124,
+    "vip_conv_rate_window_pct": 4.761904761904762,
+    "vip_conv_rate_post_pct": 5.109126984126984,
+    "non_vip_conv_rate_window_pct": 0.6383258752303238,
+    "non_vip_conv_rate_post_pct": 0.7172940247433536,
+    "multiplier_window": 7.459990181639665,
+    "multiplier_post": 7.122779234017766,
+    "vip_sod_revenue_post_usd": 75262.0
+  },
+  "bod": {
+    "lifetime_buyers": 216,
+    "buyers_before_nov25": 145,
+    "bod_sod_lifetime_overlap": 10,
+    "bod_before_to_sod_window": 5,
+    "bod_before_to_sod_post": 5,
+    "vip_bod_overlap": 29
+  },
+  "assumptions": {
+    "total_fall2025_challenge_reg": 17212,
+    "SOD_product_ids": [
+      "13",
+      "15",
+      "17",
+      "19",
+      "25",
+      "27",
+      "29",
+      "31",
+      "45",
+      "5"
+    ],
+    "SOD_lookup_includes_name_match": true
+  }
+}

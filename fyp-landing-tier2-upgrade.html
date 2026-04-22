@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Find Your Person Challenge — May 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* TIER 2 — CONSULTANT UPGRADE. Same structure as current page, but better typography, hierarchy, spacing, warmth. */
+  :root {
+    --bg: #141211;
+    --bg-2: #1F1C1A;
+    --bg-warm: #251F1B;
+    --text: #F5EFE8;
+    --muted: #9B9591;
+    --muted-2: #C7BEB6;
+    --accent: #CC835C;
+    --accent-light: #E09B6E;
+    --blush: #FFDDDD;
+    --border: #2F2B28;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    font-size: 16px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  .container-narrow { max-width: 780px; margin: 0 auto; padding: 0 24px; }
+  .serif { font-family: 'Fraunces', serif; font-weight: 500; }
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    font-weight: 700;
+    padding: 18px 44px;
+    border-radius: 100px;
+    text-decoration: none;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: all 0.2s;
+    box-shadow: 0 10px 28px rgba(204, 131, 92, 0.32);
+  }
+  .btn:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+  }
+  .section-label {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  h2.section-heading {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 52px);
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+  }
+  h2.section-heading em { color: var(--accent); font-style: italic; }
+
+  /* Header */
+  header.site {
+    padding: 18px 28px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  header.site img { height: 36px; flex-shrink: 0; }
+  header.site .nav-cta {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  header.site .nav-cta strong { color: var(--accent); }
+  @media (max-width: 560px) {
+    header.site .nav-cta { font-size: 11px; }
+    header.site .nav-cta .label { display: none; }
+  }
+
+  /* HERO */
+  .hero {
+    padding: 90px 24px 70px;
+    background:
+      radial-gradient(ellipse at top left, rgba(204,131,92,0.14), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(255,221,221,0.08), transparent 50%),
+      var(--bg);
+    text-align: center;
+  }
+  .hero-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(204,131,92,0.12);
+    color: var(--accent);
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    border: 1px solid rgba(204,131,92,0.25);
+  }
+  h1.hero-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(48px, 7vw, 88px);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    margin-bottom: 20px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  h1.hero-title em { font-style: italic; color: var(--accent); font-weight: 400; }
+  .hero-sub {
+    font-size: 19px;
+    color: var(--muted-2);
+    max-width: 640px;
+    margin: 0 auto 36px;
+    line-height: 1.55;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    margin: 36px 0 12px;
+    flex-wrap: wrap;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .hero-meta b { color: var(--text); font-weight: 600; }
+  .hero-img {
+    width: 100%;
+    max-width: 920px;
+    margin: 56px auto 0;
+    aspect-ratio: 16/9;
+    background:
+      linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.3)),
+      url('https://images.unsplash.com/photo-1529634899341-0b4011fba2bd?w=1600&q=80') center/cover;
+    border-radius: 14px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+  }
+
+  /* SCALE CALLOUT */
+  .scale {
+    padding: 72px 24px;
+    background: var(--bg-warm);
+    text-align: center;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .scale-number {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(60px, 9vw, 120px);
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    margin-bottom: 10px;
+  }
+  .scale h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(24px, 3vw, 34px);
+    letter-spacing: -0.01em;
+    max-width: 760px;
+    margin: 0 auto;
+    line-height: 1.2;
+  }
+
+  /* SPEAKERS */
+  .speakers {
+    padding: 96px 24px;
+    background: var(--bg);
+  }
+  .section-head {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 56px;
+  }
+  .section-head p {
+    color: var(--muted-2);
+    font-size: 17px;
+    margin-top: 14px;
+  }
+  .speaker-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  .speaker {
+    padding: 32px;
+    background: var(--bg-2);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+  }
+  .speaker:hover {
+    transform: translateY(-4px);
+    border-color: rgba(204,131,92,0.4);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  }
+  .speaker-photo {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: linear-gradient(135deg, var(--bg-warm), var(--border));
+    border-radius: 10px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 48px;
+    color: var(--accent);
+  }
+  .speaker-photo.kait-jj { background: url('assets/kait-jj-couple.png') center/cover; }
+  .speaker-photo.kait-solo { background: url('assets/kait-solo.png') center/cover; }
+  .speaker-photo.dr-cloud { background: url('assets/dr-cloud.jpg') center/cover; }
+  .speaker-photo.annie { background: url('assets/annie-downs.jpg') center/cover; }
+
+  .speaker-night {
+    display: inline-block;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .speaker-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 26px;
+    letter-spacing: -0.01em;
+    margin-bottom: 10px;
+  }
+  .speaker-bio {
+    font-size: 14.5px;
+    color: var(--muted-2);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex: 1;
+  }
+  .speaker-topic {
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+  }
+  .speaker-topic-label {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .speaker-topic-text {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    line-height: 1.4;
+    color: var(--text);
+  }
+  @media (max-width: 720px) { .speaker-row { grid-template-columns: 1fr; } }
+
+  /* PROBLEM (upgraded) */
+  .problem {
+    padding: 96px 24px;
+    background: var(--bg-warm);
+  }
+  .problem-inner {
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  .problem h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 48px);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+  .problem h2 em { color: var(--accent); font-style: italic; }
+  .problem .intro {
+    color: var(--muted-2);
+    font-size: 18px;
+    margin-bottom: 32px;
+  }
+  .problem-list {
+    list-style: none;
+    padding: 0;
+  }
+  .problem-list li {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 18px;
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--text);
+    padding-left: 32px;
+    position: relative;
+  }
+  .problem-list li:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 30px;
+    width: 20px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  /* SOLUTION */
+  .solution {
+    padding: 96px 24px;
+    background: var(--bg);
+  }
+  .solution-inner { max-width: 920px; margin: 0 auto; text-align: center; }
+  .solution h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(38px, 5.5vw, 64px);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    max-width: 820px;
+    margin: 0 auto 20px;
+  }
+  .solution h2 em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 400;
+  }
+  .solution .why {
+    color: var(--muted-2);
+    font-size: 18px;
+    margin-bottom: 52px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+  }
+  .solution-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .solution-item {
+    padding: 26px 28px;
+    background: var(--bg-2);
+    border-radius: 12px;
+    border-left: 3px solid var(--accent);
+    text-align: left;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  @media (max-width: 720px) { .solution-grid { grid-template-columns: 1fr; } }
+  .solution-close {
+    margin-top: 52px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--muted-2);
+  }
+
+  /* TESTIMONIALS */
+  .testis {
+    padding: 96px 24px;
+    background: var(--bg-warm);
+  }
+  .testi-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+  .testi {
+    background: var(--bg);
+    padding: 32px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+  }
+  .testi-quote {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--text);
+    margin-bottom: 22px;
+    flex: 1;
+    font-style: italic;
+  }
+  .testi-quote::before { content: '"'; color: var(--accent); font-size: 28px; display: block; line-height: 0.5; margin-bottom: 8px; }
+  .testi-name {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  @media (max-width:820px) { .testi-row { grid-template-columns: 1fr; } }
+
+  /* NIGHTS */
+  .nights {
+    padding: 96px 24px;
+    background: var(--bg);
+  }
+  .nights-list {
+    max-width: 860px;
+    margin: 48px auto 0;
+  }
+  .night {
+    padding: 32px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 140px 1fr auto;
+    gap: 32px;
+    align-items: center;
+  }
+  .night:last-child { border-bottom: none; }
+  .night-num {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 34px;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    font-style: italic;
+  }
+  .night-topic {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .night-speaker {
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+  .night-date {
+    color: var(--muted-2);
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  @media (max-width:720px) {
+    .night { grid-template-columns: 1fr; gap: 10px; }
+    .night-num { font-size: 22px; }
+  }
+
+  /* ARK BONUS */
+  .ark {
+    padding: 96px 24px;
+    background:
+      linear-gradient(135deg, rgba(204,131,92,0.92) 0%, rgba(168,94,61,0.95) 100%),
+      url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80') center/cover;
+    color: white;
+    text-align: center;
+  }
+  .ark-inner { max-width: 720px; margin: 0 auto; }
+  .ark-badge {
+    display: inline-block;
+    background: var(--blush);
+    color: #8B4A2B;
+    padding: 8px 18px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+  }
+  .ark h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 48px);
+    line-height: 1.1;
+    margin-bottom: 18px;
+    letter-spacing: -0.02em;
+  }
+  .ark h2 em { font-style: italic; color: var(--blush); }
+  .ark p {
+    font-size: 17px;
+    color: rgba(255,255,255,0.92);
+    line-height: 1.6;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* ELIGIBILITY */
+  .elig {
+    padding: 96px 24px;
+    background: var(--bg-warm);
+  }
+  .elig-inner {
+    max-width: 980px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+  .elig-col {
+    padding: 36px;
+    background: var(--bg);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+  }
+  .elig-col.for { border-top: 4px solid var(--accent); }
+  .elig-col.not { border-top: 4px solid #555; }
+  .elig-col h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 24px;
+    letter-spacing: -0.01em;
+  }
+  .elig-col ul { list-style: none; padding: 0; }
+  .elig-col li {
+    padding: 14px 0 14px 34px;
+    position: relative;
+    font-size: 15.5px;
+    line-height: 1.5;
+    border-bottom: 1px solid var(--border);
+  }
+  .elig-col li:last-child { border-bottom: none; }
+  .elig-col.for li:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 20px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .elig-col.for li:after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 24px;
+    width: 8px;
+    height: 5px;
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: rotate(-45deg);
+  }
+  .elig-col.not li:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 20px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #555;
+  }
+  @media (max-width:720px) { .elig-inner { grid-template-columns: 1fr; } }
+
+  /* FINAL CTA */
+  .final {
+    padding: 120px 24px;
+    background:
+      linear-gradient(135deg, rgba(20,18,17,0.96), rgba(20,18,17,0.94)),
+      url('https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=1600&q=80') center/cover;
+    text-align: center;
+  }
+  .final h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(42px, 6vw, 80px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .final h2 em { font-style: italic; color: var(--accent); }
+  .final .sub {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--muted-2);
+    font-size: 20px;
+    margin-bottom: 40px;
+  }
+  .final-bullets {
+    list-style: none;
+    padding: 0;
+    max-width: 520px;
+    margin: 0 auto 44px;
+    text-align: left;
+  }
+  .final-bullets li {
+    padding: 12px 0 12px 32px;
+    position: relative;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .final-bullets li:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 18px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .final-bullets li:after {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: 21px;
+    width: 8px;
+    height: 4px;
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: rotate(-45deg);
+  }
+  .final .worth {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--muted);
+    margin-top: 28px;
+    font-size: 15px;
+  }
+
+  /* EMAIL CAPTURE */
+  .email-capture {
+    padding: 72px 24px;
+    background: var(--bg-warm);
+    text-align: center;
+  }
+  .email-capture h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 32px;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+  .email-capture p {
+    color: var(--muted-2);
+    margin-bottom: 28px;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 16px;
+  }
+  .email-capture form {
+    display: flex;
+    gap: 10px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  @media (max-width: 560px) {
+    .email-capture form { flex-direction: column; }
+    .email-capture .btn { width: 100%; }
+  }
+  .email-capture input {
+    flex: 1;
+    padding: 16px 18px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: white;
+    border-radius: 100px;
+    font-family: inherit;
+    font-size: 15px;
+  }
+  .email-capture input:focus { outline: none; border-color: var(--accent); }
+
+  /* FOOTER */
+  footer.site {
+    padding: 72px 24px 32px;
+    background: #000;
+    border-top: 1px solid var(--border);
+  }
+  .foot-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr;
+    gap: 48px;
+  }
+  .foot-col h4 {
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+  .foot-col a {
+    display: block;
+    color: var(--muted-2);
+    text-decoration: none;
+    padding: 8px 0;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+  .foot-col a:hover { color: white; }
+  .foot-bottom {
+    max-width: 1100px;
+    margin: 56px auto 0;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 12px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  @media (max-width:720px) { .foot-grid { grid-template-columns: 1fr; gap: 36px; } }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <img src="assets/hod-logo-white.png" alt="Heart of Dating">
+  <div class="nav-cta">Free Event · <strong>May 26–29</strong></div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container-narrow">
+    <span class="hero-kicker">4-Night Virtual Event · May 26–29 · 7 PM CT</span>
+    <h1 class="hero-title">The Find Your Person <em>Challenge.</em></h1>
+    <p class="hero-sub">A 4-night conference experience for Christian singles to break old dating patterns and prepare for the marriage you've been praying for.</p>
+    <a href="#register" class="btn">Register Free</a>
+    <div class="hero-meta">
+      <span><b>20,000+</b> expected</span>
+      <span><b>100%</b> free</span>
+      <span><b>Live</b> on Zoom</span>
+    </div>
+    <div class="hero-img"></div>
+  </div>
+</section>
+
+<!-- SCALE -->
+<section class="scale">
+  <div class="container">
+    <div class="scale-number">20,000+</div>
+    <h2>The biggest virtual gathering of Christian singles in the world.</h2>
+  </div>
+</section>
+
+<!-- SPEAKERS -->
+<section class="speakers">
+  <div class="section-head">
+    <span class="section-label">Meet Your Speakers</span>
+    <h2 class="section-heading">Four voices you'd pay to see <em>anywhere else.</em></h2>
+    <p>Four nights, zero filler. Each night built around one transformation.</p>
+  </div>
+
+  <div class="speaker-row">
+    <div class="speaker">
+      <div class="speaker-photo dr-cloud"></div>
+      <span class="speaker-night">Night 1 · May 26</span>
+      <div class="speaker-name">Dr. Henry Cloud</div>
+      <p class="speaker-bio">NYT bestselling author of <em>Boundaries</em>, clinical psychologist, leadership expert with 20M+ books sold. A rare chance to hear him speak on dating directly.</p>
+      <div class="speaker-topic">
+        <div class="speaker-topic-label">Teaching On</div>
+        <div class="speaker-topic-text">The Problem with Christian Dating</div>
+      </div>
+    </div>
+    <div class="speaker">
+      <div class="speaker-photo kait-jj"></div>
+      <span class="speaker-night">Night 2 · May 27</span>
+      <div class="speaker-name">Kait &amp; JJ Tomlin</div>
+      <p class="speaker-bio">Founders of Heart of Dating, hosts of the HOD Podcast (100M+ downloads). Married with two kids — living out what they teach.</p>
+      <div class="speaker-topic">
+        <div class="speaker-topic-label">Teaching On</div>
+        <div class="speaker-topic-text">From Ambiguous to Intentional Dating</div>
+      </div>
+    </div>
+    <div class="speaker">
+      <div class="speaker-photo annie"></div>
+      <span class="speaker-night">Night 3 · May 28</span>
+      <div class="speaker-name">Annie F. Downs</div>
+      <p class="speaker-bio">NYT bestselling author, podcaster, and creator of Single Purpose League. Over 1M books sold, 100M+ podcast downloads on That Sounds Fun.</p>
+      <div class="speaker-topic">
+        <div class="speaker-topic-label">Teaching On</div>
+        <div class="speaker-topic-text">When Your Love Story Isn't Going How You Planned</div>
+      </div>
+    </div>
+    <div class="speaker">
+      <div class="speaker-photo kait-solo"></div>
+      <span class="speaker-night">Night 4 · May 29</span>
+      <div class="speaker-name">Kait Tomlin</div>
+      <p class="speaker-bio">Author of <em>Thank You For Rejecting Me</em>. Kait closes out the challenge with the tools for a relationship built to last — not just butterflies.</p>
+      <div class="speaker-topic">
+        <div class="speaker-topic-label">Teaching On</div>
+        <div class="speaker-topic-text">How to Build a Relationship That Lasts</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="problem-inner">
+    <span class="section-label">If This Is You</span>
+    <h2>Still single — and lowkey wondering <em>what's wrong with you?</em></h2>
+    <p class="intro">You're not alone. Dating today feels like a minefield of:</p>
+    <ul class="problem-list">
+      <li>Talking stages that go nowhere</li>
+      <li>Unclear intentions, mixed signals, and spiritual confusion</li>
+      <li>Overthinking, over-functioning, wondering if you're "too much"</li>
+      <li>Feeling like no one wants a godly marriage</li>
+    </ul>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section class="solution">
+  <div class="solution-inner">
+    <span class="section-label">The Truth</span>
+    <h2>You don't need to date harder. You need to date <em>differently.</em></h2>
+    <p class="why">That's why we created this challenge.</p>
+    <div class="solution-grid">
+      <div class="solution-item">Break free from patterns that keep you stuck</div>
+      <div class="solution-item">Heal from past dating wounds</div>
+      <div class="solution-item">Step into clarity, confidence, and spiritual discernment</div>
+      <div class="solution-item">Actually position yourself to meet the right person</div>
+    </div>
+    <p class="solution-close">You've prayed. You've tried. Now it's time to experience a breakthrough.</p>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testis">
+  <div class="section-head">
+    <span class="section-label">From Past Attendees</span>
+    <h2 class="section-heading">Real stories from real <em>singles.</em></h2>
+  </div>
+  <div class="testi-row">
+    <div class="testi">
+      <p class="testi-quote">The conference gave me more confidence, courage to be open without fear of rejection, and hope in dating again. God honors dating for marriage.</p>
+      <p class="testi-name">— Kay</p>
+    </div>
+    <div class="testi">
+      <p class="testi-quote">I found more confidence in myself. I didn't have to be embarrassed. God gave me a voice to use.</p>
+      <p class="testi-name">— Michelle</p>
+    </div>
+    <div class="testi">
+      <p class="testi-quote">The entire event helped encourage me. I was getting tired on the journey — the event revived me.</p>
+      <p class="testi-name">— Joyce</p>
+    </div>
+  </div>
+</section>
+
+<!-- NIGHTS -->
+<section class="nights">
+  <div class="section-head">
+    <span class="section-label">Your 4-Night Plan</span>
+    <h2 class="section-heading">What you'll learn each <em>night.</em></h2>
+  </div>
+  <div class="nights-list">
+    <div class="night">
+      <div class="night-num">Night 01</div>
+      <div>
+        <div class="night-topic">The Problem with Christian Dating</div>
+        <div class="night-speaker">Dr. Henry Cloud</div>
+      </div>
+      <div class="night-date">Tue May 26</div>
+    </div>
+    <div class="night">
+      <div class="night-num">Night 02</div>
+      <div>
+        <div class="night-topic">From Ambiguous to Intentional Dating</div>
+        <div class="night-speaker">Kait &amp; JJ Tomlin</div>
+      </div>
+      <div class="night-date">Wed May 27</div>
+    </div>
+    <div class="night">
+      <div class="night-num">Night 03</div>
+      <div>
+        <div class="night-topic">When Your Love Story Isn't Going How You Planned</div>
+        <div class="night-speaker">Annie F. Downs</div>
+      </div>
+      <div class="night-date">Thu May 28</div>
+    </div>
+    <div class="night">
+      <div class="night-num">Night 04</div>
+      <div>
+        <div class="night-topic">How to Build a Relationship That Lasts</div>
+        <div class="night-speaker">Kait Tomlin</div>
+      </div>
+      <div class="night-date">Fri May 29</div>
+    </div>
+  </div>
+</section>
+
+<!-- ARK BONUS -->
+<section class="ark">
+  <div class="ark-inner">
+    <span class="ark-badge">Bonus · After the Challenge</span>
+    <h2>Plus — a free in-person <em>speed dating</em> event after.</h2>
+    <p>We've partnered with our friends at Ark Dating to host a FREE in-person speed dating event for every challenge attendee. Leave with a plan — and a chance to put it into practice immediately.</p>
+  </div>
+</section>
+
+<!-- ELIGIBILITY -->
+<section class="elig">
+  <div class="section-head">
+    <span class="section-label">Is This For You?</span>
+    <h2 class="section-heading">Be honest with <em>yourself.</em></h2>
+  </div>
+  <div class="elig-inner">
+    <div class="elig-col for">
+      <h3>This is for you if…</h3>
+      <ul>
+        <li>You're serious about godly marriage and frustrated with modern dating</li>
+        <li>You've been ghosted, confused, or disillusioned</li>
+        <li>You want to attract the right person without faking anything</li>
+        <li>You know God has more for your love life</li>
+      </ul>
+    </div>
+    <div class="elig-col not">
+      <h3>This is not for you if…</h3>
+      <ul>
+        <li>You want to blame everyone else without looking inward</li>
+        <li>You're content settling or playing it safe</li>
+        <li>You're not ready to grow, heal, or prepare for marriage</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final" id="register">
+  <div class="container-narrow">
+    <h2>Are you <em>ready?</em></h2>
+    <p class="sub">This 4-night event is completely free.</p>
+    <ul class="final-bullets">
+      <li>Every seat is free — no credit card, no hidden fees</li>
+      <li>Over 20,000 Christian singles expected — biggest of its kind in the world</li>
+      <li>Nightly giveaways + live-only surprises</li>
+      <li>Replays available to all who sign up</li>
+      <li>Free in-person Ark Dating speed dating event after the challenge</li>
+    </ul>
+    <a href="#" class="btn">Register Free — May 26</a>
+    <p class="worth">Worth $99+ · Yours Free</p>
+  </div>
+</section>
+
+<!-- EMAIL CAPTURE -->
+<section class="email-capture">
+  <div class="container">
+    <h3>Join our email list</h3>
+    <p>Each week we'll drop in with practical dating advice, funny relatable stories, answers to hard questions, and content to equip you in your dating life.</p>
+    <form onsubmit="event.preventDefault();">
+      <input type="email" placeholder="your@email.com">
+      <button class="btn" type="submit">Sign Up</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>The heart behind HOD</h4>
+      <a href="#">About</a><a href="#">Speaking</a><a href="#">Compassion International</a><a href="#">Contact</a>
+    </div>
+    <div class="foot-col">
+      <h4>Find practical advice</h4>
+      <a href="#">Podcast</a><a href="#">Coaching</a><a href="#">Conference</a><a href="#">School of Dating</a><a href="#">Blog</a><a href="#">Shop</a><a href="#">Community</a><a href="#">Book</a>
+    </div>
+    <div class="foot-col">
+      <h4>Follow</h4>
+      <a href="#">Instagram</a><a href="#">Facebook</a><a href="#">TikTok</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <div>© 2026 Heart of Dating</div>
+    <div>Privacy · Terms · Accessibility</div>
+  </div>
+</footer>
+
+</body>
+</html>

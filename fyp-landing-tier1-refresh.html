@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Find Your Person Challenge — Spring 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* TIER 1 REFRESH — Mirrors existing Fall 2025 design. Dark charcoal, white text, modern sans-serif. */
+  :root {
+    --bg: #0F0E0D;
+    --bg-2: #1A1918;
+    --text: #FFFFFF;
+    --muted: #9B9591;
+    --accent: #F37C7B;
+    --accent-2: #CC835C;
+    --border: #2A2825;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    font-size: 16px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  .container-narrow { max-width: 780px; margin: 0 auto; padding: 0 24px; }
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 18px 48px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+  }
+  .btn:hover { background: #D96969; }
+
+  /* Header */
+  header.site {
+    background: var(--bg);
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  header.site img { height: 34px; flex-shrink: 0; }
+  header.site .menu { font-size: 12px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
+  @media (max-width: 560px) {
+    header.site .menu { display: none; }
+  }
+
+  /* HERO */
+  .hero {
+    padding: 80px 24px 60px;
+    background: var(--bg);
+    text-align: center;
+  }
+  h1.hero-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: clamp(42px, 6vw, 72px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-sub {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 680px;
+    margin: 0 auto 32px;
+  }
+  .hero-dates {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 40px;
+  }
+  .hero-img {
+    width: 100%;
+    max-width: 900px;
+    margin: 48px auto 0;
+    aspect-ratio: 16/9;
+    background:
+      url('https://images.unsplash.com/photo-1529634899341-0b4011fba2bd?w=1600&q=80') center/cover;
+    border-radius: 8px;
+  }
+
+  /* SPEAKERS */
+  .speakers {
+    padding: 80px 24px;
+    background: var(--bg-2);
+    text-align: center;
+  }
+  h2.section-heading {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: clamp(32px, 4.5vw, 48px);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: 17px;
+    max-width: 620px;
+    margin: 0 auto 56px;
+  }
+  .speaker-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .speaker {
+    text-align: left;
+    padding: 28px;
+    background: var(--bg);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .speaker-photo {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: linear-gradient(135deg, var(--bg-2), var(--border));
+    border-radius: 6px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 36px;
+    color: var(--accent);
+    font-family: 'Poppins', sans-serif;
+  }
+  .speaker-photo.kait-jj { background: url('assets/kait-jj-couple.png') center/cover; }
+  .speaker-photo.kait-solo { background: url('assets/kait-solo.png') center/cover; }
+  .speaker-photo.dr-cloud { background: url('assets/dr-cloud.jpg') center/cover; }
+  .speaker-photo.annie { background: url('assets/annie-downs.jpg') center/cover; }
+
+  .speaker-night {
+    display: inline-block;
+    background: rgba(243,124,123,0.15);
+    color: var(--accent);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .speaker-name {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+  .speaker-bio {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  @media (max-width:720px) { .speaker-row { grid-template-columns: 1fr; } }
+
+  /* COUNTDOWN */
+  .countdown {
+    padding: 60px 24px;
+    background: var(--bg);
+    text-align: center;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .countdown-label {
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .countdown-timer {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 5vw, 56px);
+    letter-spacing: 0.02em;
+  }
+  .countdown-timer span { color: var(--accent); }
+  .countdown-units {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  /* PROBLEM */
+  .problem {
+    padding: 80px 24px;
+    background: var(--bg-2);
+  }
+  .problem h2 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 40px);
+    letter-spacing: -0.01em;
+    max-width: 760px;
+    margin-bottom: 16px;
+  }
+  .problem p.intro {
+    color: var(--muted);
+    font-size: 17px;
+    margin-bottom: 24px;
+  }
+  .problem ul {
+    list-style: none;
+    padding: 0;
+  }
+  .problem li {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 17px;
+    padding-left: 28px;
+    position: relative;
+  }
+  .problem li:before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  /* SOLUTION */
+  .solution {
+    padding: 80px 24px;
+    background: var(--bg);
+  }
+  .solution h2 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: clamp(34px, 5vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-align: center;
+    max-width: 820px;
+    margin: 0 auto 16px;
+  }
+  .solution p.why {
+    text-align: center;
+    color: var(--muted);
+    font-size: 18px;
+    margin-bottom: 48px;
+  }
+  .solution-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  .solution-item {
+    padding: 24px 28px;
+    background: var(--bg-2);
+    border-radius: 6px;
+    border-left: 3px solid var(--accent);
+    font-size: 16px;
+  }
+  @media (max-width:720px) { .solution-grid { grid-template-columns: 1fr; } }
+  .solution-close {
+    text-align: center;
+    margin-top: 48px;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  /* TESTIMONIALS */
+  .testis {
+    padding: 80px 24px;
+    background: var(--bg-2);
+  }
+  .testi-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+  .testi {
+    background: var(--bg);
+    padding: 28px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .testi-quote {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .testi-name {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+  }
+  @media (max-width:820px) { .testi-row { grid-template-columns: 1fr; } }
+
+  /* NIGHTS */
+  .nights {
+    padding: 80px 24px;
+    background: var(--bg);
+  }
+  .nights-list {
+    max-width: 860px;
+    margin: 48px auto 0;
+  }
+  .night {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    gap: 24px;
+    align-items: center;
+  }
+  .night-num {
+    font-family: 'Poppins', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+  .night-topic {
+    font-family: 'Poppins', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+  }
+  .night-speaker {
+    font-size: 14px;
+    color: var(--muted);
+  }
+  @media (max-width:720px) {
+    .night { grid-template-columns: 1fr; gap: 4px; padding: 20px 0; }
+    .night-num { font-size: 18px; margin-bottom: 4px; }
+  }
+
+  /* PRE-SHOW */
+  .preshow {
+    padding: 60px 24px;
+    background: var(--bg-2);
+    text-align: center;
+  }
+  .preshow h2 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: clamp(26px, 3.5vw, 36px);
+    margin-bottom: 10px;
+  }
+  .preshow .time {
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+  .preshow-items {
+    display: flex;
+    gap: 28px;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 820px;
+    margin: 0 auto;
+    color: var(--muted);
+    font-size: 15px;
+  }
+  .preshow-items span:before { content: '+ '; color: var(--accent); }
+
+  /* ELIGIBILITY */
+  .elig {
+    padding: 80px 24px;
+    background: var(--bg);
+  }
+  .elig-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .elig-col {
+    padding: 32px;
+    background: var(--bg-2);
+    border-radius: 8px;
+    border-top: 4px solid;
+  }
+  .elig-col.for { border-color: var(--accent); }
+  .elig-col.not { border-color: #555; }
+  .elig-col h3 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  .elig-col ul {
+    list-style: none;
+    padding: 0;
+  }
+  .elig-col li {
+    padding: 12px 0 12px 32px;
+    position: relative;
+    font-size: 15px;
+    border-bottom: 1px solid var(--border);
+  }
+  .elig-col li:last-child { border-bottom: none; }
+  .elig-col.for li:before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 800;
+  }
+  .elig-col.not li:before {
+    content: '✕';
+    position: absolute;
+    left: 0;
+    color: #777;
+    font-weight: 800;
+  }
+  @media (max-width:720px) { .elig-inner { grid-template-columns: 1fr; } }
+
+  /* FINAL CTA */
+  .final {
+    padding: 100px 24px;
+    background: var(--bg);
+    text-align: center;
+  }
+  .final h2 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: clamp(38px, 6vw, 72px);
+    line-height: 1.05;
+    margin-bottom: 14px;
+    letter-spacing: -0.02em;
+  }
+  .final .sub {
+    color: var(--muted);
+    font-size: 20px;
+    margin-bottom: 32px;
+  }
+  .final-bullets {
+    list-style: none;
+    padding: 0;
+    max-width: 500px;
+    margin: 0 auto 40px;
+    text-align: left;
+  }
+  .final-bullets li {
+    padding: 10px 0 10px 30px;
+    position: relative;
+    font-size: 16px;
+  }
+  .final-bullets li:before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 800;
+  }
+  .final .worth {
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 24px;
+  }
+
+  /* EMAIL CAPTURE */
+  .email-capture {
+    padding: 60px 24px;
+    background: var(--bg-2);
+    text-align: center;
+  }
+  .email-capture h3 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 26px;
+    margin-bottom: 12px;
+  }
+  .email-capture p {
+    color: var(--muted);
+    margin-bottom: 24px;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .email-capture form {
+    display: flex;
+    gap: 10px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  @media (max-width: 560px) {
+    .email-capture form { flex-direction: column; }
+    .email-capture .btn { width: 100%; }
+  }
+  .email-capture input {
+    flex: 1;
+    padding: 14px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: white;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 15px;
+  }
+
+  /* FOOTER */
+  footer.site {
+    padding: 60px 24px 30px;
+    background: #000;
+    border-top: 1px solid var(--border);
+  }
+  .foot-grid {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr;
+    gap: 48px;
+  }
+  .foot-col h4 {
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+  .foot-col a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .foot-col a:hover { color: var(--accent); }
+  .foot-bottom {
+    max-width: 1080px;
+    margin: 48px auto 0;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 12px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  @media (max-width:720px) { .foot-grid { grid-template-columns: 1fr; gap: 32px; } }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <img src="assets/hod-logo-white.png" alt="Heart of Dating">
+  <div class="menu">FIND YOUR PERSON · SPRING 2026</div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container-narrow">
+    <div class="hero-dates">4-Night Virtual Event · May 26–29 · Free &amp; Online</div>
+    <h1 class="hero-title">The Find Your Person Challenge — Spring 2026</h1>
+    <p class="hero-sub">A 4-Night Conference Experience for Christian Singles to break old dating patterns and prepare for the marriage you've been praying for.</p>
+    <a href="#register" class="btn">JOIN FOR FREE</a>
+    <p style="margin-top:16px; font-size:13px; color:var(--muted);">Join us May 26–29, 7:00–8:30 PM CST</p>
+    <div class="hero-img"></div>
+  </div>
+</section>
+
+<!-- SPEAKERS -->
+<section class="speakers">
+  <div class="container">
+    <h2 class="section-heading">Meet Your Speakers</h2>
+    <p class="section-sub">Four nights. Four voices you'd pay to see anywhere else.</p>
+    <div class="speaker-row">
+      <div class="speaker">
+        <div class="speaker-photo dr-cloud"></div>
+        <span class="speaker-night">Night 1 · May 26</span>
+        <div class="speaker-name">Dr. Henry Cloud</div>
+        <p class="speaker-bio">New York Times bestselling author and clinical psychologist. 45 books sold nearly 20 million copies worldwide, including the iconic Boundaries. Leadership expert to Fortune 500 CEOs.</p>
+      </div>
+      <div class="speaker">
+        <div class="speaker-photo kait-jj"></div>
+        <span class="speaker-night">Night 2 · May 27</span>
+        <div class="speaker-name">Kait &amp; JJ Tomlin</div>
+        <p class="speaker-bio">National bestselling author, relationship coach, and founders of Heart of Dating. Married with daughter Eleanor + son Winslow. Hosts of the HOD Podcast (100M+ downloads).</p>
+      </div>
+      <div class="speaker">
+        <div class="speaker-photo annie"></div>
+        <span class="speaker-night">Night 3 · May 28</span>
+        <div class="speaker-name">Annie F. Downs</div>
+        <p class="speaker-bio">NYT bestselling author, speaker, and podcaster based in Nashville. Creator of That Sounds Fun Network and Single Purpose League. Over a million books sold.</p>
+      </div>
+      <div class="speaker">
+        <div class="speaker-photo kait-solo"></div>
+        <span class="speaker-night">Night 4 · May 29</span>
+        <div class="speaker-name">Kait Tomlin</div>
+        <p class="speaker-bio">Author of Thank You For Rejecting Me, dating coach, and host of the Heart of Dating podcast. Kait closes out the challenge with the tools for a relationship that lasts.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COUNTDOWN -->
+<section class="countdown">
+  <div class="countdown-label">Registration Ends In:</div>
+  <div class="countdown-timer"><span>00</span> : <span>00</span> : <span>00</span> : <span>00</span></div>
+  <div class="countdown-units">Days &nbsp;·&nbsp; Hrs &nbsp;·&nbsp; Min &nbsp;·&nbsp; Sec</div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="container-narrow">
+    <h2>Still single — and lowkey wondering what's wrong with you?</h2>
+    <p class="intro">You're not alone. Dating today feels like a minefield of:</p>
+    <ul>
+      <li>Talking stages that go nowhere</li>
+      <li>Unclear intentions, mixed signals, and spiritual confusion</li>
+      <li>Overthinking, over-functioning, wondering if you're "too much"</li>
+      <li>Feeling like no one wants a godly marriage</li>
+    </ul>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section class="solution">
+  <div class="container">
+    <h2>You don't need to date harder. You need to date <em style="color:var(--accent); font-style:italic;">differently.</em></h2>
+    <p class="why">That's why we created this challenge.</p>
+    <div class="solution-grid">
+      <div class="solution-item">Break free from patterns that keep you stuck</div>
+      <div class="solution-item">Heal from past dating wounds</div>
+      <div class="solution-item">Step into clarity, confidence, and spiritual discernment</div>
+      <div class="solution-item">Actually position yourself to meet the right person</div>
+    </div>
+    <p class="solution-close">You've prayed. You've tried. Now it's time to experience a breakthrough.</p>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testis">
+  <div class="container">
+    <h2 class="section-heading" style="text-align:center;">What Past Attendees Said</h2>
+    <p class="section-sub" style="text-align:center;">Real stories from past FYP Challenges.</p>
+    <div class="testi-row">
+      <div class="testi">
+        <p class="testi-quote">"The conference gave me more confidence, courage to be open without fear of rejection, and hope in dating again. God honors dating for the purpose of marriage."</p>
+        <p class="testi-name">— KAY</p>
+      </div>
+      <div class="testi">
+        <p class="testi-quote">"I found more confidence in myself. I didn't have to be embarrassed. God gave me a voice to use."</p>
+        <p class="testi-name">— MICHELLE</p>
+      </div>
+      <div class="testi">
+        <p class="testi-quote">"The entire event helped encourage me. I was getting tired on the journey — the event helped revive me."</p>
+        <p class="testi-name">— JOYCE</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NIGHT BY NIGHT -->
+<section class="nights">
+  <div class="container">
+    <h2 class="section-heading" style="text-align:center;">What You'll Learn Each Night</h2>
+    <div class="nights-list">
+      <div class="night">
+        <div class="night-num">NIGHT 1</div>
+        <div>
+          <div class="night-topic">The Problem with Christian Dating</div>
+          <div class="night-speaker">Dr. Henry Cloud</div>
+        </div>
+        <div style="color:var(--muted); font-size:13px;">May 26</div>
+      </div>
+      <div class="night">
+        <div class="night-num">NIGHT 2</div>
+        <div>
+          <div class="night-topic">From Ambiguous to Intentional Dating</div>
+          <div class="night-speaker">Kait &amp; JJ Tomlin</div>
+        </div>
+        <div style="color:var(--muted); font-size:13px;">May 27</div>
+      </div>
+      <div class="night">
+        <div class="night-num">NIGHT 3</div>
+        <div>
+          <div class="night-topic">When Your Love Story Isn't Going How You Planned</div>
+          <div class="night-speaker">Annie F. Downs</div>
+        </div>
+        <div style="color:var(--muted); font-size:13px;">May 28</div>
+      </div>
+      <div class="night">
+        <div class="night-num">NIGHT 4</div>
+        <div>
+          <div class="night-topic">How to Build a Relationship That Lasts</div>
+          <div class="night-speaker">Kait Tomlin</div>
+        </div>
+        <div style="color:var(--muted); font-size:13px;">May 29</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRE-SHOW -->
+<section class="preshow">
+  <div class="container">
+    <h2>Come early for the Pre-Show Party!</h2>
+    <p class="time">6:30 PM CST every night</p>
+    <div class="preshow-items">
+      <span>Icebreakers + fun questions</span>
+      <span>Nightly giveaways</span>
+      <span>Live chat with other singles</span>
+      <span>Dating games that'll make you laugh</span>
+    </div>
+  </div>
+</section>
+
+<!-- ELIGIBILITY -->
+<section class="elig">
+  <div class="container">
+    <h2 class="section-heading" style="text-align:center;">Is This Challenge For You?</h2>
+    <div class="elig-inner">
+      <div class="elig-col for">
+        <h3>This is for you if…</h3>
+        <ul>
+          <li>You're serious about godly marriage and frustrated with modern dating</li>
+          <li>You've been ghosted, confused, or disillusioned</li>
+          <li>You want to attract the right kind of person without faking anything</li>
+          <li>You know God has more for your love life</li>
+        </ul>
+      </div>
+      <div class="elig-col not">
+        <h3>This is not for you if…</h3>
+        <ul>
+          <li>You want to blame everyone else without looking inward</li>
+          <li>You're content settling or playing it safe</li>
+          <li>You're not ready to grow, heal, or prepare for marriage</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final" id="register">
+  <div class="container-narrow">
+    <h2>Are you ready?</h2>
+    <p class="sub">This 4-Night Event is TOTALLY FREE!</p>
+    <ul class="final-bullets">
+      <li>Spots are free!!!</li>
+      <li>Over 20,000 Single Christians expected — the biggest virtual gathering of its kind in the world</li>
+      <li>Nightly giveaways + live-only surprises</li>
+      <li>Replays available to those who sign up</li>
+      <li><strong>Bonus:</strong> Free in-person Ark Dating speed dating event after the challenge</li>
+    </ul>
+    <a href="#" class="btn">Join for Free</a>
+    <p class="worth">Worth $99+ · Yours Free</p>
+  </div>
+</section>
+
+<!-- EMAIL CAPTURE -->
+<section class="email-capture">
+  <div class="container">
+    <h3>Join our email list</h3>
+    <p>Each week we'll drop in with practical dating advice, funny relatable stories, answers to hard questions, and content created to equip YOU in your dating life. So much better than junk mail, am I right?</p>
+    <form onsubmit="event.preventDefault();">
+      <input type="email" placeholder="your@email.com">
+      <button class="btn" type="submit">Sign Up</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site">
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h4>The heart behind HOD</h4>
+      <a href="#">About</a><a href="#">Speaking</a><a href="#">Compassion International</a><a href="#">Contact</a>
+    </div>
+    <div class="foot-col">
+      <h4>Find practical advice</h4>
+      <a href="#">Podcast</a><a href="#">Coaching</a><a href="#">Conference</a><a href="#">School of Dating</a><a href="#">Blog</a><a href="#">Shop</a><a href="#">Community</a><a href="#">Book</a>
+    </div>
+    <div class="foot-col">
+      <h4>Follow</h4>
+      <a href="#">Instagram</a><a href="#">Facebook</a><a href="#">TikTok</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <div>© 2026 Heart of Dating</div>
+    <div>Privacy · Terms · Accessibility</div>
+  </div>
+</footer>
+
+</body>
+</html>

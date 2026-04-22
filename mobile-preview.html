@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>VIP Page — Mobile Preview</title>
+<style>
+  body {
+    margin: 0;
+    font-family: -apple-system, sans-serif;
+    background: #1a1a1a;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+  }
+  h1 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    letter-spacing: -0.01em;
+  }
+  .sub { color: #999; font-size: 13px; margin-bottom: 32px; }
+  .switcher {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .switcher button {
+    background: #333;
+    color: white;
+    border: 1px solid #555;
+    padding: 10px 18px;
+    border-radius: 100px;
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .switcher button.active {
+    background: #CC835C;
+    border-color: #CC835C;
+  }
+  .device {
+    background: #2a2a2a;
+    border-radius: 40px;
+    padding: 16px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    transition: all 0.3s;
+  }
+  .device iframe {
+    border: none;
+    display: block;
+    border-radius: 24px;
+    background: white;
+  }
+  .device.iphone iframe { width: 390px; height: 844px; }
+  .device.android iframe { width: 360px; height: 800px; }
+  .device.tablet iframe { width: 768px; height: 1024px; }
+  .device.desktop iframe { width: min(90vw, 1280px); height: 82vh; }
+  .device.desktop { border-radius: 12px; padding: 8px; }
+  .notch {
+    width: 120px;
+    height: 24px;
+    background: #1a1a1a;
+    border-radius: 0 0 16px 16px;
+    margin: -16px auto 8px;
+    position: relative;
+    z-index: 2;
+  }
+  .device.desktop .notch,
+  .device.tablet .notch,
+  .device.android .notch { display: none; }
+</style>
+</head>
+<body>
+
+<h1>VIP Page — Responsive Preview</h1>
+<div class="sub">Scroll inside the frame to test the full page at that device size</div>
+
+<div class="switcher">
+  <button onclick="setDevice('iphone')" class="active" id="btn-iphone">iPhone (390px)</button>
+  <button onclick="setDevice('android')" id="btn-android">Android (360px)</button>
+  <button onclick="setDevice('tablet')" id="btn-tablet">Tablet (768px)</button>
+  <button onclick="setDevice('desktop')" id="btn-desktop">Desktop</button>
+</div>
+
+<div id="device" class="device iphone">
+  <div class="notch"></div>
+  <iframe src="vip-tripwire.html"></iframe>
+</div>
+
+<script>
+function setDevice(name) {
+  const d = document.getElementById('device');
+  d.className = 'device ' + name;
+  document.querySelectorAll('.switcher button').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-' + name).classList.add('active');
+}
+</script>
+
+</body>
+</html>
