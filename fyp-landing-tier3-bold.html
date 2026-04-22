@@ -22,6 +22,8 @@
     --gold: #D4A574;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  img, picture, video { max-width: 100%; height: auto; display: block; }
+  input, textarea, button { font-family: inherit; max-width: 100%; }
   html { scroll-behavior: smooth; }
   body {
     overflow-x: hidden;
@@ -146,6 +148,8 @@
   .register input[type="text"],
   .register input[type="email"] {
     grid-column: span 1;
+    min-width: 0;
+    width: 100%;
     padding: 14px 16px;
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -156,6 +160,14 @@
     transition: all 0.2s;
   }
   .register input[type="email"] { grid-column: span 2; }
+  .register-form button { grid-column: span 2; min-width: 0; max-width: none !important; }
+  @media (max-width: 480px) {
+    .register-form { grid-template-columns: 1fr; }
+    .register input[type="text"],
+    .register input[type="email"],
+    .register-form button { grid-column: span 1; }
+    .register { padding: 22px 20px 20px; }
+  }
   .register input:focus {
     outline: none;
     border-color: var(--terracotta);
