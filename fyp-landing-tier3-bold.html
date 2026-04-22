@@ -24,6 +24,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body {
+    overflow-x: hidden;
     font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
     color: var(--ink);
     background: var(--cream);
@@ -96,7 +97,7 @@
   h1.hero-title {
     font-family: 'Fraunces', serif;
     font-weight: 500;
-    font-size: clamp(48px, 8vw, 96px);
+    font-size: clamp(38px, 8vw, 96px);
     line-height: 1;
     color: var(--ink);
     max-width: 900px;
@@ -311,20 +312,20 @@
     margin-bottom: 18px;
   }
   .speaker-photo {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
+    width: 100%;
+    aspect-ratio: 4/3;
+    border-radius: 14px;
     background: linear-gradient(135deg, var(--blush), var(--cream-deep));
-    margin-bottom: 20px;
+    margin-bottom: 22px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Fraunces', serif;
-    font-size: 38px;
+    font-size: 56px;
     font-weight: 500;
     color: var(--terracotta-dark);
-    border: 3px solid white;
-    box-shadow: 0 8px 20px rgba(204,131,92,0.15);
+    background-size: cover;
+    background-position: center top;
   }
   .speaker-photo.kait-jj {
     background:
@@ -584,7 +585,7 @@
       <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin:0"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
       4 Nights · May 26–29 · 7 PM CT
     </span>
-    <h1 class="hero-title">Find Your <em>Person.</em></h1>
+    <h1 class="hero-title">Find Your Person <em>Challenge.</em></h1>
     <p class="hero-sub">A <strong>free 4-night virtual event</strong> for Christian singles ready to stop spinning — and start meeting their person with clarity, confidence, and a plan.</p>
 
     <!-- REGISTRATION FORM -->
