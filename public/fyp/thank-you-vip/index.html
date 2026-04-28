@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>You're In! VIP Access Confirmed — Heart of Dating</title>
+<meta name="description" content="VIP access confirmed for the Find Your Person Challenge." />
+<meta name="robots" content="noindex,nofollow" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="You're In, VIP — Heart of Dating" />
+<meta property="og:image" content="https://heartofdating.com/assets/kait-jj-couple.png" />
+<meta property="og:url" content="https://heartofdating.com/fyp/thank-you-vip" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://heartofdating.com/assets/kait-jj-couple.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Caveat:wght@500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --terracotta: #CC835C;
+    --terracotta-dark: #B36B44;
+    --blush: #FFDDDD;
+    --cream: #FAF6F1;
+    --cream-deep: #F2EAE0;
+    --ink: #2A2320;
+    --muted: #6B5D54;
+    --border: #E8DCD0;
+    --success: #4A7C59;
+    --gold: #D4A574;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Poppins', -apple-system, sans-serif;
+    color: var(--ink);
+    background: var(--cream);
+    line-height: 1.6;
+    font-size: 16px;
+  }
+  .container { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+  /* Header */
+  .site-header {
+    padding: 18px 28px;
+    background: var(--cream);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .site-header img { height: 38px; }
+
+  /* HERO */
+  .hero {
+    padding: 72px 24px 60px;
+    background: linear-gradient(180deg, var(--cream) 0%, var(--cream-deep) 100%);
+    text-align: center;
+    position: relative;
+  }
+  .success-seal {
+    width: 92px; height: 92px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #5FA670, var(--success));
+    margin: 0 auto 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 20px 50px rgba(74,124,89,0.3);
+  }
+  .success-seal svg { width: 48px; height: 48px; }
+  .hero-kicker {
+    display: inline-block;
+    background: var(--blush);
+    color: var(--terracotta-dark);
+    padding: 7px 18px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(36px, 5.5vw, 56px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin-bottom: 18px;
+    max-width: 620px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  h1 em { font-style: italic; color: var(--terracotta); font-weight: 400; }
+  .hero-sub {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.55;
+  }
+  .hero-sub b { color: var(--ink); font-weight: 500; }
+
+  /* Sections */
+  section.step {
+    padding: 56px 24px;
+    border-bottom: 1px solid var(--border);
+    background: white;
+  }
+  section.step:nth-of-type(even) { background: var(--cream); }
+  .step-inner { max-width: 720px; margin: 0 auto; }
+  .step-num {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--terracotta);
+    margin-bottom: 10px;
+    letter-spacing: 0.02em;
+  }
+  h2.step-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(26px, 3.5vw, 36px);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    color: var(--ink);
+  }
+  h2.step-title em { color: var(--terracotta); font-style: italic; }
+  .step-inner > p {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  /* Primary action button */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 16px 32px;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .btn svg { width: 18px; height: 18px; }
+  .btn-primary {
+    background: var(--terracotta);
+    color: white;
+    box-shadow: 0 10px 28px rgba(204, 131, 92, 0.32);
+  }
+  .btn-primary:hover {
+    background: var(--terracotta-dark);
+    transform: translateY(-2px);
+  }
+  .btn-secondary {
+    background: white;
+    color: var(--ink);
+    border: 1.5px solid var(--border);
+  }
+  .btn-secondary:hover {
+    border-color: var(--terracotta);
+    color: var(--terracotta);
+  }
+
+  /* Calendar buttons */
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .cal-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: all 0.2s;
+  }
+  .cal-btn:hover {
+    border-color: var(--terracotta);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(204,131,92,0.12);
+  }
+  .cal-btn-icon {
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    background: var(--blush);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--terracotta-dark);
+    flex-shrink: 0;
+  }
+  .cal-btn-text .night {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+  }
+  .cal-btn-text .date {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-top: 2px;
+  }
+  @media (max-width: 560px) {
+    .calendar-grid { grid-template-columns: 1fr; }
+  }
+
+  /* BOD callout */
+  .bod-card {
+    background: linear-gradient(135deg, #FFF4E6 0%, #FFEBD6 100%);
+    border: 2px solid var(--gold);
+    border-radius: 16px;
+    padding: 28px;
+    margin-top: 20px;
+  }
+  .bod-card .tag {
+    display: inline-block;
+    background: var(--gold);
+    color: white;
+    padding: 4px 14px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .bod-card h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 22px;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+  .bod-card p {
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 18px;
+  }
+
+  /* Q&A Card */
+  .qa-card {
+    background: var(--cream-deep);
+    border-left: 4px solid var(--terracotta);
+    padding: 22px 24px;
+    border-radius: 0 12px 12px 0;
+    margin-top: 18px;
+  }
+  .qa-card .label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 8px;
+  }
+  .qa-card h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+  .qa-card p {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  /* Kait note */
+  .kait-note {
+    padding: 60px 24px;
+    background: var(--cream);
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .kait-photo {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: url('/assets/kait-solo.png') center/cover;
+    margin: 0 auto 20px;
+    border: 4px solid white;
+    box-shadow: 0 8px 20px rgba(204,131,92,0.15);
+  }
+  .kait-note p {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink);
+    max-width: 540px;
+    margin: 0 auto;
+  }
+  .kait-sig {
+    font-family: 'Caveat', cursive;
+    font-size: 28px;
+    color: var(--terracotta);
+    margin-top: 14px;
+  }
+
+  /* Receipt */
+  .receipt {
+    padding: 40px 24px 60px;
+    background: white;
+    text-align: center;
+  }
+  .receipt-details {
+    display: inline-block;
+    text-align: left;
+    background: var(--cream);
+    padding: 20px 28px;
+    border-radius: 10px;
+    font-size: 14px;
+    color: var(--muted);
+    font-family: 'Poppins', sans-serif;
+  }
+  .receipt-details b { color: var(--ink); font-weight: 600; }
+
+  /* Footer */
+  footer {
+    padding: 28px 24px;
+    background: var(--ink);
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    font-size: 13px;
+  }
+  footer a { color: rgba(255,255,255,0.85); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <img src="/assets/hod-logo.png" alt="Heart of Dating" />
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="success-seal">
+    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+  </div>
+  <span class="hero-kicker">VIP Access Confirmed</span>
+  <h1>You're <em>all in.</em> Let's go.</h1>
+  <p class="hero-sub">Your VIP upgrade is locked. <b>BOD access is below</b> — start there. Everything else is waiting for May 26.</p>
+</section>
+
+<!-- STEP 1: BOD ACCESS -->
+<section class="step">
+  <div class="step-inner">
+    <div class="step-num">Step 01</div>
+    <h2 class="step-title">Start with your <em>BOD primer.</em></h2>
+    <p>This is the bonus you just unlocked — a $197 program yours free. Start it before the challenge so you walk into Night 1 already ahead.</p>
+
+    <div class="bod-card">
+      <span class="tag">$197 · Included Free</span>
+      <h3>Basics of Dating — 6-Week Program</h3>
+      <p>Self-paced teaching on the foundation of Christian dating. Monthly group coaching call. You have immediate access.</p>
+      <a href="#" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        Open BOD Course
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 2: ADD TO CALENDAR -->
+<section class="step">
+  <div class="step-inner">
+    <div class="step-num">Step 02</div>
+    <h2 class="step-title">Lock the four nights in your <em>calendar.</em></h2>
+    <p>All sessions are 7:00 PM CT. Click a night to add it to Google, Apple, or Outlook calendar.</p>
+
+    <div class="calendar-grid">
+      <a href="#" class="cal-btn">
+        <div class="cal-btn-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="cal-btn-text">
+          <div class="night">Night 1 · Dr. Henry Cloud</div>
+          <div class="date">Tue, May 26 · 7 PM CT</div>
+        </div>
+      </a>
+      <a href="#" class="cal-btn">
+        <div class="cal-btn-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="cal-btn-text">
+          <div class="night">Night 2 · Kait &amp; JJ</div>
+          <div class="date">Wed, May 27 · 7 PM CT</div>
+        </div>
+      </a>
+      <a href="#" class="cal-btn">
+        <div class="cal-btn-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="cal-btn-text">
+          <div class="night">Night 3 · Annie F. Downs</div>
+          <div class="date">Thu, May 28 · 7 PM CT</div>
+        </div>
+      </a>
+      <a href="#" class="cal-btn">
+        <div class="cal-btn-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="cal-btn-text">
+          <div class="night">Night 4 · Kait Tomlin</div>
+          <div class="date">Fri, May 29 · 7 PM CT</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 3: VIP Q&A -->
+<section class="step">
+  <div class="step-inner">
+    <div class="step-num">Step 03</div>
+    <h2 class="step-title">Save the <em>private Q&amp;A</em> with Kait &amp; JJ.</h2>
+    <p>As a VIP, you're invited to an intimate live Q&amp;A with Kait &amp; JJ immediately after Night 4. This is where you bring the question you've been sitting on.</p>
+
+    <div class="qa-card">
+      <div class="label">VIP Q&amp;A · Small Room</div>
+      <h3>Friday, May 29 · 8:30 PM CT</h3>
+      <p>Zoom link + reminders go out the week of the challenge. No calendar link needed for this — we'll email you.</p>
+    </div>
+  </div>
+</section>
+
+<!-- KAIT NOTE -->
+<section class="kait-note">
+  <div class="kait-photo"></div>
+  <p>"Thank you for showing up for yourself. I can't wait to see your face in the VIP room — it's the best part of this whole thing for me."</p>
+  <div class="kait-sig">— Kait</div>
+</section>
+
+<!-- RECEIPT -->
+<section class="receipt">
+  <div class="container">
+    <div class="receipt-details">
+      <b>Order Confirmed</b><br>
+      FYP VIP Upgrade · $17.00<br>
+      Receipt emailed · Support: info@hodpodcast.com
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 Heart of Dating &nbsp;·&nbsp; <a href="https://heartofdating.com">heartofdating.com</a>
+</footer>
+
+</body>
+</html>
