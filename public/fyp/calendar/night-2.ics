@@ -1,0 +1,17 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Heart of Dating//FYP May 2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:fyp-may-2026-night-2@heartofdating.com
+DTSTAMP:20260428T120000Z
+DTSTART:20260528T000000Z
+DTEND:20260528T013000Z
+SUMMARY:FYP Night 2 — Kait & JJ Tomlin
+DESCRIPTION:From Ambiguous to Intentional Dating\n\nLive on Zoom 7–8:30 PM CT. Find Your Person Challenge by Heart of Dating.\nDetails: https://heartofdating.com/fyp
+LOCATION:Live on Zoom (link emailed)
+URL:https://heartofdating.com/fyp
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR
