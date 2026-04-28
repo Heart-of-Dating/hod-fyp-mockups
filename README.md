@@ -21,7 +21,7 @@ Static HTML site for the Find Your Person Challenge May 26–29, 2026.
 
 - `AC_API_URL` — e.g. `https://kaitness.api-us1.com`
 - `AC_API_KEY` — ActiveCampaign API key (Settings → Developer in AC)
-- `AC_LIST_ID` — list ID for FYP May 2026 registrants (TBD this week per Kait + JJ)
+- `AC_LIST_ID` — `28` (list "Find Your Person Challenge May 2026" — created 2026-04-28)
 
 ## Pre-launch checklist (May 11)
 
