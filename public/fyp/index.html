@@ -654,7 +654,7 @@
     <!-- REGISTRATION FORM -->
     <div class="register">
       <label class="form-label">Register free — takes 10 seconds</label>
-      <form class="register-form" onsubmit="event.preventDefault();">
+      <form class="register-form">
         <div class="register-row">
           <input type="text" name="fname" placeholder="First name" autocomplete="given-name" required />
           <input type="text" name="lname" placeholder="Last name" autocomplete="family-name" required />
@@ -908,7 +908,7 @@
 
     <div class="register">
       <label class="form-label">Save your seat — free</label>
-      <form class="register-form" onsubmit="event.preventDefault();">
+      <form class="register-form">
         <div class="register-row">
           <input type="text" name="fname" placeholder="First name" autocomplete="given-name" required />
           <input type="text" name="lname" placeholder="Last name" autocomplete="family-name" required />
@@ -987,6 +987,53 @@
 <footer>
   © 2026 Heart of Dating &nbsp;·&nbsp; <a href="https://heartofdating.com">heartofdating.com</a>
 </footer>
+
+
+<script>
+(function () {
+  // Phone normalization → E.164 on blur
+  document.querySelectorAll('input[name="phone"]').forEach(function (el) {
+    el.addEventListener('blur', function () {
+      var d = el.value.replace(/\D/g, '');
+      if (d.length === 10) d = '1' + d;
+      if (d.length === 11) el.value = '+' + d;
+    });
+  });
+
+  // Form submission → /api/register
+  document.querySelectorAll('form.register-form').forEach(function (form) {
+    var btn = form.querySelector('button[type="submit"], .submit-btn, button');
+    var origLabel = btn ? btn.textContent : null;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var data = Object.fromEntries(new FormData(form).entries());
+      data.sms = form.querySelector('input[name="sms"]')?.checked ? 'true' : 'false';
+
+      if (btn) { btn.disabled = true; btn.textContent = 'Saving your spot…'; }
+
+      fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (res) {
+          if (res.ok && res.j.ok) {
+            window.location.href = res.j.redirect || '/fyp/vip';
+          } else {
+            if (btn) { btn.disabled = false; btn.textContent = origLabel || 'Try again'; }
+            alert('Something went wrong: ' + (res.j.error || 'unknown') + '. Try again or email kait@kaitness.com.');
+          }
+        })
+        .catch(function () {
+          if (btn) { btn.disabled = false; btn.textContent = origLabel || 'Try again'; }
+          alert('Network error — try again in a moment.');
+        });
+    });
+  });
+})();
+</script>
 
 </body>
 </html>
