@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ThriveCart Embed Test — FYP May 2026</title>
+<meta name="robots" content="noindex,nofollow" />
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 24px 16px 60px;
+    background: #FBF7F2;
+    color: #2A2118;
+    line-height: 1.5;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+  header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  h1 {
+    font-size: 24px;
+    margin: 0 0 8px;
+  }
+  .sub {
+    color: #777;
+    font-size: 14px;
+    margin: 0;
+  }
+  .test-info {
+    background: #fff;
+    border: 1px solid #E5DFD4;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    font-size: 14px;
+  }
+  .test-info b { color: #C0573B; }
+  .embed-wrap {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .footnote {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 13px;
+    color: #999;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>ThriveCart Embed Test</h1>
+    <p class="sub">FYP May 2026 — confirming inline checkout works on mobile before wiring to /fyp/vip</p>
+  </header>
+
+  <div class="test-info">
+    <b>What to verify:</b><br/>
+    1. Cart loads inline below (no jump to ThriveCart) <br/>
+    2. Customer/Payment stepped flow renders correctly on mobile <br/>
+    3. JJ coupon applies + price drops <br/>
+    4. Checkout completes + redirects to success URL (whatever's set on this product)
+  </div>
+
+  <!-- ThriveCart embed: 1:1 Coaching with JJ Test (product id 7, embed id tc-hod-7-KLK037) -->
+  <div class="embed-wrap">
+    <div class="tc-v2-embeddable-target" data-thrivecart-account="hod" data-thrivecart-tpl="v2" data-thrivecart-product="7" data-thrivecart-embeddable="tc-hod-7-KLK037"></div>
+    <script async src="//tinder.thrivecart.com/embed/v2/thrivecart.js" id="tc-hod-7-KLK037"></script>
+  </div>
+
+  <p class="footnote">If you see this and the cart never loads above, check browser console (F12 / Safari Develop). The TC script may be blocked by an ad blocker or CSP.</p>
+</div>
+
+</body>
+</html>
