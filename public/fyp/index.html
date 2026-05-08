@@ -1009,6 +1009,10 @@
       e.preventDefault();
       var data = Object.fromEntries(new FormData(form).entries());
       data.sms = form.querySelector('input[name="sms"]')?.checked ? 'true' : 'false';
+      // Channel attribution from URL: ?src=paid (James / Meta) | ?src=organic (Social Crewe / podcast).
+      // No src → server defaults to organic.
+      var src = new URLSearchParams(window.location.search).get('src');
+      if (src === 'paid' || src === 'organic') data.src = src;
 
       if (btn) { btn.disabled = true; btn.textContent = 'Saving your spot…'; }
 

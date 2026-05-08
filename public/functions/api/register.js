@@ -7,7 +7,14 @@
 
 const TIER1_STATES = new Set(["TX", "CA", "FL"]);
 
-const TAGS_ALWAYS = ["FYP_May_2026_Registered", "Source_Webflow_Landing"];
+// Channel-aware tag set:
+//   FYP-Overall  → every registration (single source-of-truth list for all FYP regs)
+//   FYP-Paid     → ?src=paid (James / Meta ads)
+//   FYP-Organic  → ?src=organic OR no src (Social Crewe / podcast / direct)
+// VIP tags (VIP-Overall / VIP-Paid / VIP-Organic) fire from ThriveCart → AC integration on purchase,
+// not from this Pages Function. Per-channel ThriveCart products handle that split.
+const TAGS_ALWAYS = ["FYP-Overall"];
+const CHANNEL_TAG = { paid: "FYP-Paid", organic: "FYP-Organic" };
 
 const CUSTOM_FIELD_IDS = {
   birth_year: 17, // %BIRTH_YEAR%
@@ -64,6 +71,11 @@ export async function onRequestPost({ request, env }) {
   const state = (payload.state || "").trim().toUpperCase();
   const sms = payload.sms === "on" || payload.sms === true || payload.sms === "true" || payload.sms === "1";
 
+  // Channel attribution: paid (James/Meta) | organic (Social Crewe/podcast/direct).
+  // No src or unknown value → organic (conservative default; safer to overcount organic).
+  const srcRaw = (payload.src || "").trim().toLowerCase();
+  const src = srcRaw === "paid" ? "paid" : "organic";
+
   if (!fname || !lname || !email || !phone || !byear || !state) {
     return bad("Missing required field");
   }
@@ -107,6 +119,7 @@ export async function onRequestPost({ request, env }) {
 
   // 3) Tag set
   const tagsToApply = [...TAGS_ALWAYS];
+  tagsToApply.push(CHANNEL_TAG[src]);
   tagsToApply.push(TIER1_STATES.has(state) ? "Region_Tier1" : "Region_Tier2");
   if (sms) tagsToApply.push("SMS_Optin_Yes");
 
@@ -134,7 +147,8 @@ export async function onRequestPost({ request, env }) {
     }
   }));
 
-  return new Response(JSON.stringify({ ok: true, contact: contactId, redirect: "/fyp/vip" }), {
+  // Pass src through to /fyp/vip so VIP page can pick the channel-correct ThriveCart product.
+  return new Response(JSON.stringify({ ok: true, contact: contactId, redirect: `/fyp/vip?src=${src}` }), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   });
