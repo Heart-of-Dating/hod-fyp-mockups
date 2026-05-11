@@ -912,7 +912,9 @@
     paid:    'https://hod.thrivecart.com/find-your-person-vip-may-26-paid/',
     organic: 'https://hod.thrivecart.com/the-find-your-person-challenge-vip-org/'
   };
-  var srcRaw = new URLSearchParams(window.location.search).get('src');
+  // Accept either ?src=paid (canonical) OR ?utm_medium=paid (UTM-convention fallback).
+  var params = new URLSearchParams(window.location.search);
+  var srcRaw = (params.get('src') || params.get('utm_medium') || '').toLowerCase();
   var src = (srcRaw === 'paid') ? 'paid' : 'organic';
   var url = TC[src];
   document.querySelectorAll('.vip-cta, [data-vip-cta]').forEach(function(a){

@@ -72,8 +72,9 @@ export async function onRequestPost({ request, env }) {
   const sms = payload.sms === "on" || payload.sms === true || payload.sms === "true" || payload.sms === "1";
 
   // Channel attribution: paid (James/Meta) | organic (Social Crewe/podcast/direct).
-  // No src or unknown value → organic (conservative default; safer to overcount organic).
-  const srcRaw = (payload.src || "").trim().toLowerCase();
+  // Accept EITHER ?src= (canonical) OR ?utm_medium= (UTM-convention fallback for James's brief).
+  // No src + no utm_medium → organic (conservative default; safer to overcount organic).
+  const srcRaw = (payload.src || payload.utm_medium || "").trim().toLowerCase();
   const src = srcRaw === "paid" ? "paid" : "organic";
 
   if (!fname || !lname || !email || !phone || !byear || !state) {

@@ -1010,9 +1010,11 @@
       var data = Object.fromEntries(new FormData(form).entries());
       data.sms = form.querySelector('input[name="sms"]')?.checked ? 'true' : 'false';
       // Channel attribution from URL: ?src=paid (James / Meta) | ?src=organic (Social Crewe / podcast).
-      // No src → server defaults to organic.
-      var src = new URLSearchParams(window.location.search).get('src');
-      if (src === 'paid' || src === 'organic') data.src = src;
+      // ALSO accept ?utm_medium=paid|organic as fallback (UTM-convention from James's brief).
+      // No src + no utm_medium → server defaults to organic.
+      var params = new URLSearchParams(window.location.search);
+      var srcRaw = (params.get('src') || params.get('utm_medium') || '').toLowerCase();
+      if (srcRaw === 'paid' || srcRaw === 'organic') data.src = srcRaw;
 
       if (btn) { btn.disabled = true; btn.textContent = 'Saving your spot…'; }
 
