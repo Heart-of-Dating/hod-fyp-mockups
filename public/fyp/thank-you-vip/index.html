@@ -25,9 +25,10 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 fbq('init', '869575087492502');
 fbq('track', 'PageView');
-// VIP buyer landed — fire Purchase event ($17, USD). ThriveCart also fires
-// server-side via native CAPI; same browser + server event_id pattern dedupes.
-fbq('track', 'Purchase', {value: 17.00, currency: 'USD'});
+// NOTE: Purchase event NOT fired here — ThriveCart fires it server-side
+// via native CAPI integration with the order_id as event_id, which is
+// the authoritative source. Firing browser Purchase here too would
+// double-count because event_ids wouldn't match.
 </script>
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=869575087492502&ev=PageView&noscript=1"
