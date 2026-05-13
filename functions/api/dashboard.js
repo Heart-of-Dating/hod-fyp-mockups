@@ -36,6 +36,22 @@ async function countContactsForTag(env, tagId, since) {
   return total;
 }
 
+async function countContactsOnList(env, listId, since) {
+  // Count subscribers on a list (cleaner than tag — list captures re-subs from
+  // existing contacts whose tags already existed from prior launches)
+  let total = 0;
+  let offset = 0;
+  while (offset < 10000) {
+    const filter = since ? `&filters[updated_after]=${encodeURIComponent(since)}` : "";
+    const data = await ac(env, `/contacts?listid=${listId}${filter}&limit=100&offset=${offset}`);
+    const contacts = data.contacts || [];
+    total += contacts.length;
+    if (contacts.length < 100) break;
+    offset += 100;
+  }
+  return total;
+}
+
 async function listRecent(env, tagId, limit) {
   const data = await ac(env, `/contacts?tagid=${tagId}&orders[cdate]=DESC&limit=${limit}`);
   return (data.contacts || []).map(c => ({
@@ -55,27 +71,32 @@ export async function onRequestGet({ request, env }) {
     const yesterdayStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1)).toISOString();
     const launchCutoff = "2026-05-01T00:00:00Z";
 
-    // Parallel pulls
+    // Total regs = List 28 membership (captures both new + pre-existing AC
+    // contacts who registered for May 2026; tag-only count misses re-subs).
+    // Today's count = contacts updated today on List 28 (filter via udate).
+    // Channel split still uses FYP-Paid/FYP-Organic tags (set via /api/register
+    // on each registration regardless of new/existing contact status).
+    const LIST_ID = 28;
     const [
+      regsTotalList28,
       regsTodayAll,
       regsYesterdayAll,
-      regsSinceMay1,
       regsPaid,
       regsOrganic,
       recentList,
     ] = await Promise.all([
-      countContactsForTag(env, TAGS.fyp_overall, todayStart),
+      countContactsOnList(env, LIST_ID, null),
+      countContactsOnList(env, LIST_ID, todayStart),
       (async () => {
-        // yesterday only = total since yesterday minus today
-        const total = await countContactsForTag(env, TAGS.fyp_overall, yesterdayStart);
-        const today = await countContactsForTag(env, TAGS.fyp_overall, todayStart);
+        const total = await countContactsOnList(env, LIST_ID, yesterdayStart);
+        const today = await countContactsOnList(env, LIST_ID, todayStart);
         return total - today;
       })(),
-      countContactsForTag(env, TAGS.fyp_overall, launchCutoff),
-      countContactsForTag(env, TAGS.fyp_paid, launchCutoff),
-      countContactsForTag(env, TAGS.fyp_organic, launchCutoff),
+      countContactsForTag(env, TAGS.fyp_paid, null),
+      countContactsForTag(env, TAGS.fyp_organic, null),
       listRecent(env, TAGS.fyp_overall, 10),
     ]);
+    const regsSinceMay1 = regsTotalList28;
 
     // VIP counts — resolve tag IDs first
     const vipUmbrella = await ac(env, `/tags?search=${encodeURIComponent("FYP VIP May 2026")}`);
@@ -87,10 +108,14 @@ export async function onRequestGet({ request, env }) {
     const vipPaidId = findId(vipPaid, "FYP VIP May 2026 Paid");
     const vipOrgId = findId(vipOrg, "FYP VIP May 2026 Organic");
 
+    // VIP tags are launch-specific (named "FYP VIP May 2026"). Don't filter by
+    // created_after — most VIP buyers are pre-existing AC contacts (Kait's
+    // email list / podcast fans), so filtering by contact creation date
+    // undercounts dramatically. Count ALL with the tag.
     const [vipAll, vipPaidCount, vipOrgCount] = await Promise.all([
-      vipUmbrellaId ? countContactsForTag(env, vipUmbrellaId, launchCutoff) : 0,
-      vipPaidId ? countContactsForTag(env, vipPaidId, launchCutoff) : 0,
-      vipOrgId ? countContactsForTag(env, vipOrgId, launchCutoff) : 0,
+      vipUmbrellaId ? countContactsForTag(env, vipUmbrellaId, null) : 0,
+      vipPaidId ? countContactsForTag(env, vipPaidId, null) : 0,
+      vipOrgId ? countContactsForTag(env, vipOrgId, null) : 0,
     ]);
 
     const regToVipPct = regsSinceMay1 > 0 ? (vipAll / regsSinceMay1 * 100).toFixed(1) : "—";
