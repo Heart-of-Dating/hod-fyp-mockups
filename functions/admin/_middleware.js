@@ -1,34 +1,25 @@
-// Basic auth middleware — gates /admin/* behind a password.
-// Username can be anything. Password = "cooljj".
-// Browser prompts for credentials via WWW-Authenticate header.
+// Custom cookie-based auth — gates /admin/* behind a single password field.
+// Set the auth cookie via POST to /api/admin-login.
 
 const PASSWORD = "jjcool";
+const COOKIE_NAME = "hod_admin";
+const COOKIE_VALUE = "ok-jjcool-2026"; // changes invalidate sessions
 
 export async function onRequest({ request, next }) {
-  const auth = request.headers.get("Authorization");
+  const url = new URL(request.url);
 
-  if (auth) {
-    // "Basic base64(username:password)"
-    const match = /^Basic\s+(.+)$/i.exec(auth);
-    if (match) {
-      try {
-        const decoded = atob(match[1]);
-        const idx = decoded.indexOf(":");
-        if (idx >= 0) {
-          const pass = decoded.slice(idx + 1);
-          if (pass === PASSWORD) {
-            return next();
-          }
-        }
-      } catch (_) { /* fall through */ }
-    }
+  // Allow the login page through without auth
+  if (url.pathname.endsWith("/login.html") || url.pathname.endsWith("/login")) {
+    return next();
   }
 
-  return new Response("Authentication required", {
-    status: 401,
-    headers: {
-      "WWW-Authenticate": 'Basic realm="FYP Admin", charset="UTF-8"',
-      "Content-Type": "text/plain",
-    },
-  });
+  // Check cookie
+  const cookies = request.headers.get("Cookie") || "";
+  const match = cookies.match(new RegExp(`(?:^|;\\s*)${COOKIE_NAME}=([^;]+)`));
+  if (match && match[1] === COOKIE_VALUE) {
+    return next();
+  }
+
+  // No valid cookie — redirect to login page
+  return Response.redirect(new URL("/admin/login.html", request.url).toString(), 302);
 }
