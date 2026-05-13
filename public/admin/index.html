@@ -200,7 +200,14 @@ async function refresh() {
     document.getElementById('vip-paid').textContent = d.vip.paid;
     document.getElementById('vip-org').textContent = d.vip.organic;
 
-    if (d.pageviews.note) {
+    // Pageview data
+    if (d.pageviews && d.pageviews.today !== undefined) {
+      document.getElementById('pv-today').textContent = d.pageviews.today.toLocaleString();
+      document.getElementById('pv-conv').textContent =
+        'visit → reg: ' + d.pageviews.visit_to_reg_pct + '% · ' +
+        d.pageviews.visits_today + ' unique visits today';
+      document.getElementById('pv-note').style.display = 'none';
+    } else {
       document.getElementById('pv-note').style.display = 'block';
     }
 

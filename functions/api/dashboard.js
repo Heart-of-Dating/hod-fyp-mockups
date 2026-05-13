@@ -122,6 +122,45 @@ export async function onRequestGet({ request, env }) {
     const paidToVipPct = regsPaid > 0 ? (vipPaidCount / regsPaid * 100).toFixed(1) : "—";
     const orgToVipPct = regsOrganic > 0 ? (vipOrgCount / regsOrganic * 100).toFixed(1) : "—";
 
+    // CF Web Analytics pageview pull (GraphQL)
+    let pageviews = { today: 0, yesterday: 0, visits_today: 0 };
+    let visitToRegPct = "—";
+    if (env.CF_ANALYTICS_TOKEN && env.CF_ACCOUNT_ID) {
+      try {
+        const todayDate = isoDay(new Date());
+        const yesterdayDate = isoDay(new Date(Date.now() - 86400000));
+        const query = `query { viewer { accounts(filter: {accountTag: "${env.CF_ACCOUNT_ID}"}) { rumPageloadEventsAdaptiveGroups(limit: 1000, filter: {date_geq: "${yesterdayDate}", date_leq: "${todayDate}"}) { count sum { visits } dimensions { date } } } } }`;
+        const gqlResp = await fetch("https://api.cloudflare.com/client/v4/graphql", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${env.CF_ANALYTICS_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ query }),
+        });
+        if (gqlResp.ok) {
+          const gqlData = await gqlResp.json();
+          const rows = gqlData?.data?.viewer?.accounts?.[0]?.rumPageloadEventsAdaptiveGroups || [];
+          for (const r of rows) {
+            const d = r?.dimensions?.date;
+            const count = r?.count || 0;
+            const visits = r?.sum?.visits || 0;
+            if (d === todayDate) {
+              pageviews.today += count;
+              pageviews.visits_today += visits;
+            } else if (d === yesterdayDate) {
+              pageviews.yesterday += count;
+            }
+          }
+          if (pageviews.today > 0) {
+            visitToRegPct = (regsTodayAll / pageviews.today * 100).toFixed(1);
+          }
+        }
+      } catch (e) {
+        // fail silent — dashboard still works without pageview data
+      }
+    }
+
     return new Response(
       JSON.stringify({
         regs: {
@@ -142,10 +181,13 @@ export async function onRequestGet({ request, env }) {
           paid_reg_to_vip_pct: paidToVipPct,
           organic_reg_to_vip_pct: orgToVipPct,
         },
-        recent: recentList,
         pageviews: {
-          note: "Pending — enable Cloudflare Web Analytics on the Pages project to populate",
+          today: pageviews.today,
+          yesterday: pageviews.yesterday,
+          visits_today: pageviews.visits_today,
+          visit_to_reg_pct: visitToRegPct,
         },
+        recent: recentList,
         generated_at: new Date().toISOString(),
       }, null, 2),
       {
