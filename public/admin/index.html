@@ -17,60 +17,191 @@
     line-height: 1.4;
   }
   h1 {
-    font-size: 18px;
+    font-size: 20px;
     margin: 0 0 4px;
     color: #fff;
+  }
+  h2 {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #888;
+    letter-spacing: 0.05em;
+    margin: 0 0 12px;
+    font-weight: 600;
+  }
+  h3 {
+    font-size: 13px;
+    color: #aaa;
+    margin: 28px 0 12px;
+    font-weight: 600;
   }
   .sub {
     color: #888;
     font-size: 12px;
-    margin: 0 0 24px;
+    margin: 0 0 20px;
   }
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 8px;
   }
   .card {
     background: #181818;
     border: 1px solid #2a2a2a;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 16px 18px;
   }
-  .card h2 {
-    font-size: 11px;
-    text-transform: uppercase;
-    color: #888;
-    letter-spacing: 0.05em;
-    margin: 0 0 8px;
-    font-weight: 600;
+  .card.wide {
+    grid-column: 1 / -1;
   }
   .big {
-    font-size: 32px;
+    font-size: 34px;
     font-weight: 700;
     color: #fff;
     line-height: 1;
     margin: 0 0 4px;
+    font-feature-settings: "tnum";
   }
+  .big.green { color: #4ade80; }
+  .big.gold { color: #facc15; }
   .sub-num {
     font-size: 12px;
     color: #aaa;
   }
+  .delta-up { color: #4ade80; font-weight: 600; }
+  .delta-down { color: #f87171; font-weight: 600; }
   .row {
     display: flex;
     justify-content: space-between;
-    padding: 6px 0;
+    padding: 7px 0;
     border-bottom: 1px solid #1f1f1f;
     font-size: 13px;
   }
   .row:last-child { border-bottom: 0; }
   .row .label { color: #aaa; }
-  .row .val { color: #fff; font-weight: 600; }
+  .row .val { color: #fff; font-weight: 600; font-feature-settings: "tnum"; }
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 8px;
+    background: #2a200a;
+    color: #facc15;
+    margin-left: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  /* Bar chart — hourly */
+  .bars {
+    display: grid;
+    grid-template-columns: repeat(24, 1fr);
+    align-items: end;
+    gap: 2px;
+    height: 120px;
+    padding: 8px 0;
+  }
+  .bar {
+    background: #2a2a2a;
+    border-radius: 2px;
+    min-height: 2px;
+    transition: height 0.3s, background 0.3s;
+    position: relative;
+  }
+  .bar.active { background: #4ade80; }
+  .bar.peak { background: #facc15; }
+  .bar:hover::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    margin-bottom: 4px;
+    pointer-events: none;
+  }
+  .bars-labels {
+    display: grid;
+    grid-template-columns: repeat(24, 1fr);
+    gap: 2px;
+    font-size: 9px;
+    color: #555;
+    text-align: center;
+    margin-top: 4px;
+    font-feature-settings: "tnum";
+  }
+  /* Daily bar chart */
+  .daily-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 100px;
+    padding: 8px 0;
+  }
+  .daily-bar {
+    flex: 1;
+    background: #4ade80;
+    border-radius: 4px 4px 0 0;
+    min-height: 4px;
+    position: relative;
+    transition: height 0.3s;
+  }
+  .daily-bar .daily-count {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: #ddd;
+    font-weight: 600;
+  }
+  .daily-labels {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+    font-size: 10px;
+    color: #888;
+  }
+  .daily-labels > div {
+    flex: 1;
+    text-align: center;
+  }
+  /* State bars */
+  .state-bar {
+    display: grid;
+    grid-template-columns: 36px 1fr 40px;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+    font-size: 12px;
+  }
+  .state-bar .state-label { color: #ddd; font-weight: 600; }
+  .state-bar .state-track {
+    height: 8px;
+    background: #1f1f1f;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .state-bar .state-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4ade80, #22c55e);
+    border-radius: 4px;
+  }
+  .state-bar .state-count {
+    color: #aaa;
+    text-align: right;
+    font-feature-settings: "tnum";
+  }
+  /* Recent list */
   .recent-list {
     background: #181818;
     border: 1px solid #2a2a2a;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 12px 16px;
     max-height: 320px;
     overflow-y: auto;
@@ -84,13 +215,10 @@
     font-size: 12px;
   }
   .recent-row:last-child { border-bottom: 0; }
-  .recent-time { color: #888; }
-  .recent-email { color: #f5f5f5; }
+  .recent-time { color: #888; font-feature-settings: "tnum"; }
+  .recent-email { color: #f5f5f5; overflow: hidden; text-overflow: ellipsis; }
   .recent-name { color: #aaa; text-align: right; }
-  .stale {
-    color: #c97;
-    font-size: 11px;
-  }
+  .stale { color: #c97; font-size: 11px; }
   .pulse {
     display: inline-block;
     width: 8px; height: 8px;
@@ -103,9 +231,6 @@
     0%, 100% { opacity: 1; }
     50% { opacity: 0.3; }
   }
-  .conv-good { color: #4ade80; }
-  .conv-okay { color: #facc15; }
-  .conv-bad  { color: #f87171; }
   .note {
     background: #1c1810;
     border: 1px solid #2c2410;
@@ -115,7 +240,6 @@
     color: #c97;
     margin-bottom: 16px;
   }
-  a { color: #6ad; }
 </style>
 </head>
 <body>
@@ -124,23 +248,24 @@
 <p class="sub"><span class="pulse"></span><span id="updated">loading…</span></p>
 
 <div class="note" id="pv-note" style="display:none;">
-  ⚠️ <strong>Pageview data pending</strong> — enable Cloudflare Web Analytics on the Pages project to unlock visit → reg conversion %.
+  ⚠️ <strong>Pageview data still building</strong> — Web Analytics enabled today; full 24h window tomorrow morning for real visit→reg %.
 </div>
 
+<!-- HEADLINE NUMBERS -->
 <div class="grid">
   <div class="card">
-    <h2>Today's Registrations</h2>
+    <h2>Total Registrations</h2>
+    <div class="big green" id="since-may">—</div>
+    <div class="sub-num">List 28 — all time launch</div>
+  </div>
+  <div class="card">
+    <h2>Today</h2>
     <div class="big" id="today">—</div>
     <div class="sub-num">Yesterday: <span id="yesterday">—</span></div>
   </div>
   <div class="card">
-    <h2>Total Since May 1</h2>
-    <div class="big" id="since-may">—</div>
-    <div class="sub-num">All-time launch volume</div>
-  </div>
-  <div class="card">
     <h2>VIP Buyers</h2>
-    <div class="big" id="vip-total">—</div>
+    <div class="big gold" id="vip-total">—</div>
     <div class="sub-num">Reg → VIP: <span id="vip-pct">—</span>%</div>
   </div>
   <div class="card">
@@ -150,28 +275,55 @@
   </div>
 </div>
 
+<!-- HOURLY TODAY -->
+<h3>Today's Registration Pulse (hourly, CT)</h3>
+<div class="card wide">
+  <div class="bars" id="hourly-bars"></div>
+  <div class="bars-labels" id="hourly-labels"></div>
+</div>
+
+<!-- 7 DAY TREND -->
+<h3>Last 7 Days</h3>
+<div class="card wide">
+  <div class="daily-bars" id="daily-bars"></div>
+  <div class="daily-labels" id="daily-labels"></div>
+</div>
+
+<!-- CHANNEL + GEO + PAGEVIEWS -->
+<h3>Channel · Geography · Traffic</h3>
 <div class="grid">
   <div class="card">
-    <h2>Channel Split — Registrations</h2>
-    <div class="row"><span class="label">Paid (Meta)</span><span class="val" id="reg-paid">—</span></div>
+    <h2>Channel — Registrations</h2>
+    <div class="row"><span class="label">Paid (Meta)<span id="paid-badge" class="badge" style="display:none;">test data</span></span><span class="val" id="reg-paid">—</span></div>
     <div class="row"><span class="label">Organic</span><span class="val" id="reg-organic">—</span></div>
-    <div class="row"><span class="label">Untagged</span><span class="val" id="reg-unknown">—</span></div>
+    <div class="row"><span class="label">Unknown</span><span class="val" id="reg-unknown">—</span></div>
   </div>
   <div class="card">
-    <h2>Channel Split — VIP Conversion %</h2>
-    <div class="row"><span class="label">Paid → VIP</span><span class="val" id="paid-vip-pct">—</span></div>
-    <div class="row"><span class="label">Organic → VIP</span><span class="val" id="org-vip-pct">—</span></div>
+    <h2>Channel — VIP Conversion</h2>
     <div class="row"><span class="label">VIP — Paid</span><span class="val" id="vip-paid">—</span></div>
     <div class="row"><span class="label">VIP — Organic</span><span class="val" id="vip-org">—</span></div>
+    <div class="row"><span class="label">Paid → VIP %</span><span class="val" id="paid-vip-pct">—</span></div>
+    <div class="row"><span class="label">Organic → VIP %</span><span class="val" id="org-vip-pct">—</span></div>
   </div>
   <div class="card">
     <h2>Pageviews (24h)</h2>
     <div class="big" id="pv-today">—</div>
-    <div class="sub-num" id="pv-conv">conversion: —</div>
+    <div class="sub-num" id="pv-conv">—</div>
   </div>
 </div>
 
-<h2 style="font-size:13px;color:#aaa;margin:24px 0 10px;">Most Recent Registrations</h2>
+<div class="grid" style="margin-top:12px;">
+  <div class="card">
+    <h2>Top States (last 7 days)</h2>
+    <div id="states-list" style="margin-top:8px;"></div>
+  </div>
+  <div class="card">
+    <h2>Top Traffic Sources (24h)</h2>
+    <div id="refs-list" style="margin-top:8px;"></div>
+  </div>
+</div>
+
+<h3>Most Recent Registrations</h3>
 <div class="recent-list" id="recent">
   <div class="recent-row"><span class="recent-time">loading…</span></div>
 </div>
@@ -194,25 +346,72 @@ async function refresh() {
     document.getElementById('reg-paid').textContent = d.channel.paid;
     document.getElementById('reg-organic').textContent = d.channel.organic;
     document.getElementById('reg-unknown').textContent = d.channel.unknown;
+    document.getElementById('paid-badge').style.display = d.channel.paid_is_test ? 'inline-block' : 'none';
 
     document.getElementById('paid-vip-pct').textContent = d.vip.paid_reg_to_vip_pct + '%';
     document.getElementById('org-vip-pct').textContent = d.vip.organic_reg_to_vip_pct + '%';
     document.getElementById('vip-paid').textContent = d.vip.paid;
     document.getElementById('vip-org').textContent = d.vip.organic;
 
-    // Pageview data
-    if (d.pageviews && d.pageviews.today !== undefined) {
-      document.getElementById('pv-today').textContent = d.pageviews.today.toLocaleString();
-      var baseline = d.pageviews.baseline || 0;
-      var live = d.pageviews.live_today || (d.pageviews.today - baseline);
-      var note = baseline > 0
-        ? 'visit → reg: ' + d.pageviews.visit_to_reg_pct + '% · ' + baseline + ' baseline + ' + live + ' live'
-        : 'visit → reg: ' + d.pageviews.visit_to_reg_pct + '% · ' + d.pageviews.visits_today + ' unique today';
-      document.getElementById('pv-conv').textContent = note;
-      document.getElementById('pv-note').style.display = 'none';
-    } else {
-      document.getElementById('pv-note').style.display = 'block';
-    }
+    // Pageview
+    document.getElementById('pv-today').textContent = (d.pageviews.today || 0).toLocaleString();
+    var pvSettled = d.pageviews.today > 20; // enough sample to compute conversion meaningfully
+    document.getElementById('pv-conv').textContent = pvSettled
+      ? 'visit → reg: ' + d.pageviews.visit_to_reg_pct + '% · ' + d.pageviews.visits_today + ' unique visits'
+      : 'still accumulating — real conversion tomorrow morning';
+    document.getElementById('pv-note').style.display = pvSettled ? 'none' : 'block';
+
+    // Hourly bars
+    const hb = document.getElementById('hourly-bars');
+    const hl = document.getElementById('hourly-labels');
+    const peakHour = d.hourly_today.reduce((max, h) => h.count > max.count ? h : max, {count: 0});
+    const maxCount = Math.max(...d.hourly_today.map(h => h.count), 1);
+    hb.innerHTML = d.hourly_today.map(h => {
+      const pct = (h.count / maxCount * 100);
+      const cls = h.count === 0 ? '' : (h === peakHour ? 'peak' : 'active');
+      return `<div class="bar ${cls}" style="height:${pct}%;" data-tip="${h.hour}:00 — ${h.count} regs"></div>`;
+    }).join('');
+    hl.innerHTML = d.hourly_today.map((h, i) =>
+      `<div>${i % 3 === 0 ? h.hour : ''}</div>`
+    ).join('');
+
+    // Daily bars
+    const db = document.getElementById('daily-bars');
+    const dl = document.getElementById('daily-labels');
+    const maxDaily = Math.max(...d.daily_7d.map(x => x.count), 1);
+    db.innerHTML = d.daily_7d.map(x => {
+      const pct = (x.count / maxDaily * 100);
+      return `<div class="daily-bar" style="height:${pct}%;"><span class="daily-count">${x.count}</span></div>`;
+    }).join('');
+    dl.innerHTML = d.daily_7d.map(x => {
+      const dt = new Date(x.date + 'T00:00:00Z');
+      const day = dt.toLocaleDateString('en-US', { weekday: 'short' });
+      const num = dt.getUTCDate();
+      return `<div>${day}<br/>${num}</div>`;
+    }).join('');
+
+    // States
+    const stateMax = d.top_states.length > 0 ? d.top_states[0].count : 1;
+    document.getElementById('states-list').innerHTML = d.top_states.length === 0
+      ? '<span class="sub-num">No state data yet</span>'
+      : d.top_states.map(s => `
+        <div class="state-bar">
+          <span class="state-label">${s.state}</span>
+          <span class="state-track"><span class="state-fill" style="width:${s.count/stateMax*100}%"></span></span>
+          <span class="state-count">${s.count}</span>
+        </div>
+      `).join('');
+
+    // Referrers
+    document.getElementById('refs-list').innerHTML = d.top_referrers.length === 0
+      ? '<span class="sub-num">Building (data starts as visits come in)</span>'
+      : d.top_referrers.map(r => `
+        <div class="state-bar">
+          <span class="state-label" style="font-size:11px;font-weight:400;color:#ddd;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;">${r.referrer}</span>
+          <span class="state-track"><span class="state-fill" style="width:${r.count/d.top_referrers[0].count*100}%;background:linear-gradient(90deg,#60a5fa,#3b82f6);"></span></span>
+          <span class="state-count">${r.count}</span>
+        </div>
+      `).join('');
 
     document.getElementById('updated').textContent =
       'Updated ' + new Date(d.generated_at).toLocaleTimeString();

@@ -62,6 +62,37 @@ async function listRecent(env, tagId, limit) {
   }));
 }
 
+// Pull all contacts on a list with their cdate + state field, for charts
+async function pullListWithMeta(env, listId, since) {
+  const STATE_FIELD_ID = 18;
+  const out = [];
+  let offset = 0;
+  while (offset < 5000) {
+    const filter = since ? `&filters[updated_after]=${encodeURIComponent(since)}` : "";
+    const data = await ac(env, `/contacts?listid=${listId}${filter}&include=fieldValues&limit=100&offset=${offset}`);
+    const contacts = data.contacts || [];
+    const fieldVals = data.fieldValues || [];
+    // Build map contactId → state
+    const stateByContact = {};
+    for (const fv of fieldVals) {
+      if (String(fv.field) === String(STATE_FIELD_ID)) {
+        stateByContact[fv.contact] = (fv.value || "").toUpperCase();
+      }
+    }
+    for (const c of contacts) {
+      out.push({
+        cdate: c.cdate,
+        udate: c.udate,
+        state: stateByContact[c.id] || "",
+        email: c.email,
+      });
+    }
+    if (contacts.length < 100) break;
+    offset += 100;
+  }
+  return out;
+}
+
 function isoDay(d) { return new Date(d).toISOString().slice(0, 10); }
 
 export async function onRequestGet({ request, env }) {
@@ -77,21 +108,58 @@ export async function onRequestGet({ request, env }) {
     // Channel split still uses FYP-Paid/FYP-Organic tags (set via /api/register
     // on each registration regardless of new/existing contact status).
     const LIST_ID = 28;
+    // Pull full List 28 with cdate + state, single query — derive everything from this
+    const sevenDaysAgo = new Date(Date.now() - 7 * 86400000).toISOString();
+    const allContacts = await pullListWithMeta(env, LIST_ID, sevenDaysAgo);
+    const regsTotalList28 = await countContactsOnList(env, LIST_ID, null);
+
+    // Today / yesterday counts from the 7-day pull
+    const todayDateUtc = isoDay(new Date());
+    const yesterdayDateUtc = isoDay(new Date(Date.now() - 86400000));
+    const regsTodayAll = allContacts.filter(c => isoDay(c.udate) === todayDateUtc).length;
+    const regsYesterdayAll = allContacts.filter(c => isoDay(c.udate) === yesterdayDateUtc).length;
+
+    // Hourly today (UTC), CT = UTC-5
+    const hourlyToday = Array.from({ length: 24 }, (_, h) => ({ hour: h, count: 0 }));
+    for (const c of allContacts) {
+      const d = new Date(c.udate);
+      if (isoDay(d) !== todayDateUtc) continue;
+      // Convert to CT (UTC-5 during CDT)
+      const ctHour = (d.getUTCHours() - 5 + 24) % 24;
+      hourlyToday[ctHour].count++;
+    }
+
+    // Daily last 7 days
+    const dailyMap = {};
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(Date.now() - i * 86400000);
+      dailyMap[isoDay(d)] = 0;
+    }
+    for (const c of allContacts) {
+      const dayKey = isoDay(c.udate);
+      if (dayKey in dailyMap) dailyMap[dayKey]++;
+    }
+    const dailyLast7 = Object.entries(dailyMap)
+      .map(([date, count]) => ({ date, count }))
+      .sort((a, b) => a.date.localeCompare(b.date));
+
+    // Top states from List 28 (last 7 days only — fresh signal)
+    const stateCounts = {};
+    for (const c of allContacts) {
+      const st = c.state || "—";
+      stateCounts[st] = (stateCounts[st] || 0) + 1;
+    }
+    const topStates = Object.entries(stateCounts)
+      .filter(([s]) => s !== "—" && s.length === 2)
+      .map(([state, count]) => ({ state, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10);
+
     const [
-      regsTotalList28,
-      regsTodayAll,
-      regsYesterdayAll,
       regsPaid,
       regsOrganic,
       recentList,
     ] = await Promise.all([
-      countContactsOnList(env, LIST_ID, null),
-      countContactsOnList(env, LIST_ID, todayStart),
-      (async () => {
-        const total = await countContactsOnList(env, LIST_ID, yesterdayStart);
-        const today = await countContactsOnList(env, LIST_ID, todayStart);
-        return total - today;
-      })(),
       countContactsForTag(env, TAGS.fyp_paid, null),
       countContactsForTag(env, TAGS.fyp_organic, null),
       listRecent(env, TAGS.fyp_overall, 10),
@@ -164,6 +232,30 @@ export async function onRequestGet({ request, env }) {
       }
     }
 
+    // Top referrers from CF Web Analytics
+    let topReferrers = [];
+    if (env.CF_ANALYTICS_TOKEN && env.CF_ACCOUNT_ID) {
+      try {
+        const refQuery = `query { viewer { accounts(filter: {accountTag: "${env.CF_ACCOUNT_ID}"}) { rumPageloadEventsAdaptiveGroups(limit: 10, filter: {date_geq: "${isoDay(new Date(Date.now() - 86400000))}"}, orderBy: [count_DESC]) { count dimensions { refererHost } } } } }`;
+        const r = await fetch("https://api.cloudflare.com/client/v4/graphql", {
+          method: "POST",
+          headers: { "Authorization": `Bearer ${env.CF_ANALYTICS_TOKEN}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ query: refQuery }),
+        });
+        if (r.ok) {
+          const j = await r.json();
+          const rows = j?.data?.viewer?.accounts?.[0]?.rumPageloadEventsAdaptiveGroups || [];
+          topReferrers = rows
+            .map(r => ({ referrer: r.dimensions?.refererHost || "(direct)", count: r.count || 0 }))
+            .filter(r => r.count > 0)
+            .slice(0, 5);
+        }
+      } catch (_) {}
+    }
+
+    // Paid count cleanup — until paid launches, the few "paid" contacts are test data
+    const paidLooksReal = regsPaid > 5;
+
     return new Response(
       JSON.stringify({
         regs: {
@@ -174,7 +266,8 @@ export async function onRequestGet({ request, env }) {
         channel: {
           paid: regsPaid,
           organic: regsOrganic,
-          unknown: regsSinceMay1 - regsPaid - regsOrganic,
+          unknown: Math.max(0, regsSinceMay1 - regsPaid - regsOrganic),
+          paid_is_test: !paidLooksReal,
         },
         vip: {
           total: vipAll,
@@ -190,6 +283,10 @@ export async function onRequestGet({ request, env }) {
           visits_today: pageviews.visits_today,
           visit_to_reg_pct: visitToRegPct,
         },
+        hourly_today: hourlyToday,
+        daily_7d: dailyLast7,
+        top_states: topStates,
+        top_referrers: topReferrers,
         recent: recentList,
         generated_at: new Date().toISOString(),
       }, null, 2),
