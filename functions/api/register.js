@@ -148,6 +148,66 @@ export async function onRequestPost({ request, env }) {
     }
   }));
 
+  // 4) Meta Conversions API — server-side CompleteRegistration event with same event_id as browser pixel.
+  //    Captures iOS conversions the browser pixel misses (~60% of audience).
+  //    Pass IP, UA, fbc/fbp cookies, hashed email + phone for highest match quality.
+  if (env.META_CAPI_TOKEN && env.META_PIXEL_ID) {
+    try {
+      const eventId = (payload.event_id || `completeregistration_${email}_${Date.now()}`).slice(0, 256);
+      const eventTime = Math.floor(Date.now() / 1000);
+      const clientIp = request.headers.get("cf-connecting-ip") || request.headers.get("x-forwarded-for") || "";
+      const userAgent = request.headers.get("user-agent") || "";
+      const sourceUrl = request.headers.get("referer") || "https://fyp.heartofdating.com/fyp/";
+
+      const sha256Hex = async (s) => {
+        const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s.toLowerCase().trim()));
+        return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+      };
+      const normPhone = phone.replace(/\D/g, "");
+
+      const userData = {
+        em: [await sha256Hex(email)],
+        ph: normPhone ? [await sha256Hex(normPhone)] : undefined,
+        client_ip_address: clientIp,
+        client_user_agent: userAgent,
+        fbc: payload.fbc || undefined,
+        fbp: payload.fbp || undefined,
+      };
+      // Strip undefined fields
+      Object.keys(userData).forEach(k => userData[k] === undefined && delete userData[k]);
+
+      const capiBody = {
+        data: [{
+          event_name: "CompleteRegistration",
+          event_time: eventTime,
+          event_id: eventId,
+          action_source: "website",
+          event_source_url: sourceUrl,
+          user_data: userData,
+          custom_data: {
+            content_name: "FYP May 2026 Registration",
+            content_category: src, // "paid" | "organic"
+          },
+        }],
+      };
+
+      const capiResp = await fetch(
+        `https://graph.facebook.com/v19.0/${env.META_PIXEL_ID}/events?access_token=${env.META_CAPI_TOKEN}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(capiBody),
+        }
+      );
+      // Don't fail the whole request if CAPI fails — log and move on
+      if (!capiResp.ok) {
+        console.log(`CAPI CompleteRegistration failed for contact ${contactId}: ${capiResp.status}`);
+      }
+    } catch (e) {
+      console.log(`CAPI CompleteRegistration error for contact ${contactId}: ${e.message}`);
+    }
+  }
+
   // Pass src through to /fyp/vip so VIP page can pick the channel-correct ThriveCart product.
   return new Response(JSON.stringify({ ok: true, contact: contactId, redirect: `/fyp/vip?src=${src}` }), {
     status: 200,

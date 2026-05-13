@@ -16,6 +16,33 @@
 <meta name="twitter:description" content="A free 4-night live challenge for Christian singles. Featuring Dr. Henry Cloud, Annie F. Downs, and Kait + JJ Tomlin." />
 <meta name="twitter:image" content="https://heartofdating.com/assets/kait-jj-couple.png" />
 
+<!-- Meta Pixel — HODC 2023, reused for FYP May 2026 -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '869575087492502');
+fbq('track', 'PageView');
+// Capture fbclid from URL into _fbc cookie so server-side CAPI can use it
+(function(){
+  var p = new URLSearchParams(window.location.search);
+  var fbclid = p.get('fbclid');
+  if (fbclid && !document.cookie.match(/(?:^|;\s*)_fbc=/)) {
+    var fbc = 'fb.1.' + Date.now() + '.' + fbclid;
+    document.cookie = '_fbc=' + fbc + '; path=/; max-age=7776000; SameSite=Lax';
+  }
+})();
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=869575087492502&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel -->
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fraunces:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Caveat:wght@500;700&display=swap" rel="stylesheet" />
@@ -1018,6 +1045,15 @@
 
       if (btn) { btn.disabled = true; btn.textContent = 'Saving your spot…'; }
 
+      // Generate a deterministic event_id (email-based) for browser/server CAPI dedup
+      var eventId = 'lead_' + (data.email || '').toLowerCase().trim() + '_' + Date.now();
+      data.event_id = eventId;
+      // Also forward _fbc / _fbp cookies to server for CAPI parity
+      var fbcMatch = document.cookie.match(/(?:^|;\s*)_fbc=([^;]+)/);
+      var fbpMatch = document.cookie.match(/(?:^|;\s*)_fbp=([^;]+)/);
+      if (fbcMatch) data.fbc = decodeURIComponent(fbcMatch[1]);
+      if (fbpMatch) data.fbp = decodeURIComponent(fbpMatch[1]);
+
       fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1026,6 +1062,10 @@
         .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
         .then(function (res) {
           if (res.ok && res.j.ok) {
+            // Fire Meta Pixel CompleteRegistration event (browser side) — server fires the matching CAPI event with same event_id
+            if (typeof fbq === 'function') {
+              fbq('track', 'CompleteRegistration', {}, { eventID: eventId });
+            }
             window.location.href = res.j.redirect || '/fyp/vip';
           } else {
             if (btn) { btn.disabled = false; btn.textContent = origLabel || 'Try again'; }
