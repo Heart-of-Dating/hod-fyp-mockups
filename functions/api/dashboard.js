@@ -122,8 +122,15 @@ export async function onRequestGet({ request, env }) {
     const paidToVipPct = regsPaid > 0 ? (vipPaidCount / regsPaid * 100).toFixed(1) : "—";
     const orgToVipPct = regsOrganic > 0 ? (vipOrgCount / regsOrganic * 100).toFixed(1) : "—";
 
+    // Pageview baseline for May 13 (before CF Web Analytics was enabled mid-day).
+    // 179 = CF Functions Requests metric from morning — mostly /api/register +
+    // /api/dashboard hits, so this is a FLOOR estimate (actual pageviews are higher).
+    // Web Analytics enabled ~2026-05-13T22:30:00Z and tracks real pageviews from there.
+    // Today's pageviews = this baseline + live Web Analytics count.
+    const TODAY_BASELINE = isoDay(new Date()) === "2026-05-13" ? 179 : 0;
+
     // CF Web Analytics pageview pull (GraphQL)
-    let pageviews = { today: 0, yesterday: 0, visits_today: 0 };
+    let pageviews = { today: TODAY_BASELINE, yesterday: 0, visits_today: 0, baseline: TODAY_BASELINE };
     let visitToRegPct = "—";
     if (env.CF_ANALYTICS_TOKEN && env.CF_ACCOUNT_ID) {
       try {
@@ -155,6 +162,7 @@ export async function onRequestGet({ request, env }) {
           if (pageviews.today > 0) {
             visitToRegPct = (regsTodayAll / pageviews.today * 100).toFixed(1);
           }
+          pageviews.live_today = pageviews.today - pageviews.baseline;
         }
       } catch (e) {
         // fail silent — dashboard still works without pageview data

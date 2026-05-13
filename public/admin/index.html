@@ -203,9 +203,12 @@ async function refresh() {
     // Pageview data
     if (d.pageviews && d.pageviews.today !== undefined) {
       document.getElementById('pv-today').textContent = d.pageviews.today.toLocaleString();
-      document.getElementById('pv-conv').textContent =
-        'visit → reg: ' + d.pageviews.visit_to_reg_pct + '% · ' +
-        d.pageviews.visits_today + ' unique visits today';
+      var baseline = d.pageviews.baseline || 0;
+      var live = d.pageviews.live_today || (d.pageviews.today - baseline);
+      var note = baseline > 0
+        ? 'visit → reg: ' + d.pageviews.visit_to_reg_pct + '% · ' + baseline + ' baseline + ' + live + ' live'
+        : 'visit → reg: ' + d.pageviews.visit_to_reg_pct + '% · ' + d.pageviews.visits_today + ' unique today';
+      document.getElementById('pv-conv').textContent = note;
       document.getElementById('pv-note').style.display = 'none';
     } else {
       document.getElementById('pv-note').style.display = 'block';
