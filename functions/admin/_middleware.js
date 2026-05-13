@@ -2,7 +2,7 @@
 // Username can be anything. Password = "cooljj".
 // Browser prompts for credentials via WWW-Authenticate header.
 
-const PASSWORD = "cooljj";
+const PASSWORD = "jjcool";
 
 export async function onRequest({ request, next }) {
   const auth = request.headers.get("Authorization");
