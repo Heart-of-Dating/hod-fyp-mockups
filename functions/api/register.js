@@ -4,8 +4,67 @@
 //   AC_API_URL  e.g. https://kaitness.api-us1.com
 //   AC_API_KEY  the API key (Settings → Developer in AC)
 //   AC_LIST_ID  the AC list ID for FYP May 2026 registrants (TBD — Kait + JJ creating)
+//   TELNYX_LIVE                  "true" to enable welcome SMS send (default off until campaign approval)
+//   TELNYX_API_KEY               Telnyx API bearer token
+//   TELNYX_FROM_NUMBER           E.164 sending number (+16154889970)
+//   TELNYX_MESSAGING_PROFILE_ID  Telnyx messaging profile UUID
 
 const TIER1_STATES = new Set(["TX", "CA", "FL"]);
+
+// Welcome SMS — Bandit-drafted, 152 chars, 1 segment, Smart-Encoding-safe.
+// Do not edit without confirming character count + segment count stays at 1.
+const WELCOME_SMS_BODY = "Heart of Dating: You're in for the Find Your Person Challenge! Save this number — we'll text you 1hr before each night. Reply STOP to opt out, HELP for help.";
+
+// Normalize a user-entered phone string to E.164 for US/CA numbers.
+// Accepts: "(615) 555-1234", "615-555-1234", "6155551234", "+16155551234", "1-615-555-1234"
+// Returns: "+16155551234" or null if it can't be confidently normalized.
+function toE164US(raw) {
+  if (!raw) return null;
+  const digits = String(raw).replace(/\D/g, "");
+  if (digits.length === 10) return `+1${digits}`;
+  if (digits.length === 11 && digits.startsWith("1")) return `+${digits}`;
+  if (String(raw).trim().startsWith("+") && digits.length >= 10) return `+${digits}`;
+  return null;
+}
+
+// Fire-and-forget welcome SMS. Wrapped so caller can ctx.waitUntil() without blocking response.
+// Skips silently when: flag off, no opt-in, no phone, missing config, or non-normalizable number.
+async function sendWelcomeSMS(env, { phone, smsOptIn, contactId }) {
+  if (env.TELNYX_LIVE !== "true") return; // gate — flip via `wrangler pages secret put TELNYX_LIVE`
+  if (!smsOptIn) return;
+  if (!env.TELNYX_API_KEY || !env.TELNYX_FROM_NUMBER || !env.TELNYX_MESSAGING_PROFILE_ID) {
+    console.log(`telnyx welcome skipped (config missing) contact=${contactId}`);
+    return;
+  }
+  const to = toE164US(phone);
+  if (!to) {
+    console.log(`telnyx welcome skipped (phone not E.164) contact=${contactId}`);
+    return;
+  }
+  try {
+    const r = await fetch("https://api.telnyx.com/v2/messages", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.TELNYX_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: env.TELNYX_FROM_NUMBER,
+        to,
+        text: WELCOME_SMS_BODY,
+        messaging_profile_id: env.TELNYX_MESSAGING_PROFILE_ID,
+      }),
+    });
+    if (!r.ok) {
+      const errTxt = await r.text();
+      console.log(`telnyx welcome send failed contact=${contactId} status=${r.status} body=${errTxt.slice(0, 300)}`);
+    } else {
+      console.log(`telnyx welcome sent contact=${contactId} to=${to}`);
+    }
+  } catch (e) {
+    console.log(`telnyx welcome error contact=${contactId}: ${e.message}`);
+  }
+}
 
 // Channel-aware tag set:
 //   FYP-Overall  → every registration (single source-of-truth list for all FYP regs)
@@ -45,7 +104,7 @@ async function ac(env, path, init = {}) {
   return { ok: r.ok, status: r.status, body };
 }
 
-export async function onRequestPost({ request, env }) {
+export async function onRequestPost({ request, env, waitUntil }) {
   if (!env.AC_API_URL || !env.AC_API_KEY) {
     return bad("Server not configured: AC_API_URL or AC_API_KEY missing", 500);
   }
@@ -206,6 +265,16 @@ export async function onRequestPost({ request, env }) {
     } catch (e) {
       console.log(`CAPI CompleteRegistration error for contact ${contactId}: ${e.message}`);
     }
+  }
+
+  // 5) Welcome SMS — fire-and-forget via waitUntil so response doesn't block on Telnyx latency.
+  //    No-ops until env.TELNYX_LIVE === "true" (set via `wrangler pages secret put TELNYX_LIVE`).
+  const smsTask = sendWelcomeSMS(env, { phone, smsOptIn: sms, contactId });
+  if (typeof waitUntil === "function") {
+    waitUntil(smsTask);
+  } else {
+    // Local dev / older runtimes: still let the promise run, just don't block the response.
+    smsTask.catch(() => {});
   }
 
   // Pass src through to /fyp/vip so VIP page can pick the channel-correct ThriveCart product.
