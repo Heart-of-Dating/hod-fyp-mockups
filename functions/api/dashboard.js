@@ -62,6 +62,21 @@ async function listRecent(env, tagId, limit) {
   }));
 }
 
+// Pull recent from two tags in parallel, mark channel, merge & sort desc.
+// Used for the "recent regs" feed (paid + organic) so each row shows its source.
+async function listRecentByChannel(env, paidTagId, organicTagId, limit) {
+  const [paid, organic] = await Promise.all([
+    paidTagId ? listRecent(env, paidTagId, limit) : Promise.resolve([]),
+    organicTagId ? listRecent(env, organicTagId, limit) : Promise.resolve([]),
+  ]);
+  const merged = [
+    ...paid.map(c => ({ ...c, channel: "paid" })),
+    ...organic.map(c => ({ ...c, channel: "organic" })),
+  ];
+  merged.sort((a, b) => new Date(b.created) - new Date(a.created));
+  return merged.slice(0, limit);
+}
+
 // Pull all contacts on a list with their cdate + state field, for charts
 async function pullListWithMeta(env, listId, since) {
   const STATE_FIELD_ID = 18;
@@ -95,8 +110,25 @@ async function pullListWithMeta(env, listId, since) {
 
 function isoDay(d) { return new Date(d).toISOString().slice(0, 10); }
 
+// Module-level cache (persists per CF isolate). 60s TTL keeps us under
+// Worker CPU limits when admin auto-refreshes every 60s.
+let _cache = { at: 0, body: null };
+const CACHE_TTL_MS = 60 * 1000;
+
 export async function onRequestGet({ request, env }) {
   try {
+    // Serve from cache if fresh
+    if (_cache.body && Date.now() - _cache.at < CACHE_TTL_MS) {
+      return new Response(_cache.body, {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-store, max-age=0",
+          "Access-Control-Allow-Origin": "*",
+          "X-Cache": "HIT",
+        },
+      });
+    }
     const now = new Date();
     const todayStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())).toISOString();
     const yesterdayStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1)).toISOString();
@@ -162,7 +194,8 @@ export async function onRequestGet({ request, env }) {
     ] = await Promise.all([
       countContactsForTag(env, TAGS.fyp_paid, null),
       countContactsForTag(env, TAGS.fyp_organic, null),
-      listRecent(env, TAGS.fyp_overall, 10),
+      // Recent regs with channel badges (paid vs organic)
+      listRecentByChannel(env, TAGS.fyp_paid, TAGS.fyp_organic, 10),
     ]);
     const regsSinceMay1 = regsTotalList28;
 
@@ -180,10 +213,12 @@ export async function onRequestGet({ request, env }) {
     // created_after — most VIP buyers are pre-existing AC contacts (Kait's
     // email list / podcast fans), so filtering by contact creation date
     // undercounts dramatically. Count ALL with the tag.
-    const [vipAll, vipPaidCount, vipOrgCount] = await Promise.all([
+    const [vipAll, vipPaidCount, vipOrgCount, recentVipList] = await Promise.all([
       vipUmbrellaId ? countContactsForTag(env, vipUmbrellaId, null) : 0,
       vipPaidId ? countContactsForTag(env, vipPaidId, null) : 0,
       vipOrgId ? countContactsForTag(env, vipOrgId, null) : 0,
+      // Recent VIP buyers with channel badges
+      listRecentByChannel(env, vipPaidId, vipOrgId, 10),
     ]);
 
     const regToVipPct = regsSinceMay1 > 0 ? (vipAll / regsSinceMay1 * 100).toFixed(1) : "—";
@@ -194,13 +229,16 @@ export async function onRequestGet({ request, env }) {
     // Note: Web Analytics enabled ~22:30 UTC May 13. Today's numbers are PARTIAL
     // until tomorrow's full 24-hour window. Conversion math will be apples-to-apples
     // from May 14 00:00 CT onward.
-    let pageviews = { today: 0, yesterday: 0, visits_today: 0 };
-    let visitToRegPct = "—";
+    // Landing visits — /fyp/ path only. Use UNIQUE VISITS (sessions), not raw
+    // pageviews, as the conversion denominator. A reload or back-button revisit
+    // shouldn't inflate the denominator.
+    let landing = { today: 0, yesterday: 0, pageviews_today: 0 };
+    let landingToRegPct = "—";
     if (env.CF_ANALYTICS_TOKEN && env.CF_ACCOUNT_ID) {
       try {
         const todayDate = isoDay(new Date());
         const yesterdayDate = isoDay(new Date(Date.now() - 86400000));
-        const query = `query { viewer { accounts(filter: {accountTag: "${env.CF_ACCOUNT_ID}"}) { rumPageloadEventsAdaptiveGroups(limit: 1000, filter: {date_geq: "${yesterdayDate}", date_leq: "${todayDate}"}) { count sum { visits } dimensions { date } } } } }`;
+        const query = `query { viewer { accounts(filter: {accountTag: "${env.CF_ACCOUNT_ID}"}) { rumPageloadEventsAdaptiveGroups(limit: 100, filter: {date_geq: "${yesterdayDate}", date_leq: "${todayDate}", requestPath: "/fyp/"}) { count sum { visits } dimensions { date } } } } }`;
         const gqlResp = await fetch("https://api.cloudflare.com/client/v4/graphql", {
           method: "POST",
           headers: {
@@ -214,17 +252,17 @@ export async function onRequestGet({ request, env }) {
           const rows = gqlData?.data?.viewer?.accounts?.[0]?.rumPageloadEventsAdaptiveGroups || [];
           for (const r of rows) {
             const d = r?.dimensions?.date;
-            const count = r?.count || 0;
+            const pv = r?.count || 0;
             const visits = r?.sum?.visits || 0;
             if (d === todayDate) {
-              pageviews.today += count;
-              pageviews.visits_today += visits;
+              landing.today += visits;
+              landing.pageviews_today += pv;
             } else if (d === yesterdayDate) {
-              pageviews.yesterday += count;
+              landing.yesterday += visits;
             }
           }
-          if (pageviews.today > 0) {
-            visitToRegPct = (regsTodayAll / pageviews.today * 100).toFixed(1);
+          if (landing.today > 0) {
+            landingToRegPct = (regsTodayAll / landing.today * 100).toFixed(1);
           }
         }
       } catch (e) {
@@ -256,8 +294,7 @@ export async function onRequestGet({ request, env }) {
     // Paid count cleanup — until paid launches, the few "paid" contacts are test data
     const paidLooksReal = regsPaid > 5;
 
-    return new Response(
-      JSON.stringify({
+    const body = JSON.stringify({
         regs: {
           today: regsTodayAll,
           yesterday: regsYesterdayAll,
@@ -277,28 +314,30 @@ export async function onRequestGet({ request, env }) {
           paid_reg_to_vip_pct: paidToVipPct,
           organic_reg_to_vip_pct: orgToVipPct,
         },
-        pageviews: {
-          today: pageviews.today,
-          yesterday: pageviews.yesterday,
-          visits_today: pageviews.visits_today,
-          visit_to_reg_pct: visitToRegPct,
+        landing: {
+          today: landing.today,
+          yesterday: landing.yesterday,
+          pageviews_today: landing.pageviews_today,
+          landing_to_reg_pct: landingToRegPct,
         },
         hourly_today: hourlyToday,
         daily_7d: dailyLast7,
         top_states: topStates,
         top_referrers: topReferrers,
         recent: recentList,
+        recent_vip: recentVipList,
         generated_at: new Date().toISOString(),
-      }, null, 2),
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": "no-store, max-age=0",
-          "Access-Control-Allow-Origin": "*",
-        },
+      }, null, 2);
+    _cache = { at: Date.now(), body };
+    return new Response(body, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store, max-age=0",
+        "Access-Control-Allow-Origin": "*",
+        "X-Cache": "MISS",
       },
-    );
+    });
   } catch (e) {
     return new Response(JSON.stringify({ ok: false, error: e.message }), {
       status: 500,

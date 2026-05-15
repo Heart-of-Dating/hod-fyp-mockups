@@ -208,16 +208,72 @@
   }
   .recent-row {
     display: grid;
-    grid-template-columns: 80px 1fr 100px;
-    gap: 12px;
+    grid-template-columns: 60px 72px 1fr 80px;
+    gap: 10px;
     padding: 8px 0;
     border-bottom: 1px solid #1f1f1f;
     font-size: 12px;
+    align-items: center;
   }
   .recent-row:last-child { border-bottom: 0; }
   .recent-time { color: #888; font-feature-settings: "tnum"; }
   .recent-email { color: #f5f5f5; overflow: hidden; text-overflow: ellipsis; }
   .recent-name { color: #aaa; text-align: right; }
+  .chan-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    text-align: center;
+    min-width: 64px;
+    box-sizing: border-box;
+    white-space: nowrap;
+  }
+  .chan-paid { background: rgba(96, 165, 250, 0.15); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.35); }
+  .chan-organic { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.35); }
+  .chan-unknown { background: rgba(156, 163, 175, 0.15); color: #9ca3af; border: 1px solid rgba(156, 163, 175, 0.35); }
+
+  /* Search */
+  .search-wrap { margin: 16px 0 20px; position: relative; }
+  #search-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: #181818;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    color: #f5f5f5;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+  }
+  #search-input:focus { border-color: #4ade80; }
+  .search-results {
+    margin-top: 8px;
+    background: #181818;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    padding: 4px 0;
+    max-height: 420px;
+    overflow-y: auto;
+  }
+  .search-row {
+    padding: 12px 16px;
+    border-bottom: 1px solid #1f1f1f;
+    font-size: 13px;
+  }
+  .search-row:last-child { border-bottom: 0; }
+  .search-empty { padding: 16px; color: #888; font-size: 13px; }
+  .search-row .top-line { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .search-row .email { color: #f5f5f5; font-weight: 500; }
+  .search-row .name { color: #aaa; font-size: 12px; }
+  .search-row .meta { display: flex; gap: 14px; color: #888; font-size: 11px; margin-top: 6px; flex-wrap: wrap; }
+  .search-row .meta strong { color: #ddd; font-weight: 600; }
+  .vip-badge { background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid rgba(250, 204, 21, 0.4); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
+  .sms-badge { background: rgba(192, 132, 252, 0.15); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.35); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
+  .tag-pill { display: inline-block; background: #232323; color: #aaa; padding: 2px 7px; border-radius: 8px; font-size: 10px; margin-right: 4px; margin-top: 4px; }
   .stale { color: #c97; font-size: 11px; }
   .pulse {
     display: inline-block;
@@ -246,6 +302,12 @@
 
 <h1>FYP May 2026 — Live Dashboard</h1>
 <p class="sub"><span class="pulse"></span><span id="updated">loading…</span></p>
+
+<!-- SEARCH BAR -->
+<div class="search-wrap">
+  <input type="search" id="search-input" placeholder="Search by email (e.g. jen@gmail.com or partial like 'jen')" autocomplete="off" />
+  <div id="search-results" class="search-results" style="display:none;"></div>
+</div>
 
 <div class="note" id="pv-note" style="display:none;">
   ⚠️ <strong>Pageview data still building</strong> — Web Analytics enabled today; full 24h window tomorrow morning for real visit→reg %.
@@ -300,13 +362,14 @@
   </div>
   <div class="card">
     <h2>Channel — VIP Conversion</h2>
-    <div class="row"><span class="label">VIP — Paid</span><span class="val" id="vip-paid">—</span></div>
+    <div class="row" id="row-vip-paid"><span class="label">VIP — Paid</span><span class="val" id="vip-paid">—</span></div>
     <div class="row"><span class="label">VIP — Organic</span><span class="val" id="vip-org">—</span></div>
-    <div class="row"><span class="label">Paid → VIP %</span><span class="val" id="paid-vip-pct">—</span></div>
+    <div class="row" id="row-paid-vip-pct"><span class="label">Paid → VIP %</span><span class="val" id="paid-vip-pct">—</span></div>
     <div class="row"><span class="label">Organic → VIP %</span><span class="val" id="org-vip-pct">—</span></div>
+    <div id="paid-test-note" style="display:none; font-size:12px; color:#888; margin-top:8px;">Paid rows hidden — no paid ads live yet (current paid entries are test purchases w/ JJ discount).</div>
   </div>
   <div class="card">
-    <h2>Pageviews (24h)</h2>
+    <h2>/fyp/ Unique Visits (24h)</h2>
     <div class="big" id="pv-today">—</div>
     <div class="sub-num" id="pv-conv">—</div>
   </div>
@@ -323,9 +386,19 @@
   </div>
 </div>
 
-<h3>Most Recent Registrations</h3>
-<div class="recent-list" id="recent">
-  <div class="recent-row"><span class="recent-time">loading…</span></div>
+<div class="grid" style="margin-top:12px; grid-template-columns: 1fr 1fr; gap: 16px;">
+  <div>
+    <h3>Most Recent Registrations</h3>
+    <div class="recent-list" id="recent">
+      <div class="recent-row"><span class="recent-time">loading…</span></div>
+    </div>
+  </div>
+  <div>
+    <h3>Most Recent VIP Buyers</h3>
+    <div class="recent-list" id="recent-vip">
+      <div class="recent-row"><span class="recent-time">loading…</span></div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -352,12 +425,18 @@ async function refresh() {
     document.getElementById('org-vip-pct').textContent = d.vip.organic_reg_to_vip_pct + '%';
     document.getElementById('vip-paid').textContent = d.vip.paid;
     document.getElementById('vip-org').textContent = d.vip.organic;
+    // Hide paid VIP rows when paid is still test data (no ads live yet)
+    var hidePaidVip = !!d.channel.paid_is_test;
+    document.getElementById('row-vip-paid').style.display = hidePaidVip ? 'none' : '';
+    document.getElementById('row-paid-vip-pct').style.display = hidePaidVip ? 'none' : '';
+    document.getElementById('paid-test-note').style.display = hidePaidVip ? 'block' : 'none';
 
-    // Pageview
-    document.getElementById('pv-today').textContent = (d.pageviews.today || 0).toLocaleString();
-    var pvSettled = d.pageviews.today > 20; // enough sample to compute conversion meaningfully
+    // Landing /fyp/ pageviews — real conversion denominator
+    var landingToday = (d.landing && d.landing.today) || 0;
+    document.getElementById('pv-today').textContent = landingToday.toLocaleString();
+    var pvSettled = landingToday > 20;
     document.getElementById('pv-conv').textContent = pvSettled
-      ? 'visit → reg: ' + d.pageviews.visit_to_reg_pct + '% · ' + d.pageviews.visits_today + ' unique visits'
+      ? 'landing → reg: ' + d.landing.landing_to_reg_pct + '%'
       : 'still accumulating — real conversion tomorrow morning';
     document.getElementById('pv-note').style.display = pvSettled ? 'none' : 'block';
 
@@ -416,17 +495,27 @@ async function refresh() {
     document.getElementById('updated').textContent =
       'Updated ' + new Date(d.generated_at).toLocaleTimeString();
 
-    // Recent list
-    const recentEl = document.getElementById('recent');
-    recentEl.innerHTML = d.recent.map(c => {
-      const created = new Date(c.created);
-      const time = created.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-      return `<div class="recent-row">
-        <span class="recent-time">${time}</span>
-        <span class="recent-email">${c.email}</span>
-        <span class="recent-name">${c.fname}</span>
-      </div>`;
-    }).join('');
+    // Recent registrations + VIP — channel-badged
+    function renderRecent(rows) {
+      if (!rows || !rows.length) {
+        return '<div class="recent-row"><span class="recent-time" style="grid-column:1/-1; color:#666;">no entries yet</span></div>';
+      }
+      return rows.map(c => {
+        const created = new Date(c.created);
+        const time = created.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+        const chan = c.channel || 'unknown';
+        const badgeClass = 'chan-' + chan;
+        const badgeText = chan === 'paid' ? 'Paid' : chan === 'organic' ? 'Organic' : '—';
+        return `<div class="recent-row">
+          <span class="recent-time">${time}</span>
+          <span class="chan-badge ${badgeClass}">${badgeText}</span>
+          <span class="recent-email">${c.email}</span>
+          <span class="recent-name">${c.fname}</span>
+        </div>`;
+      }).join('');
+    }
+    document.getElementById('recent').innerHTML = renderRecent(d.recent);
+    document.getElementById('recent-vip').innerHTML = renderRecent(d.recent_vip);
   } catch (e) {
     document.getElementById('updated').innerHTML =
       '<span class="stale">⚠ ' + e.message + '</span>';
@@ -434,6 +523,78 @@ async function refresh() {
 }
 refresh();
 setInterval(refresh, 60000); // refresh every 60 sec
+
+// ---- Email search ----
+const searchInput = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
+let searchTimer = null;
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString([], {month:'short', day:'numeric'}) + ' ' +
+         d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+}
+
+function renderSearchResults(results) {
+  if (!results.length) {
+    return '<div class="search-empty">No contacts found.</div>';
+  }
+  return results.map(r => {
+    const chan = r.channel ? `<span class="chan-badge chan-${r.channel}">${r.channel}</span>` : '<span class="chan-badge chan-unknown">—</span>';
+    const vip = r.is_vip ? '<span class="vip-badge">VIP</span>' : '';
+    const sms = r.sms_optin ? '<span class="sms-badge">SMS</span>' : '';
+    const tags = (r.tags || []).slice(0, 8).map(t => `<span class="tag-pill">${t}</span>`).join('');
+    return `<div class="search-row">
+      <div class="top-line">
+        ${chan}
+        ${vip}
+        ${sms}
+        <span class="email">${r.email}</span>
+        <span class="name">${r.fname} ${r.lname}</span>
+      </div>
+      <div class="meta">
+        <span><strong>Registered:</strong> ${fmtDate(r.created)}</span>
+        <span><strong>Phone:</strong> ${r.phone || '—'}</span>
+        <span><strong>AC ID:</strong> ${r.id}</span>
+      </div>
+      <div>${tags}</div>
+    </div>`;
+  }).join('');
+}
+
+async function doSearch(query) {
+  if (!query || query.length < 3) {
+    searchResults.style.display = 'none';
+    searchResults.innerHTML = '';
+    return;
+  }
+  searchResults.style.display = 'block';
+  searchResults.innerHTML = '<div class="search-empty">Searching…</div>';
+  try {
+    const r = await fetch('/api/dashboard-search?email=' + encodeURIComponent(query));
+    const data = await r.json();
+    if (data.error) {
+      searchResults.innerHTML = '<div class="search-empty">' + data.error + '</div>';
+      return;
+    }
+    searchResults.innerHTML = renderSearchResults(data.results || []);
+  } catch (e) {
+    searchResults.innerHTML = '<div class="search-empty">Search error: ' + e.message + '</div>';
+  }
+}
+
+searchInput.addEventListener('input', (e) => {
+  clearTimeout(searchTimer);
+  const q = e.target.value.trim();
+  searchTimer = setTimeout(() => doSearch(q), 350);
+});
+searchInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    searchInput.value = '';
+    searchResults.style.display = 'none';
+  }
+});
 </script>
 
 </body>
