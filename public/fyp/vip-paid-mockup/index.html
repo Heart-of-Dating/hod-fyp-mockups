@@ -28,7 +28,7 @@
     --mockup-flag: #5B3A8C;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: no-preference) { html:focus-within { scroll-behavior: smooth; } }
   body {
     font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
     color: var(--ink);

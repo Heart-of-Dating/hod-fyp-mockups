@@ -118,7 +118,12 @@ const CACHE_TTL_MS = 60 * 1000;
 
 const LAUNCH_CUTOFF = "2026-05-01"; // earliest meaningful date for range mode
 
-export async function onRequestGet({ request, env }) {
+export async function onRequestGet(context) {
+  const { request, env } = context;
+  // Pages Functions exposes waitUntil on context (older runtimes may not).
+  const waitUntil = typeof context.waitUntil === "function"
+    ? context.waitUntil.bind(context)
+    : (p) => { p.catch(() => {}); };
   try {
     // ---- Parse range query params ----
     // ?start=YYYY-MM-DD&end=YYYY-MM-DD switches the time-based panels into
@@ -139,7 +144,7 @@ export async function onRequestGet({ request, env }) {
 
     const cacheKey = rangeMode ? `range:${rangeStart}_${rangeEnd}` : "live";
 
-    // Serve from cache if fresh AND same shape
+    // ---- Tier 1: in-isolate cache (microseconds, but per-isolate only) ----
     if (_cache.body && _cache.key === cacheKey && Date.now() - _cache.at < CACHE_TTL_MS) {
       return new Response(_cache.body, {
         status: 200,
@@ -147,9 +152,24 @@ export async function onRequestGet({ request, env }) {
           "Content-Type": "application/json",
           "Cache-Control": "no-store, max-age=0",
           "Access-Control-Allow-Origin": "*",
-          "X-Cache": "HIT",
+          "X-Cache": "HIT-MEM",
         },
       });
+    }
+
+    // ---- Tier 2: CF edge cache (shared across all isolates, ~5ms) ----
+    // Keyed by the request URL (start/end query params naturally partition it).
+    // Each colo holds its own copy but lives across cold starts within that colo.
+    const edgeCache = caches.default;
+    const cacheReq = new Request(url.toString(), { method: "GET" });
+    const cached = await edgeCache.match(cacheReq);
+    if (cached) {
+      // Warm in-isolate cache from edge for faster subsequent hits
+      const body = await cached.clone().text();
+      _cache = { at: Date.now(), key: cacheKey, body };
+      const r = new Response(body, cached);
+      r.headers.set("X-Cache", "HIT-EDGE");
+      return r;
     }
 
     // Total regs = List 28 membership (captures both new + pre-existing AC
@@ -436,15 +456,19 @@ export async function onRequestGet({ request, env }) {
         generated_at: new Date().toISOString(),
       }, null, 2);
     _cache = { at: Date.now(), key: cacheKey, body };
-    return new Response(body, {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "no-store, max-age=0",
-        "Access-Control-Allow-Origin": "*",
-        "X-Cache": "MISS",
-      },
-    });
+
+    // Write to CF edge cache so other isolates / colos can serve from there.
+    // s-maxage=60 = edge holds for 60s, browser still treats as no-store.
+    const responseHeaders = {
+      "Content-Type": "application/json",
+      "Cache-Control": "public, s-maxage=60, max-age=0",
+      "Access-Control-Allow-Origin": "*",
+      "X-Cache": "MISS",
+    };
+    const edgeResp = new Response(body, { status: 200, headers: responseHeaders });
+    // Use waitUntil so cache.put doesn't delay the response
+    waitUntil(edgeCache.put(cacheReq, edgeResp.clone()));
+    return edgeResp;
   } catch (e) {
     return new Response(JSON.stringify({ ok: false, error: e.message }), {
       status: 500,

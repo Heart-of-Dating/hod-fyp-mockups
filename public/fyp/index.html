@@ -63,8 +63,14 @@ src="https://www.facebook.com/tr?id=869575087492502&ev=PageView&noscript=1"
   * { box-sizing: border-box; margin: 0; padding: 0; }
   img, picture, video { max-width: 100%; height: auto; display: block; }
   input, textarea, button { font-family: inherit; max-width: 100%; }
-  html { scroll-behavior: smooth; }
+  /* Scope smooth scroll to user-initiated nav only — blanket html rule animates
+     browser-initiated scroll restoration / anchoring, which compounded the iOS
+     WebKit duplicate-form bug. */
+  @media (prefers-reduced-motion: no-preference) {
+    html:focus-within { scroll-behavior: smooth; }
+  }
   body {
+    overflow-anchor: none; /* disable CSS scroll anchoring on font-swap reflow */
     overflow-x: hidden;
     font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
     color: var(--ink);
@@ -949,16 +955,20 @@ src="https://www.facebook.com/tr?id=869575087492502&ev=PageView&noscript=1"
 
     <div class="register">
       <label class="form-label">Save your seat — free</label>
-      <form class="register-form">
+      <!-- Bottom-form inputs renamed with _b suffix + autocomplete=off on phone to
+           prevent iOS WebKit autofill-anchoring scroll bug (it picks the LAST
+           autocomplete="tel" input on the page and brings it into view on load).
+           Form handler strips _b before POSTing to /api/register. -->
+      <form class="register-form" data-form-position="bottom">
         <div class="register-row">
-          <input type="text" name="fname" placeholder="First name" autocomplete="given-name" required />
-          <input type="text" name="lname" placeholder="Last name" autocomplete="family-name" required />
+          <input type="text" name="fname_b" placeholder="First name" autocomplete="given-name" required />
+          <input type="text" name="lname_b" placeholder="Last name" autocomplete="family-name" required />
         </div>
-        <input type="email" name="email" placeholder="Your email address" autocomplete="email" required />
-        <input type="tel" name="phone" placeholder="Mobile number" autocomplete="tel" required />
+        <input type="email" name="email_b" placeholder="Your email address" autocomplete="email" required />
+        <input type="tel" name="phone_b" placeholder="Mobile number" autocomplete="off" required />
         <div class="register-row">
-          <input type="text" name="byear" placeholder="Birth year" autocomplete="bday-year" inputmode="numeric" pattern="19[0-9]{2}|20[0-2][0-9]" maxlength="4" required />
-          <select name="state" autocomplete="address-level1" required>
+          <input type="text" name="byear_b" placeholder="Birth year" autocomplete="bday-year" inputmode="numeric" pattern="19[0-9]{2}|20[0-2][0-9]" maxlength="4" required />
+          <select name="state_b" autocomplete="address-level1" required>
             <option value="" disabled selected>State</option>
             <option value="AL">AL</option>
             <option value="AK">AK</option>
@@ -1014,7 +1024,7 @@ src="https://www.facebook.com/tr?id=869575087492502&ev=PageView&noscript=1"
           </select>
         </div>
         <label class="sms-opt">
-          <input type="checkbox" name="sms" checked />
+          <input type="checkbox" name="sms_b" checked />
           <span>Text me Find Your Person Challenge event reminders and occasional promotional updates from Heart of Dating. Msg frequency varies (avg 1–4/mo). Msg &amp; data rates may apply. Reply HELP for help, STOP to cancel. Consent is not a condition of purchase.</span>
         </label>
         <p class="legal-fineprint">
@@ -1034,9 +1044,16 @@ src="https://www.facebook.com/tr?id=869575087492502&ev=PageView&noscript=1"
 
 
 <script>
+// Scroll defenses — kills iOS WebKit / IG webview auto-scroll on page load.
+// Belt-and-suspenders alongside the bottom-form input rename (the primary fix
+// for the WebKit autofill anchoring bug). These also harden against future
+// scroll-restoration / scroll-anchoring quirks at zero cost.
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+window.scrollTo(0, 0);
+
 (function () {
-  // Phone normalization → E.164 on blur
-  document.querySelectorAll('input[name="phone"]').forEach(function (el) {
+  // Phone normalization → E.164 on blur (both top "phone" and bottom "phone_b")
+  document.querySelectorAll('input[name="phone"], input[name="phone_b"]').forEach(function (el) {
     el.addEventListener('blur', function () {
       var d = el.value.replace(/\D/g, '');
       if (d.length === 10) d = '1' + d;
@@ -1051,8 +1068,17 @@ src="https://www.facebook.com/tr?id=869575087492502&ev=PageView&noscript=1"
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      var data = Object.fromEntries(new FormData(form).entries());
-      data.sms = form.querySelector('input[name="sms"]')?.checked ? 'true' : 'false';
+      var raw = Object.fromEntries(new FormData(form).entries());
+      // Normalize bottom-form _b suffix back to canonical input names before POST.
+      // (Bottom form uses _b suffix to dodge iOS WebKit duplicate-form scroll bug.)
+      var data = {};
+      Object.keys(raw).forEach(function (k) {
+        var canonical = k.endsWith('_b') ? k.slice(0, -2) : k;
+        data[canonical] = raw[k];
+      });
+      // Checkbox sms / sms_b — explicit read since unchecked checkboxes don't appear in FormData
+      var smsBox = form.querySelector('input[name="sms"], input[name="sms_b"]');
+      data.sms = smsBox && smsBox.checked ? 'true' : 'false';
       // Channel attribution from URL: ?src=paid (James / Meta) | ?src=organic (Social Crewe / podcast).
       // ALSO accept ?utm_medium=paid|organic as fallback (UTM-convention from James's brief).
       // No src + no utm_medium → server defaults to organic.
