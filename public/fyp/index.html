@@ -696,7 +696,7 @@ src="https://www.facebook.com/tr?id=869575087492502&ev=PageView&noscript=1"
     <p class="hero-sub">A <strong>free 4-night virtual event</strong> for Christian singles ready to stop spinning — and start meeting their person with clarity, confidence, and a plan.</p>
 
     <!-- REGISTRATION FORM -->
-    <div class="register">
+    <div class="register" id="register-form">
       <label class="form-label">Register free — takes 10 seconds</label>
       <form class="register-form">
         <div class="register-row">
@@ -953,12 +953,27 @@ src="https://www.facebook.com/tr?id=869575087492502&ev=PageView&noscript=1"
     <h2>Your person is praying for you <em>too.</em></h2>
     <p class="sub">Come meet them — or at least meet the version of you who's ready to.</p>
 
+    <!-- ====================================================================
+         BOTTOM-OF-PAGE REGISTRATION FORM — TEMPORARILY REPLACED WITH ANCHOR BTN
+         ====================================================================
+         The _b-suffix disambiguation fix didn't stop the iOS WebKit scroll-jump
+         (Apple's autofill anchoring is more aggressive than docs suggest).
+         Per James's Option A: removing the duplicate form entirely and routing
+         bottom-CTA traffic back up to the hero form via anchor link.
+         If JJ confirms scroll bug is gone after this deploy, the next step is
+         deciding whether to (a) keep the anchor-button pattern permanently or
+         (b) re-introduce the bottom form via some other mechanism (separate
+         page, lazy-render via JS after first user interaction, etc.).
+         Original form HTML preserved in git history at commit 12249c1.
+    ==================================================================== -->
+    <div class="register" style="text-align:center; padding: 28px 24px;">
+      <a href="#register-form" class="btn btn-primary" style="display:inline-block; min-width: 280px;">Save My Seat — Free</a>
+    </div>
+    <!-- end bottom-form replacement -->
+
+    <!-- Original bottom form HTML kept commented for quick restore if needed
     <div class="register">
       <label class="form-label">Save your seat — free</label>
-      <!-- Bottom-form inputs renamed with _b suffix + autocomplete=off on phone to
-           prevent iOS WebKit autofill-anchoring scroll bug (it picks the LAST
-           autocomplete="tel" input on the page and brings it into view on load).
-           Form handler strips _b before POSTing to /api/register. -->
       <form class="register-form" data-form-position="bottom">
         <div class="register-row">
           <input type="text" name="fname_b" placeholder="First name" autocomplete="given-name" required />
@@ -1033,6 +1048,7 @@ src="https://www.facebook.com/tr?id=869575087492502&ev=PageView&noscript=1"
         <button class="btn btn-primary" type="submit">Register Free — May 26</button>
       </form>
     </div>
+    end of commented-out original bottom form -->
 
     <div class="final-sig">See you on Night 1 — Kait &amp; JJ</div>
   </div>

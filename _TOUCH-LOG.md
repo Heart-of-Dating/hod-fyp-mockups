@@ -13,3 +13,4 @@ YYYY-MM-DD HH:MM TZ — <Agent> edited <path> (<one-line summary>)
 2026-05-16 11:34 CDT — Bandit added date range picker to dashboard (backend /api/dashboard?start=X&end=Y with range-aware aggregation; UI presets Today/Yesterday/7d/30d/Since launch + custom; range affects hourly/daily/states/landing while VIP+channel+recent feeds stay cumulative)
 2026-05-16 14:02 CDT — Bandit fixed iOS WebKit duplicate-form scroll bug (James diagnosis) + dashboard CF edge cache layer (kills 503s under auto-refresh load)
 2026-05-16 14:16 CDT — Bandit simplified dashboard range picker to Live / Yesterday / Custom (date+hour); backend accepts full ISO timestamps; hourly bars auto-shown when span ≤48h
+2026-05-16 14:43 CDT — Bandit removed bottom register form (commented out), replaced with anchor button → #register-form (testing whether _b-suffix fix was insufficient against iOS WebKit autofill anchoring; if scroll jump now gone, James Option A confirmed as the real fix)
