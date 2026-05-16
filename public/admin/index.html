@@ -357,16 +357,12 @@
 <!-- DATE RANGE PICKER -->
 <div class="range-bar">
   <span class="label">View:</span>
-  <button class="preset active" data-preset="live">Live (today + 7d)</button>
-  <button class="preset" data-preset="today">Today</button>
+  <button class="preset active" data-preset="live">Live (Today + Totals)</button>
   <button class="preset" data-preset="yesterday">Yesterday</button>
-  <button class="preset" data-preset="7d">Last 7 days</button>
-  <button class="preset" data-preset="30d">Last 30 days</button>
-  <button class="preset" data-preset="all">Since launch</button>
   <span class="label" style="margin-left:8px;">Custom:</span>
-  <input type="date" id="range-start" min="2026-05-01" />
+  <input type="datetime-local" id="range-start" min="2026-05-01T00:00" />
   <span style="color:#666; font-size:12px;">→</span>
-  <input type="date" id="range-end" min="2026-05-01" />
+  <input type="datetime-local" id="range-end" min="2026-05-01T00:00" />
   <button class="apply" id="range-apply">Apply</button>
   <span class="range-info" id="range-info"></span>
 </div>
@@ -482,7 +478,8 @@ function isoDayLocal(date) {
 
 function rangeQS() {
   if (!currentRange || currentRange.preset === 'live') return '';
-  return `?start=${currentRange.start}&end=${currentRange.end}`;
+  // Convert local-time inputs to UTC ISO before sending — backend treats as UTC
+  return `?start=${encodeURIComponent(currentRange.start)}&end=${encodeURIComponent(currentRange.end)}`;
 }
 
 async function refresh() {
@@ -532,15 +529,16 @@ async function refresh() {
     const dailyData = inRange ? rng.daily : d.daily_7d;
     const statesData = inRange ? rng.top_states : d.top_states;
 
-    // Hourly section — hide if range > 1 day (hourly only makes sense for a single day)
+    // Hourly section — show when in live mode OR range mode with span ≤48h
     const hourlySection = document.getElementById('hourly-section');
     const hourlyHeading = document.getElementById('hourly-heading');
-    if (inRange && !rng.is_single_day) {
+    const showHourly = !inRange || (rng && rng.use_hourly);
+    if (!showHourly) {
       hourlySection.style.display = 'none';
     } else {
       hourlySection.style.display = '';
       hourlyHeading.textContent = inRange
-        ? `Hourly Pulse for ${rng.start} (CT)`
+        ? `Hourly Pulse — ${fmtLocal(rng.start)} → ${fmtLocal(rng.end)} (CT)`
         : "Today's Registration Pulse (hourly, CT)";
 
       const hb = document.getElementById('hourly-bars');
@@ -551,11 +549,18 @@ async function refresh() {
         hb.innerHTML = hourlyData.map(h => {
           const pct = (h.count / maxCount * 100);
           const cls = h.count === 0 ? '' : (h === peakHour ? 'peak' : 'active');
-          return `<div class="bar ${cls}" style="height:${pct}%;" data-tip="${h.hour}:00 — ${h.count} regs"></div>`;
+          // In live mode rows have `hour`; in range mode they have `label`
+          const tipLabel = h.label || (h.hour + ':00');
+          return `<div class="bar ${cls}" style="height:${pct}%;" data-tip="${tipLabel} — ${h.count} regs"></div>`;
         }).join('');
-        hl.innerHTML = hourlyData.map((h, i) =>
-          `<div>${i % 3 === 0 ? h.hour : ''}</div>`
-        ).join('');
+        // Labels: every Nth bar to keep readable (live=every 3rd hour, range=adaptive)
+        const labelEvery = Math.max(1, Math.ceil(hourlyData.length / 12));
+        hl.innerHTML = hourlyData.map((h, i) => {
+          if (i % labelEvery !== 0) return '<div></div>';
+          // For range mode label is "MM/DD HH"; show just HH to keep compact
+          const short = h.label ? h.label.slice(-2) : h.hour;
+          return `<div>${short}</div>`;
+        }).join('');
       }
     }
 
@@ -597,8 +602,7 @@ async function refresh() {
     // Headline regs card — when in range mode, show range count instead of "today"
     if (inRange) {
       document.getElementById('today').textContent = rng.regs;
-      document.getElementById('today-label').textContent = `In selected range (${rng.start} → ${rng.end})`;
-      // Hide the yesterday + total rows since they're "live" concepts
+      document.getElementById('today-label').textContent = `In range (${rng.span_hours}h)`;
       document.getElementById('row-yesterday').style.display = 'none';
     } else {
       document.getElementById('today-label').textContent = 'Today';
@@ -658,7 +662,22 @@ refresh();
 let refreshTimer = setInterval(refresh, 60000); // refresh every 60 sec in live mode
 
 // ---- Date range picker ----
-function setRange(preset, start, end) {
+// Range params are full UTC ISO timestamps; presets and the custom datetime-local
+// inputs both feed setRange via toUtcIso() which interprets local-time inputs
+// (browser timezone, typically CT for JJ/Kait) and converts to UTC for the API.
+function toUtcIso(local) {
+  // local: "YYYY-MM-DDTHH:MM" (datetime-local) or Date instance → UTC ISO with Z
+  if (local instanceof Date) return local.toISOString();
+  return new Date(local).toISOString();
+}
+
+function fmtLocal(iso) {
+  // Display UTC ISO back as local date+hour for the human eye
+  const d = new Date(iso);
+  return d.toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+}
+
+function setRange(preset, startIso, endIso) {
   // Clear any active state
   document.querySelectorAll('.range-bar .preset').forEach(b => b.classList.remove('active'));
   const btn = document.querySelector(`.range-bar .preset[data-preset="${preset}"]`);
@@ -667,44 +686,51 @@ function setRange(preset, start, end) {
   if (preset === 'live') {
     currentRange = null;
     document.getElementById('range-info').innerHTML = '';
+    document.getElementById('range-start').value = '';
+    document.getElementById('range-end').value = '';
     // Resume auto-refresh
     clearInterval(refreshTimer);
     refreshTimer = setInterval(refresh, 60000);
   } else {
-    currentRange = { preset, start, end };
-    const days = Math.round((Date.parse(end) - Date.parse(start)) / 86400000) + 1;
+    currentRange = { preset, start: startIso, end: endIso };
+    const hours = Math.round((Date.parse(endIso) - Date.parse(startIso)) / 3600000);
+    const spanLabel = hours < 48 ? `${hours}h` : `${Math.round(hours/24)}d`;
     document.getElementById('range-info').innerHTML =
-      `<strong>${start} → ${end}</strong> (${days} day${days === 1 ? '' : 's'})`;
+      `<strong>${fmtLocal(startIso)} → ${fmtLocal(endIso)}</strong> (${spanLabel})`;
     // Stop auto-refresh in historical mode — data won't change
     clearInterval(refreshTimer);
   }
-  document.getElementById('range-start').value = start || '';
-  document.getElementById('range-end').value = end || '';
   refresh();
 }
 
-function todayIso() { return new Date().toISOString().slice(0, 10); }
-function daysAgoIso(n) { return new Date(Date.now() - n * 86400000).toISOString().slice(0, 10); }
+// Helper: build a Date for local midnight on a given calendar offset
+function localDayBoundary(offsetDays, hour, minute) {
+  const d = new Date();
+  d.setDate(d.getDate() + offsetDays);
+  d.setHours(hour, minute || 0, 0, 0);
+  return d;
+}
 
 document.querySelectorAll('.range-bar .preset').forEach(btn => {
   btn.addEventListener('click', () => {
     const p = btn.dataset.preset;
-    const today = todayIso();
     if (p === 'live') return setRange('live');
-    if (p === 'today') return setRange('today', today, today);
-    if (p === 'yesterday') { const y = daysAgoIso(1); return setRange('yesterday', y, y); }
-    if (p === '7d') return setRange('7d', daysAgoIso(6), today);
-    if (p === '30d') return setRange('30d', daysAgoIso(29), today);
-    if (p === 'all') return setRange('all', '2026-05-01', today);
+    if (p === 'yesterday') {
+      // Full local-time yesterday: 00:00 → 23:59:59 in user's timezone, converted to UTC
+      const start = localDayBoundary(-1, 0, 0);
+      const end = localDayBoundary(-1, 23, 59);
+      end.setSeconds(59); end.setMilliseconds(999);
+      return setRange('yesterday', toUtcIso(start), toUtcIso(end));
+    }
   });
 });
 
 document.getElementById('range-apply').addEventListener('click', () => {
   const s = document.getElementById('range-start').value;
   const e = document.getElementById('range-end').value;
-  if (!s || !e) { alert('Pick both start and end dates'); return; }
+  if (!s || !e) { alert('Pick both start and end (date + time)'); return; }
   if (s > e) { alert('Start must be before end'); return; }
-  setRange('custom', s, e);
+  setRange('custom', toUtcIso(s), toUtcIso(e));
 });
 
 // ---- Email search ----

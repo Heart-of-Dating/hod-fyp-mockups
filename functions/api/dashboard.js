@@ -132,17 +132,32 @@ export async function onRequestGet(context) {
     const url = new URL(request.url);
     const startParam = url.searchParams.get("start");
     const endParam = url.searchParams.get("end");
-    const validDate = (s) => typeof s === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s);
+    // Accept either YYYY-MM-DD (date-only, treated as UTC 00:00 / end of day)
+    // or full ISO timestamps with hour precision.
+    const parseTs = (s, isEnd) => {
+      if (typeof s !== "string") return null;
+      if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+        return new Date(s + (isEnd ? "T23:59:59.999Z" : "T00:00:00.000Z"));
+      }
+      const d = new Date(s);
+      return isNaN(d.getTime()) ? null : d;
+    };
     let rangeMode = false;
-    let rangeStart = null, rangeEnd = null;
-    if (validDate(startParam) && validDate(endParam) && startParam <= endParam) {
+    let rangeStartTs = null, rangeEndTs = null;
+    let rangeStartIso = null, rangeEndIso = null;
+    const startTs = parseTs(startParam, false);
+    const endTs = parseTs(endParam, true);
+    const launchCutoffTs = new Date(LAUNCH_CUTOFF + "T00:00:00.000Z");
+    if (startTs && endTs && startTs <= endTs) {
       rangeMode = true;
-      // Clamp start to launch cutoff (no AC data before May 1 for May 2026 funnel)
-      rangeStart = startParam < LAUNCH_CUTOFF ? LAUNCH_CUTOFF : startParam;
-      rangeEnd = endParam;
+      // Clamp start to launch cutoff
+      rangeStartTs = startTs < launchCutoffTs ? launchCutoffTs : startTs;
+      rangeEndTs = endTs;
+      rangeStartIso = rangeStartTs.toISOString();
+      rangeEndIso = rangeEndTs.toISOString();
     }
 
-    const cacheKey = rangeMode ? `range:${rangeStart}_${rangeEnd}` : "live";
+    const cacheKey = rangeMode ? `range:${rangeStartIso}_${rangeEndIso}` : "live";
 
     // ---- Tier 1: in-isolate cache (microseconds, but per-isolate only) ----
     if (_cache.body && _cache.key === cacheKey && Date.now() - _cache.at < CACHE_TTL_MS) {
@@ -181,9 +196,7 @@ export async function onRequestGet(context) {
 
     // Pull window — widen if range mode reaches back further than 7 days
     const sevenDaysAgoIso = new Date(Date.now() - 7 * 86400000).toISOString();
-    const fetchSinceIso = rangeMode
-      ? new Date(rangeStart + "T00:00:00Z").toISOString()
-      : sevenDaysAgoIso;
+    const fetchSinceIso = rangeMode ? rangeStartIso : sevenDaysAgoIso;
     const allContacts = await pullListWithMeta(env, LIST_ID, fetchSinceIso);
     const regsTotalList28 = await countContactsOnList(env, LIST_ID, null);
 
@@ -230,16 +243,25 @@ export async function onRequestGet(context) {
       .slice(0, 10);
 
     // ---- Range-mode aggregation (only computed if rangeMode = true) ----
+    // Timestamp-precise filtering (not just day-level). Hourly bars when span ≤ 48h,
+    // daily bars when longer.
     let rangeBlock = null;
     if (rangeMode) {
-      const inRange = (dayKey) => dayKey >= rangeStart && dayKey <= rangeEnd;
-      const contactsInRange = allContacts.filter(c => inRange(isoDay(c.udate)));
+      const startMs = rangeStartTs.getTime();
+      const endMs = rangeEndTs.getTime();
+      const contactsInRange = allContacts.filter(c => {
+        const t = Date.parse(c.udate);
+        return t >= startMs && t <= endMs;
+      });
 
-      // Daily breakdown across the range (zero-fill days with no regs)
+      const spanHours = Math.round((endMs - startMs) / 3600000);
+      const useHourly = spanHours <= 48; // hourly bars for ≤2 days, daily beyond
+
+      // Daily breakdown across the range (zero-fill days)
       const rangeDailyMap = {};
-      const startMs = Date.parse(rangeStart + "T00:00:00Z");
-      const endMs = Date.parse(rangeEnd + "T00:00:00Z");
-      for (let t = startMs; t <= endMs; t += 86400000) {
+      const startDayMs = Date.parse(isoDay(rangeStartTs) + "T00:00:00.000Z");
+      const endDayMs = Date.parse(isoDay(rangeEndTs) + "T00:00:00.000Z");
+      for (let t = startDayMs; t <= endDayMs; t += 86400000) {
         rangeDailyMap[isoDay(new Date(t))] = 0;
       }
       for (const c of contactsInRange) {
@@ -250,16 +272,30 @@ export async function onRequestGet(context) {
         .map(([date, count]) => ({ date, count }))
         .sort((a, b) => a.date.localeCompare(b.date));
 
-      // Hourly only if single-day range (otherwise meaningless)
-      const isSingleDay = rangeStart === rangeEnd;
+      // Hourly breakdown — single-day shows 24 CT hours, multi-day (≤48h) shows
+      // hour-of-range labeled with "MM/DD HH" so user sees the actual hour.
       let rangeHourly = null;
-      if (isSingleDay) {
-        rangeHourly = Array.from({ length: 24 }, (_, h) => ({ hour: h, count: 0 }));
-        for (const c of contactsInRange) {
-          const d = new Date(c.udate);
-          const ctHour = (d.getUTCHours() - 5 + 24) % 24; // UTC → CT
-          rangeHourly[ctHour].count++;
+      if (useHourly) {
+        const hourBuckets = new Map(); // key: "MM-DD HH (CT)" → count
+        // Pre-fill buckets so empty hours show as zero
+        const firstHourMs = Math.floor(startMs / 3600000) * 3600000;
+        const lastHourMs = Math.floor(endMs / 3600000) * 3600000;
+        for (let t = firstHourMs; t <= lastHourMs; t += 3600000) {
+          const d = new Date(t);
+          const ctMs = t - 5 * 3600000; // UTC → CT (UTC-5 CDT)
+          const ctD = new Date(ctMs);
+          const label = `${String(ctD.getUTCMonth() + 1).padStart(2,"0")}/${String(ctD.getUTCDate()).padStart(2,"0")} ${String(ctD.getUTCHours()).padStart(2,"0")}`;
+          hourBuckets.set(label, 0);
         }
+        for (const c of contactsInRange) {
+          const t = Date.parse(c.udate);
+          const hourMs = Math.floor(t / 3600000) * 3600000;
+          const ctMs = hourMs - 5 * 3600000;
+          const ctD = new Date(ctMs);
+          const label = `${String(ctD.getUTCMonth() + 1).padStart(2,"0")}/${String(ctD.getUTCDate()).padStart(2,"0")} ${String(ctD.getUTCHours()).padStart(2,"0")}`;
+          if (hourBuckets.has(label)) hourBuckets.set(label, hourBuckets.get(label) + 1);
+        }
+        rangeHourly = Array.from(hourBuckets.entries()).map(([label, count]) => ({ label, count }));
       }
 
       // Top states within the range
@@ -275,10 +311,14 @@ export async function onRequestGet(context) {
         .slice(0, 10);
 
       rangeBlock = {
-        start: rangeStart,
-        end: rangeEnd,
+        start: rangeStartIso,
+        end: rangeEndIso,
+        start_label: rangeStartIso.slice(0, 16).replace("T", " ") + " UTC",
+        end_label: rangeEndIso.slice(0, 16).replace("T", " ") + " UTC",
         days: rangeDaily.length,
-        is_single_day: isSingleDay,
+        span_hours: spanHours,
+        use_hourly: useHourly,
+        is_single_day: spanHours <= 24,
         regs: contactsInRange.length,
         daily: rangeDaily,
         hourly: rangeHourly,
@@ -370,8 +410,10 @@ export async function onRequestGet(context) {
     }
 
     // Top referrers from CF Web Analytics — range-aware
-    const refDateFrom = rangeMode ? rangeStart : isoDay(new Date(Date.now() - 86400000));
-    const refDateTo = rangeMode ? rangeEnd : isoDay(new Date());
+    // CF GraphQL date_geq/date_leq only support YYYY-MM-DD, so for hour-precision
+    // ranges we widen to the covering days.
+    const refDateFrom = rangeMode ? isoDay(rangeStartTs) : isoDay(new Date(Date.now() - 86400000));
+    const refDateTo = rangeMode ? isoDay(rangeEndTs) : isoDay(new Date());
     let topReferrers = [];
     if (env.CF_ANALYTICS_TOKEN && env.CF_ACCOUNT_ID) {
       try {
@@ -396,7 +438,7 @@ export async function onRequestGet(context) {
     let rangeLanding = null;
     if (rangeMode && env.CF_ANALYTICS_TOKEN && env.CF_ACCOUNT_ID) {
       try {
-        const lq = `query { viewer { accounts(filter: {accountTag: "${env.CF_ACCOUNT_ID}"}) { rumPageloadEventsAdaptiveGroups(limit: 100, filter: {date_geq: "${rangeStart}", date_leq: "${rangeEnd}", requestPath: "/fyp/"}) { count sum { visits } dimensions { date } } } } }`;
+        const lq = `query { viewer { accounts(filter: {accountTag: "${env.CF_ACCOUNT_ID}"}) { rumPageloadEventsAdaptiveGroups(limit: 100, filter: {date_geq: "${refDateFrom}", date_leq: "${refDateTo}", requestPath: "/fyp/"}) { count sum { visits } dimensions { date } } } } }`;
         const lr = await fetch("https://api.cloudflare.com/client/v4/graphql", {
           method: "POST",
           headers: { "Authorization": `Bearer ${env.CF_ANALYTICS_TOKEN}`, "Content-Type": "application/json" },
