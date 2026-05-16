@@ -274,6 +274,57 @@
   .vip-badge { background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid rgba(250, 204, 21, 0.4); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
   .sms-badge { background: rgba(192, 132, 252, 0.15); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.35); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
   .tag-pill { display: inline-block; background: #232323; color: #aaa; padding: 2px 7px; border-radius: 8px; font-size: 10px; margin-right: 4px; margin-top: 4px; }
+
+  /* Date range picker */
+  .range-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0 20px;
+    padding: 10px 14px;
+    background: #181818;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+  }
+  .range-bar .label { color: #aaa; font-size: 12px; margin-right: 4px; }
+  .range-bar .preset {
+    background: #232323;
+    color: #ddd;
+    border: 1px solid #2f2f2f;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .range-bar .preset:hover { background: #2a2a2a; border-color: #4ade80; }
+  .range-bar .preset.active { background: #4ade80; color: #0a0a0a; border-color: #4ade80; font-weight: 600; }
+  .range-bar input[type="date"] {
+    background: #0a0a0a;
+    color: #f5f5f5;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-family: inherit;
+    color-scheme: dark;
+  }
+  .range-bar input[type="date"]:focus { outline: none; border-color: #4ade80; }
+  .range-bar .apply {
+    background: #4ade80;
+    color: #0a0a0a;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .range-bar .range-info { color: #888; font-size: 11px; margin-left: auto; }
+  .range-bar .range-info strong { color: #4ade80; }
   .stale { color: #c97; font-size: 11px; }
   .pulse {
     display: inline-block;
@@ -303,6 +354,23 @@
 <h1>FYP May 2026 — Live Dashboard</h1>
 <p class="sub"><span class="pulse"></span><span id="updated">loading…</span></p>
 
+<!-- DATE RANGE PICKER -->
+<div class="range-bar">
+  <span class="label">View:</span>
+  <button class="preset active" data-preset="live">Live (today + 7d)</button>
+  <button class="preset" data-preset="today">Today</button>
+  <button class="preset" data-preset="yesterday">Yesterday</button>
+  <button class="preset" data-preset="7d">Last 7 days</button>
+  <button class="preset" data-preset="30d">Last 30 days</button>
+  <button class="preset" data-preset="all">Since launch</button>
+  <span class="label" style="margin-left:8px;">Custom:</span>
+  <input type="date" id="range-start" min="2026-05-01" />
+  <span style="color:#666; font-size:12px;">→</span>
+  <input type="date" id="range-end" min="2026-05-01" />
+  <button class="apply" id="range-apply">Apply</button>
+  <span class="range-info" id="range-info"></span>
+</div>
+
 <!-- SEARCH BAR -->
 <div class="search-wrap">
   <input type="search" id="search-input" placeholder="Search by email (e.g. jen@gmail.com or partial like 'jen')" autocomplete="off" />
@@ -321,9 +389,9 @@
     <div class="sub-num">List 28 — all time launch</div>
   </div>
   <div class="card">
-    <h2>Today</h2>
+    <h2 id="today-label">Today</h2>
     <div class="big" id="today">—</div>
-    <div class="sub-num">Yesterday: <span id="yesterday">—</span></div>
+    <div class="sub-num" id="row-yesterday">Yesterday: <span id="yesterday">—</span></div>
   </div>
   <div class="card">
     <h2>VIP Buyers</h2>
@@ -337,15 +405,17 @@
   </div>
 </div>
 
-<!-- HOURLY TODAY -->
-<h3>Today's Registration Pulse (hourly, CT)</h3>
-<div class="card wide">
-  <div class="bars" id="hourly-bars"></div>
-  <div class="bars-labels" id="hourly-labels"></div>
+<!-- HOURLY TODAY (hidden when multi-day range selected) -->
+<div id="hourly-section">
+  <h3 id="hourly-heading">Today's Registration Pulse (hourly, CT)</h3>
+  <div class="card wide">
+    <div class="bars" id="hourly-bars"></div>
+    <div class="bars-labels" id="hourly-labels"></div>
+  </div>
 </div>
 
-<!-- 7 DAY TREND -->
-<h3>Last 7 Days</h3>
+<!-- DAILY TREND (label changes based on range) -->
+<h3 id="daily-heading">Last 7 Days</h3>
 <div class="card wide">
   <div class="daily-bars" id="daily-bars"></div>
   <div class="daily-labels" id="daily-labels"></div>
@@ -402,11 +472,28 @@
 </div>
 
 <script>
+// Selected range state (null = live mode)
+let currentRange = null; // { start: "YYYY-MM-DD", end: "YYYY-MM-DD", preset: "live"|"today"|... }
+
+function isoDayLocal(date) {
+  // Format YYYY-MM-DD in UTC for query params
+  return date.toISOString().slice(0, 10);
+}
+
+function rangeQS() {
+  if (!currentRange || currentRange.preset === 'live') return '';
+  return `?start=${currentRange.start}&end=${currentRange.end}`;
+}
+
 async function refresh() {
   try {
-    const r = await fetch('/api/dashboard');
+    const r = await fetch('/api/dashboard' + rangeQS());
     const d = await r.json();
     if (!d || d.error) throw new Error(d.error || "no data");
+
+    // Use range data for time-based panels if range mode is active
+    const rng = d.range; // null in live mode
+    const inRange = !!rng;
 
     document.getElementById('today').textContent = d.regs.today;
     document.getElementById('yesterday').textContent = d.regs.yesterday;
@@ -440,46 +527,92 @@ async function refresh() {
       : 'still accumulating — real conversion tomorrow morning';
     document.getElementById('pv-note').style.display = pvSettled ? 'none' : 'block';
 
-    // Hourly bars
-    const hb = document.getElementById('hourly-bars');
-    const hl = document.getElementById('hourly-labels');
-    const peakHour = d.hourly_today.reduce((max, h) => h.count > max.count ? h : max, {count: 0});
-    const maxCount = Math.max(...d.hourly_today.map(h => h.count), 1);
-    hb.innerHTML = d.hourly_today.map(h => {
-      const pct = (h.count / maxCount * 100);
-      const cls = h.count === 0 ? '' : (h === peakHour ? 'peak' : 'active');
-      return `<div class="bar ${cls}" style="height:${pct}%;" data-tip="${h.hour}:00 — ${h.count} regs"></div>`;
-    }).join('');
-    hl.innerHTML = d.hourly_today.map((h, i) =>
-      `<div>${i % 3 === 0 ? h.hour : ''}</div>`
-    ).join('');
+    // Choose data source based on mode
+    const hourlyData = inRange ? rng.hourly : d.hourly_today;
+    const dailyData = inRange ? rng.daily : d.daily_7d;
+    const statesData = inRange ? rng.top_states : d.top_states;
 
-    // Daily bars
+    // Hourly section — hide if range > 1 day (hourly only makes sense for a single day)
+    const hourlySection = document.getElementById('hourly-section');
+    const hourlyHeading = document.getElementById('hourly-heading');
+    if (inRange && !rng.is_single_day) {
+      hourlySection.style.display = 'none';
+    } else {
+      hourlySection.style.display = '';
+      hourlyHeading.textContent = inRange
+        ? `Hourly Pulse for ${rng.start} (CT)`
+        : "Today's Registration Pulse (hourly, CT)";
+
+      const hb = document.getElementById('hourly-bars');
+      const hl = document.getElementById('hourly-labels');
+      if (hourlyData && hourlyData.length) {
+        const peakHour = hourlyData.reduce((max, h) => h.count > max.count ? h : max, {count: 0});
+        const maxCount = Math.max(...hourlyData.map(h => h.count), 1);
+        hb.innerHTML = hourlyData.map(h => {
+          const pct = (h.count / maxCount * 100);
+          const cls = h.count === 0 ? '' : (h === peakHour ? 'peak' : 'active');
+          return `<div class="bar ${cls}" style="height:${pct}%;" data-tip="${h.hour}:00 — ${h.count} regs"></div>`;
+        }).join('');
+        hl.innerHTML = hourlyData.map((h, i) =>
+          `<div>${i % 3 === 0 ? h.hour : ''}</div>`
+        ).join('');
+      }
+    }
+
+    // Daily bars — update heading dynamically
+    const dailyHeading = document.getElementById('daily-heading');
+    dailyHeading.textContent = inRange
+      ? `Daily — ${rng.start} to ${rng.end} (${rng.days} day${rng.days === 1 ? '' : 's'})`
+      : 'Last 7 Days';
+
     const db = document.getElementById('daily-bars');
     const dl = document.getElementById('daily-labels');
-    const maxDaily = Math.max(...d.daily_7d.map(x => x.count), 1);
-    db.innerHTML = d.daily_7d.map(x => {
+    const maxDaily = Math.max(...dailyData.map(x => x.count), 1);
+    db.innerHTML = dailyData.map(x => {
       const pct = (x.count / maxDaily * 100);
       return `<div class="daily-bar" style="height:${pct}%;"><span class="daily-count">${x.count}</span></div>`;
     }).join('');
-    dl.innerHTML = d.daily_7d.map(x => {
+    // Cap labels to ~12 for readability on long ranges
+    const labelEvery = Math.max(1, Math.ceil(dailyData.length / 12));
+    dl.innerHTML = dailyData.map((x, i) => {
+      if (i % labelEvery !== 0 && i !== dailyData.length - 1) return '<div></div>';
       const dt = new Date(x.date + 'T00:00:00Z');
       const day = dt.toLocaleDateString('en-US', { weekday: 'short' });
       const num = dt.getUTCDate();
       return `<div>${day}<br/>${num}</div>`;
     }).join('');
 
-    // States
-    const stateMax = d.top_states.length > 0 ? d.top_states[0].count : 1;
-    document.getElementById('states-list').innerHTML = d.top_states.length === 0
-      ? '<span class="sub-num">No state data yet</span>'
-      : d.top_states.map(s => `
+    // States — range-aware
+    const stateMax = statesData.length > 0 ? statesData[0].count : 1;
+    document.getElementById('states-list').innerHTML = statesData.length === 0
+      ? '<span class="sub-num">No state data for this range</span>'
+      : statesData.map(s => `
         <div class="state-bar">
           <span class="state-label">${s.state}</span>
           <span class="state-track"><span class="state-fill" style="width:${s.count/stateMax*100}%"></span></span>
           <span class="state-count">${s.count}</span>
         </div>
       `).join('');
+
+    // Headline regs card — when in range mode, show range count instead of "today"
+    if (inRange) {
+      document.getElementById('today').textContent = rng.regs;
+      document.getElementById('today-label').textContent = `In selected range (${rng.start} → ${rng.end})`;
+      // Hide the yesterday + total rows since they're "live" concepts
+      document.getElementById('row-yesterday').style.display = 'none';
+    } else {
+      document.getElementById('today-label').textContent = 'Today';
+      document.getElementById('row-yesterday').style.display = '';
+    }
+
+    // Landing card — show range landing data if available
+    if (inRange && rng.landing) {
+      document.getElementById('pv-today').textContent = (rng.landing.visits || 0).toLocaleString();
+      document.getElementById('pv-conv').textContent = rng.landing.visits > 0
+        ? `landing → reg: ${rng.landing.landing_to_reg_pct}% (${rng.regs} regs)`
+        : 'no landing visits in range';
+      document.getElementById('pv-note').style.display = 'none';
+    }
 
     // Referrers
     document.getElementById('refs-list').innerHTML = d.top_referrers.length === 0
@@ -522,7 +655,57 @@ async function refresh() {
   }
 }
 refresh();
-setInterval(refresh, 60000); // refresh every 60 sec
+let refreshTimer = setInterval(refresh, 60000); // refresh every 60 sec in live mode
+
+// ---- Date range picker ----
+function setRange(preset, start, end) {
+  // Clear any active state
+  document.querySelectorAll('.range-bar .preset').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector(`.range-bar .preset[data-preset="${preset}"]`);
+  if (btn) btn.classList.add('active');
+
+  if (preset === 'live') {
+    currentRange = null;
+    document.getElementById('range-info').innerHTML = '';
+    // Resume auto-refresh
+    clearInterval(refreshTimer);
+    refreshTimer = setInterval(refresh, 60000);
+  } else {
+    currentRange = { preset, start, end };
+    const days = Math.round((Date.parse(end) - Date.parse(start)) / 86400000) + 1;
+    document.getElementById('range-info').innerHTML =
+      `<strong>${start} → ${end}</strong> (${days} day${days === 1 ? '' : 's'})`;
+    // Stop auto-refresh in historical mode — data won't change
+    clearInterval(refreshTimer);
+  }
+  document.getElementById('range-start').value = start || '';
+  document.getElementById('range-end').value = end || '';
+  refresh();
+}
+
+function todayIso() { return new Date().toISOString().slice(0, 10); }
+function daysAgoIso(n) { return new Date(Date.now() - n * 86400000).toISOString().slice(0, 10); }
+
+document.querySelectorAll('.range-bar .preset').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const p = btn.dataset.preset;
+    const today = todayIso();
+    if (p === 'live') return setRange('live');
+    if (p === 'today') return setRange('today', today, today);
+    if (p === 'yesterday') { const y = daysAgoIso(1); return setRange('yesterday', y, y); }
+    if (p === '7d') return setRange('7d', daysAgoIso(6), today);
+    if (p === '30d') return setRange('30d', daysAgoIso(29), today);
+    if (p === 'all') return setRange('all', '2026-05-01', today);
+  });
+});
+
+document.getElementById('range-apply').addEventListener('click', () => {
+  const s = document.getElementById('range-start').value;
+  const e = document.getElementById('range-end').value;
+  if (!s || !e) { alert('Pick both start and end dates'); return; }
+  if (s > e) { alert('Start must be before end'); return; }
+  setRange('custom', s, e);
+});
 
 // ---- Email search ----
 const searchInput = document.getElementById('search-input');

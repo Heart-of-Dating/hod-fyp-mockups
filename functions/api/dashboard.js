@@ -111,14 +111,36 @@ async function pullListWithMeta(env, listId, since) {
 function isoDay(d) { return new Date(d).toISOString().slice(0, 10); }
 
 // Module-level cache (persists per CF isolate). 60s TTL keeps us under
-// Worker CPU limits when admin auto-refreshes every 60s.
-let _cache = { at: 0, body: null };
+// Worker CPU limits when admin auto-refreshes every 60s. Keyed by request
+// shape (live vs specific date range) so different views don't collide.
+let _cache = { at: 0, key: null, body: null };
 const CACHE_TTL_MS = 60 * 1000;
+
+const LAUNCH_CUTOFF = "2026-05-01"; // earliest meaningful date for range mode
 
 export async function onRequestGet({ request, env }) {
   try {
-    // Serve from cache if fresh
-    if (_cache.body && Date.now() - _cache.at < CACHE_TTL_MS) {
+    // ---- Parse range query params ----
+    // ?start=YYYY-MM-DD&end=YYYY-MM-DD switches the time-based panels into
+    // range mode. Cumulative panels (total regs, VIP, recent feeds) always
+    // show current state regardless of range.
+    const url = new URL(request.url);
+    const startParam = url.searchParams.get("start");
+    const endParam = url.searchParams.get("end");
+    const validDate = (s) => typeof s === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s);
+    let rangeMode = false;
+    let rangeStart = null, rangeEnd = null;
+    if (validDate(startParam) && validDate(endParam) && startParam <= endParam) {
+      rangeMode = true;
+      // Clamp start to launch cutoff (no AC data before May 1 for May 2026 funnel)
+      rangeStart = startParam < LAUNCH_CUTOFF ? LAUNCH_CUTOFF : startParam;
+      rangeEnd = endParam;
+    }
+
+    const cacheKey = rangeMode ? `range:${rangeStart}_${rangeEnd}` : "live";
+
+    // Serve from cache if fresh AND same shape
+    if (_cache.body && _cache.key === cacheKey && Date.now() - _cache.at < CACHE_TTL_MS) {
       return new Response(_cache.body, {
         status: 200,
         headers: {
@@ -129,10 +151,6 @@ export async function onRequestGet({ request, env }) {
         },
       });
     }
-    const now = new Date();
-    const todayStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())).toISOString();
-    const yesterdayStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1)).toISOString();
-    const launchCutoff = "2026-05-01T00:00:00Z";
 
     // Total regs = List 28 membership (captures both new + pre-existing AC
     // contacts who registered for May 2026; tag-only count misses re-subs).
@@ -140,9 +158,13 @@ export async function onRequestGet({ request, env }) {
     // Channel split still uses FYP-Paid/FYP-Organic tags (set via /api/register
     // on each registration regardless of new/existing contact status).
     const LIST_ID = 28;
-    // Pull full List 28 with cdate + state, single query — derive everything from this
-    const sevenDaysAgo = new Date(Date.now() - 7 * 86400000).toISOString();
-    const allContacts = await pullListWithMeta(env, LIST_ID, sevenDaysAgo);
+
+    // Pull window — widen if range mode reaches back further than 7 days
+    const sevenDaysAgoIso = new Date(Date.now() - 7 * 86400000).toISOString();
+    const fetchSinceIso = rangeMode
+      ? new Date(rangeStart + "T00:00:00Z").toISOString()
+      : sevenDaysAgoIso;
+    const allContacts = await pullListWithMeta(env, LIST_ID, fetchSinceIso);
     const regsTotalList28 = await countContactsOnList(env, LIST_ID, null);
 
     // Today / yesterday counts from the 7-day pull
@@ -186,6 +208,63 @@ export async function onRequestGet({ request, env }) {
       .map(([state, count]) => ({ state, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
+
+    // ---- Range-mode aggregation (only computed if rangeMode = true) ----
+    let rangeBlock = null;
+    if (rangeMode) {
+      const inRange = (dayKey) => dayKey >= rangeStart && dayKey <= rangeEnd;
+      const contactsInRange = allContacts.filter(c => inRange(isoDay(c.udate)));
+
+      // Daily breakdown across the range (zero-fill days with no regs)
+      const rangeDailyMap = {};
+      const startMs = Date.parse(rangeStart + "T00:00:00Z");
+      const endMs = Date.parse(rangeEnd + "T00:00:00Z");
+      for (let t = startMs; t <= endMs; t += 86400000) {
+        rangeDailyMap[isoDay(new Date(t))] = 0;
+      }
+      for (const c of contactsInRange) {
+        const k = isoDay(c.udate);
+        if (k in rangeDailyMap) rangeDailyMap[k]++;
+      }
+      const rangeDaily = Object.entries(rangeDailyMap)
+        .map(([date, count]) => ({ date, count }))
+        .sort((a, b) => a.date.localeCompare(b.date));
+
+      // Hourly only if single-day range (otherwise meaningless)
+      const isSingleDay = rangeStart === rangeEnd;
+      let rangeHourly = null;
+      if (isSingleDay) {
+        rangeHourly = Array.from({ length: 24 }, (_, h) => ({ hour: h, count: 0 }));
+        for (const c of contactsInRange) {
+          const d = new Date(c.udate);
+          const ctHour = (d.getUTCHours() - 5 + 24) % 24; // UTC → CT
+          rangeHourly[ctHour].count++;
+        }
+      }
+
+      // Top states within the range
+      const rangeStateCounts = {};
+      for (const c of contactsInRange) {
+        const st = c.state || "—";
+        rangeStateCounts[st] = (rangeStateCounts[st] || 0) + 1;
+      }
+      const rangeTopStates = Object.entries(rangeStateCounts)
+        .filter(([s]) => s !== "—" && s.length === 2)
+        .map(([state, count]) => ({ state, count }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 10);
+
+      rangeBlock = {
+        start: rangeStart,
+        end: rangeEnd,
+        days: rangeDaily.length,
+        is_single_day: isSingleDay,
+        regs: contactsInRange.length,
+        daily: rangeDaily,
+        hourly: rangeHourly,
+        top_states: rangeTopStates,
+      };
+    }
 
     const [
       regsPaid,
@@ -270,11 +349,13 @@ export async function onRequestGet({ request, env }) {
       }
     }
 
-    // Top referrers from CF Web Analytics
+    // Top referrers from CF Web Analytics — range-aware
+    const refDateFrom = rangeMode ? rangeStart : isoDay(new Date(Date.now() - 86400000));
+    const refDateTo = rangeMode ? rangeEnd : isoDay(new Date());
     let topReferrers = [];
     if (env.CF_ANALYTICS_TOKEN && env.CF_ACCOUNT_ID) {
       try {
-        const refQuery = `query { viewer { accounts(filter: {accountTag: "${env.CF_ACCOUNT_ID}"}) { rumPageloadEventsAdaptiveGroups(limit: 10, filter: {date_geq: "${isoDay(new Date(Date.now() - 86400000))}"}, orderBy: [count_DESC]) { count dimensions { refererHost } } } } }`;
+        const refQuery = `query { viewer { accounts(filter: {accountTag: "${env.CF_ACCOUNT_ID}"}) { rumPageloadEventsAdaptiveGroups(limit: 10, filter: {date_geq: "${refDateFrom}", date_leq: "${refDateTo}"}, orderBy: [count_DESC]) { count dimensions { refererHost } } } } }`;
         const r = await fetch("https://api.cloudflare.com/client/v4/graphql", {
           method: "POST",
           headers: { "Authorization": `Bearer ${env.CF_ANALYTICS_TOKEN}`, "Content-Type": "application/json" },
@@ -289,6 +370,31 @@ export async function onRequestGet({ request, env }) {
             .slice(0, 5);
         }
       } catch (_) {}
+    }
+
+    // Range-mode landing visits (/fyp/ only, summed across the range)
+    let rangeLanding = null;
+    if (rangeMode && env.CF_ANALYTICS_TOKEN && env.CF_ACCOUNT_ID) {
+      try {
+        const lq = `query { viewer { accounts(filter: {accountTag: "${env.CF_ACCOUNT_ID}"}) { rumPageloadEventsAdaptiveGroups(limit: 100, filter: {date_geq: "${rangeStart}", date_leq: "${rangeEnd}", requestPath: "/fyp/"}) { count sum { visits } dimensions { date } } } } }`;
+        const lr = await fetch("https://api.cloudflare.com/client/v4/graphql", {
+          method: "POST",
+          headers: { "Authorization": `Bearer ${env.CF_ANALYTICS_TOKEN}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ query: lq }),
+        });
+        if (lr.ok) {
+          const lj = await lr.json();
+          const rows = lj?.data?.viewer?.accounts?.[0]?.rumPageloadEventsAdaptiveGroups || [];
+          let visits = 0, pv = 0;
+          for (const r of rows) {
+            visits += r?.sum?.visits || 0;
+            pv += r?.count || 0;
+          }
+          const conv = visits > 0 ? (rangeBlock.regs / visits * 100).toFixed(1) : "—";
+          rangeLanding = { visits, pageviews: pv, landing_to_reg_pct: conv };
+        }
+      } catch (_) {}
+      if (rangeBlock) rangeBlock.landing = rangeLanding;
     }
 
     // Paid count cleanup — until paid launches, the few "paid" contacts are test data
@@ -326,9 +432,10 @@ export async function onRequestGet({ request, env }) {
         top_referrers: topReferrers,
         recent: recentList,
         recent_vip: recentVipList,
+        range: rangeBlock,
         generated_at: new Date().toISOString(),
       }, null, 2);
-    _cache = { at: Date.now(), body };
+    _cache = { at: Date.now(), key: cacheKey, body };
     return new Response(body, {
       status: 200,
       headers: {
