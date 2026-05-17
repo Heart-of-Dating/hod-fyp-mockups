@@ -186,29 +186,35 @@ export async function onRequestGet(context) {
     // on each registration regardless of new/existing contact status).
     const LIST_ID = 28;
 
-    // Pull window — widen if range mode reaches back further than 7 days
-    const sevenDaysAgoIso = new Date(Date.now() - 7 * 86400000).toISOString();
-    const fetchSinceIso = rangeMode ? rangeStartIso : sevenDaysAgoIso;
-    // LEAN pull: skip fieldValues for the bulk 7-day pull (cuts payload ~10x,
-    // CPU work ~5x). State data fetched separately below in a tight 2-day window.
-    // This is the difference between dashboard responding in 5s vs hitting CF
-    // CPU limit and 503'ing at ~1700+ reg scale.
-    const allContacts = await pullListWithMeta(env, LIST_ID, fetchSinceIso, { includeState: false });
+    // Pull window — in live mode, only pull TODAY's contacts (CF Pages Functions
+    // CPU budget is 50ms; 7-day pull at 2K+ scale blew through it). In range
+    // mode, use the user's chosen window (their explicit ask).
+    const todayUtcStart = isoDay(new Date()) + "T00:00:00Z";
+    const fetchSinceIso = rangeMode ? rangeStartIso : todayUtcStart;
+    // LEAN pull (no fieldValues). Hard page cap protects CPU budget.
+    const allContacts = await pullListWithMeta(env, LIST_ID, fetchSinceIso, { includeState: false, maxPages: 15 });
     const regsTotalList28 = await countContactsOnList(env, LIST_ID, null);
 
-    // Separate state-field pull, only 2 days back, smaller window. Used by
-    // top_states only. If this also fails, top_states gracefully degrades to [].
+    // Separate state-field pull for top_states, capped tight. If it fails,
+    // top_states gracefully degrades to [].
     let stateContacts = [];
     try {
-      const twoDaysAgoIso = new Date(Date.now() - 2 * 86400000).toISOString();
-      stateContacts = await pullListWithMeta(env, LIST_ID, twoDaysAgoIso, { includeState: true, maxPages: 15 });
+      const stateSince = rangeMode ? rangeStartIso : todayUtcStart;
+      stateContacts = await pullListWithMeta(env, LIST_ID, stateSince, { includeState: true, maxPages: 10 });
     } catch (_) { /* non-fatal */ }
 
-    // Today / yesterday counts from the 7-day pull
+    // Today / yesterday counts — today comes from allContacts (pulled fresh),
+    // yesterday from a cheap meta.total query since we no longer pull 7 days.
     const todayDateUtc = isoDay(new Date());
     const yesterdayDateUtc = isoDay(new Date(Date.now() - 86400000));
     const regsTodayAll = allContacts.filter(c => isoDay(c.udate) === todayDateUtc).length;
-    const regsYesterdayAll = allContacts.filter(c => isoDay(c.udate) === yesterdayDateUtc).length;
+    const yesterdayStart = yesterdayDateUtc + "T00:00:00Z";
+    const yesterdayEnd = todayDateUtc + "T00:00:00Z";
+    let regsYesterdayAll = 0;
+    try {
+      const yData = await ac(env, `/contacts?listid=${LIST_ID}&filters[updated_after]=${encodeURIComponent(yesterdayStart)}&filters[updated_before]=${encodeURIComponent(yesterdayEnd)}&limit=1`);
+      regsYesterdayAll = parseInt(yData?.meta?.total || "0", 10);
+    } catch (_) { /* non-fatal */ }
 
     // Hourly today (UTC), PT = UTC-7 (PDT, valid May-Nov). Aligns with Meta
     // Ads Manager default timezone so reg-hour bars match Meta's hour buckets.
@@ -221,19 +227,22 @@ export async function onRequestGet(context) {
       hourlyToday[ptHour].count++;
     }
 
-    // Daily last 7 days
-    const dailyMap = {};
-    for (let i = 0; i < 7; i++) {
-      const d = new Date(Date.now() - i * 86400000);
-      dailyMap[isoDay(d)] = 0;
-    }
-    for (const c of allContacts) {
-      const dayKey = isoDay(c.udate);
-      if (dayKey in dailyMap) dailyMap[dayKey]++;
-    }
-    const dailyLast7 = Object.entries(dailyMap)
-      .map(([date, count]) => ({ date, count }))
-      .sort((a, b) => a.date.localeCompare(b.date));
+    // Daily last 7 days — 7 parallel meta.total queries (cheap, no contact data).
+    // Avoids the CPU cost of pulling+iterating 7 days of full contacts.
+    const dayKeys = [];
+    for (let i = 6; i >= 0; i--) dayKeys.push(isoDay(new Date(Date.now() - i * 86400000)));
+    const dayCounts = await Promise.all(dayKeys.map(async (day, idx) => {
+      try {
+        const start = day + "T00:00:00Z";
+        const nextDay = isoDay(new Date(Date.now() - (6 - idx - 1) * 86400000));
+        const end = (idx === dayKeys.length - 1)
+          ? new Date().toISOString()
+          : nextDay + "T00:00:00Z";
+        const d = await ac(env, `/contacts?listid=${LIST_ID}&filters[updated_after]=${encodeURIComponent(start)}&filters[updated_before]=${encodeURIComponent(end)}&limit=1`);
+        return parseInt(d?.meta?.total || "0", 10);
+      } catch (_) { return 0; }
+    }));
+    const dailyLast7 = dayKeys.map((date, i) => ({ date, count: dayCounts[i] }));
 
     // Top states — from the lean 2-day stateContacts pull (separate from allContacts)
     const stateCounts = {};
