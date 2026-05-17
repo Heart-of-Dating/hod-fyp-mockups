@@ -359,13 +359,14 @@
   <span class="label">View:</span>
   <button class="preset active" data-preset="live">Live (Today + Totals)</button>
   <button class="preset" data-preset="yesterday">Yesterday</button>
-  <span class="label" style="margin-left:8px;">Custom:</span>
-  <input type="datetime-local" id="range-start" min="2026-05-01T00:00" />
+  <span class="label" style="margin-left:8px;">Custom (PT):</span>
+  <input type="datetime-local" id="range-start" min="2026-05-01T00:00" title="Times entered in Pacific Time (matches Meta Ads)" />
   <span style="color:#666; font-size:12px;">→</span>
-  <input type="datetime-local" id="range-end" min="2026-05-01T00:00" />
+  <input type="datetime-local" id="range-end" min="2026-05-01T00:00" title="Times entered in Pacific Time (matches Meta Ads)" />
   <button class="apply" id="range-apply">Apply</button>
   <span class="range-info" id="range-info"></span>
 </div>
+<p style="font-size:11px; color:#888; margin: 4px 0 0; padding-left: 2px;">All times shown in Pacific Time (PT, UTC-7) to match Meta Ads Manager. Live mode auto-refreshes every 60s.</p>
 
 <!-- SEARCH BAR -->
 <div class="search-wrap">
@@ -403,7 +404,7 @@
 
 <!-- HOURLY TODAY (hidden when multi-day range selected) -->
 <div id="hourly-section">
-  <h3 id="hourly-heading">Today's Registration Pulse (hourly, CT)</h3>
+  <h3 id="hourly-heading">Today's Registration Pulse (hourly, PT)</h3>
   <div class="card wide">
     <div class="bars" id="hourly-bars"></div>
     <div class="bars-labels" id="hourly-labels"></div>
@@ -538,8 +539,8 @@ async function refresh() {
     } else {
       hourlySection.style.display = '';
       hourlyHeading.textContent = inRange
-        ? `Hourly Pulse — ${fmtLocal(rng.start)} → ${fmtLocal(rng.end)} (CT)`
-        : "Today's Registration Pulse (hourly, CT)";
+        ? `Hourly Pulse — ${fmtPt(rng.start)} → ${fmtPt(rng.end)} (PT)`
+        : "Today's Registration Pulse (hourly, PT)";
 
       const hb = document.getElementById('hourly-bars');
       const hl = document.getElementById('hourly-labels');
@@ -662,19 +663,37 @@ refresh();
 let refreshTimer = setInterval(refresh, 60000); // refresh every 60 sec in live mode
 
 // ---- Date range picker ----
-// Range params are full UTC ISO timestamps; presets and the custom datetime-local
-// inputs both feed setRange via toUtcIso() which interprets local-time inputs
-// (browser timezone, typically CT for JJ/Kait) and converts to UTC for the API.
+// All times in the dashboard are Pacific Time (PT) to align with Meta Ads Manager's
+// default reporting timezone. Datetime-local inputs from any browser are interpreted
+// as PT entries (not the user's local), and all displayed timestamps are formatted
+// in PT regardless of where the viewer's browser is.
+// Hardcoded PDT offset (UTC-7) — valid Mar 9 → Nov 1 2026. If we ever need PST,
+// flip PT_OFFSET to "-08:00".
+const PT_OFFSET = "-07:00"; // PDT
+const PT_TZ = "America/Los_Angeles";
+
 function toUtcIso(local) {
-  // local: "YYYY-MM-DDTHH:MM" (datetime-local) or Date instance → UTC ISO with Z
+  // local: "YYYY-MM-DDTHH:MM" (datetime-local) → treat as PT, convert to UTC ISO
   if (local instanceof Date) return local.toISOString();
-  return new Date(local).toISOString();
+  // Append PT offset so Date constructor parses unambiguously
+  return new Date(local + ":00" + PT_OFFSET).toISOString();
 }
 
-function fmtLocal(iso) {
-  // Display UTC ISO back as local date+hour for the human eye
+function fmtPt(iso) {
+  // Display UTC ISO back as PT date+hour (regardless of browser timezone)
   const d = new Date(iso);
-  return d.toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  return d.toLocaleString('en-US', {
+    timeZone: PT_TZ, month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
+  });
+}
+
+// Compute PT-anchored YYYY-MM-DD for a given day offset (e.g. -1 = "yesterday in PT")
+function ptDateStr(offsetDays) {
+  const ms = Date.now() + offsetDays * 86400000;
+  // en-CA gives YYYY-MM-DD format
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: PT_TZ, year: 'numeric', month: '2-digit', day: '2-digit'
+  }).format(new Date(ms));
 }
 
 function setRange(preset, startIso, endIso) {
@@ -696,19 +715,11 @@ function setRange(preset, startIso, endIso) {
     const hours = Math.round((Date.parse(endIso) - Date.parse(startIso)) / 3600000);
     const spanLabel = hours < 48 ? `${hours}h` : `${Math.round(hours/24)}d`;
     document.getElementById('range-info').innerHTML =
-      `<strong>${fmtLocal(startIso)} → ${fmtLocal(endIso)}</strong> (${spanLabel})`;
+      `<strong>${fmtPt(startIso)} → ${fmtPt(endIso)}</strong> (${spanLabel} PT)`;
     // Stop auto-refresh in historical mode — data won't change
     clearInterval(refreshTimer);
   }
   refresh();
-}
-
-// Helper: build a Date for local midnight on a given calendar offset
-function localDayBoundary(offsetDays, hour, minute) {
-  const d = new Date();
-  d.setDate(d.getDate() + offsetDays);
-  d.setHours(hour, minute || 0, 0, 0);
-  return d;
 }
 
 document.querySelectorAll('.range-bar .preset').forEach(btn => {
@@ -716,11 +727,12 @@ document.querySelectorAll('.range-bar .preset').forEach(btn => {
     const p = btn.dataset.preset;
     if (p === 'live') return setRange('live');
     if (p === 'yesterday') {
-      // Full local-time yesterday: 00:00 → 23:59:59 in user's timezone, converted to UTC
-      const start = localDayBoundary(-1, 0, 0);
-      const end = localDayBoundary(-1, 23, 59);
-      end.setSeconds(59); end.setMilliseconds(999);
-      return setRange('yesterday', toUtcIso(start), toUtcIso(end));
+      // Full PT yesterday: 00:00 → 23:59:59 in Pacific Time, converted to UTC.
+      // Aligns with Meta Ads Manager's daily reporting boundary.
+      const y = ptDateStr(-1); // "YYYY-MM-DD" in PT
+      const startIso = new Date(y + "T00:00:00" + PT_OFFSET).toISOString();
+      const endIso = new Date(y + "T23:59:59.999" + PT_OFFSET).toISOString();
+      return setRange('yesterday', startIso, endIso);
     }
   });
 });

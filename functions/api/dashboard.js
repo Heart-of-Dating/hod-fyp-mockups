@@ -190,14 +190,15 @@ export async function onRequestGet(context) {
     const regsTodayAll = allContacts.filter(c => isoDay(c.udate) === todayDateUtc).length;
     const regsYesterdayAll = allContacts.filter(c => isoDay(c.udate) === yesterdayDateUtc).length;
 
-    // Hourly today (UTC), CT = UTC-5
+    // Hourly today (UTC), PT = UTC-7 (PDT, valid May-Nov). Aligns with Meta
+    // Ads Manager default timezone so reg-hour bars match Meta's hour buckets.
+    const TZ_OFFSET_HOURS = 7; // PDT
     const hourlyToday = Array.from({ length: 24 }, (_, h) => ({ hour: h, count: 0 }));
     for (const c of allContacts) {
       const d = new Date(c.udate);
       if (isoDay(d) !== todayDateUtc) continue;
-      // Convert to CT (UTC-5 during CDT)
-      const ctHour = (d.getUTCHours() - 5 + 24) % 24;
-      hourlyToday[ctHour].count++;
+      const ptHour = (d.getUTCHours() - TZ_OFFSET_HOURS + 24) % 24;
+      hourlyToday[ptHour].count++;
     }
 
     // Daily last 7 days
@@ -260,23 +261,21 @@ export async function onRequestGet(context) {
       // hour-of-range labeled with "MM/DD HH" so user sees the actual hour.
       let rangeHourly = null;
       if (useHourly) {
-        const hourBuckets = new Map(); // key: "MM-DD HH (CT)" → count
+        const hourBuckets = new Map(); // key: "MM/DD HH (PT)" → count
         // Pre-fill buckets so empty hours show as zero
+        const PT_OFFSET_MS = 7 * 3600000; // PDT
         const firstHourMs = Math.floor(startMs / 3600000) * 3600000;
         const lastHourMs = Math.floor(endMs / 3600000) * 3600000;
         for (let t = firstHourMs; t <= lastHourMs; t += 3600000) {
-          const d = new Date(t);
-          const ctMs = t - 5 * 3600000; // UTC → CT (UTC-5 CDT)
-          const ctD = new Date(ctMs);
-          const label = `${String(ctD.getUTCMonth() + 1).padStart(2,"0")}/${String(ctD.getUTCDate()).padStart(2,"0")} ${String(ctD.getUTCHours()).padStart(2,"0")}`;
+          const ptD = new Date(t - PT_OFFSET_MS);
+          const label = `${String(ptD.getUTCMonth() + 1).padStart(2,"0")}/${String(ptD.getUTCDate()).padStart(2,"0")} ${String(ptD.getUTCHours()).padStart(2,"0")}`;
           hourBuckets.set(label, 0);
         }
         for (const c of contactsInRange) {
           const t = Date.parse(c.udate);
           const hourMs = Math.floor(t / 3600000) * 3600000;
-          const ctMs = hourMs - 5 * 3600000;
-          const ctD = new Date(ctMs);
-          const label = `${String(ctD.getUTCMonth() + 1).padStart(2,"0")}/${String(ctD.getUTCDate()).padStart(2,"0")} ${String(ctD.getUTCHours()).padStart(2,"0")}`;
+          const ptD = new Date(hourMs - PT_OFFSET_MS);
+          const label = `${String(ptD.getUTCMonth() + 1).padStart(2,"0")}/${String(ptD.getUTCDate()).padStart(2,"0")} ${String(ptD.getUTCHours()).padStart(2,"0")}`;
           if (hourBuckets.has(label)) hourBuckets.set(label, hourBuckets.get(label) + 1);
         }
         rangeHourly = Array.from(hourBuckets.entries()).map(([label, count]) => ({ label, count }));
