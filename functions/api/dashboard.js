@@ -61,33 +61,41 @@ async function listRecentByChannel(env, paidTagId, organicTagId, limit) {
   return merged.slice(0, limit);
 }
 
-// Pull all contacts on a list with their cdate + state field, for charts
-async function pullListWithMeta(env, listId, since) {
+// Pull contacts on a list with cdate/udate (and optionally state field, for charts).
+// Two-mode: lean (no fieldValues) for hourly/daily aggregation, full (with state)
+// only when caller actually needs top-states. fieldValues bloat payload ~10x
+// and CPU work ~5x — only include when used.
+async function pullListWithMeta(env, listId, since, { includeState = false, maxPages = 50 } = {}) {
   const STATE_FIELD_ID = 18;
   const out = [];
   let offset = 0;
-  while (offset < 5000) {
+  let pages = 0;
+  while (offset < 10000 && pages < maxPages) {
     const filter = since ? `&filters[updated_after]=${encodeURIComponent(since)}` : "";
-    const data = await ac(env, `/contacts?listid=${listId}${filter}&include=fieldValues&limit=100&offset=${offset}`);
+    const includeParam = includeState ? "&include=fieldValues" : "";
+    const data = await ac(env, `/contacts?listid=${listId}${filter}${includeParam}&limit=100&offset=${offset}`);
     const contacts = data.contacts || [];
-    const fieldVals = data.fieldValues || [];
-    // Build map contactId → state
-    const stateByContact = {};
-    for (const fv of fieldVals) {
-      if (String(fv.field) === String(STATE_FIELD_ID)) {
-        stateByContact[fv.contact] = (fv.value || "").toUpperCase();
+    let stateByContact = null;
+    if (includeState) {
+      stateByContact = {};
+      const fieldVals = data.fieldValues || [];
+      for (const fv of fieldVals) {
+        if (String(fv.field) === String(STATE_FIELD_ID)) {
+          stateByContact[fv.contact] = (fv.value || "").toUpperCase();
+        }
       }
     }
     for (const c of contacts) {
       out.push({
         cdate: c.cdate,
         udate: c.udate,
-        state: stateByContact[c.id] || "",
+        state: stateByContact ? (stateByContact[c.id] || "") : "",
         email: c.email,
       });
     }
     if (contacts.length < 100) break;
     offset += 100;
+    pages++;
   }
   return out;
 }
@@ -98,7 +106,7 @@ function isoDay(d) { return new Date(d).toISOString().slice(0, 10); }
 // Worker CPU limits when admin auto-refreshes every 60s. Keyed by request
 // shape (live vs specific date range) so different views don't collide.
 let _cache = { at: 0, key: null, body: null };
-const CACHE_TTL_MS = 60 * 1000;
+const CACHE_TTL_MS = 120 * 1000; // bumped from 60s — every successful MISS is expensive (~5-8s, large AC pagination), so let cache age longer to amortize. Frontend auto-refresh is still 60s.
 
 const LAUNCH_CUTOFF = "2026-05-01"; // earliest meaningful date for range mode
 
@@ -181,8 +189,20 @@ export async function onRequestGet(context) {
     // Pull window — widen if range mode reaches back further than 7 days
     const sevenDaysAgoIso = new Date(Date.now() - 7 * 86400000).toISOString();
     const fetchSinceIso = rangeMode ? rangeStartIso : sevenDaysAgoIso;
-    const allContacts = await pullListWithMeta(env, LIST_ID, fetchSinceIso);
+    // LEAN pull: skip fieldValues for the bulk 7-day pull (cuts payload ~10x,
+    // CPU work ~5x). State data fetched separately below in a tight 2-day window.
+    // This is the difference between dashboard responding in 5s vs hitting CF
+    // CPU limit and 503'ing at ~1700+ reg scale.
+    const allContacts = await pullListWithMeta(env, LIST_ID, fetchSinceIso, { includeState: false });
     const regsTotalList28 = await countContactsOnList(env, LIST_ID, null);
+
+    // Separate state-field pull, only 2 days back, smaller window. Used by
+    // top_states only. If this also fails, top_states gracefully degrades to [].
+    let stateContacts = [];
+    try {
+      const twoDaysAgoIso = new Date(Date.now() - 2 * 86400000).toISOString();
+      stateContacts = await pullListWithMeta(env, LIST_ID, twoDaysAgoIso, { includeState: true, maxPages: 15 });
+    } catch (_) { /* non-fatal */ }
 
     // Today / yesterday counts from the 7-day pull
     const todayDateUtc = isoDay(new Date());
@@ -215,9 +235,9 @@ export async function onRequestGet(context) {
       .map(([date, count]) => ({ date, count }))
       .sort((a, b) => a.date.localeCompare(b.date));
 
-    // Top states from List 28 (last 7 days only — fresh signal)
+    // Top states — from the lean 2-day stateContacts pull (separate from allContacts)
     const stateCounts = {};
-    for (const c of allContacts) {
+    for (const c of stateContacts) {
       const st = c.state || "—";
       stateCounts[st] = (stateCounts[st] || 0) + 1;
     }
@@ -281,17 +301,26 @@ export async function onRequestGet(context) {
         rangeHourly = Array.from(hourBuckets.entries()).map(([label, count]) => ({ label, count }));
       }
 
-      // Top states within the range
-      const rangeStateCounts = {};
-      for (const c of contactsInRange) {
-        const st = c.state || "—";
-        rangeStateCounts[st] = (rangeStateCounts[st] || 0) + 1;
-      }
-      const rangeTopStates = Object.entries(rangeStateCounts)
-        .filter(([s]) => s !== "—" && s.length === 2)
-        .map(([state, count]) => ({ state, count }))
-        .sort((a, b) => b.count - a.count)
-        .slice(0, 10);
+      // Top states within the range — pull a separate state-included slice
+      // for just the range window (smaller payload than full range pull with fields).
+      let rangeTopStates = [];
+      try {
+        const stateRange = await pullListWithMeta(env, LIST_ID, rangeStartIso, { includeState: true, maxPages: 15 });
+        const startMsR = rangeStartTs.getTime();
+        const endMsR = rangeEndTs.getTime();
+        const rangeStateCounts = {};
+        for (const c of stateRange) {
+          const t = Date.parse(c.udate);
+          if (t < startMsR || t > endMsR) continue;
+          const st = c.state || "—";
+          rangeStateCounts[st] = (rangeStateCounts[st] || 0) + 1;
+        }
+        rangeTopStates = Object.entries(rangeStateCounts)
+          .filter(([s]) => s !== "—" && s.length === 2)
+          .map(([state, count]) => ({ state, count }))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 10);
+      } catch (_) { /* non-fatal */ }
 
       rangeBlock = {
         start: rangeStartIso,
@@ -483,7 +512,7 @@ export async function onRequestGet(context) {
     // s-maxage=60 = edge holds for 60s, browser still treats as no-store.
     const responseHeaders = {
       "Content-Type": "application/json",
-      "Cache-Control": "public, s-maxage=60, max-age=0",
+      "Cache-Control": "public, s-maxage=120, max-age=0",
       "Access-Control-Allow-Origin": "*",
       "X-Cache": "MISS",
     };
