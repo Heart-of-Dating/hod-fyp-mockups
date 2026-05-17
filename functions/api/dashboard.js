@@ -150,30 +150,46 @@ export async function onRequestGet(context) {
     }
 
     const cacheKey = rangeMode ? `range:${rangeStartIso}_${rangeEndIso}` : "live";
+    // Multi-isolate per-key cache so multiple concurrent ranges don't collide
+    if (!_cache.byKey) _cache.byKey = {};
+    const cacheEntry = _cache.byKey[cacheKey];
 
-    // ---- Tier 1: in-isolate cache (microseconds, but per-isolate only) ----
-    if (_cache.body && _cache.key === cacheKey && Date.now() - _cache.at < CACHE_TTL_MS) {
-      return new Response(_cache.body, {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": "no-store, max-age=0",
-          "Access-Control-Allow-Origin": "*",
-          "X-Cache": "HIT-MEM",
-        },
-      });
+    // Helper: build response from a body string
+    const respond = (body, xCache) => new Response(body, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store, max-age=0",
+        "Access-Control-Allow-Origin": "*",
+        "X-Cache": xCache,
+      },
+    });
+
+    // ---- Tier 1: in-isolate cache. Serve FRESH or STALE (SWR), trigger
+    //              background refresh if stale to avoid user-facing failures.
+    if (cacheEntry && cacheEntry.body) {
+      const age = Date.now() - cacheEntry.at;
+      if (age < CACHE_TTL_MS) {
+        return respond(cacheEntry.body, "HIT-MEM");
+      }
+      // Stale — serve immediately, kick off background refresh.
+      // Only spawn one refresh per cacheKey at a time (avoid stampede).
+      if (!cacheEntry.refreshing) {
+        cacheEntry.refreshing = true;
+        waitUntil(refreshInBackground(cacheKey, env, url, context).finally(() => {
+          if (_cache.byKey[cacheKey]) _cache.byKey[cacheKey].refreshing = false;
+        }));
+      }
+      return respond(cacheEntry.body, "STALE-MEM");
     }
 
-    // ---- Tier 2: CF edge cache (shared across all isolates, ~5ms) ----
-    // Keyed by the request URL (start/end query params naturally partition it).
-    // Each colo holds its own copy but lives across cold starts within that colo.
+    // ---- Tier 2: CF edge cache (shared across all isolates in this colo)
     const edgeCache = caches.default;
     const cacheReq = new Request(url.toString(), { method: "GET" });
     const cached = await edgeCache.match(cacheReq);
     if (cached) {
-      // Warm in-isolate cache from edge for faster subsequent hits
       const body = await cached.clone().text();
-      _cache = { at: Date.now(), key: cacheKey, body };
+      _cache.byKey[cacheKey] = { at: Date.now(), body, refreshing: false };
       const r = new Response(body, cached);
       r.headers.set("X-Cache", "HIT-EDGE");
       return r;
@@ -186,35 +202,48 @@ export async function onRequestGet(context) {
     // on each registration regardless of new/existing contact status).
     const LIST_ID = 28;
 
-    // Pull window — in live mode, only pull TODAY's contacts (CF Pages Functions
-    // CPU budget is 50ms; 7-day pull at 2K+ scale blew through it). In range
-    // mode, use the user's chosen window (their explicit ask).
+    // Pull window — only TODAY (live) or user range. Subrequest budget on
+    // CF Pages Functions Free plan is 50; we MUST stay under it.
+    // Caps below give: 5 (lean) + 2 (state) + 1 (count) + 1 (yest count) +
+    // 7 (daily parallel) + 4 (channel/recent) + 6 (VIP) + 2 (CF GraphQL) = ~28.
     const todayUtcStart = isoDay(new Date()) + "T00:00:00Z";
     const fetchSinceIso = rangeMode ? rangeStartIso : todayUtcStart;
-    // LEAN pull (no fieldValues). Hard page cap protects CPU budget.
-    const allContacts = await pullListWithMeta(env, LIST_ID, fetchSinceIso, { includeState: false, maxPages: 15 });
-    const regsTotalList28 = await countContactsOnList(env, LIST_ID, null);
 
-    // Separate state-field pull for top_states, capped tight. If it fails,
-    // top_states gracefully degrades to [].
+    // LEAN pull: capped to 5 pages = 500 contacts max. Used for hourly bars
+    // (sample is fine for hour distribution) and recent feeds (only need top 10).
+    // Today's TRUE count comes from a separate meta.total query below — so the
+    // cap doesn't undercount the displayed total.
+    let allContacts = [];
+    try {
+      allContacts = await pullListWithMeta(env, LIST_ID, fetchSinceIso, { includeState: false, maxPages: 5 });
+    } catch (_) { /* keep degraded — hourly/recent will show partial */ }
+
+    let regsTotalList28 = 0;
+    try { regsTotalList28 = await countContactsOnList(env, LIST_ID, null); } catch (_) {}
+
+    // State pull capped to 2 pages = 200 contacts. Hot-state signal sampled,
+    // not exhaustive — acceptable trade for fitting subreq budget.
     let stateContacts = [];
     try {
       const stateSince = rangeMode ? rangeStartIso : todayUtcStart;
-      stateContacts = await pullListWithMeta(env, LIST_ID, stateSince, { includeState: true, maxPages: 10 });
+      stateContacts = await pullListWithMeta(env, LIST_ID, stateSince, { includeState: true, maxPages: 2 });
     } catch (_) { /* non-fatal */ }
 
-    // Today / yesterday counts — today comes from allContacts (pulled fresh),
-    // yesterday from a cheap meta.total query since we no longer pull 7 days.
+    // Today / yesterday counts — both via cheap meta.total queries since
+    // the lean pull is now capped to 500 contacts and would undercount today.
     const todayDateUtc = isoDay(new Date());
     const yesterdayDateUtc = isoDay(new Date(Date.now() - 86400000));
-    const regsTodayAll = allContacts.filter(c => isoDay(c.udate) === todayDateUtc).length;
     const yesterdayStart = yesterdayDateUtc + "T00:00:00Z";
     const yesterdayEnd = todayDateUtc + "T00:00:00Z";
-    let regsYesterdayAll = 0;
+    let regsTodayAll = 0, regsYesterdayAll = 0;
     try {
-      const yData = await ac(env, `/contacts?listid=${LIST_ID}&filters[updated_after]=${encodeURIComponent(yesterdayStart)}&filters[updated_before]=${encodeURIComponent(yesterdayEnd)}&limit=1`);
+      const [tData, yData] = await Promise.all([
+        ac(env, `/contacts?listid=${LIST_ID}&filters[updated_after]=${encodeURIComponent(todayUtcStart)}&limit=1`),
+        ac(env, `/contacts?listid=${LIST_ID}&filters[updated_after]=${encodeURIComponent(yesterdayStart)}&filters[updated_before]=${encodeURIComponent(yesterdayEnd)}&limit=1`),
+      ]);
+      regsTodayAll = parseInt(tData?.meta?.total || "0", 10);
       regsYesterdayAll = parseInt(yData?.meta?.total || "0", 10);
-    } catch (_) { /* non-fatal */ }
+    } catch (_) {}
 
     // Hourly today (UTC), PT = UTC-7 (PDT, valid May-Nov). Aligns with Meta
     // Ads Manager default timezone so reg-hour bars match Meta's hour buckets.
@@ -515,10 +544,9 @@ export async function onRequestGet(context) {
         range: rangeBlock,
         generated_at: new Date().toISOString(),
       }, null, 2);
-    _cache = { at: Date.now(), key: cacheKey, body };
+    _cache.byKey[cacheKey] = { at: Date.now(), body, refreshing: false };
 
-    // Write to CF edge cache so other isolates / colos can serve from there.
-    // s-maxage=60 = edge holds for 60s, browser still treats as no-store.
+    // Write to CF edge cache for cross-isolate sharing within the colo
     const responseHeaders = {
       "Content-Type": "application/json",
       "Cache-Control": "public, s-maxage=120, max-age=0",
@@ -526,13 +554,48 @@ export async function onRequestGet(context) {
       "X-Cache": "MISS",
     };
     const edgeResp = new Response(body, { status: 200, headers: responseHeaders });
-    // Use waitUntil so cache.put doesn't delay the response
     waitUntil(edgeCache.put(cacheReq, edgeResp.clone()));
     return edgeResp;
   } catch (e) {
-    return new Response(JSON.stringify({ ok: false, error: e.message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
+    // SAFE-ERROR: return valid JSON (status 200) so frontend doesn't choke on
+    // "Unexpected token <" from CF's HTML error page. UI shows a "still warming"
+    // state. Real error is in `error` field for ops visibility.
+    const fallback = (_cache.byKey && _cache.byKey[cacheKey]) ? _cache.byKey[cacheKey].body : null;
+    if (fallback) {
+      // Serve the last-known-good even if very stale — better than no data
+      return respond(fallback, "STALE-FALLBACK");
+    }
+    return new Response(JSON.stringify({
+      ok: false,
+      error: e.message,
+      warming: true,
+      generated_at: new Date().toISOString(),
+      // Provide skeletal shape so UI doesn't crash on missing fields
+      regs: { today: 0, yesterday: 0, since_may_1: 0 },
+      channel: { paid: 0, organic: 0, unknown: 0, paid_is_test: true },
+      vip: { total: 0, paid: 0, organic: 0, reg_to_vip_pct: "—", paid_reg_to_vip_pct: "—", organic_reg_to_vip_pct: "—" },
+      landing: { today: 0, yesterday: 0, landing_to_reg_pct: "—" },
+      hourly_today: [], daily_7d: [], top_states: [], top_referrers: [],
+      recent: [], recent_vip: [],
+    }), {
+      status: 200, // critical: NOT 500. CF Workers gate 500s through HTML error page.
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "X-Cache": "ERROR-SAFE",
+      },
     });
   }
+}
+
+// Background refresh helper for SWR — re-runs the GET handler but discards
+// the response (cache write is the side-effect we care about). Errors are
+// swallowed so a failing background refresh doesn't surface to anyone.
+async function refreshInBackground(cacheKey, env, url, context) {
+  try {
+    const fakeRequest = new Request(url.toString(), { method: "GET" });
+    // Mark this invocation as a background-refresh to prevent infinite recursion
+    fakeRequest.headers.set("x-bg-refresh", "1");
+    await onRequestGet({ ...context, request: fakeRequest, env });
+  } catch (_) { /* silent — best effort */ }
 }

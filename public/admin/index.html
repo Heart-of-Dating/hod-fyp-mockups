@@ -486,8 +486,21 @@ function rangeQS() {
 async function refresh() {
   try {
     const r = await fetch('/api/dashboard' + rangeQS());
-    const d = await r.json();
-    if (!d || d.error) throw new Error(d.error || "no data");
+    let d;
+    try {
+      d = await r.json();
+    } catch (parseErr) {
+      // Backend returned HTML (CF error page) — show warming state, don't crash UI
+      document.getElementById('updated').textContent = 'Refreshing data… (server warming)';
+      return;
+    }
+    if (!d) throw new Error("no data");
+    // Backend returned safe-fallback JSON (warming: true means no cache yet).
+    // Show a soft warning but render whatever skeletal data came back.
+    if (d.warming) {
+      document.getElementById('updated').textContent = 'Refreshing data… (background compute in progress)';
+    }
+    if (d.error && !d.warming) throw new Error(d.error);
 
     // Use range data for time-based panels if range mode is active
     const rng = d.range; // null in live mode
