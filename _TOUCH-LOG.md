@@ -14,3 +14,4 @@ YYYY-MM-DD HH:MM TZ — <Agent> edited <path> (<one-line summary>)
 2026-05-16 14:02 CDT — Bandit fixed iOS WebKit duplicate-form scroll bug (James diagnosis) + dashboard CF edge cache layer (kills 503s under auto-refresh load)
 2026-05-16 14:16 CDT — Bandit simplified dashboard range picker to Live / Yesterday / Custom (date+hour); backend accepts full ISO timestamps; hourly bars auto-shown when span ≤48h
 2026-05-16 14:43 CDT — Bandit removed bottom register form (commented out), replaced with anchor button → #register-form (testing whether _b-suffix fix was insufficient against iOS WebKit autofill anchoring; if scroll jump now gone, James Option A confirmed as the real fix)
+2026-05-16 23:12 CDT — Bandit fixed dashboard 'too many subrequests' (CF Workers 50/invocation cap): countContactsForTag + countContactsOnList now read meta.total in 1 request instead of paginating all pages; consolidated 3 VIP tag searches into 1; cuts ~25-50 subrequests per call

@@ -21,35 +21,19 @@ async function ac(env, path) {
   return r.json();
 }
 
+// Count via AC's meta.total — single subrequest instead of full pagination.
+// Was 5-50 subrequests per count; now 1. Critical for staying under the
+// CF Workers free-plan 50-subrequests-per-invocation cap as the list grows.
 async function countContactsForTag(env, tagId, since) {
-  // Pull all pages, count
-  let total = 0;
-  let offset = 0;
-  while (offset < 5000) {
-    const filter = since ? `&filters[created_after]=${encodeURIComponent(since)}` : "";
-    const data = await ac(env, `/contacts?tagid=${tagId}${filter}&limit=100&offset=${offset}`);
-    const contacts = data.contacts || [];
-    total += contacts.length;
-    if (contacts.length < 100) break;
-    offset += 100;
-  }
-  return total;
+  const filter = since ? `&filters[created_after]=${encodeURIComponent(since)}` : "";
+  const data = await ac(env, `/contacts?tagid=${tagId}${filter}&limit=1`);
+  return parseInt(data?.meta?.total || "0", 10);
 }
 
 async function countContactsOnList(env, listId, since) {
-  // Count subscribers on a list (cleaner than tag — list captures re-subs from
-  // existing contacts whose tags already existed from prior launches)
-  let total = 0;
-  let offset = 0;
-  while (offset < 10000) {
-    const filter = since ? `&filters[updated_after]=${encodeURIComponent(since)}` : "";
-    const data = await ac(env, `/contacts?listid=${listId}${filter}&limit=100&offset=${offset}`);
-    const contacts = data.contacts || [];
-    total += contacts.length;
-    if (contacts.length < 100) break;
-    offset += 100;
-  }
-  return total;
+  const filter = since ? `&filters[updated_after]=${encodeURIComponent(since)}` : "";
+  const data = await ac(env, `/contacts?listid=${listId}${filter}&limit=1`);
+  return parseInt(data?.meta?.total || "0", 10);
 }
 
 async function listRecent(env, tagId, limit) {
@@ -338,15 +322,12 @@ export async function onRequestGet(context) {
     ]);
     const regsSinceMay1 = regsTotalList28;
 
-    // VIP counts — resolve tag IDs first
-    const vipUmbrella = await ac(env, `/tags?search=${encodeURIComponent("FYP VIP May 2026")}`);
-    const vipPaid = await ac(env, `/tags?search=${encodeURIComponent("FYP VIP May 2026 Paid")}`);
-    const vipOrg = await ac(env, `/tags?search=${encodeURIComponent("FYP VIP May 2026 Organic")}`);
-
+    // VIP tag IDs — one search instead of three (cuts 2 subrequests)
+    const vipSearch = await ac(env, `/tags?search=${encodeURIComponent("FYP VIP May 2026")}`);
     const findId = (data, name) => (data.tags || []).find(t => t.tag === name)?.id;
-    const vipUmbrellaId = findId(vipUmbrella, "FYP VIP May 2026");
-    const vipPaidId = findId(vipPaid, "FYP VIP May 2026 Paid");
-    const vipOrgId = findId(vipOrg, "FYP VIP May 2026 Organic");
+    const vipUmbrellaId = findId(vipSearch, "FYP VIP May 2026");
+    const vipPaidId = findId(vipSearch, "FYP VIP May 2026 Paid");
+    const vipOrgId = findId(vipSearch, "FYP VIP May 2026 Organic");
 
     // VIP tags are launch-specific (named "FYP VIP May 2026"). Don't filter by
     // created_after — most VIP buyers are pre-existing AC contacts (Kait's
