@@ -18,7 +18,18 @@
 
 const META_API_VERSION = "v19.0";
 const TARGET_CPL = 1.79; // From James's May 2026 brief — used for rec thresholds
-const FYP_LAUNCH_DATE = "2026-05-01"; // FYP May 2026 paid funnel started — scopes "lifetime" totals so HOD's pre-FYP ad history isn't included
+const FYP_LAUNCH_DATE = "2026-05-01"; // FYP May 2026 paid funnel started
+const FYP_EVENT_START_DATE = "2026-05-26"; // Night 1 of FYP — "must hit target by" date
+const DEFAULT_PAID_LEAD_TARGET = 15500; // From James's brief: 4.5K organic + 15.5K paid = 20K total. Overridable via env.META_PAID_LEAD_TARGET
+// Campaign-name filter to scope ALL metrics to FYP May 2026 only.
+// HOD ad account is shared across podcast/SOD/BOD/other events — without this
+// filter we'd mix in non-FYP spend. All current FYP campaigns are named
+// "JSC - FYP Challenge 2026 MAY 26-29 ..." so "FYP Challenge 2026" matches all.
+const FYP_CAMPAIGN_FILTER = JSON.stringify([{
+  field: "campaign.name",
+  operator: "CONTAIN",
+  value: "FYP Challenge 2026",
+}]);
 
 // SWR cache (90s). Per-cacheKey isolation so range + today don't evict each other.
 let _cache = { byKey: {} };
@@ -83,9 +94,12 @@ function pctDelta(current, prior) {
   return ((current - prior) / prior) * 100;
 }
 
-// Build common insight params with optional time_range / date_preset
+// Build common insight params with optional time_range / date_preset.
+// ALWAYS applies the FYP campaign-name filter so account-level aggregates
+// don't include HOD's other campaigns (podcast promos, BOD, SOD, etc.)
+// running on the same ad account.
 function buildParams(extras, hasRange, timeRange, datePreset) {
-  const p = { ...extras };
+  const p = { filtering: FYP_CAMPAIGN_FILTER, ...extras };
   if (hasRange) p.time_range = timeRange;
   else p.date_preset = datePreset;
   return p;
@@ -153,7 +167,7 @@ function safeError(msg) {
     spend: 0, impressions: 0, clicks: 0, ctr: 0, cpc: 0, reach: 0, frequency: 0, leads: 0, cpl: 0,
     compare: null, audience: { age: [], gender: [] }, top_campaigns: [],
     alerts: [], recommendations: [],
-    daily_spend: [], lifetime: null,
+    daily_spend: [], lifetime: null, pacing: null,
     generated_at: new Date().toISOString(),
   }), {
     status: 200,
@@ -198,11 +212,11 @@ async function computeSnapshot(env, { startParam, endParam, hasRange }) {
     // 6) daily breakdown — for spend-over-time chart (time_increment=1)
     fetchInsights(env,
       hasRange
-        ? { fields: dailyFields, level: "account", time_range: dailyTimeRange, time_increment: 1 }
-        : { fields: dailyFields, level: "account", date_preset: dailyPreset, time_increment: 1 }),
-    // 7) FYP campaign-period aggregate (since May 1) — scoped so HOD's pre-FYP
-    //    ad history (different campaigns, different lead events) isn't mixed in.
+        ? { filtering: FYP_CAMPAIGN_FILTER, fields: dailyFields, level: "account", time_range: dailyTimeRange, time_increment: 1 }
+        : { filtering: FYP_CAMPAIGN_FILTER, fields: dailyFields, level: "account", date_preset: dailyPreset, time_increment: 1 }),
+    // 7) FYP-to-date aggregate (since May 1, FYP campaigns only).
     fetchInsights(env, {
+      filtering: FYP_CAMPAIGN_FILTER,
       fields: accountFields,
       level: "account",
       time_range: { since: FYP_LAUNCH_DATE, until: ptDateStr(new Date()) },
@@ -505,6 +519,39 @@ async function computeSnapshot(env, { startParam, endParam, hasRange }) {
     frequency: parseFloat(lifeRow.frequency || 0),
   };
 
+  // ---- Pacing to goal (paid lead target from James's brief) ----
+  // Override DEFAULT_PAID_LEAD_TARGET via CF Pages secret META_PAID_LEAD_TARGET.
+  const targetLeads = parseInt(env.META_PAID_LEAD_TARGET || DEFAULT_PAID_LEAD_TARGET, 10);
+  const todayPt = ptDateStr(new Date());
+  // Avg daily leads from COMPLETE days only (exclude today partial)
+  const completeDays = daily_spend.filter(d => d.date < todayPt && d.spend > 0);
+  const avgDailyLeads = completeDays.length > 0
+    ? completeDays.reduce((s, d) => s + d.leads, 0) / completeDays.length
+    : 0;
+  // Days remaining until event start (May 26 inclusive of today)
+  const todayMs = Date.parse(todayPt + "T00:00:00Z");
+  const eventMs = Date.parse(FYP_EVENT_START_DATE + "T00:00:00Z");
+  const daysRemaining = Math.max(0, Math.round((eventMs - todayMs) / 86400000));
+  // Projected total leads at current pace (today included as partial)
+  const projectedTotal = lifeLeads + Math.round(avgDailyLeads * daysRemaining);
+  const pctToTarget = targetLeads > 0 ? (lifeLeads / targetLeads) * 100 : 0;
+  const projectedPct = targetLeads > 0 ? (projectedTotal / targetLeads) * 100 : 0;
+  const pacing = {
+    target_leads: targetLeads,
+    leads_to_date: lifeLeads,
+    pct_to_target: pctToTarget,
+    avg_daily_leads_complete_days: avgDailyLeads,
+    complete_days_count: completeDays.length,
+    days_remaining: daysRemaining,
+    event_start_date: FYP_EVENT_START_DATE,
+    projected_total_leads: projectedTotal,
+    projected_pct: projectedPct,
+    on_track: projectedTotal >= targetLeads,
+    leads_needed_per_day: daysRemaining > 0
+      ? Math.max(0, Math.ceil((targetLeads - lifeLeads) / daysRemaining))
+      : 0,
+  };
+
   return JSON.stringify({
     ok: true,
     spend, impressions, clicks, ctr, cpc, reach, frequency, leads, cpl,
@@ -515,6 +562,7 @@ async function computeSnapshot(env, { startParam, endParam, hasRange }) {
     recommendations,
     daily_spend,
     lifetime,
+    pacing,
     target_cpl: TARGET_CPL,
     range: hasRange ? { start: startParam, end: endParam } : null,
     timezone: "America/Los_Angeles",

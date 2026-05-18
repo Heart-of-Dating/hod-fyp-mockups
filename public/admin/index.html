@@ -510,57 +510,78 @@
 <!-- META ADS COMMAND CENTER -->
 <h3 style="margin-top:24px;">Meta Ads <span id="meta-scope-tag" class="scope-tag"></span> <span id="meta-compare-label" style="font-size:11px; color:#888; font-weight:400; margin-left:8px;"></span></h3>
 
-<!-- LIFETIME TOTALS (always since launch, regardless of range) -->
-<div class="grid" style="margin-bottom:8px;">
-  <div class="card" style="border-color: rgba(74,222,128,0.3);">
-    <h2>Spend Since Launch <span class="scope-tag" style="background:rgba(74,222,128,0.12); border-color:rgba(74,222,128,0.35); color:#4ade80;">since May 1</span></h2>
-    <div class="big" id="meta-life-spend">—</div>
-    <div class="sub-num" id="meta-life-spend-sub">—</div>
-  </div>
-  <div class="card" style="border-color: rgba(74,222,128,0.3);">
-    <h2>Leads Since Launch</h2>
-    <div class="big" id="meta-life-leads">—</div>
-    <div class="sub-num" id="meta-life-cpl">Blended CPL: —</div>
-  </div>
-  <div class="card" style="border-color: rgba(74,222,128,0.3);">
-    <h2>CTR Since Launch</h2>
-    <div class="big" id="meta-life-ctr">—</div>
-    <div class="sub-num" id="meta-life-clicks">— clicks</div>
-  </div>
-  <div class="card" style="border-color: rgba(74,222,128,0.3);">
-    <h2>Reach Since Launch</h2>
-    <div class="big" id="meta-life-reach">—</div>
-    <div class="sub-num" id="meta-life-impr">— impressions</div>
-  </div>
-</div>
-
-<!-- SPEND TIMELINE -->
-<div style="margin-bottom:12px;">
-  <h3 id="spend-timeline-heading">Spend Timeline (last 14 days, PT)</h3>
-  <div class="card wide">
-    <div id="spend-timeline" style="margin-top:4px;">Loading…</div>
-  </div>
-</div>
+<!-- ROW 1: TODAY (time-scoped, with deltas vs yesterday) — eye-level gut check -->
 <div class="grid">
+  <div class="card">
+    <h2>CPL <span style="font-size:10px; color:#666; font-weight:400; margin-left:4px;">target $1.79</span></h2>
+    <div class="big" id="meta-cpl-big">—</div>
+    <div class="sub-num"><span id="meta-cpl-delta" class="delta"></span></div>
+  </div>
   <div class="card">
     <h2>Spend</h2>
     <div class="big" id="meta-spend">—</div>
     <div class="sub-num"><span id="meta-spend-sub">—</span> <span id="meta-spend-delta" class="delta"></span></div>
   </div>
   <div class="card">
-    <h2>Leads (Meta-attributed)</h2>
+    <h2>Leads</h2>
     <div class="big" id="meta-leads">—</div>
-    <div class="sub-num"><span id="meta-cpl">CPL: —</span> <span id="meta-leads-delta" class="delta"></span></div>
+    <div class="sub-num"><span id="meta-leads-sub">CPC: —</span> <span id="meta-leads-delta" class="delta"></span></div>
   </div>
   <div class="card">
-    <h2>Reach</h2>
-    <div class="big" id="meta-reach">—</div>
-    <div class="sub-num" id="meta-freq">Frequency: —</div>
+    <h2>Frequency</h2>
+    <div class="big" id="meta-freq-big">—</div>
+    <div class="sub-num" id="meta-freq-sub">Reach: —</div>
   </div>
-  <div class="card">
-    <h2>CTR</h2>
-    <div class="big" id="meta-ctr">—</div>
-    <div class="sub-num"><span id="meta-clicks">— clicks · CPC: —</span> <span id="meta-ctr-delta" class="delta"></span></div>
+</div>
+
+<!-- ROW 2: FYP-TO-DATE (since May 1, FYP campaigns only) — green-tinted -->
+<div class="grid" style="margin-top:8px;">
+  <div class="card" style="border-color: rgba(74,222,128,0.3);">
+    <h2>Spend FYP-to-date <span class="scope-tag" style="background:rgba(74,222,128,0.12); border-color:rgba(74,222,128,0.35); color:#4ade80;">since May 1</span></h2>
+    <div class="big" id="meta-life-spend">—</div>
+    <div class="sub-num" id="meta-life-spend-sub">—</div>
+  </div>
+  <div class="card" style="border-color: rgba(74,222,128,0.3);">
+    <h2>Leads FYP-to-date</h2>
+    <div class="big" id="meta-life-leads">—</div>
+    <div class="sub-num" id="meta-life-cpl">—</div>
+  </div>
+  <div class="card" style="border-color: rgba(74,222,128,0.3);">
+    <h2>Blended CPL</h2>
+    <div class="big" id="meta-life-cpl-big">—</div>
+    <div class="sub-num" id="meta-life-cpl-sub">vs $1.79 target</div>
+  </div>
+  <div class="card" id="pacing-card" style="border-color: rgba(74,222,128,0.3);">
+    <h2>Pacing to Goal</h2>
+    <div class="big" id="meta-pacing-pct">—</div>
+    <div class="sub-num" id="meta-pacing-sub">—</div>
+  </div>
+</div>
+
+<!-- ROW 3: Secondary stats (CTR / Reach / Impressions / CPC for today) -->
+<div class="grid" style="margin-top:8px;">
+  <div class="card" style="padding: 12px 14px;"><h2 style="font-size:11px;">CTR</h2><div style="font-size:22px; font-weight:700;" id="meta-ctr">—</div><div class="sub-num"><span id="meta-ctr-delta" class="delta"></span></div></div>
+  <div class="card" style="padding: 12px 14px;"><h2 style="font-size:11px;">Reach</h2><div style="font-size:22px; font-weight:700;" id="meta-reach">—</div></div>
+  <div class="card" style="padding: 12px 14px;"><h2 style="font-size:11px;">Impressions</h2><div style="font-size:22px; font-weight:700;" id="meta-impressions">—</div></div>
+  <div class="card" style="padding: 12px 14px;"><h2 style="font-size:11px;">CPC</h2><div style="font-size:22px; font-weight:700;" id="meta-cpc">—</div></div>
+</div>
+
+<!-- Hidden legacy IDs (kept so any old JS references don't null-deref) -->
+<div style="display:none;">
+  <span id="meta-cpl"></span>
+  <span id="meta-clicks"></span>
+  <span id="meta-freq"></span>
+  <span id="meta-life-clicks"></span>
+  <span id="meta-life-ctr"></span>
+  <span id="meta-life-reach"></span>
+  <span id="meta-life-impr"></span>
+</div>
+
+<!-- SPEND TIMELINE -->
+<div style="margin-top:12px;">
+  <h3 id="spend-timeline-heading">Spend Timeline (last 14 days, PT)</h3>
+  <div class="card wide">
+    <div id="spend-timeline" style="margin-top:4px;">Loading…</div>
   </div>
 </div>
 
@@ -921,16 +942,34 @@ function renderLifetime(life) {
     el('meta-life-spend').textContent = '—';
     return;
   }
+  // Row 2: FYP-to-date cards
   el('meta-life-spend').textContent = fmtMoney(life.spend);
-  el('meta-life-spend-sub').textContent = fmtInt(life.impressions) + ' impressions · ' + fmtInt(life.clicks) + ' clicks';
+  el('meta-life-spend-sub').textContent = `${fmtInt(life.impressions)} impressions · ${fmtInt(life.clicks)} clicks`;
   el('meta-life-leads').textContent = fmtInt(life.leads);
-  el('meta-life-cpl').textContent = 'Blended CPL: ' + (life.leads > 0 ? fmtMoney(life.cpl) : '—');
-  const cplEl = el('meta-life-cpl');
-  cplEl.style.color = life.cpl < 2 ? '#4ade80' : life.cpl < 4 ? '#facc15' : '#f87171';
-  el('meta-life-ctr').textContent = fmtPct(life.ctr);
-  el('meta-life-clicks').textContent = fmtInt(life.clicks) + ' clicks';
-  el('meta-life-reach').textContent = fmtInt(life.reach);
-  el('meta-life-impr').textContent = fmtInt(life.impressions) + ' impressions · freq ' + (life.frequency || 0).toFixed(2);
+  el('meta-life-cpl').textContent = `${fmtInt(life.reach)} unique reached`;
+  el('meta-life-cpl-big').textContent = life.leads > 0 ? fmtMoney(life.cpl) : '—';
+  el('meta-life-cpl-big').style.color = life.cpl < 2 ? '#4ade80' : life.cpl < 4 ? '#facc15' : '#f87171';
+  el('meta-life-cpl-sub').textContent = life.leads > 0
+    ? `CTR ${(life.ctr || 0).toFixed(2)}% · ${(life.cpl / 1.79).toFixed(1)}x target`
+    : 'vs $1.79 target';
+}
+
+function renderPacing(p) {
+  const el = (id) => document.getElementById(id);
+  if (!p) { el('meta-pacing-pct').textContent = '—'; el('meta-pacing-sub').textContent = '—'; return; }
+  el('meta-pacing-pct').textContent = `${p.pct_to_target.toFixed(1)}%`;
+  const projectedPct = p.projected_pct.toFixed(0);
+  const onTrack = p.on_track;
+  el('meta-pacing-pct').style.color = onTrack ? '#4ade80' : projectedPct >= 80 ? '#facc15' : '#f87171';
+  const subParts = [
+    `${fmtInt(p.leads_to_date)}/${fmtInt(p.target_leads)} leads`,
+    `${p.days_remaining}d to event`,
+    `projected: ${fmtInt(p.projected_total_leads)} (${projectedPct}%)`,
+  ];
+  if (!onTrack && p.leads_needed_per_day > 0) {
+    subParts.push(`need ${fmtInt(p.leads_needed_per_day)}/day from now`);
+  }
+  el('meta-pacing-sub').innerHTML = subParts.join(' · ');
 }
 
 function renderSpendTimeline(daily, inRange, rng) {
@@ -1069,31 +1108,49 @@ async function refreshMeta() {
     document.getElementById('meta-scope-tag').textContent = inRange ? `in ${Math.round((Date.parse(currentRange.end) - Date.parse(currentRange.start)) / 3600000)}h range` : 'today PT';
     document.getElementById('meta-compare-label').textContent = d.compare ? `vs ${d.compare.period_label} · timezone PT` : 'timezone PT';
 
-    // Headline cards
+    // ROW 1: today/range cards (CPL primary, then Spend/Leads/Frequency)
+    const cplBig = document.getElementById('meta-cpl-big');
+    cplBig.textContent = d.leads > 0 ? fmtMoney(d.cpl) : '—';
+    cplBig.style.color = d.cpl < 2 ? '#4ade80' : d.cpl < 4 ? '#facc15' : '#f87171';
+
     document.getElementById('meta-spend').textContent = fmtMoney(d.spend);
     document.getElementById('meta-spend-sub').textContent = `${fmtInt(d.impressions)} impressions`;
-    document.getElementById('meta-leads').textContent = fmtInt(d.leads);
-    document.getElementById('meta-cpl').textContent = 'CPL: ' + fmtMoney(d.cpl);
-    const cplEl = document.getElementById('meta-cpl');
-    cplEl.style.color = d.cpl < 2 ? '#4ade80' : d.cpl < 4 ? '#facc15' : '#f87171';
-    document.getElementById('meta-reach').textContent = fmtInt(d.reach);
-    document.getElementById('meta-freq').textContent = 'Frequency: ' + (d.frequency || 0).toFixed(2);
-    document.getElementById('meta-ctr').textContent = fmtPct(d.ctr);
-    document.getElementById('meta-clicks').textContent = `${fmtInt(d.clicks)} clicks · CPC: ${fmtMoney(d.cpc)}`;
 
-    // Deltas
+    document.getElementById('meta-leads').textContent = fmtInt(d.leads);
+    document.getElementById('meta-leads-sub').textContent = `CPC: ${fmtMoney(d.cpc)}`;
+
+    const freqBig = document.getElementById('meta-freq-big');
+    freqBig.textContent = (d.frequency || 0).toFixed(2);
+    freqBig.style.color = d.frequency > 3.5 ? '#f87171' : d.frequency > 2.5 ? '#facc15' : '#f5f5f5';
+    document.getElementById('meta-freq-sub').textContent = `Reach: ${fmtInt(d.reach)}`;
+
+    // Hidden legacy IDs (kept populated for any cross-script references)
+    document.getElementById('meta-cpl').textContent = fmtMoney(d.cpl);
+    document.getElementById('meta-freq').textContent = (d.frequency || 0).toFixed(2);
+    document.getElementById('meta-clicks').textContent = `${fmtInt(d.clicks)} clicks`;
+
+    // Secondary stats row
+    document.getElementById('meta-ctr').textContent = fmtPct(d.ctr);
+    document.getElementById('meta-reach').textContent = fmtInt(d.reach);
+    document.getElementById('meta-impressions').textContent = fmtInt(d.impressions);
+    document.getElementById('meta-cpc').textContent = fmtMoney(d.cpc);
+
+    // Deltas (CPL gets the leads-delta slot since CPL is primary now; we
+    // surface CPL trend specifically: up = bad, down = good)
     if (d.compare?.deltas) {
+      renderDelta(document.getElementById('meta-cpl-delta'), d.compare.deltas.cpl_pct, 'cpl');
       renderDelta(document.getElementById('meta-spend-delta'), d.compare.deltas.spend_pct, 'spend');
       renderDelta(document.getElementById('meta-leads-delta'), d.compare.deltas.leads_pct, 'leads');
       renderDelta(document.getElementById('meta-ctr-delta'), d.compare.deltas.ctr_pct, 'ctr');
     } else {
-      ['meta-spend-delta', 'meta-leads-delta', 'meta-ctr-delta'].forEach(id => {
-        const el = document.getElementById(id); el.textContent = ''; el.className = 'delta';
+      ['meta-cpl-delta', 'meta-spend-delta', 'meta-leads-delta', 'meta-ctr-delta'].forEach(id => {
+        const el = document.getElementById(id); if (el) { el.textContent = ''; el.className = 'delta'; }
       });
     }
 
-    // Lifetime totals (always since launch, regardless of range)
+    // ROW 2: FYP-to-date totals + pacing
     renderLifetime(d.lifetime);
+    renderPacing(d.pacing);
 
     // Spend timeline (last 14d in live mode, range in range mode)
     renderSpendTimeline(d.daily_spend || [], inRange, currentRange);
