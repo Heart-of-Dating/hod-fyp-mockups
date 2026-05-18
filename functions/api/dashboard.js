@@ -202,31 +202,26 @@ export async function onRequestGet(context) {
     // on each registration regardless of new/existing contact status).
     const LIST_ID = 28;
 
-    // Pull window — only TODAY (live) or user range. Subrequest budget on
-    // CF Pages Functions Free plan is 50; we MUST stay under it.
-    // Caps below give: 5 (lean) + 2 (state) + 1 (count) + 1 (yest count) +
-    // 7 (daily parallel) + 4 (channel/recent) + 6 (VIP) + 2 (CF GraphQL) = ~28.
+    // Pull window — only TODAY (live) or user range. Workers Standard plan
+    // gives 1000-subreq + 30s-CPU budget so we can pull exhaustively.
     const todayUtcStart = isoDay(new Date()) + "T00:00:00Z";
     const fetchSinceIso = rangeMode ? rangeStartIso : todayUtcStart;
 
-    // LEAN pull: capped to 5 pages = 500 contacts max. Used for hourly bars
-    // (sample is fine for hour distribution) and recent feeds (only need top 10).
-    // Today's TRUE count comes from a separate meta.total query below — so the
-    // cap doesn't undercount the displayed total.
+    // LEAN pull (no fieldValues): exhaustive for hourly accuracy + recent feeds.
+    // 25 pages = 2500 contacts, well past current daily volume.
     let allContacts = [];
     try {
-      allContacts = await pullListWithMeta(env, LIST_ID, fetchSinceIso, { includeState: false, maxPages: 5 });
-    } catch (_) { /* keep degraded — hourly/recent will show partial */ }
+      allContacts = await pullListWithMeta(env, LIST_ID, fetchSinceIso, { includeState: false, maxPages: 25 });
+    } catch (_) { /* graceful degrade */ }
 
     let regsTotalList28 = 0;
     try { regsTotalList28 = await countContactsOnList(env, LIST_ID, null); } catch (_) {}
 
-    // State pull capped to 2 pages = 200 contacts. Hot-state signal sampled,
-    // not exhaustive — acceptable trade for fitting subreq budget.
+    // State pull: 10 pages = 1000 contacts, strong representative sample of today.
     let stateContacts = [];
     try {
       const stateSince = rangeMode ? rangeStartIso : todayUtcStart;
-      stateContacts = await pullListWithMeta(env, LIST_ID, stateSince, { includeState: true, maxPages: 2 });
+      stateContacts = await pullListWithMeta(env, LIST_ID, stateSince, { includeState: true, maxPages: 10 });
     } catch (_) { /* non-fatal */ }
 
     // Today / yesterday counts — both via cheap meta.total queries since
