@@ -274,6 +274,8 @@
   .vip-badge { background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid rgba(250, 204, 21, 0.4); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
   .sms-badge { background: rgba(192, 132, 252, 0.15); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.35); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
   .tag-pill { display: inline-block; background: #232323; color: #aaa; padding: 2px 7px; border-radius: 8px; font-size: 10px; margin-right: 4px; margin-top: 4px; }
+  .scope-tag { display: inline-block; font-size: 10px; font-weight: 500; color: #facc15; background: rgba(250,204,21,0.12); border: 1px solid rgba(250,204,21,0.35); padding: 2px 8px; border-radius: 10px; margin-left: 6px; vertical-align: middle; }
+  .scope-tag:empty { display: none; }
 
   /* Date range picker */
   .range-bar {
@@ -358,6 +360,7 @@
 <div class="range-bar">
   <span class="label">View:</span>
   <button class="preset active" data-preset="live">Live (Today + Totals)</button>
+  <button class="preset" data-preset="today">Today (PT)</button>
   <button class="preset" data-preset="yesterday">Yesterday</button>
   <span class="label" style="margin-left:8px;">Custom (PT):</span>
   <input type="datetime-local" id="range-start" min="2026-05-01T00:00" title="Times entered in Pacific Time (matches Meta Ads)" />
@@ -419,16 +422,16 @@
 </div>
 
 <!-- CHANNEL + GEO + PAGEVIEWS -->
-<h3>Channel · Geography · Traffic</h3>
+<h3>Channel · Geography · Traffic <span id="scope-badge" style="font-size:12px; font-weight:400; color:#888; margin-left:8px;"></span></h3>
 <div class="grid">
   <div class="card">
-    <h2>Channel — Registrations</h2>
+    <h2>Channel — Registrations <span class="scope-tag" id="reg-scope-tag"></span></h2>
     <div class="row"><span class="label">Paid (Meta)<span id="paid-badge" class="badge" style="display:none;">test data</span></span><span class="val" id="reg-paid">—</span></div>
     <div class="row"><span class="label">Organic</span><span class="val" id="reg-organic">—</span></div>
     <div class="row"><span class="label">Unknown</span><span class="val" id="reg-unknown">—</span></div>
   </div>
   <div class="card">
-    <h2>Channel — VIP Conversion</h2>
+    <h2>Channel — VIP Conversion <span class="scope-tag" id="vip-scope-tag"></span></h2>
     <div class="row" id="row-vip-paid"><span class="label">VIP — Paid</span><span class="val" id="vip-paid">—</span></div>
     <div class="row"><span class="label">VIP — Organic</span><span class="val" id="vip-org">—</span></div>
     <div class="row" id="row-paid-vip-pct"><span class="label">Paid → VIP %</span><span class="val" id="paid-vip-pct">—</span></div>
@@ -623,6 +626,15 @@ async function refresh() {
       document.getElementById('row-yesterday').style.display = '';
     }
 
+    // Scope tags — when in range mode, mark channel/VIP cards as range-scoped
+    // (so user sees at a glance that those numbers reflect the range, not all-time)
+    const scopeLabel = inRange ? `in ${rng.span_hours}h range` : '';
+    document.getElementById('reg-scope-tag').textContent = scopeLabel;
+    document.getElementById('vip-scope-tag').textContent = scopeLabel;
+    document.getElementById('scope-badge').textContent = inRange
+      ? `(numbers below reflect the ${rng.span_hours}h range — Total Registrations card stays all-time)`
+      : '';
+
     // Landing card — show range landing data if available
     if (inRange && rng.landing) {
       document.getElementById('pv-today').textContent = (rng.landing.visits || 0).toLocaleString();
@@ -739,6 +751,13 @@ document.querySelectorAll('.range-bar .preset').forEach(btn => {
   btn.addEventListener('click', () => {
     const p = btn.dataset.preset;
     if (p === 'live') return setRange('live');
+    if (p === 'today') {
+      const t = ptDateStr(0); // today in PT
+      const startIso = new Date(t + "T00:00:00" + PT_OFFSET).toISOString();
+      // End = now (so card reflects through-current-moment, not end-of-day)
+      const endIso = new Date().toISOString();
+      return setRange('today', startIso, endIso);
+    }
     if (p === 'yesterday') {
       // Full PT yesterday: 00:00 → 23:59:59 in Pacific Time, converted to UTC.
       // Aligns with Meta Ads Manager's daily reporting boundary.

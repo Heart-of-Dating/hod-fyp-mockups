@@ -22,16 +22,22 @@ async function ac(env, path) {
 }
 
 // Count via AC's meta.total — single subrequest instead of full pagination.
-// Was 5-50 subrequests per count; now 1. Critical for staying under the
-// CF Workers free-plan 50-subrequests-per-invocation cap as the list grows.
-async function countContactsForTag(env, tagId, since) {
-  const filter = since ? `&filters[created_after]=${encodeURIComponent(since)}` : "";
+// Accepts optional date window via {since, until} ISO strings to scope counts
+// to a date range (used by date-range-aware channel + VIP cards).
+async function countContactsForTag(env, tagId, range = null) {
+  const parts = [];
+  if (range?.since) parts.push(`filters[updated_after]=${encodeURIComponent(range.since)}`);
+  if (range?.until) parts.push(`filters[updated_before]=${encodeURIComponent(range.until)}`);
+  const filter = parts.length ? `&${parts.join('&')}` : "";
   const data = await ac(env, `/contacts?tagid=${tagId}${filter}&limit=1`);
   return parseInt(data?.meta?.total || "0", 10);
 }
 
-async function countContactsOnList(env, listId, since) {
-  const filter = since ? `&filters[updated_after]=${encodeURIComponent(since)}` : "";
+async function countContactsOnList(env, listId, range = null) {
+  const parts = [];
+  if (range?.since) parts.push(`filters[updated_after]=${encodeURIComponent(range.since)}`);
+  if (range?.until) parts.push(`filters[updated_before]=${encodeURIComponent(range.until)}`);
+  const filter = parts.length ? `&${parts.join('&')}` : "";
   const data = await ac(env, `/contacts?listid=${listId}${filter}&limit=1`);
   return parseInt(data?.meta?.total || "0", 10);
 }
@@ -371,17 +377,24 @@ export async function onRequestGet(context) {
       };
     }
 
+    // Channel + VIP counts — date-range-aware when range is set, else all-time.
+    // (Per James's audit: when a date range is selected, channel/VIP should
+    // reflect that window, not all-time.)
+    const rangeFilter = rangeMode
+      ? { since: rangeStartIso, until: rangeEndIso }
+      : null;
+
     const [
       regsPaid,
       regsOrganic,
       recentList,
     ] = await Promise.all([
-      countContactsForTag(env, TAGS.fyp_paid, null),
-      countContactsForTag(env, TAGS.fyp_organic, null),
-      // Recent regs with channel badges (paid vs organic)
+      countContactsForTag(env, TAGS.fyp_paid, rangeFilter),
+      countContactsForTag(env, TAGS.fyp_organic, rangeFilter),
+      // Recent regs with channel badges (always latest, regardless of range)
       listRecentByChannel(env, TAGS.fyp_paid, TAGS.fyp_organic, 10),
     ]);
-    const regsSinceMay1 = regsTotalList28;
+    const regsSinceMay1 = regsTotalList28; // always all-time (always-on reference card)
 
     // VIP tag IDs — one search instead of three (cuts 2 subrequests)
     const vipSearch = await ac(env, `/tags?search=${encodeURIComponent("FYP VIP May 2026")}`);
@@ -390,19 +403,21 @@ export async function onRequestGet(context) {
     const vipPaidId = findId(vipSearch, "FYP VIP May 2026 Paid");
     const vipOrgId = findId(vipSearch, "FYP VIP May 2026 Organic");
 
-    // VIP tags are launch-specific (named "FYP VIP May 2026"). Don't filter by
-    // created_after — most VIP buyers are pre-existing AC contacts (Kait's
-    // email list / podcast fans), so filtering by contact creation date
-    // undercounts dramatically. Count ALL with the tag.
+    // VIP counts respect the same range filter. In range mode this gives
+    // "VIP buyers WITHIN this window" — enables per-day VIP take-rate tracking
+    // (the specific thing James called out as wanting).
     const [vipAll, vipPaidCount, vipOrgCount, recentVipList] = await Promise.all([
-      vipUmbrellaId ? countContactsForTag(env, vipUmbrellaId, null) : 0,
-      vipPaidId ? countContactsForTag(env, vipPaidId, null) : 0,
-      vipOrgId ? countContactsForTag(env, vipOrgId, null) : 0,
-      // Recent VIP buyers with channel badges
+      vipUmbrellaId ? countContactsForTag(env, vipUmbrellaId, rangeFilter) : 0,
+      vipPaidId ? countContactsForTag(env, vipPaidId, rangeFilter) : 0,
+      vipOrgId ? countContactsForTag(env, vipOrgId, rangeFilter) : 0,
       listRecentByChannel(env, vipPaidId, vipOrgId, 10),
     ]);
 
-    const regToVipPct = regsSinceMay1 > 0 ? (vipAll / regsSinceMay1 * 100).toFixed(1) : "—";
+    // VIP take rate denominator: in range mode use range.regs (= contacts that
+    // hit the list in that window); in live mode use all-time list size.
+    // The denominator must match the numerator's window so the % is meaningful.
+    const vipDenom = rangeMode && rangeBlock ? rangeBlock.regs : regsSinceMay1;
+    const regToVipPct = vipDenom > 0 ? (vipAll / vipDenom * 100).toFixed(1) : "—";
     const paidToVipPct = regsPaid > 0 ? (vipPaidCount / regsPaid * 100).toFixed(1) : "—";
     const orgToVipPct = regsOrganic > 0 ? (vipOrgCount / regsOrganic * 100).toFixed(1) : "—";
 
