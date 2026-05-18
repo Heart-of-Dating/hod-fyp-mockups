@@ -319,6 +319,26 @@
   .audience-row .a-cpl { text-align: right; font-weight: 600; }
   .audience-empty { color: #888; padding: 12px; font-size: 13px; }
 
+  /* Spend timeline bars */
+  .timeline-wrap { display: flex; flex-direction: column; gap: 4px; padding: 8px 4px 4px; }
+  .timeline-bars { display: flex; align-items: flex-end; gap: 4px; height: 120px; padding: 4px 0; border-bottom: 1px solid #2a2a2a; }
+  .timeline-bar { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: stretch; position: relative; cursor: default; }
+  .timeline-bar .b-fill { width: 100%; background: linear-gradient(180deg, #60a5fa, #4ade80); border-radius: 2px 2px 0 0; transition: opacity 120ms; min-height: 1px; }
+  .timeline-bar .b-fill.empty { background: #2a2a2a; opacity: 0.4; }
+  .timeline-bar:hover .b-fill { opacity: 0.85; }
+  .timeline-bar .b-tip {
+    position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+    background: #0a0a0a; border: 1px solid #2a2a2a; border-radius: 4px;
+    padding: 6px 8px; font-size: 11px; line-height: 1.4; color: #f5f5f5;
+    white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 80ms;
+    z-index: 10; margin-bottom: 4px;
+  }
+  .timeline-bar:hover .b-tip { opacity: 1; }
+  .timeline-labels { display: flex; gap: 4px; font-size: 10px; color: #888; }
+  .timeline-labels > div { flex: 1; text-align: center; }
+  .timeline-summary { display: flex; gap: 18px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #1f1f1f; font-size: 12px; color: #aaa; flex-wrap: wrap; }
+  .timeline-summary strong { color: #f5f5f5; font-weight: 600; }
+
   /* Date range picker */
   .range-bar {
     display: flex;
@@ -489,6 +509,38 @@
 
 <!-- META ADS COMMAND CENTER -->
 <h3 style="margin-top:24px;">Meta Ads <span id="meta-scope-tag" class="scope-tag"></span> <span id="meta-compare-label" style="font-size:11px; color:#888; font-weight:400; margin-left:8px;"></span></h3>
+
+<!-- LIFETIME TOTALS (always since launch, regardless of range) -->
+<div class="grid" style="margin-bottom:8px;">
+  <div class="card" style="border-color: rgba(74,222,128,0.3);">
+    <h2>Spend Since Launch <span class="scope-tag" style="background:rgba(74,222,128,0.12); border-color:rgba(74,222,128,0.35); color:#4ade80;">since May 1</span></h2>
+    <div class="big" id="meta-life-spend">—</div>
+    <div class="sub-num" id="meta-life-spend-sub">—</div>
+  </div>
+  <div class="card" style="border-color: rgba(74,222,128,0.3);">
+    <h2>Leads Since Launch</h2>
+    <div class="big" id="meta-life-leads">—</div>
+    <div class="sub-num" id="meta-life-cpl">Blended CPL: —</div>
+  </div>
+  <div class="card" style="border-color: rgba(74,222,128,0.3);">
+    <h2>CTR Since Launch</h2>
+    <div class="big" id="meta-life-ctr">—</div>
+    <div class="sub-num" id="meta-life-clicks">— clicks</div>
+  </div>
+  <div class="card" style="border-color: rgba(74,222,128,0.3);">
+    <h2>Reach Since Launch</h2>
+    <div class="big" id="meta-life-reach">—</div>
+    <div class="sub-num" id="meta-life-impr">— impressions</div>
+  </div>
+</div>
+
+<!-- SPEND TIMELINE -->
+<div style="margin-bottom:12px;">
+  <h3 id="spend-timeline-heading">Spend Timeline (last 14 days, PT)</h3>
+  <div class="card wide">
+    <div id="spend-timeline" style="margin-top:4px;">Loading…</div>
+  </div>
+</div>
 <div class="grid">
   <div class="card">
     <h2>Spend</h2>
@@ -729,12 +781,12 @@ async function refresh() {
     }
 
     // Scope tags — when in range mode, mark channel/VIP cards as range-scoped
-    // (so user sees at a glance that those numbers reflect the range, not all-time)
+    // (so user sees at a glance that those numbers reflect the range, not since launch)
     const scopeLabel = inRange ? `in ${rng.span_hours}h range` : '';
     document.getElementById('reg-scope-tag').textContent = scopeLabel;
     document.getElementById('vip-scope-tag').textContent = scopeLabel;
     document.getElementById('scope-badge').textContent = inRange
-      ? `(numbers below reflect the ${rng.span_hours}h range — Total Registrations card stays all-time)`
+      ? `(numbers below reflect the ${rng.span_hours}h range — Total Registrations card stays since launch)`
       : '';
 
     // Landing card — show range landing data if available
@@ -863,6 +915,111 @@ function renderAlerts(alerts) {
   `).join('');
 }
 
+function renderLifetime(life) {
+  const el = (id) => document.getElementById(id);
+  if (!life) {
+    el('meta-life-spend').textContent = '—';
+    return;
+  }
+  el('meta-life-spend').textContent = fmtMoney(life.spend);
+  el('meta-life-spend-sub').textContent = fmtInt(life.impressions) + ' impressions · ' + fmtInt(life.clicks) + ' clicks';
+  el('meta-life-leads').textContent = fmtInt(life.leads);
+  el('meta-life-cpl').textContent = 'Blended CPL: ' + (life.leads > 0 ? fmtMoney(life.cpl) : '—');
+  const cplEl = el('meta-life-cpl');
+  cplEl.style.color = life.cpl < 2 ? '#4ade80' : life.cpl < 4 ? '#facc15' : '#f87171';
+  el('meta-life-ctr').textContent = fmtPct(life.ctr);
+  el('meta-life-clicks').textContent = fmtInt(life.clicks) + ' clicks';
+  el('meta-life-reach').textContent = fmtInt(life.reach);
+  el('meta-life-impr').textContent = fmtInt(life.impressions) + ' impressions · freq ' + (life.frequency || 0).toFixed(2);
+}
+
+function renderSpendTimeline(daily, inRange, rng) {
+  const el = document.getElementById('spend-timeline');
+  const heading = document.getElementById('spend-timeline-heading');
+
+  // Zero-fill: build the expected window in PT and merge with API data so empty
+  // days show as gap bars (pacing visibility). In live mode = last 14 days PT.
+  // In range mode = days spanned by rng (capped at 30 to keep chart readable).
+  const byDate = {};
+  for (const row of (daily || [])) byDate[row.date] = row;
+
+  let fullWindow = [];
+  if (inRange && rng) {
+    // Walk PT days from start → end inclusive (capped at 30)
+    const startD = new Date(rng.start);
+    const endD = new Date(rng.end);
+    const maxDays = 30;
+    for (let i = 0; i < maxDays; i++) {
+      const ms = startD.getTime() + i * 86400000;
+      const d = new Date(ms);
+      if (d > endD) break;
+      const key = ptDateStr(d);
+      fullWindow.push(byDate[key] || { date: key, spend: 0, leads: 0, impressions: 0, clicks: 0, cpl: 0 });
+    }
+  } else {
+    // Live mode: last 14 days in PT, ending today
+    for (let i = 13; i >= 0; i--) {
+      const ms = Date.now() - i * 86400000;
+      const key = ptDateStr(new Date(ms));
+      fullWindow.push(byDate[key] || { date: key, spend: 0, leads: 0, impressions: 0, clicks: 0, cpl: 0 });
+    }
+  }
+  daily = fullWindow;
+
+  if (!daily.length) {
+    el.innerHTML = '<div class="audience-empty">No spend data in this window.</div>';
+    heading.textContent = inRange ? 'Spend Timeline (in range)' : 'Spend Timeline (last 14 days, PT)';
+    return;
+  }
+
+  const activeDays = daily.filter(d => d.spend > 0).length;
+  heading.textContent = inRange
+    ? `Spend Timeline (${daily.length}-day range · ${activeDays} active, PT)`
+    : `Spend Timeline (last ${daily.length} days · ${activeDays} active, PT)`;
+
+  const maxSpend = Math.max(...daily.map(d => d.spend), 1);
+  const totalSpend = daily.reduce((s, d) => s + d.spend, 0);
+  const totalLeads = daily.reduce((s, d) => s + d.leads, 0);
+  const totalClicks = daily.reduce((s, d) => s + d.clicks, 0);
+  const blendedCpl = totalLeads > 0 ? totalSpend / totalLeads : 0;
+  const daysWithSpend = daily.filter(d => d.spend > 0).length;
+  const avgDailySpend = daysWithSpend > 0 ? totalSpend / daysWithSpend : 0;
+
+  // Pick label cadence: every Nth bar to keep readable (target ~10 labels)
+  const labelEvery = Math.max(1, Math.ceil(daily.length / 10));
+
+  el.innerHTML = `
+    <div class="timeline-wrap">
+      <div class="timeline-bars">
+        ${daily.map(d => {
+          const pct = (d.spend / maxSpend * 100).toFixed(1);
+          const cls = d.spend === 0 ? 'empty' : '';
+          const cplStr = d.leads > 0 ? fmtMoney(d.cpl) : '—';
+          return `<div class="timeline-bar">
+            <div class="b-tip"><strong>${esc(d.date)}</strong><br>spend: ${fmtMoney(d.spend)}<br>leads: ${fmtInt(d.leads)}<br>CPL: ${cplStr}</div>
+            <div class="b-fill ${cls}" style="height:${pct}%;"></div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="timeline-labels">
+        ${daily.map((d, i) => {
+          if (i % labelEvery !== 0 && i !== daily.length - 1) return '<div></div>';
+          // Show MM/DD (date_start from Meta is YYYY-MM-DD)
+          const parts = (d.date || '').split('-');
+          return `<div>${parts[1] || ''}/${parts[2] || ''}</div>`;
+        }).join('')}
+      </div>
+      <div class="timeline-summary">
+        <span>Total: <strong>${fmtMoney(totalSpend)}</strong></span>
+        <span>Leads: <strong>${fmtInt(totalLeads)}</strong></span>
+        <span>Blended CPL: <strong>${totalLeads > 0 ? fmtMoney(blendedCpl) : '—'}</strong></span>
+        <span>Avg daily (active days): <strong>${fmtMoney(avgDailySpend)}</strong></span>
+        <span>Days w/ spend: <strong>${daysWithSpend}/${daily.length}</strong></span>
+      </div>
+    </div>
+  `;
+}
+
 function renderAudienceTable(elId, buckets) {
   const el = document.getElementById(elId);
   if (!buckets || !buckets.length) {
@@ -934,6 +1091,12 @@ async function refreshMeta() {
         const el = document.getElementById(id); el.textContent = ''; el.className = 'delta';
       });
     }
+
+    // Lifetime totals (always since launch, regardless of range)
+    renderLifetime(d.lifetime);
+
+    // Spend timeline (last 14d in live mode, range in range mode)
+    renderSpendTimeline(d.daily_spend || [], inRange, currentRange);
 
     // Recommendations + Alerts
     renderRecommendations(d.recommendations || []);

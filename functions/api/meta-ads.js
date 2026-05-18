@@ -18,6 +18,7 @@
 
 const META_API_VERSION = "v19.0";
 const TARGET_CPL = 1.79; // From James's May 2026 brief — used for rec thresholds
+const FYP_LAUNCH_DATE = "2026-05-01"; // FYP May 2026 paid funnel started — scopes "lifetime" totals so HOD's pre-FYP ad history isn't included
 
 // SWR cache (90s). Per-cacheKey isolation so range + today don't evict each other.
 let _cache = { byKey: {} };
@@ -152,6 +153,7 @@ function safeError(msg) {
     spend: 0, impressions: 0, clicks: 0, ctr: 0, cpc: 0, reach: 0, frequency: 0, leads: 0, cpl: 0,
     compare: null, audience: { age: [], gender: [] }, top_campaigns: [],
     alerts: [], recommendations: [],
+    daily_spend: [], lifetime: null,
     generated_at: new Date().toISOString(),
   }), {
     status: 200,
@@ -172,9 +174,15 @@ async function computeSnapshot(env, { startParam, endParam, hasRange }) {
     compareLabel = "yesterday";
   }
 
-  // 5 parallel Graph calls
+  // Parallel Graph calls
   const accountFields = "spend,impressions,clicks,ctr,cpc,reach,frequency,actions,cost_per_action_type";
   const campaignFields = "campaign_name,spend,impressions,clicks,ctr,actions,reach,frequency,cost_per_action_type";
+  const dailyFields = "spend,impressions,clicks,actions";
+
+  // Daily-spend window: in range mode use the user's range; in live mode show
+  // trailing 14 days for context (sees the full launch ramp).
+  const dailyTimeRange = hasRange ? timeRange : null;
+  const dailyPreset = hasRange ? null : "last_14d";
 
   const calls = [
     // 1) current account aggregate
@@ -187,10 +195,22 @@ async function computeSnapshot(env, { startParam, endParam, hasRange }) {
     fetchInsights(env, buildParams({ fields: "spend,reach,frequency,actions,impressions,clicks,ctr", breakdowns: "age", level: "account" }, hasRange, timeRange, "today")),
     // 5) audience breakdown by gender (current)
     fetchInsights(env, buildParams({ fields: "spend,reach,frequency,actions,impressions,clicks,ctr", breakdowns: "gender", level: "account" }, hasRange, timeRange, "today")),
+    // 6) daily breakdown — for spend-over-time chart (time_increment=1)
+    fetchInsights(env,
+      hasRange
+        ? { fields: dailyFields, level: "account", time_range: dailyTimeRange, time_increment: 1 }
+        : { fields: dailyFields, level: "account", date_preset: dailyPreset, time_increment: 1 }),
+    // 7) FYP campaign-period aggregate (since May 1) — scoped so HOD's pre-FYP
+    //    ad history (different campaigns, different lead events) isn't mixed in.
+    fetchInsights(env, {
+      fields: accountFields,
+      level: "account",
+      time_range: { since: FYP_LAUNCH_DATE, until: ptDateStr(new Date()) },
+    }),
   ];
 
   const settled = await Promise.allSettled(calls);
-  const [curRes, cmpRes, campRes, ageRes, genderRes] = settled;
+  const [curRes, cmpRes, campRes, ageRes, genderRes, dailyRes, lifetimeRes] = settled;
 
   // Helper to unwrap a settled promise to its data (empty array on failure)
   const unwrap = (s) => (s.status === "fulfilled" ? s.value : []);
@@ -199,6 +219,8 @@ async function computeSnapshot(env, { startParam, endParam, hasRange }) {
   const campaignRows = unwrap(campRes);
   const ageRows = unwrap(ageRes);
   const genderRows = unwrap(genderRes);
+  const dailyRows = unwrap(dailyRes);
+  const lifetimeRows = unwrap(lifetimeRes);
 
   // ---- Account aggregate ----
   const acc = accountRows[0] || {};
@@ -452,6 +474,37 @@ async function computeSnapshot(env, { startParam, endParam, hasRange }) {
     return (conf[a.confidence] - conf[b.confidence]) || (actionPriority[a.action] - actionPriority[b.action]);
   });
 
+  // ---- Daily breakdown (spend timeline) ----
+  // Meta returns one row per day in account TZ with `date_start` / `date_stop`.
+  // Sort ascending so chart reads left → right oldest → newest.
+  const daily_spend = dailyRows.map(r => {
+    const dSpend = parseFloat(r.spend || 0);
+    const dLeads = getLeads(r);
+    return {
+      date: r.date_start,
+      spend: dSpend,
+      impressions: parseInt(r.impressions || 0, 10),
+      clicks: parseInt(r.clicks || 0, 10),
+      leads: dLeads,
+      cpl: dLeads > 0 ? dSpend / dLeads : 0,
+    };
+  }).sort((a, b) => a.date.localeCompare(b.date));
+
+  // ---- Lifetime aggregate (all-time campaign performance) ----
+  const lifeRow = lifetimeRows[0] || {};
+  const lifeSpend = parseFloat(lifeRow.spend || 0);
+  const lifeLeads = getLeads(lifeRow);
+  const lifetime = {
+    spend: lifeSpend,
+    impressions: parseInt(lifeRow.impressions || 0, 10),
+    clicks: parseInt(lifeRow.clicks || 0, 10),
+    leads: lifeLeads,
+    cpl: lifeLeads > 0 ? lifeSpend / lifeLeads : 0,
+    ctr: parseFloat(lifeRow.ctr || 0),
+    reach: parseInt(lifeRow.reach || 0, 10),
+    frequency: parseFloat(lifeRow.frequency || 0),
+  };
+
   return JSON.stringify({
     ok: true,
     spend, impressions, clicks, ctr, cpc, reach, frequency, leads, cpl,
@@ -460,6 +513,8 @@ async function computeSnapshot(env, { startParam, endParam, hasRange }) {
     top_campaigns,
     alerts,
     recommendations,
+    daily_spend,
+    lifetime,
     target_cpl: TARGET_CPL,
     range: hasRange ? { start: startParam, end: endParam } : null,
     timezone: "America/Los_Angeles",
