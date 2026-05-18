@@ -344,51 +344,126 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 8px;
-    margin: 12px 0 20px;
+    gap: 6px;
+    margin: 12px 0 4px;
     padding: 10px 14px;
-    background: #181818;
+    background: linear-gradient(180deg, #1c1c1c 0%, #181818 100%);
     border: 1px solid #2a2a2a;
-    border-radius: 10px;
+    border-radius: 12px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.02) inset;
   }
-  .range-bar .label { color: #aaa; font-size: 12px; margin-right: 4px; }
+  .range-bar .label { color: #888; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 4px; }
   .range-bar .preset {
-    background: #232323;
+    background: #1f1f1f;
     color: #ddd;
     border: 1px solid #2f2f2f;
     border-radius: 8px;
-    padding: 6px 12px;
-    font-size: 12px;
+    padding: 7px 13px;
+    font-size: 12.5px;
     font-family: inherit;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.14s ease;
+    line-height: 1.2;
   }
-  .range-bar .preset:hover { background: #2a2a2a; border-color: #4ade80; }
-  .range-bar .preset.active { background: #4ade80; color: #0a0a0a; border-color: #4ade80; font-weight: 600; }
-  .range-bar input[type="date"] {
-    background: #0a0a0a;
-    color: #f5f5f5;
+  .range-bar .preset:hover { background: #2a2a2a; border-color: #3a3a3a; color: #fff; }
+  .range-bar .preset.active {
+    background: #4ade80;
+    color: #0a0a0a;
+    border-color: #4ade80;
+    font-weight: 700;
+    box-shadow: 0 0 0 3px rgba(74,222,128,0.18);
+  }
+  /* Visual divider between presets and custom inputs */
+  .range-bar .divider {
+    width: 1px;
+    height: 22px;
+    background: #2a2a2a;
+    margin: 0 4px;
+  }
+  /* Custom-range group — wrap both inputs + arrow + apply in a pill */
+  .range-bar .custom-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #0e0e0e;
     border: 1px solid #2a2a2a;
-    border-radius: 8px;
-    padding: 6px 10px;
-    font-size: 12px;
+    border-radius: 10px;
+    padding: 4px 4px 4px 10px;
+    transition: border-color 0.14s ease;
+  }
+  .range-bar .custom-group:focus-within {
+    border-color: rgba(74,222,128,0.5);
+    box-shadow: 0 0 0 3px rgba(74,222,128,0.12);
+  }
+  .range-bar .custom-group .custom-label {
+    color: #888;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    padding-right: 2px;
+  }
+  .range-bar input[type="datetime-local"],
+  .range-bar input[type="date"] {
+    background: transparent;
+    color: #f5f5f5;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-size: 12.5px;
     font-family: inherit;
     color-scheme: dark;
+    cursor: pointer;
+    transition: background 0.14s ease;
   }
-  .range-bar input[type="date"]:focus { outline: none; border-color: #4ade80; }
+  .range-bar input[type="datetime-local"]:hover,
+  .range-bar input[type="date"]:hover {
+    background: rgba(255,255,255,0.04);
+  }
+  .range-bar input[type="datetime-local"]:focus,
+  .range-bar input[type="date"]:focus {
+    outline: none;
+    background: rgba(74,222,128,0.06);
+  }
+  /* Style the native calendar picker indicator (Chromium/Safari) */
+  .range-bar input::-webkit-calendar-picker-indicator {
+    filter: invert(0.5) brightness(1.4);
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.14s ease;
+  }
+  .range-bar input::-webkit-calendar-picker-indicator:hover { opacity: 1; }
+  .range-bar .range-arrow {
+    color: #555;
+    font-size: 14px;
+    user-select: none;
+    padding: 0 2px;
+  }
   .range-bar .apply {
     background: #4ade80;
     color: #0a0a0a;
     border: none;
-    border-radius: 8px;
-    padding: 6px 14px;
+    border-radius: 7px;
+    padding: 7px 14px;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 700;
     font-family: inherit;
     cursor: pointer;
+    letter-spacing: 0.2px;
+    transition: all 0.14s ease;
   }
-  .range-bar .range-info { color: #888; font-size: 11px; margin-left: auto; }
-  .range-bar .range-info strong { color: #4ade80; }
+  .range-bar .apply:hover { background: #5af09c; transform: translateY(-1px); }
+  .range-bar .apply:active { transform: translateY(0); }
+  .range-bar .range-info {
+    color: #888;
+    font-size: 11px;
+    margin-left: auto;
+    padding-left: 12px;
+    border-left: 1px solid #2a2a2a;
+    line-height: 1.4;
+  }
+  .range-bar .range-info strong { color: #4ade80; font-weight: 600; }
+  .range-bar .range-info:empty { display: none; }
   .stale { color: #c97; font-size: 11px; }
   .pulse {
     display: inline-block;
@@ -424,14 +499,17 @@
   <button class="preset active" data-preset="live">Live (Today + Totals)</button>
   <button class="preset" data-preset="today">Today (PT)</button>
   <button class="preset" data-preset="yesterday">Yesterday</button>
-  <span class="label" style="margin-left:8px;">Custom (PT):</span>
-  <input type="datetime-local" id="range-start" min="2026-05-01T00:00" title="Times entered in Pacific Time (matches Meta Ads)" />
-  <span style="color:#666; font-size:12px;">→</span>
-  <input type="datetime-local" id="range-end" min="2026-05-01T00:00" title="Times entered in Pacific Time (matches Meta Ads)" />
-  <button class="apply" id="range-apply">Apply</button>
+  <span class="divider"></span>
+  <div class="custom-group">
+    <span class="custom-label">Custom · PT</span>
+    <input type="datetime-local" id="range-start" min="2026-05-01T00:00" title="Times entered in Pacific Time (matches Meta Ads)" />
+    <span class="range-arrow">→</span>
+    <input type="datetime-local" id="range-end" min="2026-05-01T00:00" title="Times entered in Pacific Time (matches Meta Ads)" />
+    <button class="apply" id="range-apply">Apply</button>
+  </div>
   <span class="range-info" id="range-info"></span>
 </div>
-<p style="font-size:11px; color:#888; margin: 4px 0 0; padding-left: 2px;">All times shown in Pacific Time (PT, UTC-7) to match Meta Ads Manager. Live mode auto-refreshes every 60s.</p>
+<p style="font-size:10.5px; color:#666; margin: 6px 0 20px; padding-left: 4px;">All times PT (UTC-7) to match Meta Ads Manager · Live mode auto-refreshes every 60s</p>
 
 <!-- SEARCH BAR -->
 <div class="search-wrap">
