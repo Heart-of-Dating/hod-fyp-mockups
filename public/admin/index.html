@@ -1273,7 +1273,9 @@ async function refreshMeta() {
       }).join('');
     }
   } catch (e) {
-    // Silent fail
+    // Log so we can diagnose mid-render failures (was previously silent, which
+    // hid a real bug for half a day). Keep dashboard up but surface where.
+    console.error('refreshMeta failed:', e);
   }
 }
 refreshMeta();
@@ -1304,13 +1306,16 @@ function fmtPt(iso) {
   });
 }
 
-// Compute PT-anchored YYYY-MM-DD for a given day offset (e.g. -1 = "yesterday in PT")
-function ptDateStr(offsetDays) {
-  const ms = Date.now() + offsetDays * 86400000;
-  // en-CA gives YYYY-MM-DD format
+// Compute PT-anchored YYYY-MM-DD. Accepts either:
+//   - a number (day offset from now, e.g. -1 = "yesterday in PT")
+//   - a Date instance (formatted directly in PT)
+function ptDateStr(arg) {
+  const d = arg instanceof Date
+    ? arg
+    : new Date(Date.now() + (arg || 0) * 86400000);
   return new Intl.DateTimeFormat('en-CA', {
     timeZone: PT_TZ, year: 'numeric', month: '2-digit', day: '2-digit'
-  }).format(new Date(ms));
+  }).format(d);
 }
 
 function setRange(preset, startIso, endIso) {
