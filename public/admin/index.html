@@ -445,6 +445,38 @@
   </div>
 </div>
 
+<!-- META ADS COMMAND CENTER -->
+<h3 style="margin-top:24px;">Meta Ads <span id="meta-scope-tag" class="scope-tag"></span> <span style="font-size:11px; color:#888; font-weight:400; margin-left:8px;">(timezone: PT, matches Meta Ads Manager)</span></h3>
+<div class="grid">
+  <div class="card">
+    <h2>Spend</h2>
+    <div class="big" id="meta-spend">—</div>
+    <div class="sub-num" id="meta-spend-sub">—</div>
+  </div>
+  <div class="card">
+    <h2>Leads (Meta-attributed)</h2>
+    <div class="big" id="meta-leads">—</div>
+    <div class="sub-num" id="meta-cpl">CPL: —</div>
+  </div>
+  <div class="card">
+    <h2>Reach</h2>
+    <div class="big" id="meta-reach">—</div>
+    <div class="sub-num" id="meta-freq">Frequency: —</div>
+  </div>
+  <div class="card">
+    <h2>CTR</h2>
+    <div class="big" id="meta-ctr">—</div>
+    <div class="sub-num" id="meta-clicks">— clicks · CPC: —</div>
+  </div>
+</div>
+
+<div style="margin-top:12px;">
+  <h3>Top Campaigns by Spend</h3>
+  <div class="card wide">
+    <div id="meta-campaigns" style="font-size:13px;">Loading…</div>
+  </div>
+</div>
+
 <div class="grid" style="margin-top:12px;">
   <div class="card">
     <h2>Top States (last 7 days)</h2>
@@ -687,6 +719,80 @@ async function refresh() {
 refresh();
 let refreshTimer = setInterval(refresh, 60000); // refresh every 60 sec in live mode
 
+// ---- Meta Ads command center ----
+function fmtMoney(n) { return '$' + (n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function fmtInt(n) { return (n || 0).toLocaleString(); }
+function fmtPct(n) { return (n || 0).toFixed(2) + '%'; }
+
+async function refreshMeta() {
+  try {
+    const qs = rangeQS(); // share the dashboard's range
+    const r = await fetch('/api/meta-ads' + qs);
+    let d;
+    try { d = await r.json(); } catch (_) { return; }
+    if (!d || d.warming) {
+      document.getElementById('meta-spend').textContent = 'warming…';
+      return;
+    }
+    if (!d.ok) {
+      document.getElementById('meta-spend').innerHTML = '<span style="font-size:14px; color:#f87171;">' + (d.error || 'error') + '</span>';
+      return;
+    }
+
+    // Scope tag — show range badge if range mode
+    const inRange = currentRange && currentRange.preset !== 'live';
+    document.getElementById('meta-scope-tag').textContent = inRange ? `in ${Math.round((Date.parse(currentRange.end) - Date.parse(currentRange.start)) / 3600000)}h range` : 'today PT';
+
+    // Headline cards
+    document.getElementById('meta-spend').textContent = fmtMoney(d.spend);
+    document.getElementById('meta-spend-sub').textContent = `${fmtInt(d.impressions)} impressions`;
+
+    document.getElementById('meta-leads').textContent = fmtInt(d.leads);
+    document.getElementById('meta-cpl').textContent = 'CPL: ' + fmtMoney(d.cpl);
+    // Highlight CPL color: green if < $2, yellow $2-4, red > $4 (rough thresholds vs James's $1.79 target)
+    const cplEl = document.getElementById('meta-cpl');
+    cplEl.style.color = d.cpl < 2 ? '#4ade80' : d.cpl < 4 ? '#facc15' : '#f87171';
+
+    document.getElementById('meta-reach').textContent = fmtInt(d.reach);
+    document.getElementById('meta-freq').textContent = 'Frequency: ' + (d.frequency || 0).toFixed(2);
+
+    document.getElementById('meta-ctr').textContent = fmtPct(d.ctr);
+    document.getElementById('meta-clicks').textContent = `${fmtInt(d.clicks)} clicks · CPC: ${fmtMoney(d.cpc)}`;
+
+    // Top campaigns table
+    const camps = d.top_campaigns || [];
+    const ce = document.getElementById('meta-campaigns');
+    if (!camps.length) {
+      ce.innerHTML = '<div style="color:#888; padding:8px;">No active campaigns in this window.</div>';
+    } else {
+      ce.innerHTML = `
+        <div style="display:grid; grid-template-columns: 1fr 80px 80px 80px 80px 90px; gap:8px; padding:8px 0; border-bottom:1px solid #2a2a2a; color:#888; font-size:11px; text-transform:uppercase; letter-spacing:0.4px;">
+          <div>Campaign</div>
+          <div style="text-align:right;">Spend</div>
+          <div style="text-align:right;">Clicks</div>
+          <div style="text-align:right;">CTR</div>
+          <div style="text-align:right;">Leads</div>
+          <div style="text-align:right;">CPL</div>
+        </div>
+      ` + camps.map(c => {
+        const cplColor = c.cpl < 2 ? '#4ade80' : c.cpl < 4 ? '#facc15' : '#f87171';
+        return `<div style="display:grid; grid-template-columns: 1fr 80px 80px 80px 80px 90px; gap:8px; padding:8px 0; border-bottom:1px solid #1f1f1f; align-items:center;">
+          <div style="font-size:12px; color:#ddd; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${c.name.replace(/"/g, '&quot;')}">${c.name}</div>
+          <div style="text-align:right; color:#f5f5f5;">${fmtMoney(c.spend)}</div>
+          <div style="text-align:right; color:#aaa;">${fmtInt(c.clicks)}</div>
+          <div style="text-align:right; color:#aaa;">${fmtPct(c.ctr)}</div>
+          <div style="text-align:right; color:#f5f5f5;">${fmtInt(c.leads)}</div>
+          <div style="text-align:right; color:${cplColor}; font-weight:600;">${fmtMoney(c.cpl)}</div>
+        </div>`;
+      }).join('');
+    }
+  } catch (e) {
+    // Silent fail — don't blow up the dashboard if Meta is down
+  }
+}
+refreshMeta();
+setInterval(refreshMeta, 90000); // Meta updates lag a few min, no point hitting more often
+
 // ---- Date range picker ----
 // All times in the dashboard are Pacific Time (PT) to align with Meta Ads Manager's
 // default reporting timezone. Datetime-local inputs from any browser are interpreted
@@ -745,6 +851,7 @@ function setRange(preset, startIso, endIso) {
     clearInterval(refreshTimer);
   }
   refresh();
+  if (typeof refreshMeta === 'function') refreshMeta();
 }
 
 document.querySelectorAll('.range-bar .preset').forEach(btn => {
