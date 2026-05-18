@@ -18,7 +18,7 @@
 
 const META_API_VERSION = "v19.0";
 const TARGET_CPL = 1.79; // From James's May 2026 brief — used for rec thresholds
-const FYP_LAUNCH_DATE = "2026-05-01"; // FYP May 2026 paid funnel started
+const FYP_LAUNCH_DATE = "2026-05-13"; // FYP May 2026 paid spend started (per JJ — earlier dates would include pre-paid setup days w/ zero spend that just noise the totals)
 const FYP_EVENT_START_DATE = "2026-05-26"; // Night 1 of FYP — "must hit target by" date
 const DEFAULT_PAID_LEAD_TARGET = 15500; // From James's brief: 4.5K organic + 15.5K paid = 20K total. Overridable via env.META_PAID_LEAD_TARGET
 // Campaign-name filter to scope ALL metrics to FYP May 2026 only.
