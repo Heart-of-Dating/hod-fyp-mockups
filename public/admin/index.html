@@ -277,6 +277,48 @@
   .scope-tag { display: inline-block; font-size: 10px; font-weight: 500; color: #facc15; background: rgba(250,204,21,0.12); border: 1px solid rgba(250,204,21,0.35); padding: 2px 8px; border-radius: 10px; margin-left: 6px; vertical-align: middle; }
   .scope-tag:empty { display: none; }
 
+  /* Delta indicators on Meta cards */
+  .delta { font-size: 11px; margin-left: 6px; font-weight: 600; }
+  .delta.up-good { color: #4ade80; }
+  .delta.up-bad { color: #f87171; }
+  .delta.down-good { color: #4ade80; }
+  .delta.down-bad { color: #f87171; }
+  .delta.flat { color: #888; }
+
+  /* Recommendation card */
+  .rec-row { display: grid; grid-template-columns: 100px 1fr 80px; gap: 12px; align-items: start; padding: 10px 12px; border-left: 3px solid transparent; background: #181818; border-radius: 6px; }
+  .rec-row .rec-action { font-weight: 700; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; padding-top: 2px; }
+  .rec-row .rec-body { font-size: 13px; }
+  .rec-row .rec-subject { color: #f5f5f5; font-weight: 600; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; }
+  .rec-row .rec-rationale { color: #aaa; font-size: 12px; line-height: 1.4; }
+  .rec-row .rec-delta { color: #ddd; font-size: 11px; text-align: right; }
+  .rec-row .rec-confidence { color: #888; font-size: 10px; text-transform: uppercase; letter-spacing: 0.4px; margin-top: 4px; }
+  .rec-row.pause { border-left-color: #f87171; }  .rec-row.pause .rec-action { color: #f87171; }
+  .rec-row.investigate { border-left-color: #fb923c; }  .rec-row.investigate .rec-action { color: #fb923c; }
+  .rec-row.exclude { border-left-color: #facc15; }  .rec-row.exclude .rec-action { color: #facc15; }
+  .rec-row.scale { border-left-color: #4ade80; }  .rec-row.scale .rec-action { color: #4ade80; }
+  .rec-row.boost { border-left-color: #60a5fa; }  .rec-row.boost .rec-action { color: #60a5fa; }
+  .recs-empty { color: #888; padding: 12px; font-size: 13px; }
+
+  /* Alerts */
+  .alert-row { display: flex; align-items: center; gap: 10px; padding: 6px 10px; background: #181818; border-radius: 4px; font-size: 12px; }
+  .alert-row .alert-level { display: inline-block; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
+  .alert-row.critical .alert-level { background: rgba(248,113,113,0.18); color: #f87171; }
+  .alert-row.warning .alert-level { background: rgba(250,204,21,0.18); color: #facc15; }
+  .alert-row .alert-subject { color: #ddd; font-weight: 600; max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .alert-row .alert-msg { color: #aaa; flex: 1; }
+
+  /* Audience tables */
+  .audience-table { display: grid; gap: 4px; }
+  .audience-row { display: grid; grid-template-columns: 70px 1fr 80px 80px 90px; gap: 8px; align-items: center; padding: 6px 4px; font-size: 12px; border-bottom: 1px solid #1f1f1f; }
+  .audience-row.header { color: #888; font-size: 10px; text-transform: uppercase; letter-spacing: 0.4px; font-weight: 600; border-bottom: 1px solid #2a2a2a; }
+  .audience-row .a-key { color: #f5f5f5; font-weight: 600; }
+  .audience-row .a-bar { background: #2a2a2a; border-radius: 3px; height: 14px; position: relative; overflow: hidden; }
+  .audience-row .a-bar > span { display: block; height: 100%; background: linear-gradient(90deg, #60a5fa, #818cf8); }
+  .audience-row .a-num { text-align: right; color: #ddd; }
+  .audience-row .a-cpl { text-align: right; font-weight: 600; }
+  .audience-empty { color: #888; padding: 12px; font-size: 13px; }
+
   /* Date range picker */
   .range-bar {
     display: flex;
@@ -446,17 +488,17 @@
 </div>
 
 <!-- META ADS COMMAND CENTER -->
-<h3 style="margin-top:24px;">Meta Ads <span id="meta-scope-tag" class="scope-tag"></span> <span style="font-size:11px; color:#888; font-weight:400; margin-left:8px;">(timezone: PT, matches Meta Ads Manager)</span></h3>
+<h3 style="margin-top:24px;">Meta Ads <span id="meta-scope-tag" class="scope-tag"></span> <span id="meta-compare-label" style="font-size:11px; color:#888; font-weight:400; margin-left:8px;"></span></h3>
 <div class="grid">
   <div class="card">
     <h2>Spend</h2>
     <div class="big" id="meta-spend">—</div>
-    <div class="sub-num" id="meta-spend-sub">—</div>
+    <div class="sub-num"><span id="meta-spend-sub">—</span> <span id="meta-spend-delta" class="delta"></span></div>
   </div>
   <div class="card">
     <h2>Leads (Meta-attributed)</h2>
     <div class="big" id="meta-leads">—</div>
-    <div class="sub-num" id="meta-cpl">CPL: —</div>
+    <div class="sub-num"><span id="meta-cpl">CPL: —</span> <span id="meta-leads-delta" class="delta"></span></div>
   </div>
   <div class="card">
     <h2>Reach</h2>
@@ -466,7 +508,35 @@
   <div class="card">
     <h2>CTR</h2>
     <div class="big" id="meta-ctr">—</div>
-    <div class="sub-num" id="meta-clicks">— clicks · CPC: —</div>
+    <div class="sub-num"><span id="meta-clicks">— clicks · CPC: —</span> <span id="meta-ctr-delta" class="delta"></span></div>
+  </div>
+</div>
+
+<!-- RECOMMENDATIONS PANEL -->
+<div style="margin-top:16px;">
+  <h3>Recommendations <span id="recs-count" style="font-size:11px; color:#888; font-weight:400; margin-left:8px;"></span></h3>
+  <div class="card wide" id="recs-card">
+    <div id="recs-list" style="display:flex; flex-direction:column; gap:10px;">Loading…</div>
+  </div>
+</div>
+
+<!-- ALERTS -->
+<div style="margin-top:12px;">
+  <h3>Alerts <span id="alerts-count" style="font-size:11px; color:#888; font-weight:400; margin-left:8px;"></span></h3>
+  <div class="card wide" id="alerts-card">
+    <div id="alerts-list" style="display:flex; flex-direction:column; gap:6px;">Loading…</div>
+  </div>
+</div>
+
+<!-- AUDIENCE BREAKDOWN -->
+<div class="grid" style="margin-top:12px;">
+  <div class="card">
+    <h2>Audience — Age</h2>
+    <div id="audience-age" style="margin-top:8px; font-size:13px;">Loading…</div>
+  </div>
+  <div class="card">
+    <h2>Audience — Gender</h2>
+    <div id="audience-gender" style="margin-top:8px; font-size:13px;">Loading…</div>
   </div>
 </div>
 
@@ -723,10 +793,109 @@ let refreshTimer = setInterval(refresh, 60000); // refresh every 60 sec in live 
 function fmtMoney(n) { return '$' + (n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 function fmtInt(n) { return (n || 0).toLocaleString(); }
 function fmtPct(n) { return (n || 0).toFixed(2) + '%'; }
+function esc(s) { return String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]); }
+
+// Render delta arrow + percentage. metricKind = "spend"|"leads"|"cpl"|"ctr".
+// Direction logic: for CPL, "up" is BAD (CPL rising = worse efficiency).
+// For leads/CTR/spend (if you're trying to scale), "up" is GOOD.
+function renderDelta(el, pct, metricKind) {
+  if (pct === null || pct === undefined || isNaN(pct)) {
+    el.textContent = '';
+    el.className = 'delta';
+    return;
+  }
+  const arrow = pct > 0.5 ? '▲' : pct < -0.5 ? '▼' : '→';
+  const absStr = Math.abs(pct).toFixed(0) + '%';
+  el.textContent = `${arrow} ${absStr}`;
+  const up = pct > 0.5;
+  const flat = Math.abs(pct) <= 0.5;
+  let cls = 'delta';
+  if (flat) cls += ' flat';
+  else if (metricKind === 'cpl') cls += up ? ' up-bad' : ' down-good';
+  else cls += up ? ' up-good' : ' down-bad';
+  el.className = cls;
+}
+
+function renderRecommendations(recs) {
+  const el = document.getElementById('recs-list');
+  const cnt = document.getElementById('recs-count');
+  if (!recs || !recs.length) {
+    el.innerHTML = '<div class="recs-empty">No actions recommended right now — all campaigns within tolerance.</div>';
+    cnt.textContent = '';
+    return;
+  }
+  cnt.textContent = `${recs.length} action${recs.length === 1 ? '' : 's'} to consider`;
+  el.innerHTML = recs.map(r => {
+    const cls = r.action === 'PAUSE' ? 'pause'
+              : r.action === 'INVESTIGATE' ? 'investigate'
+              : r.action === 'EXCLUDE AUDIENCE' ? 'exclude'
+              : r.action === 'SCALE' ? 'scale'
+              : r.action === 'BOOST AUDIENCE' ? 'boost' : '';
+    return `<div class="rec-row ${cls}">
+      <div class="rec-action">${esc(r.action)}</div>
+      <div class="rec-body">
+        <div class="rec-subject" title="${esc(r.subject)}">${esc(r.subject)}</div>
+        <div class="rec-rationale">${esc(r.rationale)}</div>
+        <div class="rec-confidence">${esc(r.confidence || 'medium')} confidence</div>
+      </div>
+      <div class="rec-delta">${esc(r.suggested_delta || '')}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderAlerts(alerts) {
+  const el = document.getElementById('alerts-list');
+  const cnt = document.getElementById('alerts-count');
+  if (!alerts || !alerts.length) {
+    el.innerHTML = '<div class="recs-empty">No alerts — frequency healthy, CPL within tolerance.</div>';
+    cnt.textContent = '';
+    return;
+  }
+  // Sort: critical first, then warning
+  const sorted = [...alerts].sort((a, b) => (a.level === 'critical' ? 0 : 1) - (b.level === 'critical' ? 0 : 1));
+  cnt.textContent = `${alerts.filter(a => a.level === 'critical').length} critical · ${alerts.filter(a => a.level === 'warning').length} warning`;
+  el.innerHTML = sorted.map(a => `
+    <div class="alert-row ${esc(a.level)}">
+      <span class="alert-level">${esc(a.level)}</span>
+      <span class="alert-subject" title="${esc(a.subject)}">${esc(a.subject)}</span>
+      <span class="alert-msg">${esc(a.message)}</span>
+    </div>
+  `).join('');
+}
+
+function renderAudienceTable(elId, buckets) {
+  const el = document.getElementById(elId);
+  if (!buckets || !buckets.length) {
+    el.innerHTML = '<div class="audience-empty">No data for this window.</div>';
+    return;
+  }
+  const maxSpend = Math.max(...buckets.map(b => b.spend), 1);
+  el.innerHTML = `
+    <div class="audience-row header">
+      <div>Segment</div>
+      <div>Spend</div>
+      <div style="text-align:right;">Leads</div>
+      <div style="text-align:right;">Freq</div>
+      <div style="text-align:right;">CPL</div>
+    </div>
+    ${buckets.map(b => {
+      const cplColor = b.leads === 0 ? '#888' : b.cpl < 2 ? '#4ade80' : b.cpl < 4 ? '#facc15' : '#f87171';
+      const cplStr = b.leads === 0 ? '—' : fmtMoney(b.cpl);
+      const barPct = (b.spend / maxSpend * 100).toFixed(1);
+      return `<div class="audience-row">
+        <div class="a-key">${esc(b.key)}</div>
+        <div class="a-bar"><span style="width:${barPct}%;"></span></div>
+        <div class="a-num">${fmtInt(b.leads)}</div>
+        <div class="a-num">${b.frequency.toFixed(2)}</div>
+        <div class="a-cpl" style="color:${cplColor};">${cplStr}</div>
+      </div>`;
+    }).join('')}
+  `;
+}
 
 async function refreshMeta() {
   try {
-    const qs = rangeQS(); // share the dashboard's range
+    const qs = rangeQS();
     const r = await fetch('/api/meta-ads' + qs);
     let d;
     try { d = await r.json(); } catch (_) { return; }
@@ -735,29 +904,44 @@ async function refreshMeta() {
       return;
     }
     if (!d.ok) {
-      document.getElementById('meta-spend').innerHTML = '<span style="font-size:14px; color:#f87171;">' + (d.error || 'error') + '</span>';
+      document.getElementById('meta-spend').innerHTML = '<span style="font-size:14px; color:#f87171;">' + esc(d.error || 'error') + '</span>';
       return;
     }
 
-    // Scope tag — show range badge if range mode
     const inRange = currentRange && currentRange.preset !== 'live';
     document.getElementById('meta-scope-tag').textContent = inRange ? `in ${Math.round((Date.parse(currentRange.end) - Date.parse(currentRange.start)) / 3600000)}h range` : 'today PT';
+    document.getElementById('meta-compare-label').textContent = d.compare ? `vs ${d.compare.period_label} · timezone PT` : 'timezone PT';
 
     // Headline cards
     document.getElementById('meta-spend').textContent = fmtMoney(d.spend);
     document.getElementById('meta-spend-sub').textContent = `${fmtInt(d.impressions)} impressions`;
-
     document.getElementById('meta-leads').textContent = fmtInt(d.leads);
     document.getElementById('meta-cpl').textContent = 'CPL: ' + fmtMoney(d.cpl);
-    // Highlight CPL color: green if < $2, yellow $2-4, red > $4 (rough thresholds vs James's $1.79 target)
     const cplEl = document.getElementById('meta-cpl');
     cplEl.style.color = d.cpl < 2 ? '#4ade80' : d.cpl < 4 ? '#facc15' : '#f87171';
-
     document.getElementById('meta-reach').textContent = fmtInt(d.reach);
     document.getElementById('meta-freq').textContent = 'Frequency: ' + (d.frequency || 0).toFixed(2);
-
     document.getElementById('meta-ctr').textContent = fmtPct(d.ctr);
     document.getElementById('meta-clicks').textContent = `${fmtInt(d.clicks)} clicks · CPC: ${fmtMoney(d.cpc)}`;
+
+    // Deltas
+    if (d.compare?.deltas) {
+      renderDelta(document.getElementById('meta-spend-delta'), d.compare.deltas.spend_pct, 'spend');
+      renderDelta(document.getElementById('meta-leads-delta'), d.compare.deltas.leads_pct, 'leads');
+      renderDelta(document.getElementById('meta-ctr-delta'), d.compare.deltas.ctr_pct, 'ctr');
+    } else {
+      ['meta-spend-delta', 'meta-leads-delta', 'meta-ctr-delta'].forEach(id => {
+        const el = document.getElementById(id); el.textContent = ''; el.className = 'delta';
+      });
+    }
+
+    // Recommendations + Alerts
+    renderRecommendations(d.recommendations || []);
+    renderAlerts(d.alerts || []);
+
+    // Audience breakdown
+    renderAudienceTable('audience-age', d.audience?.age || []);
+    renderAudienceTable('audience-gender', d.audience?.gender || []);
 
     // Top campaigns table
     const camps = d.top_campaigns || [];
@@ -766,32 +950,36 @@ async function refreshMeta() {
       ce.innerHTML = '<div style="color:#888; padding:8px;">No active campaigns in this window.</div>';
     } else {
       ce.innerHTML = `
-        <div style="display:grid; grid-template-columns: 1fr 80px 80px 80px 80px 90px; gap:8px; padding:8px 0; border-bottom:1px solid #2a2a2a; color:#888; font-size:11px; text-transform:uppercase; letter-spacing:0.4px;">
+        <div style="display:grid; grid-template-columns: 1fr 80px 70px 70px 70px 70px 90px; gap:8px; padding:8px 0; border-bottom:1px solid #2a2a2a; color:#888; font-size:11px; text-transform:uppercase; letter-spacing:0.4px;">
           <div>Campaign</div>
           <div style="text-align:right;">Spend</div>
           <div style="text-align:right;">Clicks</div>
           <div style="text-align:right;">CTR</div>
+          <div style="text-align:right;">Freq</div>
           <div style="text-align:right;">Leads</div>
           <div style="text-align:right;">CPL</div>
         </div>
       ` + camps.map(c => {
-        const cplColor = c.cpl < 2 ? '#4ade80' : c.cpl < 4 ? '#facc15' : '#f87171';
-        return `<div style="display:grid; grid-template-columns: 1fr 80px 80px 80px 80px 90px; gap:8px; padding:8px 0; border-bottom:1px solid #1f1f1f; align-items:center;">
-          <div style="font-size:12px; color:#ddd; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${c.name.replace(/"/g, '&quot;')}">${c.name}</div>
+        const cplColor = c.leads === 0 ? '#888' : c.cpl < 2 ? '#4ade80' : c.cpl < 4 ? '#facc15' : '#f87171';
+        const freqColor = c.frequency > 3.5 ? '#f87171' : c.frequency > 2.5 ? '#facc15' : '#aaa';
+        const cplStr = c.leads === 0 ? '—' : fmtMoney(c.cpl);
+        return `<div style="display:grid; grid-template-columns: 1fr 80px 70px 70px 70px 70px 90px; gap:8px; padding:8px 0; border-bottom:1px solid #1f1f1f; align-items:center;">
+          <div style="font-size:12px; color:#ddd; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${esc(c.name)}">${esc(c.name)}</div>
           <div style="text-align:right; color:#f5f5f5;">${fmtMoney(c.spend)}</div>
           <div style="text-align:right; color:#aaa;">${fmtInt(c.clicks)}</div>
           <div style="text-align:right; color:#aaa;">${fmtPct(c.ctr)}</div>
+          <div style="text-align:right; color:${freqColor};">${c.frequency.toFixed(2)}</div>
           <div style="text-align:right; color:#f5f5f5;">${fmtInt(c.leads)}</div>
-          <div style="text-align:right; color:${cplColor}; font-weight:600;">${fmtMoney(c.cpl)}</div>
+          <div style="text-align:right; color:${cplColor}; font-weight:600;">${cplStr}</div>
         </div>`;
       }).join('');
     }
   } catch (e) {
-    // Silent fail — don't blow up the dashboard if Meta is down
+    // Silent fail
   }
 }
 refreshMeta();
-setInterval(refreshMeta, 90000); // Meta updates lag a few min, no point hitting more often
+setInterval(refreshMeta, 90000);
 
 // ---- Date range picker ----
 // All times in the dashboard are Pacific Time (PT) to align with Meta Ads Manager's
