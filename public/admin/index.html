@@ -1436,6 +1436,8 @@ async function refreshMeta() {
     try { d = await r.json(); } catch (_) { return; }
     if (!d || d.warming) {
       document.getElementById('meta-spend').textContent = 'warming…';
+      // Retry once after cache settles
+      setTimeout(refreshMeta, 4000);
       return;
     }
     if (!d.ok) {
