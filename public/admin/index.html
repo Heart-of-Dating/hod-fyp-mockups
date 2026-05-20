@@ -1252,8 +1252,8 @@ function renderSODForecast(d) {
   const orgToDate = d.channel?.organic || 0;
   const orgProjected = Math.round(orgToDate * factor);
 
-  // Current CPL — prefer FYP-to-date blended, fall back to today
-  const cpl = (d.meta?.life?.cpl) || (d.meta?.cpl) || (d.pacing?.cpl) || 4.0;
+  // Current CPL — prefer FYP-to-date blended, fall back to today, then static
+  const cpl = (d.meta?.lifetime?.cpl) || (d.meta?.cpl) || 4.0;
   const spendProjected = Math.round(paidProjected * cpl);
 
   sodLiveDefaults = {
@@ -1490,6 +1490,13 @@ async function refreshMeta() {
     // ROW 2: FYP-to-date totals + pacing
     renderLifetime(d.lifetime);
     renderPacing(d.pacing);
+
+    // Stash meta data into dashboard cache so SOD calculator can pull pacing/CPL
+    if (window._lastDashData) {
+      window._lastDashData.meta = d;
+      window._lastDashData.pacing = d.pacing;
+      renderSODForecast(window._lastDashData);
+    }
 
     // Spend timeline (last 14d in live mode, range in range mode)
     renderSpendTimeline(d.daily_spend || [], inRange, currentRange);
