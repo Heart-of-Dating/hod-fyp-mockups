@@ -1246,16 +1246,20 @@ function renderSODForecast(d) {
     organic: hasLiveOrg ? orgPct / 100 : null,
   };
 
+  // Meta data may arrive before or after dashboard data — read whichever path has it.
+  const meta = d.meta || window._lastMetaData;
+  const pacing = d.pacing || meta?.pacing;
+
   // Live paid projection from Pacing widget
-  const paidProjected = d.pacing?.projected_total_leads || d.pacing?.leads_to_date || 0;
+  const paidProjected = pacing?.projected_total_leads || pacing?.leads_to_date || 0;
   // Organic projection: extrapolate current org regs to event date using paid pacing factor
-  const paidToDate = d.pacing?.leads_to_date || 1;
+  const paidToDate = pacing?.leads_to_date || 1;
   const factor = paidToDate > 0 ? Math.max(1, paidProjected / paidToDate) : 1;
   const orgToDate = d.channel?.organic || 0;
   const orgProjected = Math.round(orgToDate * factor);
 
   // Current CPL — prefer FYP-to-date blended, fall back to today, then static
-  const cpl = (d.meta?.lifetime?.cpl) || (d.meta?.cpl) || 4.0;
+  const cpl = (meta?.lifetime?.cpl) || (meta?.cpl) || 4.0;
   const spendProjected = Math.round(paidProjected * cpl);
 
   sodLiveDefaults = {
@@ -1498,7 +1502,9 @@ async function refreshMeta() {
     renderLifetime(d.lifetime);
     renderPacing(d.pacing);
 
-    // Stash meta data into dashboard cache so SOD calculator can pull pacing/CPL
+    // Stash meta data globally so SOD calculator can read it regardless of
+    // which endpoint completes first (race: meta may land before dashboard).
+    window._lastMetaData = d;
     if (window._lastDashData) {
       window._lastDashData.meta = d;
       window._lastDashData.pacing = d.pacing;
