@@ -289,6 +289,10 @@
   .sod-price-btn { background: #1f1f1f; color: #aaa; border: 1px solid #333; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
   .sod-price-btn:hover { background: #2a2a2a; color: #ddd; }
   .sod-price-btn.active { background: #C9603F; color: #fff; border-color: #C9603F; }
+  .sod-num-input { background: #1f1f1f; color: #fff; border: 1px solid #333; padding: 4px 8px; border-radius: 6px; font-size: 22px; font-weight: 700; width: 100%; box-sizing: border-box; }
+  .sod-num-input:focus { outline: none; border-color: #C9603F; }
+  #sod-reset-btn:hover { background: #2a2a2a; color: #fff; }
+  #sod-price-select:focus { outline: none; border-color: #C9603F; }
 
   /* Recommendation card */
   .rec-row { display: grid; grid-template-columns: 100px 1fr 80px; gap: 12px; align-items: start; padding: 10px 12px; border-left: 3px solid transparent; background: #181818; border-radius: 6px; }
@@ -550,47 +554,82 @@
   </div>
 </div>
 
-<!-- SOD FORECAST -->
-<h3 style="margin-top:20px;">SOD Forecast <span style="font-size:11px;color:#888;font-weight:400;margin-left:8px;">fall 2025 conversion math</span></h3>
+<!-- SOD CALCULATOR -->
+<h3 style="margin-top:20px;">SOD Forecast & Calculator <span style="font-size:11px;color:#888;font-weight:400;margin-left:8px;">live projection + what-if</span></h3>
 <div class="card wide" id="sod-forecast-card">
-  <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px;">
-    <span style="font-size:13px;color:#888;">Promo price:</span>
-    <div id="sod-price-tabs" style="display:flex;gap:6px;">
-      <button type="button" data-price="997" class="sod-price-btn">$997</button>
-      <button type="button" data-price="1197" class="sod-price-btn active">$1,197</button>
-      <button type="button" data-price="1397" class="sod-price-btn">$1,397</button>
-      <button type="button" data-price="1697" class="sod-price-btn">$1,697</button>
+  <!-- Price + reset row -->
+  <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:14px;">
+    <label style="font-size:12px;color:#888;">Promo price:</label>
+    <select id="sod-price-select" style="background:#1f1f1f;color:#fff;border:1px solid #333;padding:6px 10px;border-radius:6px;font-size:13px;font-weight:600;">
+      <option value="997" selected>$997 (default — wheel & deal)</option>
+      <option value="1197">$1,197</option>
+      <option value="1397">$1,397</option>
+      <option value="1697">$1,697 (full)</option>
+    </select>
+    <button type="button" id="sod-reset-btn" style="background:#1f1f1f;color:#aaa;border:1px solid #333;padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;">↻ Reset to live projection</button>
+  </div>
+
+  <!-- Editable inputs row -->
+  <div class="grid" style="margin-bottom:8px;">
+    <div class="card">
+      <h2>Paid Leads</h2>
+      <input type="number" id="sod-input-paid" class="sod-num-input" />
+      <div class="sub-num" id="sod-paid-sub">live projection: —</div>
+    </div>
+    <div class="card">
+      <h2>Organic Leads</h2>
+      <input type="number" id="sod-input-org" class="sod-num-input" />
+      <div class="sub-num" id="sod-org-sub">live projection: —</div>
+    </div>
+    <div class="card">
+      <h2>Ad Spend</h2>
+      <input type="number" id="sod-input-spend" class="sod-num-input" />
+      <div class="sub-num" id="sod-cpl-sub">@ CPL —</div>
+    </div>
+    <div class="card">
+      <h2>Total Leads</h2>
+      <div class="big" id="sod-total-leads">—</div>
+      <div class="sub-num" id="sod-total-sub">paid + organic</div>
     </div>
   </div>
+
+  <!-- Output row -->
   <div class="grid">
-    <div class="card"><h2>Current Pace</h2>
-      <div class="big" id="sod-current-projected">—</div>
+    <div class="card">
+      <h2>Current Pace SOD</h2>
+      <div class="big gold" id="sod-current-projected">—</div>
       <div class="sub-num" id="sod-current-sub">—</div>
     </div>
-    <div class="card"><h2>At Lead Goal</h2>
-      <div class="big gold" id="sod-goal-projected">—</div>
-      <div class="sub-num" id="sod-goal-sub">at goal regs</div>
-    </div>
-    <div class="card"><h2>vs 250 Cap</h2>
-      <div class="big" id="sod-cap-status">—</div>
-      <div class="sub-num" id="sod-cap-sub">SOD fulfillment ceiling</div>
-    </div>
-    <div class="card"><h2>SOD Revenue (goal)</h2>
+    <div class="card">
+      <h2>SOD Revenue</h2>
       <div class="big" id="sod-revenue">—</div>
       <div class="sub-num" id="sod-revenue-sub">—</div>
     </div>
-  </div>
-  <div class="card" style="margin-top:8px;">
-    <h2>Expected Night Attendance (at goal regs)</h2>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;">
-      <div><div style="font-size:11px;color:#888;">Night 1</div><div style="font-size:20px;font-weight:700;" id="att-n1">—</div><div style="font-size:11px;color:#666;">14.9% · May 26</div></div>
-      <div><div style="font-size:11px;color:#888;">Night 2</div><div style="font-size:20px;font-weight:700;" id="att-n2">—</div><div style="font-size:11px;color:#666;">11.94% · May 27</div></div>
-      <div><div style="font-size:11px;color:#888;">Night 3 <span style="color:#facc15;">(SOD pitch)</span></div><div style="font-size:20px;font-weight:700;color:#facc15;" id="att-n3">—</div><div style="font-size:11px;color:#666;">8.5% · May 28</div></div>
-      <div><div style="font-size:11px;color:#888;">Night 4</div><div style="font-size:20px;font-weight:700;" id="att-n4">—</div><div style="font-size:11px;color:#666;">6.21% · May 29</div></div>
+    <div class="card">
+      <h2>ROAS <span style="font-size:10px;color:#666;font-weight:400;">(SOD rev ÷ ad spend)</span></h2>
+      <div class="big" id="sod-roas">—</div>
+      <div class="sub-num" id="sod-roas-sub">profitable scaling test</div>
+    </div>
+    <div class="card">
+      <h2>VIP Projected</h2>
+      <div class="big" id="sod-vip-projected">—</div>
+      <div class="sub-num" id="sod-vip-sub">+ VIP revenue: —</div>
     </div>
   </div>
+
+  <!-- Night attendance -->
+  <div class="card" style="margin-top:8px;">
+    <h2>Expected Night Attendance <span style="font-size:11px;color:#888;font-weight:400;">SMS-adjusted +~20% vs fall (no SMS reminders in fall)</span></h2>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;">
+      <div><div style="font-size:11px;color:#888;">Night 1</div><div style="font-size:22px;font-weight:700;" id="att-n1">—</div><div style="font-size:11px;color:#666;">~18% · May 26</div></div>
+      <div><div style="font-size:11px;color:#888;">Night 2</div><div style="font-size:22px;font-weight:700;" id="att-n2">—</div><div style="font-size:11px;color:#666;">~14% · May 27</div></div>
+      <div><div style="font-size:11px;color:#888;">Night 3 <span style="color:#facc15;">(SOD pitch)</span></div><div style="font-size:22px;font-weight:700;color:#facc15;" id="att-n3">—</div><div style="font-size:11px;color:#666;">~10% · May 28</div></div>
+      <div><div style="font-size:11px;color:#888;">Night 4</div><div style="font-size:22px;font-weight:700;" id="att-n4">—</div><div style="font-size:11px;color:#666;">~7.5% · May 29</div></div>
+    </div>
+  </div>
+
   <div style="font-size:11px;color:#666;margin-top:10px;line-height:1.5;">
-    Reg→VIP uses LIVE May '26 rates once paid/org VIP each ≥50; falls back to fall '25 (9.55% paid / 16.17% organic) before that. VIP→SOD + non-VIP→SOD rates from fall '25 (no May data yet — pitch lands Night 3). Attendance from 17,212-reg fall cohort (D1 14.9% → D4 6.21%).
+    Reg→VIP uses LIVE May '26 rates (paid/org each ≥50 VIP threshold). VIP→SOD + non-VIP→SOD from fall '25 cohort (no May SOD data — pitch lands Night 3). Edit any input above to model scenarios; spend ↔ paid leads link via current CPL. ROAS is SOD revenue only (not counting VIP $17 upsell).
   </div>
 </div>
 
@@ -1085,117 +1124,173 @@ function renderLifetime(life) {
     : 'vs $1.79 target';
 }
 
-// ===== SOD Forecast =====
-// Conversion rates from Fall 2025 cohort (17,212 regs).
-// VIP→SOD & Non-VIP→SOD vary by promo price; rates from may-2026-launch-strategy-summary.md
+// ===== SOD Forecast & Calculator =====
+// VIP→SOD & non-VIP→SOD vary by promo price (fall '25 cohort).
 const SOD_RATES = {
   997:  { vipSod: 0.051, nonVipSod: 0.0072 },
   1197: { vipSod: 0.042, nonVipSod: 0.0055 },
   1397: { vipSod: 0.035, nonVipSod: 0.0042 },
   1697: { vipSod: 0.025, nonVipSod: 0.0030 },
 };
-const REG_TO_VIP = { paid: 0.0955, organic: 0.1617 }; // Fall '25 actuals
-const ATTENDANCE = { n1: 0.149, n2: 0.1194, n3: 0.085, n4: 0.0621 };
-const ORGANIC_BASELINE = 4500;
-const SOD_CAP = 250;
-let sodPromoPrice = 1197;
+const REG_TO_VIP_FALL = { paid: 0.0955, organic: 0.1617 };
+// SMS-adjusted: fall rates +~20% (adds nightly SMS reminders we didn't have)
+const ATTENDANCE_SMS = { n1: 0.184, n2: 0.143, n3: 0.102, n4: 0.075 };
+let sodPromoPrice = 997;
+let sodLiveDefaults = null; // {paid, org, spend, cpl, rates}
+let sodLastEdit = 'paid';   // tracks whether user last edited paid-leads or spend (for ↔ link)
 
-function calcSOD(totalRegs, vipCount, paidShare, liveRates) {
+function calcSOD(paidLeads, orgLeads, liveRates) {
   const rates = SOD_RATES[sodPromoPrice];
-  let vips = vipCount;
-  if (vips == null || vips === 0) {
-    // Prefer live May '26 conversion rates if provided; fall back to fall '25
-    const paidRate = (liveRates?.paid != null) ? liveRates.paid : REG_TO_VIP.paid;
-    const orgRate  = (liveRates?.organic != null) ? liveRates.organic : REG_TO_VIP.organic;
-    const paidRegs = totalRegs * paidShare;
-    const orgRegs = totalRegs * (1 - paidShare);
-    vips = paidRegs * paidRate + orgRegs * orgRate;
-  }
-  const nonVip = Math.max(0, totalRegs - vips);
+  const paidRate = (liveRates?.paid != null) ? liveRates.paid : REG_TO_VIP_FALL.paid;
+  const orgRate  = (liveRates?.organic != null) ? liveRates.organic : REG_TO_VIP_FALL.organic;
+  const vipsPaid = paidLeads * paidRate;
+  const vipsOrg  = orgLeads  * orgRate;
+  const vips = vipsPaid + vipsOrg;
+  const total = paidLeads + orgLeads;
+  const nonVip = Math.max(0, total - vips);
   const sodFromVip = vips * rates.vipSod;
   const sodFromNonVip = nonVip * rates.nonVipSod;
   return {
     vips: Math.round(vips),
+    totalLeads: total,
     sod: Math.round(sodFromVip + sodFromNonVip),
     sodFromVip: Math.round(sodFromVip),
     sodFromNonVip: Math.round(sodFromNonVip),
   };
 }
 
-function renderSODForecast(d) {
-  const currentRegs = d.regs?.since_may_1 || 0;
-  const currentVips = d.vip?.total || 0;
-  const paidRegs = d.channel?.paid || 0;
-  const orgRegs = d.channel?.organic || 0;
-  const known = paidRegs + orgRegs;
-  // Default paid share for launch: 78% paid / 22% organic (per strategy doc)
-  const paidShare = known > 0 ? paidRegs / known : 0.78;
+function sodGetInputs() {
+  return {
+    paid:  parseInt(document.getElementById('sod-input-paid').value, 10)  || 0,
+    org:   parseInt(document.getElementById('sod-input-org').value, 10)   || 0,
+    spend: parseFloat(document.getElementById('sod-input-spend').value)   || 0,
+  };
+}
 
-  // Current pace: use actual VIP count (more accurate than estimating from rate)
-  const cur = calcSOD(currentRegs, currentVips, paidShare);
-  document.getElementById('sod-current-projected').textContent = cur.sod;
+function sodSetInputs({ paid, org, spend }) {
+  if (paid != null)  document.getElementById('sod-input-paid').value  = Math.round(paid);
+  if (org != null)   document.getElementById('sod-input-org').value   = Math.round(org);
+  if (spend != null) document.getElementById('sod-input-spend').value = Math.round(spend);
+}
+
+function sodRecompute() {
+  if (!sodLiveDefaults) return;
+  const cpl = sodLiveDefaults.cpl;
+  const inp = sodGetInputs();
+  const rates = sodLiveDefaults.rates;
+
+  // Link spend ↔ paid leads via CPL based on what user last edited
+  let paid = inp.paid, spend = inp.spend;
+  if (sodLastEdit === 'paid' && cpl > 0) {
+    spend = paid * cpl;
+    document.getElementById('sod-input-spend').value = Math.round(spend);
+  } else if (sodLastEdit === 'spend' && cpl > 0) {
+    paid = Math.round(spend / cpl);
+    document.getElementById('sod-input-paid').value = paid;
+  }
+
+  const result = calcSOD(paid, inp.org, rates);
+  const revenue = result.sod * sodPromoPrice;
+  const roas = spend > 0 ? revenue / spend : 0;
+
+  // Total leads + sub
+  document.getElementById('sod-total-leads').textContent = result.totalLeads.toLocaleString();
+  document.getElementById('sod-total-sub').textContent = `${paid.toLocaleString()} paid + ${inp.org.toLocaleString()} org`;
+
+  // Current Pace SOD
+  document.getElementById('sod-current-projected').textContent = result.sod.toLocaleString();
   document.getElementById('sod-current-sub').textContent =
-    `${currentRegs.toLocaleString()} regs · ${currentVips.toLocaleString()} VIP → ${cur.sodFromVip} from VIP + ${cur.sodFromNonVip} non-VIP`;
+    `${result.sodFromVip} from VIP + ${result.sodFromNonVip} non-VIP`;
 
-  // Live May '26 reg→VIP rates from current data (only trust once we have enough volume)
+  // Revenue
+  document.getElementById('sod-revenue').textContent = '$' + revenue.toLocaleString();
+  document.getElementById('sod-revenue-sub').textContent = `${result.sod} × $${sodPromoPrice.toLocaleString()}`;
+
+  // ROAS
+  const roasEl = document.getElementById('sod-roas');
+  if (spend > 0) {
+    roasEl.textContent = roas.toFixed(2) + 'x';
+    roasEl.style.color = roas >= 3 ? '#4ade80' : roas >= 1.5 ? '#facc15' : '#f87171';
+    document.getElementById('sod-roas-sub').textContent =
+      roas >= 3 ? 'scaling is profitable' : roas >= 1.5 ? 'breakeven-ish — watch costs' : 'losing on ad spend';
+  } else {
+    roasEl.textContent = '—';
+    roasEl.style.color = '';
+    document.getElementById('sod-roas-sub').textContent = 'no ad spend yet';
+  }
+
+  // VIP projection
+  document.getElementById('sod-vip-projected').textContent = result.vips.toLocaleString();
+  document.getElementById('sod-vip-sub').textContent = `+ VIP revenue: $${(result.vips * 17).toLocaleString()} @ $17`;
+
+  // CPL display
+  document.getElementById('sod-cpl-sub').textContent = `@ CPL $${cpl.toFixed(2)}`;
+
+  // Attendance (SMS-adjusted)
+  document.getElementById('att-n1').textContent = Math.round(result.totalLeads * ATTENDANCE_SMS.n1).toLocaleString();
+  document.getElementById('att-n2').textContent = Math.round(result.totalLeads * ATTENDANCE_SMS.n2).toLocaleString();
+  document.getElementById('att-n3').textContent = Math.round(result.totalLeads * ATTENDANCE_SMS.n3).toLocaleString();
+  document.getElementById('att-n4').textContent = Math.round(result.totalLeads * ATTENDANCE_SMS.n4).toLocaleString();
+}
+
+function renderSODForecast(d) {
+  // Live reg→VIP rates (only trust once paid AND organic each have ≥50 VIPs)
   const paidPct = parseFloat(d.vip?.paid_reg_to_vip_pct);
   const orgPct = parseFloat(d.vip?.organic_reg_to_vip_pct);
   const hasLivePaid = !!(d.vip?.paid >= 50) && !isNaN(paidPct) && paidPct > 0 && !d.channel?.paid_is_test;
-  const hasLiveOrg = !!(d.vip?.organic >= 50) && !isNaN(orgPct) && orgPct > 0;
+  const hasLiveOrg  = !!(d.vip?.organic >= 50) && !isNaN(orgPct) && orgPct > 0;
   const liveRates = {
     paid: hasLivePaid ? paidPct / 100 : null,
     organic: hasLiveOrg ? orgPct / 100 : null,
   };
 
-  // At goal: paid lead target + organic baseline
-  const paidTarget = (d.pacing?.target_leads) || 15500;
-  const goalRegs = paidTarget + ORGANIC_BASELINE;
-  const goalPaidShare = paidTarget / goalRegs;
-  const goal = calcSOD(goalRegs, null, goalPaidShare, liveRates);
-  document.getElementById('sod-goal-projected').textContent = goal.sod.toLocaleString();
-  const usedPaid = liveRates.paid != null ? (liveRates.paid * 100).toFixed(1) + '% live' : (REG_TO_VIP.paid * 100).toFixed(2) + '% fall';
-  const usedOrg  = liveRates.organic != null ? (liveRates.organic * 100).toFixed(1) + '% live' : (REG_TO_VIP.organic * 100).toFixed(2) + '% fall';
-  document.getElementById('sod-goal-sub').textContent =
-    `${goalRegs.toLocaleString()} regs → ${goal.vips.toLocaleString()} VIP (paid ${usedPaid} · org ${usedOrg})`;
+  // Live paid projection from Pacing widget
+  const paidProjected = d.pacing?.projected_total_leads || d.pacing?.leads_to_date || 0;
+  // Organic projection: extrapolate current org regs to event date using paid pacing factor
+  const paidToDate = d.pacing?.leads_to_date || 1;
+  const factor = paidToDate > 0 ? Math.max(1, paidProjected / paidToDate) : 1;
+  const orgToDate = d.channel?.organic || 0;
+  const orgProjected = Math.round(orgToDate * factor);
 
-  // Cap status
-  const capEl = document.getElementById('sod-cap-status');
-  const capPct = Math.round(goal.sod / SOD_CAP * 100);
-  if (goal.sod > SOD_CAP) {
-    capEl.textContent = `+${goal.sod - SOD_CAP}`;
-    capEl.style.color = '#f87171';
-    document.getElementById('sod-cap-sub').textContent = `over ${SOD_CAP} cap (${capPct}%) — tier up price`;
-  } else if (goal.sod > SOD_CAP * 0.85) {
-    capEl.textContent = `${capPct}%`;
-    capEl.style.color = '#facc15';
-    document.getElementById('sod-cap-sub').textContent = `${goal.sod}/${SOD_CAP} cap — near ceiling`;
-  } else {
-    capEl.textContent = `${capPct}%`;
-    capEl.style.color = '#4ade80';
-    document.getElementById('sod-cap-sub').textContent = `${goal.sod}/${SOD_CAP} cap`;
+  // Current CPL — prefer FYP-to-date blended, fall back to today
+  const cpl = (d.meta?.life?.cpl) || (d.meta?.cpl) || (d.pacing?.cpl) || 4.0;
+  const spendProjected = Math.round(paidProjected * cpl);
+
+  sodLiveDefaults = {
+    paid: paidProjected,
+    org: orgProjected,
+    spend: spendProjected,
+    cpl,
+    rates: liveRates,
+  };
+
+  // Set live-projection sublabels
+  document.getElementById('sod-paid-sub').textContent = `live projection: ${paidProjected.toLocaleString()}`;
+  document.getElementById('sod-org-sub').textContent = `live projection: ${orgProjected.toLocaleString()}`;
+
+  // Only seed inputs on first render (don't clobber user edits on refresh)
+  if (!document.getElementById('sod-input-paid').value) {
+    sodSetInputs({ paid: paidProjected, org: orgProjected, spend: spendProjected });
   }
 
-  // Revenue at goal
-  document.getElementById('sod-revenue').textContent = '$' + (goal.sod * sodPromoPrice).toLocaleString();
-  document.getElementById('sod-revenue-sub').textContent = `${goal.sod} × $${sodPromoPrice.toLocaleString()}`;
-
-  // Attendance at goal regs
-  document.getElementById('att-n1').textContent = Math.round(goalRegs * ATTENDANCE.n1).toLocaleString();
-  document.getElementById('att-n2').textContent = Math.round(goalRegs * ATTENDANCE.n2).toLocaleString();
-  document.getElementById('att-n3').textContent = Math.round(goalRegs * ATTENDANCE.n3).toLocaleString();
-  document.getElementById('att-n4').textContent = Math.round(goalRegs * ATTENDANCE.n4).toLocaleString();
+  sodRecompute();
 }
 
-// Wire price-tab handlers (deferred until DOM ready)
+// Wire handlers (deferred until DOM ready)
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.sod-price-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      sodPromoPrice = parseInt(btn.dataset.price, 10);
-      document.querySelectorAll('.sod-price-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      if (window._lastDashData) renderSODForecast(window._lastDashData);
-    });
+  document.getElementById('sod-price-select')?.addEventListener('change', (e) => {
+    sodPromoPrice = parseInt(e.target.value, 10);
+    sodRecompute();
   });
+  document.getElementById('sod-reset-btn')?.addEventListener('click', () => {
+    if (!sodLiveDefaults) return;
+    sodSetInputs({ paid: sodLiveDefaults.paid, org: sodLiveDefaults.org, spend: sodLiveDefaults.spend });
+    sodLastEdit = 'paid';
+    sodRecompute();
+  });
+  document.getElementById('sod-input-paid')?.addEventListener('input', () => { sodLastEdit = 'paid'; sodRecompute(); });
+  document.getElementById('sod-input-spend')?.addEventListener('input', () => { sodLastEdit = 'spend'; sodRecompute(); });
+  document.getElementById('sod-input-org')?.addEventListener('input', sodRecompute);
 });
 
 function renderPacing(p) {
