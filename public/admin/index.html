@@ -1138,6 +1138,8 @@ const ATTENDANCE_SMS = { n1: 0.184, n2: 0.143, n3: 0.102, n4: 0.075 };
 let sodPromoPrice = 997;
 let sodLiveDefaults = null; // {paid, org, spend, cpl, rates}
 let sodLastEdit = 'paid';   // tracks whether user last edited paid-leads or spend (for ↔ link)
+let sodSeededWithMeta = false; // true once we've seeded with real meta data (not warming zeros)
+let sodUserEdited = false;     // true once user touches any input — never auto-reseed after that
 
 function calcSOD(paidLeads, orgLeads, liveRates) {
   const rates = SOD_RATES[sodPromoPrice];
@@ -1268,9 +1270,11 @@ function renderSODForecast(d) {
   document.getElementById('sod-paid-sub').textContent = `live projection: ${paidProjected.toLocaleString()}`;
   document.getElementById('sod-org-sub').textContent = `live projection: ${orgProjected.toLocaleString()}`;
 
-  // Only seed inputs on first render (don't clobber user edits on refresh)
-  if (!document.getElementById('sod-input-paid').value) {
+  // Seed inputs when (a) never seeded with real meta yet, AND (b) user hasn't manually edited
+  const haveRealMeta = paidProjected > 0 && cpl > 0.5;
+  if (!sodUserEdited && (!sodSeededWithMeta || haveRealMeta)) {
     sodSetInputs({ paid: paidProjected, org: orgProjected, spend: spendProjected });
+    if (haveRealMeta) sodSeededWithMeta = true;
   }
 
   sodRecompute();
@@ -1286,11 +1290,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!sodLiveDefaults) return;
     sodSetInputs({ paid: sodLiveDefaults.paid, org: sodLiveDefaults.org, spend: sodLiveDefaults.spend });
     sodLastEdit = 'paid';
+    sodUserEdited = false;
     sodRecompute();
   });
-  document.getElementById('sod-input-paid')?.addEventListener('input', () => { sodLastEdit = 'paid'; sodRecompute(); });
-  document.getElementById('sod-input-spend')?.addEventListener('input', () => { sodLastEdit = 'spend'; sodRecompute(); });
-  document.getElementById('sod-input-org')?.addEventListener('input', sodRecompute);
+  document.getElementById('sod-input-paid')?.addEventListener('input', () => { sodLastEdit = 'paid'; sodUserEdited = true; sodRecompute(); });
+  document.getElementById('sod-input-spend')?.addEventListener('input', () => { sodLastEdit = 'spend'; sodUserEdited = true; sodRecompute(); });
+  document.getElementById('sod-input-org')?.addEventListener('input', () => { sodUserEdited = true; sodRecompute(); });
 });
 
 function renderPacing(p) {
