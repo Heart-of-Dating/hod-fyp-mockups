@@ -590,7 +590,7 @@
     </div>
   </div>
   <div style="font-size:11px;color:#666;margin-top:10px;line-height:1.5;">
-    Fall '25 math: reg→VIP 9.55% paid / 16.17% organic · VIP→SOD varies by promo · non-VIP→SOD same scale · attendance from 17,212-reg cohort (D1 14.9% → D4 6.21%).
+    Reg→VIP uses LIVE May '26 rates once paid/org VIP each ≥50; falls back to fall '25 (9.55% paid / 16.17% organic) before that. VIP→SOD + non-VIP→SOD rates from fall '25 (no May data yet — pitch lands Night 3). Attendance from 17,212-reg fall cohort (D1 14.9% → D4 6.21%).
   </div>
 </div>
 
@@ -1100,13 +1100,16 @@ const ORGANIC_BASELINE = 4500;
 const SOD_CAP = 250;
 let sodPromoPrice = 1197;
 
-function calcSOD(totalRegs, vipCount, paidShare) {
+function calcSOD(totalRegs, vipCount, paidShare, liveRates) {
   const rates = SOD_RATES[sodPromoPrice];
   let vips = vipCount;
   if (vips == null || vips === 0) {
+    // Prefer live May '26 conversion rates if provided; fall back to fall '25
+    const paidRate = (liveRates?.paid != null) ? liveRates.paid : REG_TO_VIP.paid;
+    const orgRate  = (liveRates?.organic != null) ? liveRates.organic : REG_TO_VIP.organic;
     const paidRegs = totalRegs * paidShare;
     const orgRegs = totalRegs * (1 - paidShare);
-    vips = paidRegs * REG_TO_VIP.paid + orgRegs * REG_TO_VIP.organic;
+    vips = paidRegs * paidRate + orgRegs * orgRate;
   }
   const nonVip = Math.max(0, totalRegs - vips);
   const sodFromVip = vips * rates.vipSod;
@@ -1134,14 +1137,26 @@ function renderSODForecast(d) {
   document.getElementById('sod-current-sub').textContent =
     `${currentRegs.toLocaleString()} regs · ${currentVips.toLocaleString()} VIP → ${cur.sodFromVip} from VIP + ${cur.sodFromNonVip} non-VIP`;
 
+  // Live May '26 reg→VIP rates from current data (only trust once we have enough volume)
+  const paidPct = parseFloat(d.vip?.paid_reg_to_vip_pct);
+  const orgPct = parseFloat(d.vip?.organic_reg_to_vip_pct);
+  const hasLivePaid = !!(d.vip?.paid >= 50) && !isNaN(paidPct) && paidPct > 0 && !d.channel?.paid_is_test;
+  const hasLiveOrg = !!(d.vip?.organic >= 50) && !isNaN(orgPct) && orgPct > 0;
+  const liveRates = {
+    paid: hasLivePaid ? paidPct / 100 : null,
+    organic: hasLiveOrg ? orgPct / 100 : null,
+  };
+
   // At goal: paid lead target + organic baseline
   const paidTarget = (d.pacing?.target_leads) || 15500;
   const goalRegs = paidTarget + ORGANIC_BASELINE;
   const goalPaidShare = paidTarget / goalRegs;
-  const goal = calcSOD(goalRegs, null, goalPaidShare);
+  const goal = calcSOD(goalRegs, null, goalPaidShare, liveRates);
   document.getElementById('sod-goal-projected').textContent = goal.sod.toLocaleString();
+  const usedPaid = liveRates.paid != null ? (liveRates.paid * 100).toFixed(1) + '% live' : (REG_TO_VIP.paid * 100).toFixed(2) + '% fall';
+  const usedOrg  = liveRates.organic != null ? (liveRates.organic * 100).toFixed(1) + '% live' : (REG_TO_VIP.organic * 100).toFixed(2) + '% fall';
   document.getElementById('sod-goal-sub').textContent =
-    `${goalRegs.toLocaleString()} regs (${paidTarget.toLocaleString()} paid + ${ORGANIC_BASELINE.toLocaleString()} org) → ${goal.vips.toLocaleString()} VIP`;
+    `${goalRegs.toLocaleString()} regs → ${goal.vips.toLocaleString()} VIP (paid ${usedPaid} · org ${usedOrg})`;
 
   // Cap status
   const capEl = document.getElementById('sod-cap-status');
