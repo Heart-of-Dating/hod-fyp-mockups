@@ -1180,26 +1180,37 @@ function renderABWidget(d) {
   const ab = d.ab_test;
   if (!ab) return;
   const fmt = (n) => (n || 0).toLocaleString();
-  const balanceLabel = (a, b) => {
+  const balanceLabel = (a, b, expected50) => {
     const tot = a + b;
     if (tot === 0) return 'no traffic yet';
     const splitPct = Math.round(b / tot * 100);
-    const lift = a > 0 ? ((b - a) / a * 100).toFixed(1) : null;
-    const liftStr = lift !== null
-      ? (b > a ? `<span style="color:#4ade80;">+${lift}% variant lift</span>` : b < a ? `<span style="color:#f87171;">${lift}% variant drop</span>` : '<span style="color:#888;">flat</span>')
-      : '';
-    return `${fmt(tot)} total · ${splitPct}% on variant · ${liftStr}`;
+    // For 50/50-router tests (VIP), show split health vs 50%. For URL-split tests
+    // (LP, where James controls ad-set ratio), just show the split %.
+    let health = '';
+    if (expected50) {
+      const drift = Math.abs(splitPct - 50);
+      if (tot < 30) {
+        health = '<span style="color:#888;">sample too small</span>';
+      } else if (drift <= 5) {
+        health = '<span style="color:#4ade80;">balanced</span>';
+      } else if (drift <= 12) {
+        health = '<span style="color:#facc15;">slight drift</span>';
+      } else {
+        health = '<span style="color:#f87171;">off balance — check router</span>';
+      }
+    }
+    return `${fmt(tot)} total · ${splitPct}% on variant ${health ? '· ' + health : ''}`;
   };
   document.getElementById('ab-lp-v1').textContent = fmt(ab.lp.v1.regs);
   document.getElementById('ab-lp-v2').textContent = fmt(ab.lp.v2.regs);
   document.getElementById('ab-lp-v1-label').textContent = ab.lp.v1.label;
   document.getElementById('ab-lp-v2-label').textContent = ab.lp.v2.label;
-  document.getElementById('ab-lp-balance').innerHTML = balanceLabel(ab.lp.v1.regs, ab.lp.v2.regs);
+  document.getElementById('ab-lp-balance').innerHTML = balanceLabel(ab.lp.v1.regs, ab.lp.v2.regs, false);
   document.getElementById('ab-vip-v1').textContent = fmt(ab.vip.v1.regs);
   document.getElementById('ab-vip-v2').textContent = fmt(ab.vip.v2.regs);
   document.getElementById('ab-vip-v1-label').textContent = ab.vip.v1.label;
   document.getElementById('ab-vip-v2-label').textContent = ab.vip.v2.label;
-  document.getElementById('ab-vip-balance').innerHTML = balanceLabel(ab.vip.v1.regs, ab.vip.v2.regs);
+  document.getElementById('ab-vip-balance').innerHTML = balanceLabel(ab.vip.v1.regs, ab.vip.v2.regs, true);
 }
 document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.getElementById('ab-toggle');
