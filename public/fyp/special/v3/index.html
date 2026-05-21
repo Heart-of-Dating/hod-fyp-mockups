@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>[MOCKUP V3] FYP + VIP Special — Social Proof</title>
+<meta name="robots" content="noindex,nofollow" />
+<meta name="description" content="1,200+ joined VIP last cohort. Here's why. Find Your Person Challenge VIP — $17." />
+
+<!-- Pixel intentionally OMITTED on mockup -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --terracotta: #CC835C;
+    --terracotta-dark: #B36B44;
+    --cream: #FAF6F1;
+    --cream-deep: #F2EAE0;
+    --ink: #2A2320;
+    --muted: #6B5D54;
+    --border: #E8DCD0;
+    --white: #FFFFFF;
+    --gold: #D4A574;
+    --mockup-flag: #5B3A8C;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--ink);
+    background: var(--cream);
+    line-height: 1.55;
+    font-size: 16px;
+    padding-bottom: 92px;
+  }
+
+  .mockup-banner {
+    background: var(--mockup-flag); color: white;
+    padding: 8px 16px; text-align: center; font-size: 12px; font-weight: 600;
+  }
+  .mockup-banner code { background: rgba(255,255,255,0.18); padding: 2px 6px; border-radius: 3px; }
+
+  .container { max-width: 560px; margin: 0 auto; padding: 0 18px; }
+
+  .site-header {
+    padding: 12px 18px; text-align: center; border-bottom: 1px solid var(--border);
+  }
+  .logo { font-family: 'Fraunces', serif; font-weight: 600; font-size: 16px; letter-spacing: 0.5px; color: var(--ink); }
+  .logo b { color: var(--terracotta); }
+
+  /* HERO — testimonial-led */
+  .hero {
+    padding: 28px 18px 24px;
+    background: var(--cream);
+    text-align: center;
+  }
+  .credibility-pill {
+    display: inline-flex;
+    align-items: center; gap: 8px;
+    background: var(--white);
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--ink);
+    border: 1px solid var(--border);
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(42,35,32,0.05);
+  }
+  .credibility-pill b { color: var(--terracotta); font-weight: 700; }
+  .credibility-pill .dots {
+    display: inline-flex; gap: 2px;
+  }
+  .credibility-pill .dot {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--gold);
+    border: 2px solid var(--white);
+    margin-left: -6px;
+  }
+  .credibility-pill .dot:first-child { margin-left: 0; }
+  .credibility-pill .dot.d2 { background: var(--terracotta); }
+  .credibility-pill .dot.d3 { background: #c4956a; }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    line-height: 1.15;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 8px;
+    max-width: 460px;
+    margin-left: auto; margin-right: auto;
+  }
+  h1 em { font-style: italic; color: var(--terracotta); font-weight: 600; }
+  .hero-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 0 auto 24px;
+    max-width: 440px;
+    line-height: 1.55;
+  }
+
+  /* HERO TESTIMONIAL CARD */
+  .hero-testimonial {
+    margin: 0 auto 8px;
+    max-width: 460px;
+    background: var(--white);
+    border-radius: 18px;
+    padding: 22px 20px;
+    border: 1px solid var(--border);
+    box-shadow: 0 6px 20px rgba(42,35,32,0.08);
+    text-align: left;
+    position: relative;
+  }
+  .hero-testimonial::before {
+    content: '"';
+    position: absolute;
+    top: -8px; left: 18px;
+    font-family: 'Fraunces', serif;
+    font-size: 80px;
+    line-height: 1;
+    color: var(--terracotta);
+    opacity: 0.25;
+  }
+  .testimonial-quote {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--ink);
+    margin-bottom: 16px;
+    font-style: italic;
+    position: relative;
+    z-index: 1;
+  }
+  .testimonial-attribution {
+    display: flex; align-items: center; gap: 12px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .testimonial-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background-size: cover; background-position: center;
+    flex-shrink: 0;
+    border: 2px solid var(--cream);
+  }
+  .testimonial-meta { font-size: 12px; line-height: 1.35; }
+  .testimonial-meta .name { font-weight: 700; color: var(--ink); font-size: 14px; font-family: 'Poppins', sans-serif; }
+  .testimonial-meta .demo { color: var(--muted); }
+
+  /* FORM */
+  .form-section {
+    padding: 20px 18px 28px;
+    background: var(--cream);
+  }
+  .form-card {
+    background: var(--white);
+    border-radius: 18px;
+    padding: 22px 18px;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 20px rgba(42,35,32,0.05);
+    max-width: 460px;
+    margin: 0 auto;
+  }
+  .form-headline { text-align: center; margin-bottom: 14px; }
+  .form-headline h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .form-headline p {
+    font-size: 13px; color: var(--muted); margin-top: 2px;
+  }
+  .form-headline strong { color: var(--terracotta); }
+
+  .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .form-input, .form-select {
+    width: 100%; padding: 14px 14px; margin-bottom: 8px;
+    border: 1px solid var(--border); border-radius: 10px;
+    background: var(--cream); color: var(--ink);
+    font-family: inherit; font-size: 16px;
+    -webkit-appearance: none; appearance: none;
+  }
+  .form-input:focus, .form-select:focus { outline: none; border-color: var(--terracotta); background: var(--white); }
+  .form-input::placeholder { color: #a8998b; }
+
+  .sms-opt {
+    display: flex; align-items: flex-start; gap: 10px;
+    margin: 8px 0 12px; padding: 10px 12px;
+    background: var(--cream-deep); border-radius: 8px;
+    font-size: 11px; line-height: 1.45; color: var(--muted);
+  }
+  .sms-opt input { margin-top: 2px; transform: scale(1.1); flex-shrink: 0; }
+  .sms-opt a { color: var(--terracotta); text-decoration: underline; }
+
+  .legal-fineprint { font-size: 10px; color: #a8998b; margin: 6px 0 12px; line-height: 1.4; }
+  .legal-fineprint a { color: var(--muted); }
+
+  .btn-primary {
+    display: block; width: 100%;
+    padding: 18px 20px;
+    background: var(--terracotta); color: white;
+    border: none; border-radius: 12px;
+    font-family: inherit; font-size: 17px; font-weight: 700;
+    cursor: pointer; text-align: center; text-decoration: none;
+    box-shadow: 0 4px 14px rgba(204, 131, 92, 0.35);
+    transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+  }
+  .btn-primary:active { transform: translateY(1px); box-shadow: 0 2px 8px rgba(204, 131, 92, 0.4); }
+  .btn-primary:hover { background: var(--terracotta-dark); }
+  .btn-sub-price {
+    display: block; font-size: 12px; font-weight: 500; opacity: 0.92; margin-top: 4px;
+  }
+
+  .free-link {
+    display: block; text-align: center; margin-top: 14px;
+    font-size: 13px; color: var(--muted);
+    text-decoration: underline; text-underline-offset: 3px;
+    background: none; border: none; font-family: inherit; cursor: pointer; width: 100%;
+  }
+  .free-link:hover { color: var(--terracotta); }
+
+  /* TESTIMONIAL WALL */
+  .wall {
+    padding: 36px 18px 28px;
+    background: var(--cream-deep);
+  }
+  .wall h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+  .wall h2 em { color: var(--terracotta); font-style: italic; }
+  .wall-sub {
+    text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 24px;
+  }
+  .wall-grid {
+    max-width: 480px; margin: 0 auto;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .quote-card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 16px 16px;
+    border: 1px solid var(--border);
+  }
+  .quote-card .quote {
+    font-size: 14px; line-height: 1.55; color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .quote-card .quote::before { content: '" '; color: var(--terracotta); font-weight: 600; }
+  .quote-card .quote::after { content: ' "'; color: var(--terracotta); font-weight: 600; }
+  .quote-card .attribution {
+    display: flex; align-items: center; gap: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .quote-card .avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background-size: cover; background-position: center;
+    flex-shrink: 0;
+  }
+  .quote-card .name { font-size: 13px; font-weight: 700; color: var(--ink); }
+  .quote-card .demo { font-size: 11px; color: var(--muted); }
+
+  /* BONUSES — compact */
+  .bonuses {
+    padding: 28px 18px 24px;
+    background: var(--cream);
+    text-align: center;
+  }
+  .bonuses h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+  .bonuses h2 em { color: var(--terracotta); font-style: italic; }
+  .bonuses-sub { color: var(--muted); font-size: 14px; margin-bottom: 18px; }
+  .bonus-pills {
+    display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+    max-width: 480px; margin: 0 auto;
+  }
+  .bonus-pill {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--ink);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .bonus-pill::before { content: '✓'; color: var(--terracotta); font-weight: 700; }
+
+  /* GUARANTEE */
+  .guarantee {
+    padding: 22px 18px;
+    background: var(--cream-deep);
+    text-align: center;
+  }
+  .guarantee b { color: var(--ink); font-size: 14px; }
+  .guarantee p { color: var(--muted); font-size: 13px; margin-top: 4px; }
+
+  footer {
+    padding: 24px 18px; text-align: center; font-size: 11px;
+    color: #a8998b; background: var(--cream);
+  }
+  footer a { color: var(--muted); }
+
+  /* STICKY CTA */
+  .sticky-cta {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--white); border-top: 1px solid var(--border);
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    box-shadow: 0 -4px 20px rgba(42,35,32,0.08);
+    z-index: 40;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .sticky-cta .btn-primary { flex: 1; padding: 14px 16px; font-size: 15px; }
+
+  @media (min-width: 640px) {
+    h1 { font-size: 34px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="mockup-banner">MOCKUP V3 · Social Proof / Testimonial-Led · preview for James · <code>/fyp/special/v3/</code></div>
+
+<header class="site-header">
+  <span class="logo">Heart of <b>Dating</b></span>
+</header>
+
+<!-- HERO — opens with a real quote -->
+<section class="hero">
+  <div class="container">
+    <div class="credibility-pill">
+      <span class="dots"><span class="dot"></span><span class="dot d2"></span><span class="dot d3"></span></span>
+      <span><b>1,200+</b> joined VIP last cohort</span>
+    </div>
+    <h1>Why <em>1,200+</em> upgraded to VIP last fall:</h1>
+    <p class="hero-sub">Read what they said. Then decide if $17 is worth it.</p>
+
+    <!-- Hero testimonial — most impactful quote, Bianca's "splash of water" -->
+    <div class="hero-testimonial">
+      <p class="testimonial-quote">Another dating opportunity ended, and I was feeling discouraged. I thought "this shouldn't be this hard." When Jamal called out that exact thought as avoidance, it was like he was splashing water on my face to wake me up. I shifted course and signed up for School of Dating.</p>
+      <div class="testimonial-attribution">
+        <div class="testimonial-avatar" style="background-image: url('https://randomuser.me/api/portraits/women/19.jpg');"></div>
+        <div class="testimonial-meta">
+          <div class="name">Bianca</div>
+          <div class="demo">40s · US West Coast · Nov 2025 VIP</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="form-section">
+  <div class="form-card">
+    <div class="form-headline">
+      <h3>Join them — VIP for <strong>$17.</strong></h3>
+      <p>FYP starts May 26. VIP locks in the rooms + replays + bonuses.</p>
+    </div>
+    <form id="reg-form" novalidate>
+      <div class="input-row">
+        <input class="form-input" type="text" name="fname" placeholder="First name" autocomplete="given-name" required />
+        <input class="form-input" type="text" name="lname" placeholder="Last name" autocomplete="family-name" required />
+      </div>
+      <input class="form-input" type="email" name="email" placeholder="Email address" autocomplete="email" inputmode="email" required />
+      <input class="form-input" type="tel" name="phone" placeholder="Mobile number" autocomplete="tel" inputmode="tel" required />
+      <div class="input-row">
+        <input class="form-input" type="text" name="byear" placeholder="Birth year" autocomplete="bday-year" inputmode="numeric" pattern="19[0-9]{2}|20[0-2][0-9]" maxlength="4" required />
+        <select class="form-select" name="state" autocomplete="address-level1" required>
+          <option value="" disabled selected>State</option>
+          <option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option><option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option><option>HI</option><option>ID</option><option>IL</option><option>IN</option><option>IA</option><option>KS</option><option>KY</option><option>LA</option><option>ME</option><option>MD</option><option>MA</option><option>MI</option><option>MN</option><option>MS</option><option>MO</option><option>MT</option><option>NE</option><option>NV</option><option>NH</option><option>NJ</option><option>NM</option><option>NY</option><option>NC</option><option>ND</option><option>OH</option><option>OK</option><option>OR</option><option>PA</option><option>RI</option><option>SC</option><option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option><option>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option><option value="INTL">Outside US</option>
+        </select>
+      </div>
+      <label class="sms-opt">
+        <input type="checkbox" name="sms" />
+        <span>Yes, text me Find Your Person Challenge event reminders + occasional promo updates from Heart of Dating. Avg 1–4/mo. Message and data rates may apply. Reply HELP/STOP. Consent not required. <a href="/privacy#sms" target="_blank">SMS Privacy</a>.</span>
+      </label>
+      <p class="legal-fineprint">By submitting you agree to receive email from Heart of Dating. See our <a href="/privacy" target="_blank">Privacy</a> & <a href="/terms" target="_blank">Terms</a>.</p>
+      <button type="submit" class="btn-primary" id="cta-vip">
+        Join them — Unlock VIP $17
+        <span class="btn-sub-price">one-time · 7-day money-back guarantee</span>
+      </button>
+      <button type="button" class="free-link" id="cta-free">or save my free seat (skip VIP)</button>
+    </form>
+  </div>
+</section>
+
+<!-- TESTIMONIAL WALL -->
+<section class="wall">
+  <h2>More from <em>last cohort.</em></h2>
+  <p class="wall-sub">Real attendees · Nov 2025 · verbatim from feedback form</p>
+  <div class="wall-grid">
+    <div class="quote-card">
+      <p class="quote">It was great to learn more about the pain cycle on night one and Lisa on night two. Love that our identities are in Christ and not what we've done.</p>
+      <div class="attribution">
+        <div class="avatar" style="background-image: url('https://randomuser.me/api/portraits/men/7.jpg');"></div>
+        <div><div class="name">Andrew</div><div class="demo">30s · US East Coast · Nov 2025 VIP</div></div>
+      </div>
+    </div>
+    <div class="quote-card">
+      <p class="quote">This gave me hope and courage to date again. After my 5 year relationship ended, I didn't know if I could ever open up to someone again. Through the teachings, I felt empowered to be open.</p>
+      <div class="attribution">
+        <div class="avatar" style="background-image: url('https://randomuser.me/api/portraits/women/42.jpg'); background-size: 170%; background-position: center 30%;"></div>
+        <div><div class="name">Kate</div><div class="demo">30s · US Midwest · Nov 2025 VIP</div></div>
+      </div>
+    </div>
+    <div class="quote-card">
+      <p class="quote">After the challenge, I went to a speed dating event the next evening locally. It was eye opening — FYP challenged me to date the unexpected and try something new.</p>
+      <div class="attribution">
+        <div class="avatar" style="background-image: url('https://randomuser.me/api/portraits/men/32.jpg');"></div>
+        <div><div class="name">Benjamin</div><div class="demo">30s · US Midwest · Nov 2025 VIP</div></div>
+      </div>
+    </div>
+    <div class="quote-card">
+      <p class="quote">Made me look more at myself. And I am excited to date the unexpected. Make some changes and value more of God's character.</p>
+      <div class="attribution">
+        <div class="avatar" style="background-image: url('/assets/aspen-avatar.png');"></div>
+        <div><div class="name">Aspen</div><div class="demo">40s · US West Coast · Nov 2025 VIP</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BONUSES — compact pills -->
+<section class="bonuses">
+  <h2>VIP <em>includes:</em></h2>
+  <p class="bonuses-sub">$468 of bonuses · yours for $17</p>
+  <div class="bonus-pills">
+    <span class="bonus-pill">Lifetime replays</span>
+    <span class="bonus-pill">Smaller breakout rooms</span>
+    <span class="bonus-pill">Basics of Dating program</span>
+    <span class="bonus-pill">Dr. Cloud Q&A</span>
+    <span class="bonus-pill">Workbook + worksheets</span>
+  </div>
+</section>
+
+<section class="guarantee">
+  <b>7-day money-back guarantee.</b>
+  <p>Try VIP. Email us if it's not right.</p>
+</section>
+
+<footer>
+  © 2026 Heart of Dating · <a href="https://heartofdating.com">heartofdating.com</a> · Secure Stripe checkout via ThriveCart
+</footer>
+
+<!-- STICKY CTA -->
+<div class="sticky-cta">
+  <button class="btn-primary" id="sticky-cta-btn">Join them — Unlock VIP $17</button>
+</div>
+
+<script>
+  document.getElementById('sticky-cta-btn').addEventListener('click', () => {
+    document.getElementById('cta-vip').scrollIntoView({behavior: 'smooth', block: 'center'});
+    setTimeout(()=>document.querySelector('input[name="fname"]')?.focus(), 600);
+  });
+
+  const form = document.getElementById('reg-form');
+  const TC_PAID = 'https://hod.thrivecart.com/find-your-person-vip-may-26-paid/';
+  let intent = 'vip';
+
+  document.getElementById('cta-vip').addEventListener('click', () => { intent = 'vip'; });
+  document.getElementById('cta-free').addEventListener('click', (e) => {
+    e.preventDefault();
+    intent = 'free';
+    if (form.checkValidity()) form.requestSubmit();
+    else form.reportValidity();
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const raw = Object.fromEntries(new FormData(form).entries());
+    const data = { ...raw };
+    data.sms = form.querySelector('input[name="sms"]').checked ? 'true' : 'false';
+    const params = new URLSearchParams(window.location.search);
+    const srcRaw = (params.get('src') || params.get('utm_medium') || '').toLowerCase();
+    if (srcRaw === 'paid' || srcRaw === 'organic') data.src = srcRaw;
+    else data.src = 'paid';
+    data.lp_variant = 'special-v3';
+    data.intent = intent;
+
+    const btn = intent === 'vip' ? document.getElementById('cta-vip') : document.getElementById('cta-free');
+    const origLabel = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = intent === 'vip' ? 'Locking in your VIP…' : 'Saving your seat…';
+
+    const eventId = 'lead_' + data.email.toLowerCase().trim() + '_' + Date.now();
+    data.event_id = eventId;
+
+    fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }).then(r => r.json()).then(res => {
+      if (res.ok) {
+        if (intent === 'vip') {
+          window.location.href = TC_PAID + '?email=' + encodeURIComponent(data.email);
+        } else {
+          window.location.href = res.redirect || '/fyp/vip-paid';
+        }
+      } else {
+        btn.disabled = false; btn.textContent = origLabel;
+        alert('Something went wrong: ' + (res.error || 'unknown'));
+      }
+    }).catch(err => {
+      btn.disabled = false; btn.textContent = origLabel;
+      alert('Network error: ' + err.message);
+    });
+  });
+</script>
+</body>
+</html>
