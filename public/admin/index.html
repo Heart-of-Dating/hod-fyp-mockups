@@ -633,6 +633,56 @@
   </div>
 </div>
 
+<!-- A/B TEST WIDGET (collapsible) -->
+<div style="margin-top:20px;">
+  <h3 id="ab-toggle" style="cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px;">
+    <span id="ab-caret" style="display:inline-block;transition:transform 0.18s;color:#888;font-size:14px;">▶</span>
+    A/B Test Results
+    <span style="font-size:11px;color:#888;font-weight:400;">LP variants · VIP variants · click to expand</span>
+  </h3>
+  <div id="ab-body" style="display:none;">
+    <div class="grid">
+      <div class="card">
+        <h2>LP Test <span style="font-size:10px;color:#666;font-weight:400;margin-left:4px;">paid traffic split</span></h2>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:6px;">
+          <div>
+            <div style="font-size:10px;color:#888;letter-spacing:0.8px;text-transform:uppercase;">v1 control</div>
+            <div style="font-size:22px;font-weight:700;" id="ab-lp-v1">—</div>
+            <div style="font-size:11px;color:#aaa;" id="ab-lp-v1-label">/fyp/</div>
+          </div>
+          <div style="font-size:11px;color:#666;">vs</div>
+          <div style="text-align:right;">
+            <div style="font-size:10px;color:#888;letter-spacing:0.8px;text-transform:uppercase;">v2 variant</div>
+            <div style="font-size:22px;font-weight:700;color:#facc15;" id="ab-lp-v2">—</div>
+            <div style="font-size:11px;color:#aaa;" id="ab-lp-v2-label">/fyp/v2/</div>
+          </div>
+        </div>
+        <div class="sub-num" id="ab-lp-balance" style="margin-top:10px;">—</div>
+      </div>
+      <div class="card">
+        <h2>VIP Test <span style="font-size:10px;color:#666;font-weight:400;margin-left:4px;">50/50 router</span></h2>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:6px;">
+          <div>
+            <div style="font-size:10px;color:#888;letter-spacing:0.8px;text-transform:uppercase;">v1 control</div>
+            <div style="font-size:22px;font-weight:700;" id="ab-vip-v1">—</div>
+            <div style="font-size:11px;color:#aaa;" id="ab-vip-v1-label">/fyp/vip</div>
+          </div>
+          <div style="font-size:11px;color:#666;">vs</div>
+          <div style="text-align:right;">
+            <div style="font-size:10px;color:#888;letter-spacing:0.8px;text-transform:uppercase;">v2 variant</div>
+            <div style="font-size:22px;font-weight:700;color:#facc15;" id="ab-vip-v2">—</div>
+            <div style="font-size:11px;color:#aaa;" id="ab-vip-v2-label">/fyp/vip-paid</div>
+          </div>
+        </div>
+        <div class="sub-num" id="ab-vip-balance" style="margin-top:10px;">—</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:#666;margin-top:10px;line-height:1.5;">
+      Counts are unique AC contacts tagged with the variant. LP test runs once James duplicates ad sets pointing half at /fyp/v2/. VIP test routes 50/50 via deterministic email-hash on registration. Conversion-rate split (variant → VIP buyer) pending tag-intersection wiring.
+    </div>
+  </div>
+</div>
+
 <!-- HOURLY TODAY (hidden when multi-day range selected) -->
 <div id="hourly-section">
   <h3 id="hourly-heading">Today's Registration Pulse (hourly, PT)</h3>
@@ -861,6 +911,7 @@ async function refresh() {
     // SOD Forecast — cache dash data so price tabs can re-render
     window._lastDashData = d;
     renderSODForecast(d);
+    renderABWidget(d);
 
     document.getElementById('reg-paid').textContent = d.channel.paid;
     document.getElementById('reg-organic').textContent = d.channel.organic;
@@ -1123,6 +1174,43 @@ function renderLifetime(life) {
     ? `CTR ${(life.ctr || 0).toFixed(2)}% · ${(life.cpl / 1.79).toFixed(1)}x target`
     : 'vs $1.79 target';
 }
+
+// ===== A/B Test Widget (collapsible) =====
+function renderABWidget(d) {
+  const ab = d.ab_test;
+  if (!ab) return;
+  const fmt = (n) => (n || 0).toLocaleString();
+  const balanceLabel = (a, b) => {
+    const tot = a + b;
+    if (tot === 0) return 'no traffic yet';
+    const splitPct = Math.round(b / tot * 100);
+    const lift = a > 0 ? ((b - a) / a * 100).toFixed(1) : null;
+    const liftStr = lift !== null
+      ? (b > a ? `<span style="color:#4ade80;">+${lift}% variant lift</span>` : b < a ? `<span style="color:#f87171;">${lift}% variant drop</span>` : '<span style="color:#888;">flat</span>')
+      : '';
+    return `${fmt(tot)} total · ${splitPct}% on variant · ${liftStr}`;
+  };
+  document.getElementById('ab-lp-v1').textContent = fmt(ab.lp.v1.regs);
+  document.getElementById('ab-lp-v2').textContent = fmt(ab.lp.v2.regs);
+  document.getElementById('ab-lp-v1-label').textContent = ab.lp.v1.label;
+  document.getElementById('ab-lp-v2-label').textContent = ab.lp.v2.label;
+  document.getElementById('ab-lp-balance').innerHTML = balanceLabel(ab.lp.v1.regs, ab.lp.v2.regs);
+  document.getElementById('ab-vip-v1').textContent = fmt(ab.vip.v1.regs);
+  document.getElementById('ab-vip-v2').textContent = fmt(ab.vip.v2.regs);
+  document.getElementById('ab-vip-v1-label').textContent = ab.vip.v1.label;
+  document.getElementById('ab-vip-v2-label').textContent = ab.vip.v2.label;
+  document.getElementById('ab-vip-balance').innerHTML = balanceLabel(ab.vip.v1.regs, ab.vip.v2.regs);
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const toggle = document.getElementById('ab-toggle');
+  const body = document.getElementById('ab-body');
+  const caret = document.getElementById('ab-caret');
+  toggle?.addEventListener('click', () => {
+    const isOpen = body.style.display !== 'none';
+    body.style.display = isOpen ? 'none' : 'block';
+    if (caret) caret.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(90deg)';
+  });
+});
 
 // ===== SOD Forecast & Calculator =====
 // VIP→SOD & non-VIP→SOD vary by promo price (fall '25 cohort).

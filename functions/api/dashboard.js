@@ -442,6 +442,31 @@ export async function onRequestGet(context) {
     const paidToVipPct = regsPaid > 0 ? (vipPaidCount / regsPaid * 100).toFixed(1) : "—";
     const orgToVipPct = regsOrganic > 0 ? (vipOrgCount / regsOrganic * 100).toFixed(1) : "—";
 
+    // A/B test tag counts — LP variants + VIP variants.
+    // Tags are created on-the-fly by register.js when first applied, so resolve by name.
+    const abSearch = await ac(env, `/tags?search=${encodeURIComponent("LP-v")}`).catch(() => null);
+    const vipAbSearch = await ac(env, `/tags?search=${encodeURIComponent("VIP-v")}`).catch(() => null);
+    const lpV1Id = findId(abSearch, "LP-v1");
+    const lpV2Id = findId(abSearch, "LP-v2");
+    const vipV1Id = findId(vipAbSearch, "VIP-v1");
+    const vipV2Id = findId(vipAbSearch, "VIP-v2");
+    const [lpV1Count, lpV2Count, vipV1Count, vipV2Count] = await Promise.all([
+      lpV1Id ? countContactsForTag(env, lpV1Id, rangeFilter) : 0,
+      lpV2Id ? countContactsForTag(env, lpV2Id, rangeFilter) : 0,
+      vipV1Id ? countContactsForTag(env, vipV1Id, rangeFilter) : 0,
+      vipV2Id ? countContactsForTag(env, vipV2Id, rangeFilter) : 0,
+    ]);
+    const ab_test = {
+      lp: {
+        v1: { regs: lpV1Count, label: "/fyp/ (control)" },
+        v2: { regs: lpV2Count, label: "/fyp/v2/ (AFD + Cloud hero)" },
+      },
+      vip: {
+        v1: { regs: vipV1Count, label: "/fyp/vip (control)" },
+        v2: { regs: vipV2Count, label: "/fyp/vip-paid (re-stacked)" },
+      },
+    };
+
     // CF Web Analytics pageview pull (GraphQL).
     // Note: Web Analytics enabled ~22:30 UTC May 13. Today's numbers are PARTIAL
     // until tomorrow's full 24-hour window. Conversion math will be apples-to-apples
@@ -572,6 +597,7 @@ export async function onRequestGet(context) {
         top_referrers: topReferrers,
         recent: recentList,
         recent_vip: recentVipList,
+        ab_test,
         range: rangeBlock,
         generated_at: new Date().toISOString(),
       }, null, 2);
