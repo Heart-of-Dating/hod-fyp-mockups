@@ -467,6 +467,27 @@ export async function onRequestGet(context) {
       },
     };
 
+    // SMS opt-in compare: pre-MNO-flip (auto-checked, May 1-17) vs post-flip
+    // (auto-unchecked, May 18+). Telnyx forced us to switch May 18 for approval.
+    const smsSearch = await ac(env, `/tags?search=${encodeURIComponent("SMS_Optin_Yes")}`).catch(() => null);
+    const smsTagId = findId(smsSearch, "SMS_Optin_Yes");
+    const PRE_FLIP_END = "2026-05-17T23:59:59Z";
+    const POST_FLIP_START = "2026-05-18T00:00:00Z";
+    const [smsTotal, smsPre, smsPost, regsPre, regsPost] = await Promise.all([
+      smsTagId ? countContactsForTag(env, smsTagId, null) : 0,
+      smsTagId ? countContactsForTag(env, smsTagId, { until: PRE_FLIP_END }) : 0,
+      smsTagId ? countContactsForTag(env, smsTagId, { since: POST_FLIP_START }) : 0,
+      countContactsOnList(env, LIST_ID, { until: PRE_FLIP_END }),
+      countContactsOnList(env, LIST_ID, { since: POST_FLIP_START }),
+    ]);
+    const sms_optin = {
+      total: smsTotal,
+      pre_flip: { regs: regsPre, optins: smsPre, pct: regsPre > 0 ? +(smsPre / regsPre * 100).toFixed(1) : 0 },
+      post_flip: { regs: regsPost, optins: smsPost, pct: regsPost > 0 ? +(smsPost / regsPost * 100).toFixed(1) : 0 },
+      delta_pp: 0, // computed below
+    };
+    sms_optin.delta_pp = +(sms_optin.post_flip.pct - sms_optin.pre_flip.pct).toFixed(1);
+
     // CF Web Analytics pageview pull (GraphQL).
     // Note: Web Analytics enabled ~22:30 UTC May 13. Today's numbers are PARTIAL
     // until tomorrow's full 24-hour window. Conversion math will be apples-to-apples
@@ -598,6 +619,7 @@ export async function onRequestGet(context) {
         recent: recentList,
         recent_vip: recentVipList,
         ab_test,
+        sms_optin,
         range: rangeBlock,
         generated_at: new Date().toISOString(),
       }, null, 2);
