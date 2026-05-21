@@ -3,11 +3,33 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>[MOCKUP] VIP Upgrade — FYP Challenge | Heart of Dating</title>
+<title>VIP Upgrade — FYP Challenge | Heart of Dating</title>
 <meta name="description" content="One-time VIP upgrade for the Find Your Person Challenge. $468 of bonuses for $17 — including the Basics of Dating program, free." />
-<meta name="robots" content="noindex,nofollow" />
 
-<!-- Pixel intentionally OMITTED on mockup — do not pollute Meta event signal until promoted to prod. -->
+<!-- Meta Pixel — HODC 2023, reused for FYP May 2026 -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '869575087492502');
+fbq('track', 'PageView');
+(function(){
+  var p = new URLSearchParams(window.location.search);
+  var fbclid = p.get('fbclid');
+  if (fbclid && !document.cookie.match(/(?:^|;\s*)_fbc=/)) {
+    document.cookie = '_fbc=fb.1.' + Date.now() + '.' + fbclid + '; path=/; max-age=7776000; SameSite=Lax';
+  }
+})();
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=869575087492502&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -25,7 +47,6 @@
     --white: #FFFFFF;
     --success: #4A7C59;
     --gold: #D4A574;
-    --mockup-flag: #5B3A8C;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   @media (prefers-reduced-motion: no-preference) { html:focus-within { scroll-behavior: smooth; } }
@@ -39,18 +60,6 @@
   .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
   .container-narrow { max-width: 680px; margin: 0 auto; padding: 0 24px; }
   .handwritten { font-family: 'Caveat', cursive; font-weight: 500; }
-
-  /* MOCKUP banner — do NOT ship to prod with this visible */
-  .mockup-banner {
-    background: var(--mockup-flag);
-    color: white;
-    padding: 10px 24px;
-    text-align: center;
-    font-size: 12.5px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-  }
-  .mockup-banner code { background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 4px; }
 
   /* Confirmation Banner */
   .confirm-banner {
@@ -218,11 +227,25 @@
   details.quote-card .avatar {
     width: 56px; height: 56px;
     border-radius: 50%;
-    background-size: cover;
-    background-position: center;
+    background: linear-gradient(135deg, var(--terracotta) 0%, var(--terracotta-dark) 100%);
+    color: white;
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 2px solid var(--cream);
     box-shadow: 0 2px 8px rgba(42,35,32,0.12);
     margin: 0 auto;
+    letter-spacing: 0.5px;
+  }
+  details.quote-card .avatar.anon {
+    background: var(--cream-deep);
+    color: var(--muted);
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
   }
   details.quote-card .id-block { margin-top: 8px; text-align: center; }
   details.quote-card .name { font-weight: 600; font-size: 13px; color: var(--ink); line-height: 1.2; }
@@ -281,52 +304,6 @@
     text-transform: uppercase;
     text-align: right;
   }
-
-  /* PLACEHOLDER slot — clearly marked for Kait to fill from real testimonials */
-  .quote-card.placeholder {
-    background: #FCFAF6;
-    border: 2px dashed var(--mockup-flag);
-    position: relative;
-  }
-  .quote-card.placeholder::before {
-    content: 'SLOT — REPLACE WITH REAL QUOTE';
-    position: absolute;
-    top: -10px; left: 14px;
-    background: var(--mockup-flag);
-    color: white;
-    font-size: 9.5px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    padding: 3px 10px;
-    border-radius: 4px;
-  }
-  .quote-card.placeholder .archetype-tag {
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--mockup-flag);
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-  .quote-card.placeholder .dream-quote {
-    font-family: 'Fraunces', serif;
-    font-size: 14.5px;
-    line-height: 1.5;
-    color: var(--ink);
-    font-style: italic;
-    margin-bottom: 12px;
-    flex: 1;
-  }
-  .quote-card.placeholder .dream-quote::before { content: '"'; }
-  .quote-card.placeholder .dream-quote::after  { content: '"'; }
-  .quote-card.placeholder .brief {
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.45;
-    border-top: 1px dashed var(--border);
-    padding-top: 10px;
-  }
-  .quote-card.placeholder .brief b { color: var(--mockup-flag); font-weight: 600; }
 
   /* HERO with lifestyle image — offer card */
   .offer-section {
@@ -584,11 +561,6 @@
 </head>
 <body>
 
-<!-- MOCKUP banner — Banjo: remove this div before promoting to /fyp/vip-paid/ in prod -->
-<div class="mockup-banner">
-  MOCKUP PREVIEW · paid-traffic VIP variant · re-stacked for cold ad clickers · not live · path <code>/fyp/vip-paid-mockup/</code>
-</div>
-
 <!-- Confirmation Banner -->
 <div class="confirm-banner">
   <span class="check">
@@ -623,170 +595,164 @@
   <span class="pill">Featured w/ <strong>Dr. Henry Cloud</strong> + <strong>Annie F. Downs</strong></span>
 </section>
 
-<!-- TESTIMONIAL WALL — sits BEFORE the offer. Real Nov 2025 attendees, verbatim or lightly trimmed for fit.
-     ALL 9 below: signed permission to share via Nov 2025 feedback form.
-     Source: FYP Nov 2025 Feedback (Responses).xlsx, share-permission column = "Yes".
-     PHOTOS BELOW ARE RANDOMUSER.ME PLACEHOLDERS — replace with final AI-generated/sourced portraits before promoting to prod. -->
+<!-- TESTIMONIAL WALL — sits BEFORE the offer. Real Nov 2025 attendees, verbatim from feedback form.
+     Public-named cards: signed PUBLIC-name consent. Anonymous cards: signed quote-share consent, name withheld per their request.
+     Source: sales/fyp-testimonials-fall2025.md (canonical, consent-tagged). Monogram avatars used — no fabricated faces. -->
 <section class="wall">
   <div class="wall-head">
     <div class="eyebrow">Real attendees · last cohort · Nov 2025</div>
     <h2>Before we ask you for $17, <em>read what they said.</em></h2>
-    <p class="sub">Real women + men from our last challenge. Quotes lightly edited for length and clarity — all from attendees who signed permission to share. Last names swapped for first names only.</p>
+    <p class="sub">Verbatim quotes from our Nov 2025 cohort. Public-named where they granted us permission to share their first name; demographic-only where they preferred to stay anonymous. All consented to share.</p>
   </div>
 
   <div class="wall-grid">
     <!-- Teaser-expand pattern: <summary> shows avatar + name + teaser ending in "..." Tap to expand for full quote.
          First card defaults to [open] so users see at least one full quote without tapping. -->
 
-    <!-- CARD 1 — Leslie -->
+    <!-- CARD 1 — Bianca (real public-named consent) — OPENER -->
     <details class="quote-card" open>
       <summary>
         <div>
-          <div class="avatar" style="background-image: url('https://randomuser.me/api/portraits/women/45.jpg');"></div>
-          <div class="id-block">
-            <div class="name">Leslie</div>
-            <div class="meta">30s · South · Nov 2025</div>
-          </div>
-        </div>
-        <p class="quote-body">
-          <span class="quote-teaser">Honestly this whole challenge wasn't really about finding my person. It ended up being about</span><span class="ellipsis">...</span><span class="more-link">tap to read</span><span class="quote-continued"> finding myself again lol. Realized I'm an escaper and I needed to face some stuff before getting into anything. Literally signed up to go back to therapy after.</span>
-        </p>
-      </summary>
-    </details>
-
-    <!-- CARD 2 — Andrew -->
-    <details class="quote-card">
-      <summary>
-        <div>
-          <div class="avatar" style="background-image: url('https://randomuser.me/api/portraits/men/7.jpg');"></div>
-          <div class="id-block">
-            <div class="name">Andrew</div>
-            <div class="meta">30s · Texas · Nov 2025</div>
-          </div>
-        </div>
-        <p class="quote-body">
-          <span class="quote-teaser">Never heard of Heart of Dating before this so honestly my expectations were low. By night two I was actually taking notes which kinda surprised me</span><span class="ellipsis">...</span><span class="more-link">tap to read</span><span class="quote-continued"> The pain cycle teaching hit, and Lisa Bevere's word really stuck. Love that our identity is in Christ and not what we've done.</span>
-        </p>
-      </summary>
-    </details>
-
-    <!-- CARD 3 — Bianca -->
-    <details class="quote-card">
-      <summary>
-        <div>
-          <div class="avatar" style="background-image: url('https://randomuser.me/api/portraits/women/19.jpg');"></div>
+          <div class="avatar">B</div>
           <div class="id-block">
             <div class="name">Bianca</div>
-            <div class="meta">40s · West Coast · Nov 2025</div>
+            <div class="meta">40s · US West Coast · Nov 2025</div>
           </div>
         </div>
         <p class="quote-body">
-          <span class="quote-teaser">Another dating thing had just ended and I was sitting there thinking "this shouldn't be this hard." Then literally Jamal</span><span class="ellipsis">...</span><span class="more-link">tap to read</span><span class="quote-continued"> called that exact thought out as avoidance and it was like cold water in my face. I'd been avoiding without even realizing it.</span>
+          <span class="quote-teaser">Another dating opportunity ended, and I was feeling discouraged. Subconsciously I was ready to withdraw from continuing to pursue relationships. I thought "this shouldn't be this hard,"</span><span class="ellipsis">...</span><span class="more-link">tap to read</span><span class="quote-continued"> and when Jamal called out that exact thought as an avoidant action, it was like he was splashing water on my face to wake me up. Typically I'm not someone who avoids hard things — I didn't realize that the path I was leaning towards was avoidant. So I shifted course and signed up for School of Dating. Excited to learn and grow.</span>
         </p>
       </summary>
     </details>
 
-    <!-- CARD 4 — Xan. RETROACTIVE framing per JJ: "a week or two after" the challenge. Quote rewritten to include "at 44 years old" + "two weeks in" hindsight angle. -->
+    <!-- CARD 2 — Andrew (real public-named consent, region corrected to East Coast per source) -->
     <details class="quote-card">
       <summary>
         <div>
-          <div class="avatar" style="background-image: url('https://randomuser.me/api/portraits/women/4.jpg');"></div>
+          <div class="avatar">A</div>
           <div class="id-block">
-            <div class="name">Xan</div>
-            <div class="meta">44 · East Coast · Nov 2025</div>
+            <div class="name">Andrew</div>
+            <div class="meta">30s · US East Coast · Nov 2025</div>
           </div>
         </div>
         <p class="quote-body">
-          <span class="quote-teaser">Honestly at 44 years old I'd kinda made up my mind to give up dating</span><span class="ellipsis">...</span><span class="more-link">tap to read</span><span class="quote-continued"> Horrible past relationships, just not worth it anymore in my head. After the challenge I broke down and signed up for SOD. Two weeks in and the healing + hope so far has been absolutely amazing tbh. So glad I registered.</span>
+          <span class="quote-teaser">It was great to learn more about the pain cycle on night one and Lisa on night two.</span><span class="ellipsis">...</span><span class="more-link">tap to read</span><span class="quote-continued"> Love that our identities are in Christ and not what we've done.</span>
         </p>
       </summary>
     </details>
 
-    <!-- CARD 5 — Benjamin -->
+    <!-- CARD 3 — Kate (real public-named consent) -->
     <details class="quote-card">
       <summary>
         <div>
-          <div class="avatar" style="background-image: url('https://randomuser.me/api/portraits/men/32.jpg');"></div>
-          <div class="id-block">
-            <div class="name">Benjamin</div>
-            <div class="meta">30s · Midwest · Nov 2025</div>
-          </div>
-        </div>
-        <p class="quote-body">
-          <span class="quote-teaser">Figured this was gonna be aimed at women, wasn't sure it was for me as a guy. Showed up anyway, and literally</span><span class="ellipsis">...</span><span class="more-link">tap to read</span><span class="quote-continued"> went to a speed dating event the next night. Eye opening lol. FYP challenged me to date the unexpected and actually try something new.</span>
-        </p>
-      </summary>
-    </details>
-
-    <!-- CARD 6 — Kate -->
-    <details class="quote-card">
-      <summary>
-        <div>
-          <div class="avatar" style="background-image: url('https://randomuser.me/api/portraits/women/42.jpg'); background-size: 170%; background-position: center 30%;"></div>
+          <div class="avatar">K</div>
           <div class="id-block">
             <div class="name">Kate</div>
-            <div class="meta">30s · Midwest · Nov 2025</div>
+            <div class="meta">30s · US Midwest · Nov 2025</div>
           </div>
         </div>
         <p class="quote-body">
-          <span class="quote-teaser">After my 5 year relationship ended (not in marriage) I honestly didn't know if I could</span><span class="ellipsis">...</span><span class="more-link">tap to read</span><span class="quote-continued"> ever open up to someone again. Through the teachings I felt empowered to be open. Hopeful and ready to give it a shot again.</span>
+          <span class="quote-teaser">This gave me hope and courage to date again. After my 5 year relationship ended (not in marriage), I didn't know if I could ever open up to someone again.</span><span class="ellipsis">...</span><span class="more-link">tap to read</span><span class="quote-continued"> Through the teachings, I felt empowered to be open to new experiences and relationships. I realized that it is worth it to be vulnerable. I also learned the importance of finding a Godly spouse and not just someone to marry. I'm hopeful, open, and ready to give it a shot again.</span>
         </p>
       </summary>
     </details>
 
-    <!-- CARD 7 — Savannah -->
+    <!-- CARD 4 — Benjamin (real public-named consent) -->
     <details class="quote-card">
       <summary>
         <div>
-          <div class="avatar" style="background-image: url('https://randomuser.me/api/portraits/women/26.jpg');"></div>
+          <div class="avatar">B</div>
+          <div class="id-block">
+            <div class="name">Benjamin</div>
+            <div class="meta">30s · US Midwest · Nov 2025</div>
+          </div>
+        </div>
+        <p class="quote-body">
+          <span class="quote-teaser">After the challenge, I went to a speed dating event that next evening locally. It was eye opening</span><span class="ellipsis">...</span><span class="more-link">tap to read</span><span class="quote-continued"> — some things that I could really change moving forward. FYP challenged me to date the unexpected and try something new.</span>
+        </p>
+      </summary>
+    </details>
+
+    <!-- CARD 5 — Savannah (real public-named consent) -->
+    <details class="quote-card">
+      <summary>
+        <div>
+          <div class="avatar">S</div>
           <div class="id-block">
             <div class="name">Savannah</div>
-            <div class="meta">20s · Midwest · Nov 2025</div>
+            <div class="meta">20s · US Midwest · Nov 2025</div>
           </div>
         </div>
         <p class="quote-body">
-          <span class="quote-teaser">I was hopeless before this conference. Grieved a terrible breakup, then my last boyfriend passed away this summer. It was a heartbreaking year</span><span class="ellipsis">...</span><span class="more-link">tap to read</span><span class="quote-continued"> FYP changed how I'm thinking for the better. So thankful I found this.</span>
+          <span class="quote-teaser">FYP Challenge helped me change my way of viewing stages of pain and peace — when you mentioned The Pain Cycle and The Peace Cycle, and getting into the truth about dating even when it was hard to hear,</span><span class="ellipsis">...</span><span class="more-link">tap to read</span><span class="quote-continued"> the hard truth encouraged me even more to be wiser in the future. This conference changed my thinking for the better. I am so thankful I found this amazing conference!</span>
         </p>
       </summary>
     </details>
 
-    <!-- CARD 8 — Stephanie -->
+    <!-- CARD 6 — Anonymous (consented quote-share, name withheld per request) -->
     <details class="quote-card">
       <summary>
         <div>
-          <div class="avatar" style="background-image: url('https://randomuser.me/api/portraits/women/14.jpg');"></div>
+          <div class="avatar anon">30s</div>
           <div class="id-block">
-            <div class="name">Stephanie</div>
-            <div class="meta">40s · Midwest · Nov 2025</div>
+            <div class="name">Nov 2025 attendee</div>
+            <div class="meta">30s · US South · anonymous</div>
           </div>
         </div>
         <p class="quote-body">
-          <span class="quote-teaser">Was bracing for the usual surface level "wait on God" Christian dating content. This</span><span class="ellipsis">...</span><span class="more-link">tap to read</span><span class="quote-continued"> was not that lol. Felt more like a good therapy session. Night one left me emotionally tired and that's exactly why I knew I had to keep showing up. Thank you seriously.</span>
+          <span class="quote-teaser">The Find Your Person Challenge was never about me finding my person, but about me finding myself again. Jamal's night and the first night made me realize that as much as I want to be married —</span><span class="ellipsis">...</span><span class="more-link">tap to read</span><span class="quote-continued"> I need to take a break from pursuing dating. I was already really struggling with coping mechanisms, so it just hit the nail on the head. I'm an escaper, and it really hit me that I need to face some things and look at myself before a relationship and future marriage. I signed up to go back to therapy!</span>
         </p>
       </summary>
     </details>
 
-    <!-- CARD 9 — Tyisha -->
+    <!-- CARD 7 — Demika (real public-named consent) — replaces Banjo's "Xan" who was unverified -->
     <details class="quote-card">
       <summary>
         <div>
-          <div class="avatar" style="background-image: url('https://randomuser.me/api/portraits/women/16.jpg');"></div>
+          <div class="avatar">D</div>
           <div class="id-block">
-            <div class="name">Tyisha</div>
-            <div class="meta">20s · East Coast · Nov 2025</div>
+            <div class="name">Demika</div>
+            <div class="meta">40s · US East Coast · Nov 2025</div>
           </div>
         </div>
         <p class="quote-body">
-          <span class="quote-teaser">Almost didn't sign up cause every Christian dating thing I've done before felt like the same script. This one had teeth though</span><span class="ellipsis">...</span><span class="more-link">tap to read</span><span class="quote-continued"> Changed my perspective on godly partnership. I don't want to be a "pick me" girl, I want to walk in who God says I am.</span>
+          <span class="quote-teaser">The challenge was added on to more wisdom for me to make adjustments, meet different people — very organic and brought hope.</span><span class="ellipsis">...</span><span class="more-link">tap to read</span><span class="quote-continued"> I learned others are willing to be transparent. I appreciate you guys saying "look at yourself" — it made a huge difference. The blame and shame got broken down. It stood out for me to become more aware of my response, and no one else's.</span>
+        </p>
+      </summary>
+    </details>
+
+    <!-- CARD 8 — Aspen (real public-named consent) — replaces Banjo's "Stephanie" who was fabricated -->
+    <details class="quote-card">
+      <summary>
+        <div>
+          <div class="avatar">A</div>
+          <div class="id-block">
+            <div class="name">Aspen</div>
+            <div class="meta">40s · US West Coast · Nov 2025</div>
+          </div>
+        </div>
+        <p class="quote-body">
+          <span class="quote-teaser">Made me look more at myself.</span><span class="ellipsis">...</span><span class="more-link">tap to read</span><span class="quote-continued"> And I am excited to date the unexpected. Make some changes and value more of God's character.</span>
+        </p>
+      </summary>
+    </details>
+
+    <!-- CARD 9 — Anonymous (consented quote-share, name withheld per request) -->
+    <details class="quote-card">
+      <summary>
+        <div>
+          <div class="avatar anon">20s</div>
+          <div class="id-block">
+            <div class="name">Nov 2025 attendee</div>
+            <div class="meta">20s · US East Coast · anonymous</div>
+          </div>
+        </div>
+        <p class="quote-body">
+          <span class="quote-teaser">I don't want to be a "pick me" girl</span><span class="ellipsis">...</span><span class="more-link">tap to read</span><span class="quote-continued"> but walk in who God says I am.</span>
         </p>
       </summary>
     </details>
   </div>
-
-  <!-- Avatar disclaimer — visible to JJ/Kait reviewing the mockup; not for production. Remove before promotion. -->
-  <p style="max-width: 720px; margin: 28px auto 0; text-align: center; font-size: 12px; color: var(--mockup-flag); font-style: italic;">
-    Avatar photos above are randomuser.me placeholders for visual demonstration of the "perfect world" warmth. Replace with final AI-generated everyday-American portraits (6-8/10 attractiveness, normal IG-selfie style) before promoting this page to production. Quotes are real and have signed permission to share.
-  </p>
 </section>
 
 <!-- THE OFFER — moved BELOW the trust stack, kept identical content -->
@@ -986,12 +952,12 @@
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener');
   });
-  window.__vipChannel = { src: src, url: url, variant: 'paid-mockup' };
+  window.__vipChannel = { src: src, url: url, variant: 'paid' };
 })();
 </script>
 
 <footer>
-  © 2026 Heart of Dating &nbsp;·&nbsp; <a href="https://heartofdating.com">heartofdating.com</a> &nbsp;·&nbsp; Secure checkout via Stripe &nbsp;·&nbsp; <strong style="color: var(--terracotta);">MOCKUP — not for production traffic</strong>
+  © 2026 Heart of Dating &nbsp;·&nbsp; <a href="https://heartofdating.com">heartofdating.com</a> &nbsp;·&nbsp; Secure checkout via Stripe
 </footer>
 
 </body>

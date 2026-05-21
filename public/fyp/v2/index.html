@@ -168,6 +168,72 @@ src="https://www.facebook.com/tr?id=869575087492502&ev=PageView&noscript=1"
   }
   .hero-sub strong { color: var(--ink); font-weight: 500; }
 
+  /* v2 LP variant — hero "featuring" block, A/B test against control */
+  .hero-featuring {
+    margin: 28px auto 32px;
+    padding: 22px 24px;
+    background: rgba(255, 255, 255, 0.62);
+    border-radius: 18px;
+    border: 1px solid rgba(201, 96, 63, 0.18);
+    max-width: 620px;
+  }
+  .featuring-label {
+    font-size: 11px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    font-weight: 700;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .featuring-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+  .featuring-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .featuring-photo {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    margin-bottom: 12px;
+    border: 2px solid rgba(201, 96, 63, 0.2);
+    background-size: cover;
+    background-position: center;
+  }
+  .featuring-photo.dr-cloud-hero { background-image: url('/assets/dr-cloud.jpg'); }
+  .featuring-photo.annie-hero { background-image: url('/assets/annie-downs.jpg'); }
+  .featuring-name {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .featuring-cred {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    line-height: 1.35;
+  }
+  .featuring-quote {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.5;
+    margin-top: 12px;
+    font-style: italic;
+  }
+  @media (max-width: 640px) {
+    .featuring-grid { grid-template-columns: 1fr; gap: 22px; }
+    .hero-featuring { padding: 18px 18px; margin: 24px auto 28px; }
+    .featuring-photo { width: 68px; height: 68px; }
+  }
+
   /* REGISTER FORM — mobile-first, stacks by default */
   .register {
     background: white;
@@ -695,6 +761,28 @@ src="https://www.facebook.com/tr?id=869575087492502&ev=PageView&noscript=1"
     <h1 class="hero-title">Find Your Person <em>Challenge.</em></h1>
     <p class="hero-sub">A <strong>free 4-night virtual event</strong> for Christian singles ready to stop spinning — and start meeting their person with clarity, confidence, and a plan.</p>
 
+    <!-- v2 LP variant: hero "featuring" block. A/B test hypothesis = restore the
+         "celebrity anchor" effect (Lisa Bevere in fall lifted conv 32% → present
+         24% drop). Topic statements pulled from each speaker's confirmed Night
+         topic (see speakers section below) — not invented quotes. -->
+    <div class="hero-featuring">
+      <div class="featuring-label">Featuring on Night 1 + Night 3</div>
+      <div class="featuring-grid">
+        <div class="featuring-card">
+          <div class="featuring-photo dr-cloud-hero"></div>
+          <div class="featuring-name">Dr. Henry Cloud</div>
+          <div class="featuring-cred">NYT Bestseller · <em>Boundaries</em> · 20M+ books sold</div>
+          <p class="featuring-quote">"The problem with Christian dating — and what actually works instead."</p>
+        </div>
+        <div class="featuring-card">
+          <div class="featuring-photo annie-hero"></div>
+          <div class="featuring-name">Annie F. Downs</div>
+          <div class="featuring-cred">NYT Bestseller · <em>That Sounds Fun</em> · 1M+ books sold</div>
+          <p class="featuring-quote">"When your love story isn't going how you planned — finding purpose and hope in the wait."</p>
+        </div>
+      </div>
+    </div>
+
     <!-- REGISTRATION FORM -->
     <div class="register" id="register-form">
       <label class="form-label">Register free — takes 10 seconds</label>
@@ -1101,8 +1189,8 @@ window.scrollTo(0, 0);
       var params = new URLSearchParams(window.location.search);
       var srcRaw = (params.get('src') || params.get('utm_medium') || '').toLowerCase();
       if (srcRaw === 'paid' || srcRaw === 'organic') data.src = srcRaw;
-      // LP A/B variant — this is the control page, pin v1
-      data.lp_variant = 'v1';
+      // v2 LP A/B variant tag — pinned by page, not by URL param
+      data.lp_variant = 'v2';
 
       if (btn) { btn.disabled = true; btn.textContent = 'Saving your spot…'; }
 

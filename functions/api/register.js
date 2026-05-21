@@ -136,6 +136,11 @@ export async function onRequestPost({ request, env, waitUntil }) {
   const srcRaw = (payload.src || payload.utm_medium || "").trim().toLowerCase();
   const src = srcRaw === "paid" ? "paid" : "organic";
 
+  // LP A/B variant — pinned by the page that submitted (not by URL param).
+  // Defaults to v1 (control). Tags LP-v1 or LP-v2 for downstream conv-rate analysis.
+  const lpRaw = (payload.lp_variant || "v1").toString().trim().toLowerCase();
+  const lpVariant = lpRaw === "v2" ? "v2" : "v1";
+
   if (!fname || !lname || !email || !phone || !byear || !state) {
     return bad("Missing required field");
   }
@@ -182,6 +187,19 @@ export async function onRequestPost({ request, env, waitUntil }) {
   tagsToApply.push(CHANNEL_TAG[src]);
   tagsToApply.push(TIER1_STATES.has(state) ? "Region_Tier1" : "Region_Tier2");
   if (sms) tagsToApply.push("SMS_Optin_Yes");
+  tagsToApply.push(`LP-${lpVariant}`);  // LP-v1 (control) or LP-v2 (variant)
+
+  // VIP A/B variant — deterministic 50/50 split via email hash so the same person
+  // always lands on the same VIP page even if they re-register or come back later.
+  // v1 = /fyp/vip (control, original creative). v2 = /fyp/vip-paid (Banjo's rebuilt
+  // paid-traffic variant with testimonial wall + re-stacked offer).
+  let emailHash = 0;
+  for (let i = 0; i < email.length; i++) {
+    emailHash = ((emailHash << 5) - emailHash + email.charCodeAt(i)) | 0;
+  }
+  const vipVariant = (Math.abs(emailHash) % 2) === 0 ? "v1" : "v2";
+  const vipPath = vipVariant === "v2" ? "/fyp/vip-paid" : "/fyp/vip";
+  tagsToApply.push(`VIP-${vipVariant}`);
 
   // AC tags require tag IDs, but we can also create via /contactTags with tag NAME using the
   // /tags?search= endpoint to resolve. For simplicity, use a single batch call with names.
@@ -277,8 +295,8 @@ export async function onRequestPost({ request, env, waitUntil }) {
     smsTask.catch(() => {});
   }
 
-  // Pass src through to /fyp/vip so VIP page can pick the channel-correct ThriveCart product.
-  return new Response(JSON.stringify({ ok: true, contact: contactId, redirect: `/fyp/vip?src=${src}` }), {
+  // Pass src + variant through so the VIP page can pick the channel-correct ThriveCart product.
+  return new Response(JSON.stringify({ ok: true, contact: contactId, redirect: `${vipPath}?src=${src}` }), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   });
