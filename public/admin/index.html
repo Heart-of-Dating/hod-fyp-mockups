@@ -1349,28 +1349,43 @@ function renderSODForecast(d) {
   const meta = d.meta || window._lastMetaData;
   const pacing = d.pacing || meta?.pacing;
 
-  // Live paid projection from Pacing widget
-  const paidProjected = pacing?.projected_total_leads || pacing?.leads_to_date || 0;
+  // Live Meta→AC inflation factor (Meta count / AC truth count).
+  // Was ~1.25 (25% over-report) early in launch; running ~1.05 today.
+  // Apply to deflate Meta projections to AC truth so the SOD calc reflects real conversion math.
+  const metaLeadsToDate = pacing?.leads_to_date || 0;
+  const acPaidToDate = d.channel?.paid || 0;
+  const inflation = (metaLeadsToDate > 100 && acPaidToDate > 100)
+    ? Math.max(1.0, metaLeadsToDate / acPaidToDate)
+    : 1.20; // fallback to a sensible default before we have enough signal
+
+  // Paid projection — Meta-side first, then deflate to AC truth
+  const metaProjected = pacing?.projected_total_leads || pacing?.leads_to_date || 0;
+  const paidProjected = Math.round(metaProjected / inflation);
   // Organic projection: extrapolate current org regs to event date using paid pacing factor
-  const paidToDate = pacing?.leads_to_date || 1;
-  const factor = paidToDate > 0 ? Math.max(1, paidProjected / paidToDate) : 1;
+  const acPaidNow = d.channel?.paid || 1;
+  const factor = acPaidNow > 0 ? Math.max(1, paidProjected / acPaidNow) : 1;
   const orgToDate = d.channel?.organic || 0;
   const orgProjected = Math.round(orgToDate * factor);
 
-  // Current CPL — prefer FYP-to-date blended, fall back to today, then static
+  // Current CPL — prefer FYP-to-date blended (Meta's cost-per-lead).
+  // Also expose the AC-truth CPL for reference (CPL × inflation).
   const cpl = (meta?.lifetime?.cpl) || (meta?.cpl) || 4.0;
-  const spendProjected = Math.round(paidProjected * cpl);
+  const cplAcTruth = cpl * inflation;
+  const spendProjected = Math.round(paidProjected * cplAcTruth);
 
   sodLiveDefaults = {
     paid: paidProjected,
     org: orgProjected,
     spend: spendProjected,
-    cpl,
+    cpl: cplAcTruth,  // inputs/spend use AC-truth CPL so the calc matches real unit econ
     rates: liveRates,
+    inflation,
   };
 
-  // Set live-projection sublabels
-  document.getElementById('sod-paid-sub').textContent = `live projection: ${paidProjected.toLocaleString()}`;
+  // Set live-projection sublabels — surface AC-truth + show inflation factor so JJ sees what's applied
+  const inflPct = ((inflation - 1) * 100).toFixed(1);
+  document.getElementById('sod-paid-sub').textContent =
+    `live projection: ${paidProjected.toLocaleString()} (AC truth · Meta ${metaProjected.toLocaleString()} / inflation ${inflation.toFixed(2)}x +${inflPct}%)`;
   document.getElementById('sod-org-sub').textContent = `live projection: ${orgProjected.toLocaleString()}`;
 
   // Seed inputs when (a) never seeded with real meta yet, AND (b) user hasn't manually edited
