@@ -643,7 +643,7 @@
   <div id="ab-body" style="display:none;">
     <div class="grid">
       <div class="card">
-        <h2>LP Test <span style="font-size:10px;color:#666;font-weight:400;margin-left:4px;">paid traffic split</span></h2>
+        <h2>LP Test <span style="font-size:10px;color:#666;font-weight:400;margin-left:4px;">50/50 server-side rotation · regs = conv outcome</span></h2>
         <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:6px;">
           <div>
             <div style="font-size:10px;color:#888;letter-spacing:0.8px;text-transform:uppercase;">v1 control</div>
@@ -679,6 +679,8 @@
     </div>
     <div style="font-size:11px;color:#666;margin-top:10px;line-height:1.5;">
       Counts are unique AC contacts tagged with the variant. LP test runs once James duplicates ad sets pointing half at /fyp/v2/. VIP test routes 50/50 via deterministic email-hash on registration. Conversion-rate split (variant → VIP buyer) pending tag-intersection wiring.
+      <br><br>
+      <b>LP lift math:</b> middleware splits traffic 50/50 server-side so both variants see equal pageviews. Ratio of regs = ratio of conv rates. Lift = (v2 − v1) / v1. Confidence threshold: sample &lt; 100 = too small · 100–500 = directional only · 500–1500 needs &gt;8% lift to be directional · 1500+ with &gt;5% lift = solid signal.
     </div>
   </div>
 </div>
@@ -1180,37 +1182,51 @@ function renderABWidget(d) {
   const ab = d.ab_test;
   if (!ab) return;
   const fmt = (n) => (n || 0).toLocaleString();
-  const balanceLabel = (a, b, expected50) => {
-    const tot = a + b;
+
+  // For tests where traffic is split 50/50 server-side (LP middleware + VIP email-hash),
+  // the lift on REG count == lift on conv rate. Compute relative lift directly.
+  const liftReport = (control, variant) => {
+    const tot = control + variant;
     if (tot === 0) return 'no traffic yet';
-    const splitPct = Math.round(b / tot * 100);
-    // For 50/50-router tests (VIP), show split health vs 50%. For URL-split tests
-    // (LP, where James controls ad-set ratio), just show the split %.
-    let health = '';
-    if (expected50) {
-      const drift = Math.abs(splitPct - 50);
-      if (tot < 30) {
-        health = '<span style="color:#888;">sample too small</span>';
-      } else if (drift <= 5) {
-        health = '<span style="color:#4ade80;">balanced</span>';
-      } else if (drift <= 12) {
-        health = '<span style="color:#facc15;">slight drift</span>';
-      } else {
-        health = '<span style="color:#f87171;">off balance — check router</span>';
-      }
-    }
-    return `${fmt(tot)} total · ${splitPct}% on variant ${health ? '· ' + health : ''}`;
+    if (tot < 100) return `${fmt(tot)} total · <span style="color:#888;">sample too small (need 300+)</span>`;
+    const lift = control > 0 ? ((variant - control) / control * 100) : 0;
+    const liftStr = (lift > 0 ? '+' : '') + lift.toFixed(1) + '%';
+    let color = '#888', verdict = 'directional only';
+    const absLift = Math.abs(lift);
+    if (tot >= 1500 && absLift >= 5) { color = lift > 0 ? '#4ade80' : '#f87171'; verdict = 'solid signal'; }
+    else if (tot >= 500 && absLift >= 8) { color = lift > 0 ? '#4ade80' : '#f87171'; verdict = 'directional'; }
+    else if (absLift >= 15) { color = lift > 0 ? '#4ade80' : '#f87171'; verdict = 'strong directional'; }
+    const splitPct = Math.round(variant / tot * 100);
+    return `${fmt(tot)} total · ${splitPct}% on variant · <b style="color:${color};">variant ${liftStr} lift</b> · <span style="color:#888;">${verdict}</span>`;
   };
+
+  // VIP test: same router math but assignment-only (we count VIP-v1/v2 tags applied on register,
+  // not actual VIP buyers per variant). Until we wire tag-intersection, the "lift" here only
+  // measures router balance — should be near 0 if router is working. Show that explicitly.
+  const routerHealthReport = (control, variant) => {
+    const tot = control + variant;
+    if (tot === 0) return 'no traffic yet';
+    const splitPct = Math.round(variant / tot * 100);
+    const drift = Math.abs(splitPct - 50);
+    let health = '';
+    if (tot < 30) health = '<span style="color:#888;">sample too small</span>';
+    else if (drift <= 5) health = '<span style="color:#4ade80;">balanced router</span>';
+    else if (drift <= 12) health = '<span style="color:#facc15;">slight drift</span>';
+    else health = '<span style="color:#f87171;">off balance — check router</span>';
+    return `${fmt(tot)} assigned · ${splitPct}% on variant · ${health} · <span style="color:#888;">conv-rate split TBD</span>`;
+  };
+
   document.getElementById('ab-lp-v1').textContent = fmt(ab.lp.v1.regs);
   document.getElementById('ab-lp-v2').textContent = fmt(ab.lp.v2.regs);
   document.getElementById('ab-lp-v1-label').textContent = ab.lp.v1.label;
   document.getElementById('ab-lp-v2-label').textContent = ab.lp.v2.label;
-  document.getElementById('ab-lp-balance').innerHTML = balanceLabel(ab.lp.v1.regs, ab.lp.v2.regs, false);
+  document.getElementById('ab-lp-balance').innerHTML = liftReport(ab.lp.v1.regs, ab.lp.v2.regs);
+
   document.getElementById('ab-vip-v1').textContent = fmt(ab.vip.v1.regs);
   document.getElementById('ab-vip-v2').textContent = fmt(ab.vip.v2.regs);
   document.getElementById('ab-vip-v1-label').textContent = ab.vip.v1.label;
   document.getElementById('ab-vip-v2-label').textContent = ab.vip.v2.label;
-  document.getElementById('ab-vip-balance').innerHTML = balanceLabel(ab.vip.v1.regs, ab.vip.v2.regs, true);
+  document.getElementById('ab-vip-balance').innerHTML = routerHealthReport(ab.vip.v1.regs, ab.vip.v2.regs);
 }
 document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.getElementById('ab-toggle');
