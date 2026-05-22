@@ -3,11 +3,33 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>[MOCKUP V3] FYP + VIP Special — Social Proof</title>
-<meta name="robots" content="noindex,nofollow" />
-<meta name="description" content="1,200+ joined VIP last cohort. Here's why. Find Your Person Challenge VIP — $17." />
+<title>VIP Upgrade — FYP Challenge | Heart of Dating</title>
+<meta name="description" content="One-time VIP upgrade for the Find Your Person Challenge. $468 of bonuses for $17 — including the Basics of Dating program, free." />
 
-<!-- Pixel intentionally OMITTED on mockup -->
+<!-- Meta Pixel — HODC 2023, reused for FYP May 2026 -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '869575087492502');
+fbq('track', 'PageView');
+(function(){
+  var p = new URLSearchParams(window.location.search);
+  var fbclid = p.get('fbclid');
+  if (fbclid && !document.cookie.match(/(?:^|;\s*)_fbc=/)) {
+    document.cookie = '_fbc=fb.1.' + Date.now() + '.' + fbclid + '; path=/; max-age=7776000; SameSite=Lax';
+  }
+})();
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=869575087492502&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -23,7 +45,6 @@
     --border: #E8DCD0;
     --white: #FFFFFF;
     --gold: #D4A574;
-    --mockup-flag: #5B3A8C;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html { -webkit-text-size-adjust: 100%; }
@@ -35,12 +56,6 @@
     font-size: 16px;
     padding-bottom: 92px;
   }
-
-  .mockup-banner {
-    background: var(--mockup-flag); color: white;
-    padding: 8px 16px; text-align: center; font-size: 12px; font-weight: 600;
-  }
-  .mockup-banner code { background: rgba(255,255,255,0.18); padding: 2px 6px; border-radius: 3px; }
 
   .container { max-width: 560px; margin: 0 auto; padding: 0 18px; }
 
@@ -329,8 +344,6 @@
 </head>
 <body>
 
-<div class="mockup-banner">MOCKUP V3 · Social Proof / Testimonial-Led · preview for James · <code>/fyp/special/v3/</code></div>
-
 <header class="site-header">
   <span class="logo">Heart of <b>Dating</b></span>
 </header>
@@ -501,6 +514,10 @@
     }).then(r => r.json()).then(res => {
       if (res.ok) {
         if (intent === 'vip') {
+          // InitiateCheckout fires before TC handoff so James gets mid-funnel signal
+          if (typeof fbq === 'function') {
+            fbq('track', 'InitiateCheckout', { value: 17.00, currency: 'USD' });
+          }
           window.location.href = TC_PAID + '?email=' + encodeURIComponent(data.email);
         } else {
           window.location.href = res.redirect || '/fyp/vip-paid';
