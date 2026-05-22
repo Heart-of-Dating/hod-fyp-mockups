@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FYP May 2026 — P&L Dashboard</title>
+<meta name="robots" content="noindex,nofollow" />
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --card: #1a1a1a;
+    --card-2: #232323;
+    --ink: #f5f5f5;
+    --muted: #888;
+    --muted-2: #555;
+    --border: #2a2a2a;
+    --terracotta: #C9603F;
+    --green: #4ade80;
+    --gold: #facc15;
+    --red: #f87171;
+    --blue: #60a5fa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    padding: 24px;
+    line-height: 1.45;
+  }
+  .wrap { max-width: 1240px; margin: 0 auto; }
+  header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
+  }
+  h1 { font-size: 24px; font-weight: 700; }
+  h1 small { color: var(--muted); font-size: 13px; font-weight: 400; margin-left: 8px; }
+  .updated { font-size: 12px; color: var(--muted); }
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: 18px; }
+  .grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 800px) { .grid.cols-4, .grid.cols-2 { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .grid.cols-4, .grid.cols-2 { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .card.wide { grid-column: 1 / -1; }
+  .card h2 { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
+  .big { font-size: 30px; font-weight: 700; line-height: 1.15; }
+  .big.green { color: var(--green); }
+  .big.gold { color: var(--gold); }
+  .big.red { color: var(--red); }
+  .big.blue { color: var(--blue); }
+  .sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .sub b { color: var(--ink); }
+
+  h3 { font-size: 13px; font-weight: 600; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin: 24px 0 10px; }
+
+  /* Expense table */
+  table { width: 100%; border-collapse: collapse; }
+  table th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  table td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
+  table td.amount { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
+  table td.note { color: var(--muted); font-size: 12px; }
+  table tr:last-child td { border-bottom: none; }
+  table tr.total td { font-weight: 700; background: var(--card-2); }
+  table tr.total td.amount { color: var(--terracotta); font-size: 16px; }
+  table input[type=number] {
+    background: var(--card-2);
+    border: 1px solid var(--border);
+    color: var(--ink);
+    padding: 6px 10px;
+    border-radius: 6px;
+    width: 110px;
+    text-align: right;
+    font-family: inherit;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+  table input[type=number]:focus { outline: none; border-color: var(--terracotta); }
+  .live-tag {
+    display: inline-block;
+    font-size: 10px; font-weight: 600;
+    background: rgba(74, 222, 128, 0.15);
+    color: var(--green);
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-left: 6px;
+    letter-spacing: 0.04em;
+  }
+
+  /* Scenario compare */
+  .scenarios { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  @media (max-width: 720px) { .scenarios { grid-template-columns: 1fr 1fr; } }
+  .scen-card {
+    background: var(--card-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+  .scen-card.active { border-color: var(--terracotta); background: rgba(201, 96, 63, 0.06); }
+  .scen-card .label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .scen-card .label.us { color: var(--terracotta); }
+  .scen-card .val { font-size: 22px; font-weight: 700; margin: 6px 0; }
+  .scen-card .sub-line { font-size: 11px; color: var(--muted); }
+
+  /* SOD promo selector */
+  .promo-row { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+  .promo-row label { font-size: 12px; color: var(--muted); }
+  .promo-row select {
+    background: var(--card-2); color: var(--ink); border: 1px solid var(--border);
+    padding: 6px 10px; border-radius: 6px; font-size: 13px; font-family: inherit;
+  }
+
+  .footer-note { font-size: 11px; color: var(--muted-2); margin-top: 18px; line-height: 1.5; }
+  .nav-bar { margin-bottom: 12px; }
+  .nav-bar a { color: var(--terracotta); font-size: 12px; text-decoration: none; }
+  .nav-bar a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="nav-bar"><a href="/admin/">← Main dashboard</a></div>
+
+<header>
+  <h1>FYP May 2026 — P&L <small>private profit tracker</small></h1>
+  <span class="updated" id="updated">loading…</span>
+</header>
+
+<!-- TOP KPIs -->
+<div class="grid cols-4">
+  <div class="card">
+    <h2>Total Revenue</h2>
+    <div class="big green" id="kpi-revenue">—</div>
+    <div class="sub" id="kpi-revenue-sub">—</div>
+  </div>
+  <div class="card">
+    <h2>Total Expenses</h2>
+    <div class="big red" id="kpi-expenses">—</div>
+    <div class="sub" id="kpi-expenses-sub">—</div>
+  </div>
+  <div class="card">
+    <h2>Net Profit</h2>
+    <div class="big gold" id="kpi-profit">—</div>
+    <div class="sub" id="kpi-profit-sub">—</div>
+  </div>
+  <div class="card">
+    <h2>ROAS <span style="font-size:10px;color:var(--muted);font-weight:400;">rev ÷ ad spend</span></h2>
+    <div class="big blue" id="kpi-roas">—</div>
+    <div class="sub" id="kpi-roas-sub">—</div>
+  </div>
+</div>
+
+<!-- REVENUE -->
+<h3>Revenue</h3>
+<div class="card wide">
+  <div class="promo-row">
+    <label>SOD promo price:</label>
+    <select id="sod-price">
+      <option value="997" selected>$997 (default)</option>
+      <option value="1197">$1,197</option>
+      <option value="1397">$1,397</option>
+      <option value="1697">$1,697 (full)</option>
+    </select>
+    <label style="margin-left:18px;">Reg→VIP rates:</label>
+    <span class="sub" id="rates-display">paid — · org —</span>
+  </div>
+  <table>
+    <thead>
+      <tr><th>Line</th><th>Detail</th><th style="text-align:right;">Amount</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>VIP Buyers <span class="live-tag">LIVE</span></td>
+        <td class="note"><span id="rev-vip-count">—</span> @ $17 each</td>
+        <td class="amount" id="rev-vip">—</td>
+      </tr>
+      <tr>
+        <td>SOD Sales (projected)</td>
+        <td class="note"><span id="rev-sod-count">—</span> @ $<span id="rev-sod-price">997</span> · from VIP funnel + non-VIP</td>
+        <td class="amount" id="rev-sod">—</td>
+      </tr>
+      <tr class="total">
+        <td>Total Revenue</td>
+        <td></td>
+        <td class="amount" id="rev-total">—</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- EXPENSES -->
+<h3>Expenses <span style="color:var(--muted-2);font-size:11px;font-weight:400;text-transform:none;letter-spacing:0;">— edit any number to update profit math</span></h3>
+<div class="card wide">
+  <table id="expense-table">
+    <thead>
+      <tr><th>Line</th><th>Note</th><th style="text-align:right;">Amount</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Ad Spend (Meta) <span class="live-tag">LIVE</span></td>
+        <td class="note">FYP-to-date from Meta API · auto-updates · override if you want a forecast</td>
+        <td class="amount"><input type="number" id="exp-adspend" value="35000" step="100" /></td>
+      </tr>
+      <tr>
+        <td>James Starr (ads consultant)</td>
+        <td class="note">contractor fee for paid traffic management</td>
+        <td class="amount"><input type="number" id="exp-james" value="7000" step="100" /></td>
+      </tr>
+      <tr>
+        <td>Social Media Consultants</td>
+        <td class="note">Social Crewe + design support</td>
+        <td class="amount"><input type="number" id="exp-social" value="5500" step="100" /></td>
+      </tr>
+      <tr>
+        <td>Speakers</td>
+        <td class="note">Dr. Cloud + Annie F. Downs honoraria</td>
+        <td class="amount"><input type="number" id="exp-speakers" value="10000" step="500" /></td>
+      </tr>
+      <tr>
+        <td>SOD Coaches</td>
+        <td class="note">Sophia / Alana / Keyla + others through 16-week cohort</td>
+        <td class="amount"><input type="number" id="exp-coaches" value="15000" step="500" /></td>
+      </tr>
+      <tr>
+        <td>Influencer Marketing</td>
+        <td class="note">paid story plugs / partner promo</td>
+        <td class="amount"><input type="number" id="exp-influencer" value="2500" step="500" /></td>
+      </tr>
+      <tr>
+        <td>ActiveCampaign upgrade</td>
+        <td class="note">temporary tier-up for launch send volume</td>
+        <td class="amount"><input type="number" id="exp-ac" value="2600" step="100" /></td>
+      </tr>
+      <tr>
+        <td>Zoom upgrade</td>
+        <td class="note">large-meeting tier for live nights</td>
+        <td class="amount"><input type="number" id="exp-zoom" value="1000" step="50" /></td>
+      </tr>
+      <tr>
+        <td>ThriveCart processing</td>
+        <td class="note">~3% of revenue (Stripe + TC fees)</td>
+        <td class="amount" id="exp-tc-fees">—</td>
+      </tr>
+      <tr>
+        <td>Telnyx SMS</td>
+        <td class="note">welcome + 5 night reminders × opt-ins · ~$0.0065/seg</td>
+        <td class="amount"><input type="number" id="exp-telnyx" value="200" step="50" /></td>
+      </tr>
+      <tr>
+        <td>Cloudflare + tooling</td>
+        <td class="note">Workers Standard, domain, misc</td>
+        <td class="amount"><input type="number" id="exp-misc" value="200" step="50" /></td>
+      </tr>
+      <tr class="total">
+        <td>Total Expenses</td>
+        <td></td>
+        <td class="amount" id="exp-total">—</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SCENARIO COMPARE (from JJ's spreadsheet) -->
+<h3>Tracking vs. Plan</h3>
+<div class="scenarios">
+  <div class="scen-card" id="scen-us">
+    <div class="label us">Current Trajectory</div>
+    <div class="val" id="scen-us-rev">—</div>
+    <div class="sub-line"><b id="scen-us-sod">—</b> SOD · <span id="scen-us-net">—</span> net</div>
+  </div>
+  <div class="scen-card">
+    <div class="label">Doomsday (Kait)</div>
+    <div class="val">$156,537</div>
+    <div class="sub-line"><b>130</b> SOD · $114,802 net</div>
+  </div>
+  <div class="scen-card">
+    <div class="label">Must</div>
+    <div class="val">$202,683</div>
+    <div class="sub-line"><b>170</b> SOD · $157,868 net</div>
+  </div>
+  <div class="scen-card">
+    <div class="label">Sweet</div>
+    <div class="val">$272,652</div>
+    <div class="sub-line"><b>230</b> SOD · $218,217 net</div>
+  </div>
+</div>
+
+<p class="footer-note">
+  Live data refreshes every 90s. Edit any expense to recalculate. "Current Trajectory" projects SOD via live May reg→VIP rates (paid + organic), fall '25 VIP→SOD + non-VIP→SOD by promo price. Ad spend defaults to live Meta API FYP-to-date — bump the input higher if you want to model further scale.
+</p>
+
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => '$' + Math.round(n).toLocaleString();
+const fmtN = (n) => Math.round(n).toLocaleString();
+
+// Conversion math constants
+const SOD_RATES = {
+  997:  { vipSod: 0.051, nonVipSod: 0.0072 },
+  1197: { vipSod: 0.042, nonVipSod: 0.0055 },
+  1397: { vipSod: 0.035, nonVipSod: 0.0042 },
+  1697: { vipSod: 0.025, nonVipSod: 0.0030 },
+};
+const FALL_RATES = { paid: 0.0955, organic: 0.1617 };
+const TC_FEE_PCT = 0.03;
+
+let liveData = null;
+let sodPromo = 997;
+
+async function pullData() {
+  try {
+    const [d, m] = await Promise.all([
+      fetch('/api/dashboard').then(r => r.json()),
+      fetch('/api/meta-ads').then(r => r.json()),
+    ]);
+    liveData = { d, m };
+    if (!$('exp-adspend').dataset.userEdited) {
+      const lifeSpend = m?.lifetime?.spend || 0;
+      // Default to live spend if higher than seed; otherwise keep $35K seed
+      if (lifeSpend > 35000) {
+        $('exp-adspend').value = Math.round(lifeSpend);
+      }
+    }
+    $('updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+    recompute();
+  } catch (e) {
+    $('updated').textContent = 'Error loading data: ' + e.message;
+  }
+}
+
+function projectVIPandSOD(d, m, promoPrice) {
+  // Live reg→VIP rates (fall back to fall '25 if not enough data)
+  const paidPct = parseFloat(d.vip?.paid_reg_to_vip_pct);
+  const orgPct = parseFloat(d.vip?.organic_reg_to_vip_pct);
+  const hasLivePaid = (d.vip?.paid >= 50) && !isNaN(paidPct) && paidPct > 0 && !d.channel?.paid_is_test;
+  const hasLiveOrg  = (d.vip?.organic >= 50) && !isNaN(orgPct) && orgPct > 0;
+  const ratePaid = hasLivePaid ? paidPct / 100 : FALL_RATES.paid;
+  const rateOrg  = hasLiveOrg ? orgPct / 100 : FALL_RATES.organic;
+
+  // Meta→AC inflation
+  const metaLeads = m?.pacing?.leads_to_date || 0;
+  const acPaid = d.channel?.paid || 0;
+  const inflation = (metaLeads > 100 && acPaid > 100) ? Math.max(1.0, metaLeads / acPaid) : 1.20;
+  const cpl = (m?.lifetime?.cpl) || 4.0;
+  const cplAc = cpl * inflation;
+
+  // Project paid leads from ad spend input
+  const adSpend = parseFloat($('exp-adspend').value) || 0;
+  const projectedPaid = cplAc > 0 ? adSpend / cplAc : 0;
+
+  // Project organic — extrapolate current org to event date
+  const orgToDate = d.channel?.organic || 0;
+  const paidProjectedFactor = acPaid > 0 ? projectedPaid / acPaid : 1;
+  const projectedOrg = orgToDate * Math.max(1, paidProjectedFactor);
+
+  // VIPs and SOD
+  const vipsPaid = projectedPaid * ratePaid;
+  const vipsOrg = projectedOrg * rateOrg;
+  const totalVIPs = vipsPaid + vipsOrg;
+  const totalLeads = projectedPaid + projectedOrg;
+  const nonVIP = Math.max(0, totalLeads - totalVIPs);
+
+  const rates = SOD_RATES[promoPrice] || SOD_RATES[997];
+  const sodFromVIP = totalVIPs * rates.vipSod;
+  const sodFromNonVIP = nonVIP * rates.nonVipSod;
+  const totalSOD = sodFromVIP + sodFromNonVIP;
+
+  return {
+    totalLeads, projectedPaid, projectedOrg, totalVIPs, totalSOD,
+    sodFromVIP, sodFromNonVIP, cplAc, ratePaid, rateOrg, inflation,
+  };
+}
+
+function recompute() {
+  if (!liveData) return;
+  const { d, m } = liveData;
+  const promo = sodPromo;
+  const proj = projectVIPandSOD(d, m, promo);
+
+  // VIP revenue — use current LIVE VIP buyers, not projected
+  // (we already have them; SOD projection projects forward but VIP $17 are realized)
+  const currentVIPs = d.vip?.total || 0;
+  const projectedVIPs = Math.round(proj.totalVIPs);
+  // Use whichever is higher: current actual OR projected (since projection includes future)
+  const finalVIPs = Math.max(currentVIPs, projectedVIPs);
+  const vipRevenue = finalVIPs * 17;
+
+  // SOD revenue
+  const sodRevenue = proj.totalSOD * promo;
+
+  // Total revenue
+  const totalRev = vipRevenue + sodRevenue;
+
+  // Expense inputs
+  const expenseFields = ['adspend','james','social','speakers','coaches','influencer','ac','zoom','telnyx','misc'];
+  let totalExp = 0;
+  expenseFields.forEach(f => totalExp += parseFloat($('exp-'+f).value) || 0);
+  // Auto TC fees
+  const tcFees = totalRev * TC_FEE_PCT;
+  $('exp-tc-fees').textContent = fmt(tcFees);
+  totalExp += tcFees;
+
+  // KPIs
+  $('kpi-revenue').textContent = fmt(totalRev);
+  $('kpi-revenue-sub').innerHTML = `<b>${fmt(vipRevenue)}</b> VIP + <b>${fmt(sodRevenue)}</b> SOD`;
+  $('kpi-expenses').textContent = fmt(totalExp);
+  $('kpi-expenses-sub').innerHTML = `<b>${fmt(parseFloat($('exp-adspend').value)||0)}</b> ads + <b>${fmt(totalExp - (parseFloat($('exp-adspend').value)||0))}</b> other`;
+
+  const netProfit = totalRev - totalExp;
+  const margin = totalRev > 0 ? (netProfit/totalRev*100) : 0;
+  $('kpi-profit').textContent = fmt(netProfit);
+  $('kpi-profit-sub').innerHTML = `<b>${margin.toFixed(1)}%</b> margin`;
+  $('kpi-profit').style.color = netProfit > 50000 ? 'var(--green)' : netProfit > 0 ? 'var(--gold)' : 'var(--red)';
+
+  const adSpend = parseFloat($('exp-adspend').value)||0;
+  const roas = adSpend > 0 ? (totalRev / adSpend) : 0;
+  $('kpi-roas').textContent = roas.toFixed(2) + 'x';
+  $('kpi-roas-sub').innerHTML = `vs. <b>${(adSpend > 0 ? sodRevenue/adSpend : 0).toFixed(2)}x</b> on SOD-only`;
+  $('kpi-roas').style.color = roas > 5 ? 'var(--green)' : roas > 3 ? 'var(--blue)' : roas > 2 ? 'var(--gold)' : 'var(--red)';
+
+  // Revenue table
+  $('rev-vip-count').textContent = fmtN(finalVIPs);
+  $('rev-vip').textContent = fmt(vipRevenue);
+  $('rev-sod-count').textContent = Math.round(proj.totalSOD);
+  $('rev-sod-price').textContent = promo.toLocaleString();
+  $('rev-sod').textContent = fmt(sodRevenue);
+  $('rev-total').textContent = fmt(totalRev);
+
+  // Expense total
+  $('exp-total').textContent = fmt(totalExp);
+
+  // Rates display
+  $('rates-display').innerHTML =
+    `paid <b>${(proj.ratePaid*100).toFixed(1)}%</b> · org <b>${(proj.rateOrg*100).toFixed(1)}%</b> · Meta inflation ${proj.inflation.toFixed(2)}x · AC-truth CPL <b>$${proj.cplAc.toFixed(2)}</b>`;
+
+  // Scenario card
+  $('scen-us-rev').textContent = fmt(totalRev);
+  $('scen-us-sod').textContent = Math.round(proj.totalSOD);
+  $('scen-us-net').textContent = fmt(netProfit);
+  // Which scenario are we tracking towards?
+  const scenCard = document.querySelectorAll('.scen-card');
+  scenCard.forEach(c => c.classList.remove('active'));
+  let targetIdx = 0;
+  if (totalRev >= 272000) targetIdx = 3;
+  else if (totalRev >= 202000) targetIdx = 2;
+  else if (totalRev >= 156000) targetIdx = 1;
+  // Highlight current trajectory always
+  $('scen-us').classList.add('active');
+}
+
+// Wire input handlers
+['adspend','james','social','speakers','coaches','influencer','ac','zoom','telnyx','misc'].forEach(f => {
+  $('exp-'+f).addEventListener('input', () => {
+    $('exp-'+f).dataset.userEdited = '1';
+    recompute();
+  });
+});
+$('sod-price').addEventListener('change', (e) => {
+  sodPromo = parseInt(e.target.value, 10);
+  recompute();
+});
+
+pullData();
+setInterval(pullData, 90000);
+</script>
+</body>
+</html>
