@@ -104,7 +104,11 @@ async function ac(env, path, init = {}) {
   return { ok: r.ok, status: r.status, body };
 }
 
-export async function onRequestPost({ request, env, waitUntil }) {
+export async function onRequestPost(context) {
+  const { request, env } = context;
+  // CF Pages: waitUntil lives on the context, not as a top-level destructure target.
+  // Older destructure-style was unreliable across runtimes (sometimes undefined).
+  const waitUntil = typeof context.waitUntil === "function" ? context.waitUntil.bind(context) : null;
   if (!env.AC_API_URL || !env.AC_API_KEY) {
     return bad("Server not configured: AC_API_URL or AC_API_KEY missing", 500);
   }
@@ -288,7 +292,7 @@ export async function onRequestPost({ request, env, waitUntil }) {
   // 5) Welcome SMS — fire-and-forget via waitUntil so response doesn't block on Telnyx latency.
   //    No-ops until env.TELNYX_LIVE === "true" (set via `wrangler pages secret put TELNYX_LIVE`).
   const smsTask = sendWelcomeSMS(env, { phone, smsOptIn: sms, contactId });
-  if (typeof waitUntil === "function") {
+  if (waitUntil) {
     waitUntil(smsTask);
   } else {
     // Local dev / older runtimes: still let the promise run, just don't block the response.
