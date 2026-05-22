@@ -1373,19 +1373,24 @@ function renderSODForecast(d) {
   const cplAcTruth = cpl * inflation;
   const spendProjected = Math.round(paidProjected * cplAcTruth);
 
+  // Default spend anchor at $35K (JJ's chosen launch budget). Back-calc paid leads
+  // from spend / AC-truth CPL so the widget defaults to the budget we're actually running.
+  const DEFAULT_SPEND = 35000;
+  const paidFromBudget = cplAcTruth > 0 ? Math.round(DEFAULT_SPEND / cplAcTruth) : paidProjected;
+
   sodLiveDefaults = {
-    paid: paidProjected,
+    paid: paidFromBudget,
     org: orgProjected,
-    spend: spendProjected,
-    cpl: cplAcTruth,  // inputs/spend use AC-truth CPL so the calc matches real unit econ
+    spend: DEFAULT_SPEND,
+    cpl: cplAcTruth,  // AC-truth CPL keeps unit econ honest
     rates: liveRates,
     inflation,
   };
 
-  // Set live-projection sublabels — surface AC-truth + show inflation factor so JJ sees what's applied
+  // Surface what's applied so JJ can see the inflation factor + budget anchor
   const inflPct = ((inflation - 1) * 100).toFixed(1);
   document.getElementById('sod-paid-sub').textContent =
-    `live projection: ${paidProjected.toLocaleString()} (AC truth · Meta ${metaProjected.toLocaleString()} / inflation ${inflation.toFixed(2)}x +${inflPct}%)`;
+    `from $${DEFAULT_SPEND.toLocaleString()} budget @ $${cplAcTruth.toFixed(2)} CPL · Meta inflation ${inflation.toFixed(2)}x (+${inflPct}%)`;
   document.getElementById('sod-org-sub').textContent = `live projection: ${orgProjected.toLocaleString()}`;
 
   // Seed inputs when (a) never seeded with real meta yet, AND (b) user hasn't manually edited
