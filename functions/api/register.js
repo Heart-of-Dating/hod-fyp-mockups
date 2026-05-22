@@ -30,17 +30,13 @@ function toE164US(raw) {
 // Fire-and-forget welcome SMS. Wrapped so caller can ctx.waitUntil() without blocking response.
 // Skips silently when: flag off, no opt-in, no phone, missing config, or non-normalizable number.
 async function sendWelcomeSMS(env, { phone, smsOptIn, contactId }) {
-  if (env.TELNYX_LIVE !== "true") return; // gate — flip via `wrangler pages secret put TELNYX_LIVE`
-  if (!smsOptIn) return;
+  if (env.TELNYX_LIVE !== "true") return { skip: "live-flag-off", value: JSON.stringify(env.TELNYX_LIVE) };
+  if (!smsOptIn) return { skip: "no-opt-in" };
   if (!env.TELNYX_API_KEY || !env.TELNYX_FROM_NUMBER || !env.TELNYX_MESSAGING_PROFILE_ID) {
-    console.log(`telnyx welcome skipped (config missing) contact=${contactId}`);
-    return;
+    return { skip: "config-missing" };
   }
   const to = toE164US(phone);
-  if (!to) {
-    console.log(`telnyx welcome skipped (phone not E.164) contact=${contactId}`);
-    return;
-  }
+  if (!to) return { skip: "phone-not-e164", phone };
   try {
     const r = await fetch("https://api.telnyx.com/v2/messages", {
       method: "POST",
@@ -57,12 +53,12 @@ async function sendWelcomeSMS(env, { phone, smsOptIn, contactId }) {
     });
     if (!r.ok) {
       const errTxt = await r.text();
-      console.log(`telnyx welcome send failed contact=${contactId} status=${r.status} body=${errTxt.slice(0, 300)}`);
-    } else {
-      console.log(`telnyx welcome sent contact=${contactId} to=${to}`);
+      return { sent: false, status: r.status, body: errTxt.slice(0, 300) };
     }
+    const ok = await r.json();
+    return { sent: true, telnyx_id: ok?.data?.id, to };
   } catch (e) {
-    console.log(`telnyx welcome error contact=${contactId}: ${e.message}`);
+    return { error: e.message };
   }
 }
 
@@ -291,16 +287,28 @@ export async function onRequestPost(context) {
 
   // 5) Welcome SMS — fire-and-forget via waitUntil so response doesn't block on Telnyx latency.
   //    No-ops until env.TELNYX_LIVE === "true" (set via `wrangler pages secret put TELNYX_LIVE`).
-  const smsTask = sendWelcomeSMS(env, { phone, smsOptIn: sms, contactId });
-  if (waitUntil) {
-    waitUntil(smsTask);
-  } else {
-    // Local dev / older runtimes: still let the promise run, just don't block the response.
-    smsTask.catch(() => {});
+  // TEMP DIAGNOSTIC: await the SMS task + capture diagnostic so we can see what's failing.
+  // Remove after debugging is done.
+  let smsDebug = { stage: "init" };
+  try {
+    smsDebug.telnyx_live_present = !!env.TELNYX_LIVE;
+    smsDebug.telnyx_live_value = env.TELNYX_LIVE ? JSON.stringify(env.TELNYX_LIVE) : null;
+    smsDebug.api_key_len = (env.TELNYX_API_KEY || "").length;
+    smsDebug.from_present = !!env.TELNYX_FROM_NUMBER;
+    smsDebug.from_value = env.TELNYX_FROM_NUMBER || null;
+    smsDebug.profile_present = !!env.TELNYX_MESSAGING_PROFILE_ID;
+    smsDebug.sms_optin_received = sms;
+    smsDebug.phone_received = phone;
+    smsDebug.stage = "pre-send";
+    const r = await sendWelcomeSMS(env, { phone, smsOptIn: sms, contactId });
+    smsDebug.stage = "post-send";
+    smsDebug.result = r || "no-return";
+  } catch (e) {
+    smsDebug.error = e.message;
   }
 
   // Pass src + variant through so the VIP page can pick the channel-correct ThriveCart product.
-  return new Response(JSON.stringify({ ok: true, contact: contactId, redirect: `${vipPath}?src=${src}` }), {
+  return new Response(JSON.stringify({ ok: true, contact: contactId, redirect: `${vipPath}?src=${src}`, _sms_debug: smsDebug }), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   });
