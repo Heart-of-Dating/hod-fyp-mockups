@@ -30,35 +30,35 @@ function toE164US(raw) {
 // Fire-and-forget welcome SMS. Wrapped so caller can ctx.waitUntil() without blocking response.
 // Skips silently when: flag off, no opt-in, no phone, missing config, or non-normalizable number.
 async function sendWelcomeSMS(env, { phone, smsOptIn, contactId }) {
-  if (env.TELNYX_LIVE !== "true") return { skip: "live-flag-off", value: JSON.stringify(env.TELNYX_LIVE) };
-  if (!smsOptIn) return { skip: "no-opt-in" };
+  if (env.TELNYX_LIVE !== "true") return;
+  if (!smsOptIn) return;
   if (!env.TELNYX_API_KEY || !env.TELNYX_FROM_NUMBER || !env.TELNYX_MESSAGING_PROFILE_ID) {
-    return { skip: "config-missing" };
+    console.log(`telnyx welcome skipped (config missing) contact=${contactId}`);
+    return;
   }
   const to = toE164US(phone);
-  if (!to) return { skip: "phone-not-e164", phone };
-  try {
-    const r = await fetch("https://api.telnyx.com/v2/messages", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${env.TELNYX_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: env.TELNYX_FROM_NUMBER,
-        to,
-        text: WELCOME_SMS_BODY,
-        messaging_profile_id: env.TELNYX_MESSAGING_PROFILE_ID,
-      }),
-    });
-    if (!r.ok) {
-      const errTxt = await r.text();
-      return { sent: false, status: r.status, body: errTxt.slice(0, 300) };
-    }
-    const ok = await r.json();
-    return { sent: true, telnyx_id: ok?.data?.id, to };
-  } catch (e) {
-    return { error: e.message };
+  if (!to) {
+    console.log(`telnyx welcome skipped (phone not E.164) contact=${contactId}`);
+    return;
+  }
+  const r = await fetch("https://api.telnyx.com/v2/messages", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${env.TELNYX_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: env.TELNYX_FROM_NUMBER,
+      to,
+      text: WELCOME_SMS_BODY,
+      messaging_profile_id: env.TELNYX_MESSAGING_PROFILE_ID,
+    }),
+  });
+  if (!r.ok) {
+    const errTxt = await r.text();
+    console.log(`telnyx welcome send failed contact=${contactId} status=${r.status} body=${errTxt.slice(0, 300)}`);
+  } else {
+    console.log(`telnyx welcome sent contact=${contactId} to=${to}`);
   }
 }
 
@@ -287,28 +287,14 @@ export async function onRequestPost(context) {
 
   // 5) Welcome SMS — fire-and-forget via waitUntil so response doesn't block on Telnyx latency.
   //    No-ops until env.TELNYX_LIVE === "true" (set via `wrangler pages secret put TELNYX_LIVE`).
-  // TEMP DIAGNOSTIC: await the SMS task + capture diagnostic so we can see what's failing.
-  // Remove after debugging is done.
-  let smsDebug = { stage: "init" };
-  try {
-    smsDebug.telnyx_live_present = !!env.TELNYX_LIVE;
-    smsDebug.telnyx_live_value = env.TELNYX_LIVE ? JSON.stringify(env.TELNYX_LIVE) : null;
-    smsDebug.api_key_len = (env.TELNYX_API_KEY || "").length;
-    smsDebug.from_present = !!env.TELNYX_FROM_NUMBER;
-    smsDebug.from_value = env.TELNYX_FROM_NUMBER || null;
-    smsDebug.profile_present = !!env.TELNYX_MESSAGING_PROFILE_ID;
-    smsDebug.sms_optin_received = sms;
-    smsDebug.phone_received = phone;
-    smsDebug.stage = "pre-send";
-    const r = await sendWelcomeSMS(env, { phone, smsOptIn: sms, contactId });
-    smsDebug.stage = "post-send";
-    smsDebug.result = r || "no-return";
-  } catch (e) {
-    smsDebug.error = e.message;
-  }
+  // Fire-and-forget welcome SMS via waitUntil (won't block the response).
+  const smsTask = sendWelcomeSMS(env, { phone, smsOptIn: sms, contactId }).catch((e) => {
+    console.log(`telnyx welcome error contact=${contactId}: ${e?.message || e}`);
+  });
+  if (waitUntil) waitUntil(smsTask);
 
   // Pass src + variant through so the VIP page can pick the channel-correct ThriveCart product.
-  return new Response(JSON.stringify({ ok: true, contact: contactId, redirect: `${vipPath}?src=${src}`, _sms_debug: smsDebug }), {
+  return new Response(JSON.stringify({ ok: true, contact: contactId, redirect: `${vipPath}?src=${src}` }), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   });
