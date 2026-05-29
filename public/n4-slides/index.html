@@ -113,6 +113,7 @@ h3 em { font-style: italic; }
 .theme-terra h1 em, .theme-terra h2 em, .theme-terra .giant em { color: #fff1d8; }
 .theme-terra .eyebrow, .theme-terra .kicker { color: #fff1d8; }
 .theme-dark { background: #1d1815; color: var(--bg); }
+.theme-ink { background: #1d1815; color: #fffaf2; }
 .theme-dark .lede, .theme-dark h1, .theme-dark h2, .theme-dark h3 { color: var(--bg); }
 .theme-dark .eyebrow { color: var(--gold); }
 .theme-dark h1 em, .theme-dark h2 em, .theme-dark .giant em { color: var(--gold); }
@@ -1346,15 +1347,20 @@ h3 em { font-style: italic; }
   </div>
 </section>
 
-<!-- 3. ARK PHOTO FINDER SKIT VIDEO -->
-<section class="slide center" style="background:var(--bg)">
-  <div class="eyebrow" style="color:var(--rose-deep)">A little something from our friends at ARK</div>
-  <h2 class="section" style="margin-bottom:1rem">The new <em>Photo Finder</em> feature.</h2>
-  <video controls autoplay preload="auto" playsinline data-noclick data-slide-video
-    style="width:100%; max-width:1100px; aspect-ratio:16/9; border-radius:14px; box-shadow:var(--shadow-strong); background:#000; display:block; margin:0 auto"
-    poster="">
-    <source src="videos/ark-skit.mp4" type="video/mp4">
-  </video>
+<!-- 3. ARK PHOTO FINDER SKIT VIDEO — vertical (9:16 IG stories format) with copy on the side -->
+<section class="slide" style="background:var(--bg); padding:3vh 5vw">
+  <div style="display:grid; grid-template-columns:1fr auto; gap:3rem; align-items:center; max-width:1400px; margin:0 auto; height:100%">
+    <div style="display:flex; flex-direction:column; gap:1.2rem; max-width:42ch">
+      <div class="eyebrow" style="color:var(--rose-deep)">A little something from our friends at ARK</div>
+      <h2 class="section" style="font-size:clamp(2.4rem,4vw,4rem); line-height:1.05">The new <em>Photo Finder</em> feature.</h2>
+      <p class="lede" style="font-size:clamp(1.2rem,1.5vw,1.5rem)">A 60-second IG-stories style ad we made for ARK. Watch what their new photo-finder does.</p>
+    </div>
+    <video controls autoplay preload="auto" playsinline data-noclick data-slide-video
+      style="height:88vh; max-height:88vh; aspect-ratio:9/16; width:auto; border-radius:24px; box-shadow:var(--shadow-strong); background:#000; display:block; border:6px solid #1d1815"
+      poster="">
+      <source src="videos/ark-skit.mp4" type="video/mp4">
+    </video>
+  </div>
 </section>
 
 <!-- 4. SCHOLARSHIP — coming after our talk -->
@@ -1646,9 +1652,7 @@ h3 em { font-style: italic; }
 
 </div>
 
-<button class="nav-arrow prev" id="prevBtn" onclick="prev()">‹</button>
-<button class="nav-arrow next" id="nextBtn" onclick="next()">›</button>
-<div class="slide-counter" id="counter">1 · 23</div>
+<!-- Kait's nav arrows + slide-counter removed — we use our own chrome (single #counter) -->
 
 
 <!-- ========== /KAIT TEACHING SLIDES — pitch resumes below ========== -->
