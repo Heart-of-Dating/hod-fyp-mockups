@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1600, initial-scale=1">
-<title>FYP Night 4 — The Final SOD Pitch</title>
+<title>FYP Night 4 — Final SOD Pitch</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600;700;800&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
@@ -17,12 +17,11 @@
   --gold: #c89a4a;
   --gold-deep: #8a6627;
   --gold-light: #f5e0b8;
-  --rose: #b85c5c;
-  --rose-deep: #8a3a3a;
-  --rose-burgundy: #6e2a2a;
+  --rose: #c47a6e;
+  --rose-deep: #a85a4e;
   --sage: #6e8071;
   --blue: #6c84a3;
-  --cream: #efe4cf;
+  --cream: #f3ebdc;
   --paper: #fffaf2;
   --dark: #1d1815;
   --shadow: 0 30px 80px -30px rgba(40,28,18,.25);
@@ -113,7 +112,7 @@ h3 em { font-style: italic; }
 .theme-terra h1, .theme-terra h2, .theme-terra h3, .theme-terra .lede, .theme-terra .giant { color: #faf6f0; }
 .theme-terra h1 em, .theme-terra h2 em, .theme-terra .giant em { color: #fff1d8; }
 .theme-terra .eyebrow, .theme-terra .kicker { color: #fff1d8; }
-.theme-dark { background: #1a1410; color: var(--bg); }
+.theme-dark { background: #1d1815; color: var(--bg); }
 .theme-dark .lede, .theme-dark h1, .theme-dark h2, .theme-dark h3 { color: var(--bg); }
 .theme-dark .eyebrow { color: var(--gold); }
 .theme-dark h1 em, .theme-dark h2 em, .theme-dark .giant em { color: var(--gold); }
@@ -222,12 +221,12 @@ h3 em { font-style: italic; }
 }
 .progress > div {
   height: 100%;
-  background: linear-gradient(90deg, var(--rose), var(--rose-burgundy));
+  background: linear-gradient(90deg, var(--gold), var(--gold-deep));
   width: 0%; transition: width .35s ease;
 }
 .nav-hint kbd {
   display: inline-block; padding: 2px 8px;
-  border: 1px solid var(--rose); border-radius: 3px;
+  border: 1px solid var(--line); border-radius: 3px;
   font-size: 0.7rem; margin: 0 2px;
   color: var(--ink-soft); background: var(--paper);
 }
@@ -1096,253 +1095,6 @@ h3 em { font-style: italic; }
   position: relative;
   z-index: 2;
 }
-
-/* N4 — Scholarship entry */
-.scholar-entry-wrap {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4vw;
-  align-items: center;
-  width: 100%;
-}
-.scholar-form {
-  display: flex; gap: .8rem; margin-top: 2rem;
-}
-.scholar-form input {
-  flex: 1;
-  background: rgba(255,255,255,.08);
-  border: 1px solid var(--rose);
-  border-radius: 999px;
-  padding: 1.1rem 1.6rem;
-  color: #fff;
-  font-family: 'Inter', sans-serif;
-  font-size: 1.2rem;
-  font-weight: 500;
-  outline: none;
-}
-.scholar-form input::placeholder { color: rgba(255,255,255,.5); }
-.scholar-form input:focus { border-color: var(--gold); background: rgba(255,255,255,.14); }
-.scholar-form button {
-  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-burgundy) 100%);
-  color: #fff;
-  border: none;
-  border-radius: 999px;
-  padding: 1.1rem 2rem;
-  font-family: 'Inter', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  box-shadow: 0 18px 40px -16px rgba(184,92,92,.6);
-}
-.scholar-form button:hover { transform: translateY(-1px); }
-.scholar-entries {
-  background: rgba(0,0,0,.3);
-  border: 1px solid rgba(245,212,154,.3);
-  border-radius: 14px;
-  padding: 1.6rem;
-  max-height: 60vh;
-  overflow-y: auto;
-}
-.scholar-entries .se-label {
-  font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
-  font-weight: 700; color: var(--gold-light); margin-bottom: 1rem;
-  display: flex; align-items: center; gap: .6rem;
-}
-.scholar-entries .se-label::before {
-  content: ""; width: 8px; height: 8px; background: var(--rose);
-  border-radius: 50%; animation: pulseDot 1.4s ease-in-out infinite;
-}
-.scholar-entries .se-item {
-  font-family: 'Fraunces', serif;
-  font-style: italic;
-  font-size: 1.15rem;
-  color: #fff;
-  padding: .5rem 0;
-  border-bottom: 1px solid rgba(255,255,255,.06);
-}
-.scholar-entries .se-item:last-child { border-bottom: 0; }
-.scholar-empty {
-  font-family: 'Fraunces', serif; font-style: italic;
-  color: rgba(255,255,255,.4);
-  text-align: center; padding: 2rem 0;
-}
-
-/* N4 — Winner reveal */
-.winner-stage {
-  text-align: center;
-  display: flex; flex-direction: column; align-items: center; gap: 2rem;
-  position: relative;
-  width: 100%;
-}
-.winner-name {
-  font-family: 'Fraunces', serif;
-  font-weight: 600;
-  font-size: clamp(4rem, 10vw, 11rem);
-  color: #fff;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  text-shadow: 0 4px 40px rgba(245,212,154,.5);
-  animation: winnerPop 1.2s cubic-bezier(.34,1.56,.64,1);
-}
-@keyframes winnerPop {
-  0% { opacity: 0; transform: scale(.4) rotate(-4deg); }
-  100% { opacity: 1; transform: scale(1) rotate(0); }
-}
-.winner-pre {
-  font-family: 'Caveat', cursive;
-  font-weight: 700;
-  font-size: clamp(2.4rem, 4vw, 4rem);
-  color: var(--gold-light);
-  line-height: 1;
-}
-.winner-prize {
-  font-family: 'Inter', sans-serif;
-  font-weight: 800;
-  font-size: clamp(2rem, 4vw, 3.6rem);
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: .04em;
-  margin-top: 1rem;
-}
-.winner-prize em { font-style: italic; color: var(--gold); font-family: 'Fraunces', serif; font-weight: 500; }
-.reveal-btn {
-  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
-  color: #fff;
-  border: none;
-  border-radius: 999px;
-  padding: 1.4rem 3rem;
-  font-family: 'Inter', sans-serif;
-  font-size: 1.2rem;
-  font-weight: 800;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  cursor: pointer;
-  box-shadow: 0 20px 50px -16px rgba(200,154,74,.7);
-}
-
-/* N4 — Marriage grid (25 couples) */
-.marriage-grid-25 {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0.5rem;
-  max-width: 1400px;
-  margin: 1rem auto 0;
-  width: 100%;
-}
-.marriage-grid-25 .photo-frame {
-  aspect-ratio: 1/1;
-  box-shadow: 0 10px 24px -16px rgba(40,28,18,.4);
-  border-radius: 6px;
-}
-.marriage-grid-25 .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
-
-/* N4 — Upcoming events list */
-.events-list {
-  display: flex; flex-direction: column; gap: 1.4rem;
-  max-width: 900px; margin: 2rem auto 0;
-  width: 100%;
-}
-.event-row {
-  display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 2rem;
-  padding: 1.4rem 1.6rem;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-left: 4px solid var(--rose);
-  border-radius: 10px;
-  box-shadow: var(--shadow);
-  align-items: center;
-}
-.event-row .ev-tag {
-  font-size: .68rem; letter-spacing: .26em; text-transform: uppercase;
-  font-weight: 700; color: var(--rose-deep);
-}
-.event-row .ev-title {
-  font-family: 'Fraunces', serif; font-weight: 500;
-  font-size: 1.4rem; color: var(--ink); line-height: 1.2;
-}
-.event-row .ev-sub {
-  font-family: 'Fraunces', serif; font-style: italic;
-  color: var(--ink-soft); font-size: 1rem; margin-top: .3rem;
-}
-
-/* N4 — Not for you cards */
-.not-for-grid {
-  display: grid; grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem; max-width: 1200px; margin: 2rem auto 0; width: 100%;
-}
-.not-for-card {
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.15);
-  border-left: 4px solid var(--rose);
-  border-radius: 12px;
-  padding: 1.6rem 1.8rem;
-  color: var(--bg);
-}
-.not-for-card .nfc-tag {
-  font-size: .7rem; letter-spacing: .22em; text-transform: uppercase;
-  font-weight: 700; color: var(--rose); margin-bottom: .6rem;
-}
-.not-for-card .nfc-head {
-  font-family: 'Fraunces', serif; font-weight: 500;
-  font-size: 1.5rem; line-height: 1.15; color: #fff;
-}
-.not-for-card .nfc-body {
-  font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
-  font-size: 1rem; color: rgba(255,255,255,.7);
-  margin-top: .6rem; line-height: 1.4;
-}
-
-/* N4 — Diff bullets */
-.diff-grid {
-  display: grid; grid-template-columns: repeat(5, 1fr);
-  gap: 1.2rem; max-width: 1400px; margin: 2rem auto 0; width: 100%;
-}
-.diff-card {
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-top: 4px solid var(--rose);
-  border-radius: 10px;
-  padding: 1.4rem 1.2rem;
-  text-align: center;
-  display: flex; flex-direction: column; gap: .6rem;
-  box-shadow: var(--shadow);
-}
-.diff-card .dc-n {
-  font-family: 'Caveat', cursive; font-weight: 700;
-  font-size: 2.4rem; color: var(--rose-deep); line-height: 1;
-}
-.diff-card .dc-h {
-  font-family: 'Fraunces', serif; font-weight: 500;
-  font-size: 1.1rem; line-height: 1.2; color: var(--ink);
-}
-
-/* New students 24h slide */
-.stat-cards {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 2rem; max-width: 1000px; margin: 2.5rem auto 0; width: 100%;
-}
-.stat-card {
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 2.5rem 2rem;
-  text-align: center;
-  box-shadow: var(--shadow-strong);
-  border-top: 4px solid var(--rose);
-}
-.stat-card .sc-num {
-  font-family: 'Fraunces', serif; font-weight: 400;
-  font-size: clamp(4rem, 8vw, 8rem); color: var(--rose-deep);
-  line-height: 1;
-}
-.stat-card .sc-label {
-  font-size: .78rem; letter-spacing: .22em; text-transform: uppercase;
-  font-weight: 700; color: var(--ink-soft); margin-top: 1rem;
-}
 </style>
 </head>
 <body>
@@ -1351,80 +1103,105 @@ h3 em { font-style: italic; }
 
 <div class="deck" id="deck">
 
-<!-- 1. TITLE -->
+<!-- 1. WELCOME -->
 <section class="slide active center">
-  <div class="eyebrow" style="color:var(--rose-deep)">FYP Challenge<span class="dot"></span>Night 4</div>
-  <p class="script" style="font-size:clamp(2.5rem,4vw,4rem); color:var(--ink); margin-bottom:1rem">Welcome to the…</p>
-  <h1 class="title">Final SOD <em>Pitch</em>.</h1>
-  <p class="kicker" style="margin-top:3rem; color:var(--rose-deep)">Kait Tomlin × JJ Tomlin · 7 PM CT</p>
+  <div class="eyebrow">Find Your Person Challenge<span class="dot"></span>Night 4</div>
+  <p class="script" style="font-size:clamp(2.5rem,4vw,4rem); color:var(--ink); margin-bottom:1rem">Welcome to the...</p>
+  <h1 class="title">Find Your <em>Person</em><br>Challenge.</h1>
+  <p class="kicker" style="margin-top:3rem; color:var(--gold-deep)">Kait Tomlin × JJ Tomlin</p>
 </section>
 
-<!-- 2. UPCOMING EVENTS (HOD) -->
+<!-- 2. CALENDAR -->
 <section class="slide">
-  <div class="stack" style="max-width:1200px; margin:0 auto; width:100%">
-    <div class="eyebrow" style="text-align:center; color:var(--rose-deep)">What's coming up at HOD</div>
-    <h2 class="section center"><em>Mark your</em> calendar.</h2>
-    <p class="lede center" style="margin:1rem auto 0">Beyond tonight — here's where we'll be next.</p>
-    <div class="events-list">
-      <div class="event-row">
-        <div><div class="ev-tag">2026 · Fall</div></div>
-        <div><div class="ev-title">HOD Marriage Retreat</div><div class="ev-sub">A weekend away with Kait &amp; JJ. Details soon.</div></div>
+  <div class="stack" style="max-width:1400px; margin:0 auto">
+    <div class="eyebrow">What's coming up</div>
+    <h2 class="section">Mark your <em>calendar</em>.</h2>
+    <p class="lede" style="margin-top:.5rem">The final main night. Three bonus events to come. All 7 PM CT.</p>
+    <div class="cal" style="margin-top:2.5rem">
+      <div class="cal-row">
+        <div class="cal-label">Tonight</div>
+        <div class="cal-cards">
+          <div class="cal-card tonight">
+            <div class="cal-date"><div class="cal-day">FRI</div><div class="cal-num">29</div><div class="cal-mo">May</div></div>
+            <div>
+              <div class="cal-time">🔴 Tonight · Night 4 · 7 PM CT</div>
+              <div class="cal-speaker">Kait & JJ</div>
+              <div class="cal-title">How to Build a Relationship That Lasts</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="event-row">
-        <div><div class="ev-tag">2026 · Tour</div></div>
-        <div><div class="ev-title">HOD Live · 2026 Tour Dates</div><div class="ev-sub">Cities + dates dropping in your inbox.</div></div>
-      </div>
-      <div class="event-row">
-        <div><div class="ev-tag">Weekly</div></div>
-        <div><div class="ev-title">The Heart of Dating Podcast</div><div class="ev-sub">New episodes every week — wherever you listen.</div></div>
+      <div class="cal-row">
+        <div class="cal-label">Bonus events</div>
+        <div class="cal-cards three">
+          <div class="cal-card bonus">
+            <div class="cal-date"><div class="cal-day">SAT</div><div class="cal-num">30</div><div class="cal-mo">May</div></div>
+            <div><div class="cal-time">7 PM CT</div><div class="cal-speaker">Coach Michael</div><div class="cal-title">The Hot Seat</div></div>
+          </div>
+          <div class="cal-card bonus">
+            <div class="cal-date"><div class="cal-day">MON</div><div class="cal-num">1</div><div class="cal-mo">Jun</div></div>
+            <div><div class="cal-time">7 PM CT</div><div class="cal-speaker">Dating Coaches Panel</div><div class="cal-title">The Ultimate Q&amp;A</div></div>
+          </div>
+          <div class="cal-card bonus">
+            <div class="cal-date"><div class="cal-day">TUE</div><div class="cal-num">2</div><div class="cal-mo">Jun</div></div>
+            <div><div class="cal-time">7 PM CT</div><div class="cal-speaker">ARK Dating</div><div class="cal-title">Free Speed Dating</div></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 3. WELCOME NEW SOD STUDENTS (live 24h count) -->
-<section class="slide theme-dark center">
-  <div class="eyebrow">Before we pitch a thing</div>
-  <h2 class="section" style="margin-top:1rem; max-width:24ch">Welcome our <em>newest</em> students.</h2>
-  <div class="stat-cards">
-    <div class="stat-card">
-      <div class="sc-num" id="new-students-24h">—</div>
-      <div class="sc-label">New in the last 24 hours</div>
-    </div>
-    <div class="stat-card">
-      <div class="sc-num" id="spots-left-200">—</div>
-      <div class="sc-label">Spots left of 200</div>
-    </div>
-  </div>
-  <p class="lede" style="margin-top:2.5rem; max-width:50ch; color:rgba(255,255,255,.75)">If you came in after Night 3, we see you. Welcome to the cohort.</p>
+<!-- 3. WELCOME NEW SOD STUDENTS — 24h count + spots left -->
+<section class="slide theme-rose center">
+  <div class="eyebrow" style="color:var(--rose-deep)">🎉 Welcome to the cohort</div>
+  <h1 class="title" style="margin-top:1rem; max-width:24ch; font-size:clamp(2.6rem,5vw,5rem)">
+    <em id="n4-new-24h">—</em> new students<br>joined in the last 24 hours.
+  </h1>
+  <p class="lede" style="margin-top:2.5rem; max-width:48ch; font-size:clamp(1.3rem,1.8vw,1.8rem)">
+    <strong id="n4-spots-left" style="color:var(--rose-deep)">—</strong> spots left out of 200.<br>
+    <span style="color:var(--ink-soft); font-style:italic">Once we hit 200, the doors close until 2027.</span>
+  </p>
 </section>
 
-<!-- 4. SCHOLARSHIP AFTER OUR TALK -->
+<!-- 4. SCHOLARSHIP — coming after our talk -->
 <section class="slide theme-terra center">
-  <div class="eyebrow">Heads up</div>
-  <h1 class="giant" style="margin-top:1.5rem; max-width:18ch">Scholarship<br>comes <em>after</em>.</h1>
-  <p class="lede" style="margin-top:2.5rem; max-width:46ch; color:#fff1d8">Stay on with us tonight. We're picking one person live and they win School of Dating <em>free</em>.</p>
+  <div class="eyebrow">Stick around</div>
+  <h1 class="giant" style="margin-top:1rem; max-width:18ch">SOD<br><em>Scholarship</em><br>tonight.</h1>
+  <p class="lede" style="margin-top:2.5rem; max-width:46ch; color:#fff1d8">Happening live <em>after</em> our talk. You have to be here to win — free seat in School of Dating, on us.</p>
 </section>
 
-<!-- 5. LIVE Q&A AFTER -->
+<!-- 5. LIVE Q&A — after the pitch -->
+<section class="slide theme-dark center">
+  <div class="eyebrow">Plus</div>
+  <h1 class="giant" style="margin-top:1.5rem; max-width:14ch">Live <em>Q&amp;A</em>.</h1>
+  <p class="lede" style="margin-top:3rem; max-width:46ch">After our talk. Ask us anything and everything. Bring your hardest dating questions.</p>
+</section>
+
+<!-- 6. JESS & RONNY VIDEO — kept from N3 (real testimonial) -->
 <section class="slide center">
-  <div class="eyebrow" style="color:var(--rose-deep)">After the pitch</div>
-  <h2 class="section" style="margin-top:1rem; max-width:22ch">Live Q&amp;A. <em>Anything</em> and <em>everything</em>.</h2>
-  <p class="lede" style="margin-top:2rem">Bring your questions. We're not going anywhere.</p>
+  <div class="eyebrow" style="color:var(--rose-deep)">Watch what happened</div>
+  <h2 class="section" style="margin-bottom:.5rem"><em>Jess &amp; Ronny.</em></h2>
+  <p class="lede" style="margin:0 auto 1.5rem; max-width:52ch">Jess came through one of our events. Joined School of Dating. Watch the transformation.</p>
+  <video controls preload="auto" playsinline data-noclick data-slide-video
+    style="width:100%; max-width:1000px; aspect-ratio:16/9; border-radius:12px; box-shadow:var(--shadow-strong); background:#000; display:block; margin:0 auto"
+    poster="">
+    <source src="videos/jess-ronny.mp4" type="video/mp4">
+  </video>
 </section>
 
-<!-- 6. SCHOOL OF DATING TITLE -->
+<!-- 10. SOD INTRO — "Let's GO!" reveal -->
 <section class="slide">
   <div class="two-col">
     <div class="stack">
       <div class="eyebrow">Introducing</div>
       <p class="script" style="font-size:clamp(3rem,5vw,5rem); color:var(--ink); line-height:1">School of</p>
-      <h1 class="title" style="font-style:italic; font-weight:400; color:var(--rose-deep); margin-top:-1rem; font-size:clamp(4rem,7vw,8rem)">Dating.</h1>
+      <h1 class="title" style="font-style:italic; font-weight:400; color:var(--gold-deep); margin-top:-1rem; font-size:clamp(4rem,7vw,8rem)">Dating.</h1>
       <p class="lede" style="margin-top:2rem">A 10-week guided cohort. Coaching, community, and a proven process to date with intention.</p>
       <div style="display:flex; gap:1rem; margin-top:1.5rem; flex-wrap:wrap">
-        <span class="tag-pill rose">10 weeks</span>
-        <span class="tag-pill rose">16 live teachings</span>
-        <span class="tag-pill gold">Personal coach</span>
+        <span class="tag-pill gold">10 weeks</span>
+        <span class="tag-pill gold">3 phases</span>
+        <span class="tag-pill gold">16 live teachings</span>
         <span class="tag-pill gold">Lifetime access</span>
       </div>
     </div>
@@ -1434,368 +1211,117 @@ h3 em { font-style: italic; }
   </div>
 </section>
 
-<!-- 7. KAIT INTRO -->
+<!-- 10. CHANGE YOUR LIFE — 3 phases overview -->
 <section class="slide center">
-  <div class="eyebrow" style="color:var(--rose-deep)">Kait</div>
-  <h2 class="section" style="margin-top:1rem; max-width:24ch"><em>OK friends…</em></h2>
-  <p class="lede" style="margin-top:2.5rem; max-width:60ch">
-    We will get to Q&amp;A momentarily — but for those who missed last night, we are <em>so sorry</em>. Tonight is the night we finally tell you everything about School of Dating. Stay with us.
-  </p>
-</section>
-
-<!-- 8. SARA VIDEO -->
-<section class="slide center">
-  <div class="eyebrow" style="color:var(--rose-deep)">Meet</div>
-  <h2 class="section" style="margin-bottom:.5rem"><em>Sara.</em></h2>
-  <p class="lede" style="margin:0 auto 1.5rem; max-width:52ch">She came in skeptical. Watch what happened.</p>
-  <video controls preload="auto" playsinline data-noclick data-slide-video
-    style="width:100%; max-width:1000px; aspect-ratio:16/9; border-radius:12px; box-shadow:var(--shadow-strong); background:#000; display:block; margin:0 auto"
-    poster="">
-    <source src="videos/sara.mp4" type="video/mp4">
-  </video>
-</section>
-
-<!-- 9. SYSTEM THAT WON'T LET YOU QUIT -->
-<section class="slide theme-dark center">
-  <div class="eyebrow">Why SOD works</div>
-  <h2 class="section" style="margin-top:1rem; max-width:24ch">SOD is a <em>system</em> that won't let you quit.</h2>
+  <div class="eyebrow">10 weeks · 3 phases</div>
+  <h2 class="section" style="max-width:24ch">Change your life in <em>10 weeks</em>.</h2>
+  <p class="lede" style="margin-top:1.5rem">Coaching × Community × Proven Process</p>
   <div class="three-col" style="margin-top:3rem; gap:1.5rem; max-width:1400px">
-    <div style="background:rgba(255,255,255,.05); border:1px solid rgba(184,92,92,.4); border-left:4px solid var(--rose); border-radius:14px; padding:2.2rem 1.8rem; display:flex; flex-direction:column; gap:.8rem; min-height:240px">
-      <p class="script" style="font-size:2.2rem; color:var(--gold-light)">Reason 1</p>
-      <h3 style="color:#fff; font-size:1.6rem; line-height:1.1">LIVE coaching.<br><em>Every week.</em></h3>
-      <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.7); font-size:1rem; margin-top:auto">Not a course you binge alone — humans showing up with you.</p>
+    <div style="background:#c47a6e; color:#faf6f0; border-radius:14px; padding:2.5rem 2rem; display:flex; flex-direction:column; gap:1rem; min-height:240px; justify-content:center; box-shadow:var(--shadow-strong)">
+      <p class="script" style="font-size:2.4rem; color:#fff1d8">Phase 1</p>
+      <h3 style="color:#fff; font-size:1.8rem; line-height:1.05">Inner Healing &amp;<br><em>Transformation</em></h3>
     </div>
-    <div style="background:rgba(255,255,255,.05); border:1px solid rgba(184,92,92,.4); border-left:4px solid var(--rose); border-radius:14px; padding:2.2rem 1.8rem; display:flex; flex-direction:column; gap:.8rem; min-height:240px">
-      <p class="script" style="font-size:2.2rem; color:var(--gold-light)">Reason 2</p>
-      <h3 style="color:#fff; font-size:1.6rem; line-height:1.1">A personal <em>coach</em>.</h3>
-      <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.7); font-size:1rem; margin-top:auto">Someone who knows your name and your dating life — by text.</p>
+    <div style="background:#b8504a; color:#faf6f0; border-radius:14px; padding:2.5rem 2rem; display:flex; flex-direction:column; gap:1rem; min-height:240px; justify-content:center; box-shadow:var(--shadow-strong)">
+      <p class="script" style="font-size:2.4rem; color:#fff1d8">Phase 2</p>
+      <h3 style="color:#fff; font-size:1.8rem; line-height:1.05">Practical Dating Tools<br><em>Coaching &amp; Accountability</em></h3>
     </div>
-    <div style="background:rgba(255,255,255,.05); border:1px solid rgba(184,92,92,.4); border-left:4px solid var(--rose); border-radius:14px; padding:2.2rem 1.8rem; display:flex; flex-direction:column; gap:.8rem; min-height:240px">
-      <p class="script" style="font-size:2.2rem; color:var(--gold-light)">Reason 3</p>
-      <h3 style="color:#fff; font-size:1.6rem; line-height:1.1">We <em>built</em> it.<br>We <em>run</em> it.</h3>
-      <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.7); font-size:1rem; margin-top:auto">No outsourced "coaches." This is Kait, JJ, and our hand-picked team.</p>
+    <div style="background:#7a7370; color:#faf6f0; border-radius:14px; padding:2.5rem 2rem; display:flex; flex-direction:column; gap:1rem; min-height:240px; justify-content:center; box-shadow:var(--shadow-strong)">
+      <p class="script" style="font-size:2.4rem; color:#fff1d8">Phase 3</p>
+      <h3 style="color:#fff; font-size:1.8rem; line-height:1.05">Dating Challenge &amp;<br><em>Application</em></h3>
     </div>
   </div>
 </section>
 
-<!-- 10. HOW WE'RE DIFFERENT (JJ) -->
-<section class="slide">
-  <div class="stack" style="max-width:1500px; margin:0 auto; width:100%">
-    <div class="eyebrow" style="text-align:center; color:var(--rose-deep)">JJ</div>
-    <h2 class="section center" style="margin-top:.5rem">How we're <em>different</em>.</h2>
-    <div class="diff-grid">
-      <div class="diff-card"><div class="dc-n">1</div><div class="dc-h">Live &amp; interactive</div></div>
-      <div class="diff-card"><div class="dc-n">2</div><div class="dc-h">1:1 personal coach</div></div>
-      <div class="diff-card"><div class="dc-n">3</div><div class="dc-h">Physical mailed workbook</div></div>
-      <div class="diff-card"><div class="dc-n">4</div><div class="dc-h">Co-led by Kait &amp; JJ</div></div>
-      <div class="diff-card"><div class="dc-n">5</div><div class="dc-h">A proven, repeatable process</div></div>
+<!-- 11. PHASE 1 — transparent cutout floats over slide -->
+<section class="slide" style="background:radial-gradient(ellipse at 70% 30%, rgba(200,154,74,.10), transparent 55%), var(--bg)">
+  <div class="phase-split">
+    <div style="position:relative; display:flex; align-items:center; justify-content:center; height:100%; min-height:60vh">
+      <img src="img/phase1-team-cutout.png" alt="Phase 1 coaching team" style="max-width:100%; max-height:78vh; object-fit:contain; filter:drop-shadow(0 30px 60px rgba(40,28,18,.25))">
+      <div class="phase-tag-overlay" style="position:absolute; top:1.5rem; left:1.5rem">Phase 1</div>
+    </div>
+    <div class="phase-body">
+      <h3>Inner Healing &amp;<br><em>Transformation</em></h3>
+      <ul class="phase-list">
+        <li><span class="n">1</span><span>Uncover your pain cycle and attachment pattern, and how it's affecting your love life.</span></li>
+        <li><span class="n">2</span><span>Walk out with clear dealbreakers, red flags, and non-negotiables.</span></li>
+        <li><span class="n">3</span><span>Unshakeable <em>GODfidence</em>.</span></li>
+      </ul>
     </div>
   </div>
 </section>
 
-<!-- 11. WHO THIS IS NOT FOR (intro) -->
-<section class="slide theme-terra center">
-  <div class="eyebrow">Real talk</div>
-  <h1 class="giant" style="margin-top:1rem; max-width:18ch">Who this is<br><em>NOT</em> for.</h1>
-</section>
-
-<!-- 12. NOT FOR YOU IF... -->
-<section class="slide theme-dark">
-  <div class="stack" style="max-width:1400px; margin:0 auto; width:100%">
-    <div class="eyebrow" style="text-align:center">SOD is not for you if…</div>
-    <h2 class="section center" style="margin-top:.5rem; color:#fff">This isn't your <em>season</em>.</h2>
-    <div class="not-for-grid">
-      <div class="not-for-card">
-        <div class="nfc-tag">01</div>
-        <div class="nfc-head">You won't do the work.</div>
-        <div class="nfc-body">SOD is a system, not a miracle. If you're not willing to show up and do the reps, save your money.</div>
-      </div>
-      <div class="not-for-card">
-        <div class="nfc-tag">02</div>
-        <div class="nfc-head">You're cynical.</div>
-        <div class="nfc-body">If you came in believing nothing can help, you'll find evidence for that. We can't out-coach a closed heart.</div>
-      </div>
-      <div class="not-for-card">
-        <div class="nfc-tag">03</div>
-        <div class="nfc-head">You can't be coached.</div>
-        <div class="nfc-body">If feedback feels like attack, this cohort will be hard. SOD is a feedback engine, on purpose.</div>
-      </div>
-      <div class="not-for-card">
-        <div class="nfc-tag">04</div>
-        <div class="nfc-head">You're in a hard financial season.</div>
-        <div class="nfc-body">Take BOD through our VIP path — it's basically free right now. SOD will be here when the season changes.</div>
-      </div>
+<!-- 12. PHASE 2 — transparent cutout floats over slide -->
+<section class="slide" style="background:radial-gradient(ellipse at 30% 70%, rgba(196,122,110,.10), transparent 55%), linear-gradient(135deg,#faf2ef 0%,var(--bg) 50%)">
+  <div class="phase-split">
+    <div class="phase-body">
+      <h3>Practical Dating Tools.<br><em>Coaching. Accountability.</em></h3>
+      <ul class="phase-list">
+        <li><span class="n">1</span><span>Harness your God-given <em>masculinity</em> or <em>femininity</em> + ultimate texting scripts.</span></li>
+        <li><span class="n">2</span><span>Navigate online dating without burning out.</span></li>
+        <li><span class="n">3</span><span>Master first dates and build rejection resilience.</span></li>
+      </ul>
+    </div>
+    <div style="position:relative; display:flex; align-items:center; justify-content:center; height:100%; min-height:60vh">
+      <img src="img/phase2-team-cutout.png" alt="Phase 2 team" style="max-width:100%; max-height:78vh; object-fit:contain; filter:drop-shadow(0 30px 60px rgba(40,28,18,.25))">
+      <div class="phase-tag-overlay" style="position:absolute; top:1.5rem; right:1.5rem">Phase 2</div>
     </div>
   </div>
 </section>
 
-<!-- 13. WHAT'S INCLUDED — value table -->
-<section class="slide" style="padding:5vh 5vw; background:
-  radial-gradient(ellipse at 0% 0%, rgba(184,92,92,.10), transparent 50%),
-  radial-gradient(ellipse at 100% 100%, rgba(200,154,74,.08), transparent 50%),
-  var(--bg)">
-  <div class="stack center" style="max-width:1200px; margin:0 auto">
-    <div class="eyebrow">The full stack</div>
-    <h2 class="section" style="margin-bottom:.5rem">What's <em>all included</em>?</h2>
-    <p class="lede" style="margin:0 auto 2rem">Everything you need to actually get married. No upsells. No half-measures.</p>
-    <table class="value-table">
-      <thead><tr><th>What's Included</th><th style="text-align:right">Value</th></tr></thead>
-      <tbody>
-        <tr><td>16 LIVE Sessions + Weekly Q&amp;A <span style="color:var(--muted); font-size:.85rem; font-style:italic">(10 with Kait &amp; JJ, 6 with expert guests &amp; coaches)</span></td><td>$9,000</td></tr>
-        <tr><td>200+ Page Physical Workbook</td><td>$297</td></tr>
-        <tr><td>Co-ed Cohort Community</td><td>$297</td></tr>
-        <tr><td>Personal SOD Coach (text support)</td><td>$1,497</td></tr>
-        <tr><td>Weekly Office Hours</td><td>$747</td></tr>
-        <tr><td>Lifetime Access to SOD &amp; Alumni Network</td><td><em>Priceless</em></td></tr>
-        <tr class="total"><td><strong>Total Value</strong></td><td><strong>$11,839</strong></td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<!-- 14. KAIT TRANSITION TO AMIE -->
-<section class="slide center">
-  <div class="eyebrow" style="color:var(--rose-deep)">Kait</div>
-  <h2 class="section" style="margin-top:1.5rem; max-width:26ch">Before we reveal tonight's <em>special invite</em>…</h2>
-  <p class="lede" style="margin-top:2rem; max-width:46ch">…we have to meet one more person. Her name is <em>Amie</em>.</p>
-</section>
-
-<!-- 15. AMIE VIDEO -->
-<section class="slide center">
-  <div class="eyebrow" style="color:var(--rose-deep)">Meet</div>
-  <h2 class="section" style="margin-bottom:.5rem"><em>Amie.</em></h2>
-  <p class="lede" style="margin:0 auto 1.5rem; max-width:52ch">A story we couldn't end the week without.</p>
-  <video controls preload="auto" playsinline data-noclick data-slide-video
-    style="width:100%; max-width:1000px; aspect-ratio:16/9; border-radius:12px; box-shadow:var(--shadow-strong); background:#000; display:block; margin:0 auto"
-    poster="">
-    <source src="videos/amie.mp4" type="video/mp4">
-  </video>
-</section>
-
-<!-- 16. WE WANT THIS FOR YOU — 25 couples grid -->
-<section class="slide" style="padding:4vh 4vw; background:linear-gradient(135deg, #faf2ef 0%, var(--bg) 50%)">
-  <div class="stack" style="max-width:1500px; margin:0 auto; width:100%; height:100%; gap:1rem">
-    <div style="text-align:center">
-      <div class="eyebrow" style="color:var(--rose-deep)">25 couples. Real marriages. Real engagements.</div>
-      <h2 class="section center" style="font-size:clamp(2.4rem,4.5vw,4.5rem); margin-top:.5rem">We want <em>this</em> for you.</h2>
+<!-- 13. PHASE 3 — transparent cutout floats over slide (matches Phase 1 & 2) -->
+<section class="slide" style="background:radial-gradient(ellipse at 70% 70%, rgba(196,122,110,.10), transparent 55%), var(--bg)">
+  <div class="phase-split">
+    <div style="position:relative; display:flex; align-items:center; justify-content:center; height:100%; min-height:60vh">
+      <img src="img/phase3-cutout-clean.png" alt="Phase 3 — JJ &amp; Kait podcast" style="max-width:100%; max-height:78vh; object-fit:contain; filter:drop-shadow(0 30px 60px rgba(40,28,18,.25))">
+      <div class="phase-tag-overlay" style="position:absolute; bottom:1.5rem; left:1.5rem">Phase 3</div>
     </div>
-    <div class="marriage-grid-25">
-      <div class="photo-frame"><img src="img/marriage-1.jpg" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-2.png" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-3.jpg" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-4.png" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-5.jpg" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-6.jpg" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-7.jpg" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-8.jpg" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-1.jpg" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-2.png" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-3.jpg" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-4.png" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-5.jpg" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-6.jpg" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-7.jpg" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-8.jpg" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-1.jpg" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-2.png" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-3.jpg" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-4.png" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-5.jpg" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-6.jpg" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-7.jpg" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-8.jpg" alt=""></div>
-      <div class="photo-frame"><img src="img/marriage-1.jpg" alt=""></div>
+    <div class="phase-body">
+      <h3>Dating Challenge &amp;<br><em>Application</em></h3>
+      <ul class="phase-list">
+        <li><span class="n">1</span><span>Connection-building texting, communication styles, and anxiety management.</span></li>
+        <li><span class="n">2</span><span>Healthy <em>boundaries</em> — spiritual, emotional, and physical.</span></li>
+        <li><span class="n">3</span><span>Discernment + wisdom: stay, walk away, or leave them better.</span></li>
+      </ul>
     </div>
   </div>
 </section>
 
-<!-- 17. NOW HERE IS WHERE IT GETS FUN (JJ transition) -->
-<section class="slide theme-terra center">
-  <div class="eyebrow">JJ</div>
-  <h1 class="giant" style="margin-top:1.5rem; max-width:20ch">Now here's where it gets <em>fun</em>.</h1>
-</section>
-
-<!-- 18. TWO WAYS TO JOIN -->
-<section class="slide" style="background:
-  radial-gradient(ellipse at 80% 0%, rgba(200,154,74,.12), transparent 55%),
-  radial-gradient(ellipse at 0% 100%, rgba(184,92,92,.10), transparent 55%),
-  var(--bg)">
-  <div class="stack" style="max-width:1300px; margin:0 auto">
-    <div style="text-align:center; display:flex; flex-direction:column; align-items:center; gap:0.5rem">
-      <span style="display:inline-flex; align-items:center; gap:.6rem; background:rgba(184,92,92,.12); border:1px solid var(--rose); border-radius:999px; padding:0.4rem 1.1rem; font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">
-        <span style="width:6px; height:6px; background:var(--rose); border-radius:50%"></span>
-        Two ways in
-      </span>
-      <h2 class="section center" style="margin-top:1rem">Two options. <em>Pick yours.</em></h2>
-      <p class="lede" style="max-width:50ch; margin:0.5rem auto 0">The difference is simple — twenty 1:1 calls with your coach across the program and beyond.</p>
-    </div>
-
-    <div class="tiers" style="margin-top:2.5rem">
-      <div class="tier sod recommended">
-        <div class="tier-tag">School of Dating</div>
-        <h4>SOD</h4>
-        <ul>
-          <li>16 LIVE Two-Hour Group Teachings</li>
-          <li>200+ Page Physical Workbook</li>
-          <li>Community Support System</li>
-          <li>Personal SOD Coach (text support)</li>
-          <li>Weekly Thursday Q&amp;A</li>
-          <li>Lifetime Access</li>
-        </ul>
-        <div class="price-row">
-          <span class="price-new" style="color:var(--rose-deep)">$997</span>
-        </div>
-      </div>
-
-      <div class="tier pro">
-        <div class="tier-tag">School of Dating PRO</div>
-        <h4>SOD <em>PRO</em></h4>
-        <ul>
-          <li>Everything in SOD</li>
-          <li>Lifetime Access</li>
-        </ul>
-        <div class="calls-badge">
-          <div class="num">20 weekly <em style="font-style:italic">1:1 LIVE calls</em></div>
-          <div class="label">10 in program + 10 weeks after · 30 min each</div>
-        </div>
-        <div class="price-row">
-          <span class="price-new">$2,497</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 19. TONIGHT ONLY — TWO MASSIVE BONUSES -->
-<section class="slide bonus-banner-bg center" style="padding:5vh 6vw">
-  <div class="eyebrow">🔥 Tonight only · Final night</div>
-  <h1 class="title" style="margin-top:1rem; max-width:24ch">Two <em>massive</em> bonuses on top.</h1>
-  <p class="lede" style="margin-top:2rem; max-width:50ch">For anyone who jumps in tonight — we're stacking these on top of the SOD + Pro offer.</p>
-</section>
-
-<!-- 20. BONUS #1 — PROFILE DIAGNOSTIC -->
-<section class="slide fab-bonus">
-  <div class="fab-grid">
-    <div class="fab-body">
-      <div class="fab-tag"><span class="num">Bonus 01</span><span>⏰ Tonight only</span></div>
-      <h1 class="fab-headline">The <em>Profile Diagnostic</em>.</h1>
-      <p class="fab-sub">"Pimp My Ride" — for your dating apps. <em>JJ and Kait</em> personally diagnose your online dating profile. Photos. Bio. Prompts. The whole stack.</p>
-      <div class="fab-value-pill">
-        <span class="val-num">$299</span>
-        <span class="val-tx">value · free tonight</span>
-      </div>
-    </div>
-    <div class="fab-pic-wrap">
-      <div class="fab-cap"><em>Free</em> · for every SOD buyer</div>
-      <img src="img/engagement-ai.png" alt="Profile diagnostic" style="object-position:center center">
-    </div>
-  </div>
-</section>
-
-<!-- 21. BONUS #2 — JUST TELL ME WHAT TO SAY -->
-<section class="slide fab-bonus">
-  <div class="fab-grid">
-    <div class="fab-body">
-      <div class="fab-tag" style="color:var(--gold-deep)"><span class="num" style="background:var(--gold-deep)">Bonus 02</span><span>⏰ Tonight only · First 30 get custom scripts</span></div>
-      <h1 class="fab-headline"><em>"Just tell me what to say."</em></h1>
-      <p class="fab-sub">40+ texting scripts for the hard conversations.<br>"Where is this going?" · "I need to slow down physically." · The breakup script. The faith conversation. The Thanksgiving family pressure response.</p>
-      <p class="fab-sub" style="color:var(--rose-deep); font-style:normal; font-weight:500"><strong>First 30 buyers</strong> submit one personal scenario — we write a custom script back within 5 days.</p>
-      <div class="fab-value-pill">
-        <span class="val-num">$197</span>
-        <span class="val-tx">value · free tonight</span>
-      </div>
-    </div>
-    <div class="fab-pic-wrap">
-      <img src="img/coaching-ai.png" alt="Just tell me what to say" style="object-position:center top">
-    </div>
-  </div>
-</section>
-
-<!-- 22. FINAL VALUE STACK -->
-<!--
-  Math note: JJ's outline used $11,588 base + bonuses = $12,084.
-  The value table on slide 13 sums to $11,839, which is the source of truth.
-  Final = $11,839 + $299 + $197 = $12,335. JJ — adjust here if you want a different total.
--->
-<section class="slide" style="padding:4vh 4vw">
-  <div class="stack" style="max-width:1500px; margin:0 auto; width:100%">
-    <div class="eyebrow" style="text-align:center; color:var(--rose-deep)">Tonight's full stack</div>
-    <h2 class="section center" style="font-size:clamp(2rem,3.5vw,3.5rem)">All <em>included</em>. One investment.</h2>
-
-    <div style="display:grid; grid-template-columns:1.4fr 1fr; gap:3rem; margin-top:1rem; align-items:center">
-      <table class="value-table">
-        <tbody>
-          <tr><td>School of Dating · 10-Week Mentorship</td><td>$11,839</td></tr>
-          <tr class="bonus"><td>Bonus 01 · Profile Diagnostic (Kait + JJ)</td><td>$299</td></tr>
-          <tr class="bonus"><td>Bonus 02 · "Just Tell Me What to Say" Scripts</td><td>$197</td></tr>
-          <tr class="total"><td><strong>Total Value</strong></td><td><strong>$12,335</strong></td></tr>
-          <tr class="offer"><td><strong>Yours for</strong></td><td><strong>$997</strong></td></tr>
-        </tbody>
-      </table>
-
-      <div style="display:flex; flex-direction:column; gap:1rem">
-        <p class="kicker" style="color:var(--rose-deep); text-align:center">Two payment options</p>
-        <div style="background:linear-gradient(135deg,var(--paper),#faf2ef); border:3px solid var(--rose-deep); border-radius:12px; padding:1.4rem; text-align:center; box-shadow:var(--shadow-strong)">
-          <p class="kicker" style="color:var(--rose-deep); margin-bottom:.4rem; font-size:.78rem">Pay in full</p>
-          <p style="font-family:'Fraunces',serif; font-weight:500; font-size:2.6rem; color:var(--ink); line-height:1">1 × $997</p>
-          <p style="font-size:.78rem; color:var(--rose-deep); font-weight:700; letter-spacing:.16em; margin-top:.4rem">$700 OFF</p>
-        </div>
-        <div style="background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:1rem; text-align:center">
-          <p class="kicker" style="color:var(--muted); margin-bottom:.3rem; font-size:.72rem">6-pay plan</p>
-          <p style="font-family:'Fraunces',serif; font-weight:500; font-size:2rem; color:var(--ink); line-height:1">6 × $198</p>
-          <p style="font-size:.72rem; color:var(--muted); font-weight:500; letter-spacing:.1em; margin-top:.3rem; font-style:italic">first payment today + 5 more</p>
-        </div>
-      </div>
-    </div>
-
-    <div style="margin-top:1.5rem; background:linear-gradient(135deg, var(--rose-deep) 0%, var(--rose-burgundy) 100%); border-radius:16px; padding:1.8rem 2.5rem; display:flex; align-items:center; justify-content:space-between; gap:2rem; box-shadow:0 30px 60px -20px rgba(110,42,42,.5); flex-wrap:wrap">
-      <div style="display:flex; flex-direction:column; gap:.3rem; flex:1; min-width:300px">
-        <span style="font-size:.78rem; letter-spacing:.28em; text-transform:uppercase; font-weight:700; color:rgba(255,255,255,.85)">⏰ Save your seat now</span>
-        <a href="https://schoolofdatingoffer.com" target="_blank" rel="noopener"
-          style="font-family:'Inter',sans-serif; font-weight:800; font-size:clamp(2.4rem,4.5vw,4.5rem); color:#fff; text-decoration:none; letter-spacing:-0.01em; line-height:1; text-transform:lowercase; text-shadow:0 4px 20px rgba(0,0,0,.3)">
-          schoolofdatingoffer.com
-        </a>
-      </div>
-      <div style="background:#fff; padding:.8rem; border-radius:10px; box-shadow:0 12px 30px -8px rgba(0,0,0,.3)">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=6&data=https://schoolofdatingoffer.com" alt="Scan to enroll" style="display:block; width:140px; height:140px">
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 23. SUMMER SCHEDULE -->
-<section class="slide" style="padding:3vh 4vw; background:radial-gradient(ellipse at 0% 0%, rgba(184,92,92,.08), transparent 50%), var(--bg)">
+<!-- 14. SCHEDULE OVERVIEW — inline timeline (iframe was unreadable) -->
+<section class="slide" style="padding:3vh 4vw; background:radial-gradient(ellipse at 0% 0%, rgba(200,154,74,.08), transparent 50%), var(--bg)">
   <div class="stack" style="max-width:1500px; margin:0 auto; width:100%">
     <div style="display:flex; justify-content:space-between; align-items:baseline; gap:2rem; flex-wrap:wrap">
       <div>
-        <div class="eyebrow" style="color:var(--rose-deep)">The 10-week roadmap</div>
-        <h2 class="section" style="font-size:clamp(2.2rem,4vw,4rem)">Summer <em>schedule</em>.</h2>
+        <div class="eyebrow">The 10-week roadmap</div>
+        <h2 class="section" style="font-size:clamp(2.2rem,4vw,4rem)">Here's <em>every</em> session.</h2>
       </div>
-      <p class="lede" style="max-width:36ch; text-align:right">Starts Tuesday June 9. Tue · Thu · Sat. 16 live teachings + weekly office hours.</p>
+      <p class="lede" style="max-width:36ch; text-align:right">16 live teachings · weekly Thursday office hours · Saturday workshops when topics warrant the deeper dive.</p>
     </div>
 
+    <!-- 3-month timeline strip -->
     <div style="margin-top:1.5rem; display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.5rem">
-      <div style="background:var(--paper); border:1px solid var(--line); border-top:4px solid var(--rose); border-radius:12px; padding:1.4rem; box-shadow:var(--shadow)">
+      <!-- JUNE / PHASE 1 -->
+      <div style="background:var(--paper); border:1px solid var(--line); border-top:4px solid var(--gold); border-radius:12px; padding:1.4rem; box-shadow:var(--shadow)">
         <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:1rem">
           <p class="script" style="font-size:2rem; color:var(--ink); line-height:1">June</p>
-          <span style="font-size:.65rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">Phase 1 · Foundations</span>
+          <span style="font-size:.65rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--gold-deep)">Phase 1 · Foundations</span>
         </div>
         <div style="display:flex; flex-direction:column; gap:.7rem">
-          <div style="border-left:3px solid var(--rose); padding-left:.8rem">
-            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">Week 1 · Tue Jun 9</div>
+          <div style="border-left:3px solid var(--gold); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--gold-deep)">Week 1 · Tue Jun 9</div>
             <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:1rem; color:var(--ink); margin-top:.2rem">Inner Child &amp; Reconnecting</div>
           </div>
-          <div style="border-left:3px solid var(--rose); padding-left:.8rem">
-            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">Week 2 · Tue Jun 16</div>
+          <div style="border-left:3px solid var(--gold); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--gold-deep)">Week 2 · Tue Jun 16</div>
             <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:1rem; color:var(--ink); margin-top:.2rem">Attachment Style &amp; Wounds</div>
           </div>
-          <div style="border-left:3px solid var(--rose); padding-left:.8rem">
-            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">Week 3 · Tue Jun 23</div>
+          <div style="border-left:3px solid var(--gold); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--gold-deep)">Week 3 · Tue Jun 23</div>
             <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:1rem; color:var(--ink); margin-top:.2rem">Triggers &amp; Managing Emotions</div>
           </div>
         </div>
       </div>
 
+      <!-- JULY / PHASE 2 -->
       <div style="background:var(--paper); border:1px solid var(--line); border-top:4px solid var(--sage); border-radius:12px; padding:1.4rem; box-shadow:var(--shadow)">
         <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:1rem">
           <p class="script" style="font-size:2rem; color:var(--ink); line-height:1">July</p>
@@ -1821,45 +1347,442 @@ h3 em { font-style: italic; }
         </div>
       </div>
 
-      <div style="background:var(--paper); border:1px solid var(--line); border-top:4px solid var(--gold); border-radius:12px; padding:1.4rem; box-shadow:var(--shadow)">
+      <!-- AUGUST / PHASE 3 -->
+      <div style="background:var(--paper); border:1px solid var(--line); border-top:4px solid var(--rose); border-radius:12px; padding:1.4rem; box-shadow:var(--shadow)">
         <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:1rem">
           <p class="script" style="font-size:2rem; color:var(--ink); line-height:1">August</p>
-          <span style="font-size:.65rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--gold-deep)">Phase 3 · Action</span>
+          <span style="font-size:.65rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">Phase 3 · Action</span>
         </div>
         <div style="display:flex; flex-direction:column; gap:.55rem">
-          <div style="border-left:3px solid var(--gold); padding-left:.8rem">
-            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--gold-deep)">Wk 10 · Aug 11 + 15</div>
+          <div style="border-left:3px solid var(--rose); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">Wk 10 · Aug 11 + 15</div>
             <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:.95rem; color:var(--ink)">First Dates + Facing Rejection</div>
           </div>
-          <div style="border-left:3px solid var(--gold); padding-left:.8rem">
-            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--gold-deep)">Wk 11 · Aug 18 + 22</div>
+          <div style="border-left:3px solid var(--rose); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">Wk 11 · Aug 18 + 22</div>
             <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:.95rem; color:var(--ink)">After the First Date + Long Distance</div>
           </div>
-          <div style="border-left:3px solid var(--gold); padding-left:.8rem">
-            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--gold-deep)">Wk 12 · Aug 25 + 29 · 🎓 Finale</div>
+          <div style="border-left:3px solid var(--rose); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">Wk 12 · Aug 25 + 29 · 🎓 Finale</div>
             <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:.95rem; color:var(--ink)">DTR + Boundaries + <strong>Graduation</strong></div>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- Break weeks + meta below -->
     <div style="display:flex; gap:1.5rem; justify-content:center; align-items:center; margin-top:1rem; flex-wrap:wrap">
-      <span style="font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); font-weight:600">Sessions:</span>
-      <span style="background:var(--cream); border:1px dashed var(--rose); border-radius:999px; padding:.4rem .9rem; font-family:'Fraunces',serif; font-style:italic; font-size:.85rem; color:var(--ink-soft)">Tue · Thu · Sat</span>
+      <span style="font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); font-weight:600">Break weeks:</span>
+      <span style="background:var(--cream); border:1px dashed var(--gold); border-radius:999px; padding:.4rem .9rem; font-family:'Fraunces',serif; font-style:italic; font-size:.85rem; color:var(--ink-soft)">Wk 4 · Jun 30 – Jul 4</span>
+      <span style="background:var(--cream); border:1px dashed var(--gold); border-radius:999px; padding:.4rem .9rem; font-family:'Fraunces',serif; font-style:italic; font-size:.85rem; color:var(--ink-soft)">Wk 9 · Aug 4 – 8</span>
       <span style="font-family:'Fraunces',serif; font-style:italic; font-size:.95rem; color:var(--muted)">+ Office Hours every Thursday · 7 PM CT</span>
     </div>
   </div>
 </section>
 
-<!-- 24. NO FALL COHORT / 200 CAP -->
-<section class="slide theme-dark center">
-  <div class="eyebrow">Kait</div>
-  <h2 class="section" style="margin-top:1rem; max-width:24ch">There's no <em>fall cohort</em>.</h2>
-  <h1 class="giant" style="margin-top:1.5rem">This is it<br><em>until 2027</em>.</h1>
-  <p class="lede" style="margin-top:2.5rem; max-width:50ch; color:rgba(255,255,255,.75)">Cohort caps at <strong style="color:var(--gold-light)">200</strong>. After Sunday night, the doors close until next May.</p>
+<!-- 16. WHO IS THIS FOR? -->
+<style>
+.marriage-wall {
+  columns: 4;
+  column-gap: 0.7rem;
+  flex: 1;
+  min-height: 50vh;
+}
+.marriage-wall .photo-frame {
+  break-inside: avoid;
+  margin-bottom: 0.7rem;
+  width: 100%;
+  height: auto;
+  aspect-ratio: auto;
+  box-shadow: 0 18px 40px -22px rgba(40,28,18,.3);
+  border-radius: 10px;
+  display: block;
+  overflow: hidden;
+}
+.marriage-wall .photo-frame img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+</style>
+<section class="slide theme-terra center">
+  <div class="eyebrow">The big question</div>
+  <h1 class="giant" style="margin-top:1.5rem; max-width:14ch">Who is<br>this <em>for</em>?</h1>
 </section>
 
-<!-- 25. REFUND POLICY -->
+<!-- 18. archetype 1 -->
+<section class="slide theme-terra">
+  <div class="archetype">
+    <p class="kicker" style="color:#fff1d8">Archetype 1</p>
+    <h1 class="archetype-hed">Burnt out and hopeless</h1>
+    <p class="archetype-q">Is that <em>you</em>?</p>
+  </div>
+</section>
+
+<!-- 19. archetype 2 -->
+<section class="slide" style="background:#b8504a; color:#faf6f0">
+  <div class="archetype">
+    <p class="kicker" style="color:#fff1d8">Archetype 2</p>
+    <h1 class="archetype-hed">Done the work, but need a proven process</h1>
+    <p class="archetype-q">Is that <em>you</em>?</p>
+  </div>
+</section>
+
+<!-- 20. archetype 3 -->
+<section class="slide theme-terra">
+  <div class="archetype">
+    <p class="kicker" style="color:#fff1d8">Archetype 3</p>
+    <h1 class="archetype-hed">Never really dated much</h1>
+    <p class="archetype-q">Is that <em>you</em>?</p>
+  </div>
+</section>
+
+<!-- 21. archetype 4 -->
+<section class="slide" style="background:#b8504a; color:#faf6f0">
+  <div class="archetype">
+    <p class="kicker" style="color:#fff1d8">Archetype 4</p>
+    <h1 class="archetype-hed">Dated all the wrong types</h1>
+    <p class="archetype-q">Is that <em>you</em>?</p>
+  </div>
+</section>
+
+<!-- 22. archetype 5 -->
+<section class="slide theme-terra">
+  <div class="archetype">
+    <p class="kicker" style="color:#fff1d8">Archetype 5</p>
+    <h1 class="archetype-hed">Starting a second chapter</h1>
+    <p class="archetype-q">Is that <em>you</em>?</p>
+  </div>
+</section>
+
+<!-- 23. WHAT'S INCLUDED — value stack with more life -->
+<section class="slide" style="padding:5vh 5vw; background:
+  radial-gradient(ellipse at 0% 0%, rgba(200,154,74,.10), transparent 50%),
+  radial-gradient(ellipse at 100% 100%, rgba(196,122,110,.08), transparent 50%),
+  var(--bg)">
+  <div class="stack center" style="max-width:1200px; margin:0 auto">
+    <div class="eyebrow">The full stack</div>
+    <h2 class="section" style="margin-bottom:.5rem">What's <em>all included</em>?</h2>
+    <p class="lede" style="margin:0 auto 2rem">Every thing you need to actually get married. No upsells. No half-measures.</p>
+    <table class="value-table">
+      <thead><tr><th>What's Included</th><th style="text-align:right">Value</th></tr></thead>
+      <tbody>
+        <tr><td>16 LIVE Sessions <span style="color:var(--muted); font-size:.85rem; font-style:italic">(10 with Kait &amp; JJ, 6 with expert guests &amp; coaches)</span></td><td>$9,000</td></tr>
+        <tr><td>200+ Page Physical Workbook</td><td>$297</td></tr>
+        <tr><td>Co-ed Cohort Community (healing &amp; support)</td><td>$297</td></tr>
+        <tr><td>Personal School of Dating Coach (text support)</td><td>$1,497</td></tr>
+        <tr><td>Weekly Office Hours <span style="color:var(--muted); font-size:.85rem; font-style:italic">(10 weeks of live Q&amp;A with a coach)</span></td><td>$747</td></tr>
+        <tr><td>Lifetime Access to SOD &amp; Alumni Network</td><td><em>Priceless</em></td></tr>
+        <tr class="total"><td><strong>Total Value</strong></td><td><strong>$11,838</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 24. INTRODUCING SOD PRO — lightly intro Pro before testimonials -->
+<section class="slide" style="padding:5vh 5vw; background:
+  radial-gradient(ellipse at 100% 0%, rgba(196,122,110,.14), transparent 55%),
+  radial-gradient(ellipse at 0% 100%, rgba(200,154,74,.08), transparent 55%),
+  var(--bg)">
+  <div class="stack center" style="max-width:1250px; margin:0 auto">
+    <span style="display:inline-flex; align-items:center; gap:.6rem; background:rgba(196,122,110,.12); border:1px solid var(--rose); border-radius:999px; padding:0.4rem 1.1rem; font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">
+      <span style="width:6px; height:6px; background:var(--rose); border-radius:50%"></span>
+      One step deeper
+    </span>
+    <h2 class="section" style="margin-top:1rem">Then there's <em>SOD Pro</em>.</h2>
+    <p class="lede" style="max-width:54ch; margin:.5rem auto 0">Everything in SOD — plus a coach who knows your dating life by name. Weekly 1:1 calls. 20 weeks. <em>10 during the program, 10 after.</em></p>
+
+    <table class="value-table" style="margin-top:2rem">
+      <thead>
+        <tr><th>SOD Pro adds…</th><th style="text-align:right">Value</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Everything in School of Dating</td><td><em>included</em></td></tr>
+        <tr style="background:rgba(196,122,110,.10)"><td><strong style="color:var(--rose-deep)">20 weekly 1:1 coaching calls</strong> <span style="color:var(--muted); font-size:.85rem; font-style:italic">(10 in program + 10 weeks after)</span></td><td><strong style="color:var(--rose-deep)">$3,000</strong></td></tr>
+        <tr class="total" style="background:var(--rose-deep)"><td><strong>Pro Total Value</strong></td><td><strong>$14,838</strong></td></tr>
+      </tbody>
+    </table>
+
+    <p class="kicker" style="margin-top:1.5rem; color:var(--rose-deep); font-style:italic; font-family:'Fraunces',serif; font-weight:300; text-transform:none; letter-spacing:0; font-size:1.05rem">
+      We're not pushing Pro tonight. We just want you to know it exists — because the Fast Action Bonus gives every SOD buyer a free taste of it.
+    </p>
+  </div>
+</section>
+
+<!-- 25. JOEL & JULES VIDEO — real video embedded -->
+<section class="slide center" style="position:relative; overflow:hidden">
+  <div class="eyebrow" style="color:var(--rose-deep)">This one made Kait weepy</div>
+  <h2 class="section" style="margin-bottom:.5rem"><em>Joel &amp; Jules.</em></h2>
+  <p class="lede" style="margin:0 auto 1.5rem; max-width:52ch">Joel was the anxious over-committer. Jules was Ms. Independent. Watch what SOD did with them.</p>
+  <video controls preload="auto" playsinline data-noclick data-slide-video
+    style="width:100%; max-width:1000px; aspect-ratio:16/9; border-radius:12px; box-shadow:var(--shadow-strong); background:#000; display:block; margin:0 auto">
+    <source src="videos/joel-jules.mp4" type="video/mp4">
+  </video>
+  <!-- engagement photo bottom right -->
+  <div style="position:absolute; bottom:3vh; right:3vw; width:clamp(200px, 19vw, 280px); border-radius:14px; overflow:hidden; box-shadow:var(--shadow-strong); border:4px solid #fff; transform:rotate(2deg); z-index:5">
+    <img src="img/engagement-ai.png" alt="" style="width:100%; height:auto; display:block">
+  </div>
+</section>
+
+<!-- 25. AND COUNTLESS OTHERS — marriage wall payoff -->
+<section class="slide" style="padding:4vh 4vw; background:linear-gradient(135deg, #faf2ef 0%, var(--bg) 50%)">
+  <div class="stack" style="max-width:1600px; margin:0 auto; width:100%; height:100%; gap:1.2rem">
+    <div style="display:flex; justify-content:space-between; align-items:baseline; gap:2rem; flex-wrap:wrap">
+      <div>
+        <div class="eyebrow" style="color:var(--rose-deep)">You just heard Joel + Jules</div>
+        <h2 class="section" style="font-size:clamp(2.6rem,5vw,5rem)">And <em>countless</em> others.</h2>
+      </div>
+      <p class="lede" style="max-width:32ch; text-align:right">Real SOD alumni. Real marriages. Real engagements. The proof is in the people.</p>
+    </div>
+    <div class="marriage-wall" style="margin-top:1rem">
+      <div class="photo-frame"><img src="img/marriage-3.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-2.png" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-6.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-4.png" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-1.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-5.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-7.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-8.jpg" alt=""></div>
+    </div>
+    <div style="text-align:center; margin-top:.5rem">
+      <p class="script" style="font-size:clamp(2rem,3vw,3rem); color:var(--rose-deep); line-height:1">…and that's just a few of them.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 26. TWO OPTIONS × FULL PRICE — sprucier, bigger badge, support bubble -->
+<section class="slide" style="background:
+  radial-gradient(ellipse at 80% 0%, rgba(200,154,74,.12), transparent 55%),
+  radial-gradient(ellipse at 0% 100%, rgba(110,128,113,.08), transparent 55%),
+  var(--bg)">
+  <div class="stack" style="max-width:1300px; margin:0 auto">
+    <div style="text-align:center; display:flex; flex-direction:column; align-items:center; gap:0.5rem">
+      <span style="display:inline-flex; align-items:center; gap:.6rem; background:var(--cream); border:1px solid var(--gold); border-radius:999px; padding:0.4rem 1.1rem; font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--gold-deep)">
+        <span style="width:6px; height:6px; background:var(--gold); border-radius:50%"></span>
+        Two ways in
+      </span>
+      <h2 class="section center" style="margin-top:1rem">Two options × <em>full price</em>.</h2>
+      <p class="lede" style="max-width:50ch; margin:0.5rem auto 0">First, here's what these programs normally cost. Then we'll show you what tonight unlocks.</p>
+    </div>
+
+    <div class="tiers" style="margin-top:2.5rem">
+      <div class="tier sod">
+        <div class="tier-tag">School of Dating</div>
+        <h4>SOD</h4>
+        <ul>
+          <li>16 LIVE Two-Hour Group Teachings</li>
+          <li>200+ Page Physical Workbook</li>
+          <li>Community Support System</li>
+          <li>Personal SOD Coach (text support)</li>
+          <li>Weekly Thursday Q&amp;A with a Coach</li>
+          <li>Lifetime Access to SOD &amp; Alumni Network</li>
+        </ul>
+        <div class="price-row">
+          <span class="price-new">$1,697</span>
+        </div>
+      </div>
+
+      <div class="tier pro">
+        <div class="tier-tag">School of Dating PRO</div>
+        <h4>SOD <em>PRO</em></h4>
+        <ul>
+          <li>Everything in SOD</li>
+          <li>Lifetime Access to SOD &amp; Alumni Network</li>
+        </ul>
+        <div class="calls-badge">
+          <div class="num">20 weeks of <em style="font-style:italic">1:1 coaching</em></div>
+          <div class="label">10 in program + 10 weeks after</div>
+        </div>
+        <div class="price-row">
+          <span class="price-new">$3,197</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 25. $700 OFF TONIGHT -->
+<section class="slide">
+  <div class="stack" style="max-width:1300px; margin:0 auto">
+    <div class="eyebrow" style="text-align:center; color:var(--rose-deep)">⏰ Tonight only</div>
+    <h1 class="title" style="text-align:center; font-size:clamp(3.5rem,6.5vw,6.5rem)">$700 <em>off</em>. Tonight.</h1>
+
+    <div class="tiers" style="margin-top:3rem">
+      <div class="tier sod recommended">
+        <div class="tier-tag">School of Dating</div>
+        <h4>SOD</h4>
+        <ul>
+          <li>16 LIVE Two-Hour Group Teachings</li>
+          <li>200+ Page Physical Workbook</li>
+          <li>Community Support System</li>
+          <li>Personal SOD Coach</li>
+          <li>Weekly Thursday Q&amp;A</li>
+          <li>Lifetime Access</li>
+        </ul>
+        <div class="price-row">
+          <span class="price-old">$1,697</span>
+          <span class="price-new" style="color:var(--gold-deep)">$997</span>
+        </div>
+      </div>
+
+      <div class="tier pro">
+        <div class="tier-tag">School of Dating PRO</div>
+        <h4>SOD <em>PRO</em></h4>
+        <ul>
+          <li>Everything in SOD</li>
+          <li>Lifetime Access</li>
+        </ul>
+        <div class="calls-badge">
+          <div class="num">20 weeks of <em style="font-style:italic">1:1 coaching</em></div>
+          <div class="label">10 in program + 10 weeks after</div>
+        </div>
+        <div class="price-row">
+          <span class="price-old">$3,197</span>
+          <span class="price-new">$2,497</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAB intro — straight from $700 off discount reveal to "it gets better" -->
+<section class="slide bonus-banner-bg center" style="padding:5vh 6vw">
+  <div class="eyebrow">🔥 Fast Action Bonus · Night 4 ONLY</div>
+  <h1 class="title" style="margin-top:1rem; max-width:22ch">Two unlocks.<br>Instantly. <em>Free</em>.</h1>
+  <p class="lede" style="margin-top:2rem; max-width:50ch">For the first 100 people who say yes — we're stacking two bonuses you won't find anywhere else.</p>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; max-width:900px; margin:2.5rem auto 0; width:100%">
+    <div style="background:rgba(245,224,184,.12); border:1px solid rgba(245,224,184,.4); border-radius:12px; padding:1.4rem; text-align:left">
+      <div style="font-size:.7rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--gold-light); margin-bottom:.4rem">⏰ Bonus #1 deadline</div>
+      <div style="font-family:'Fraunces',serif; font-weight:400; font-style:italic; font-size:1.4rem; color:#fff; line-height:1.2">When this call ends</div>
+      <div style="font-size:.85rem; color:rgba(255,255,255,.65); margin-top:.4rem">≈ 9:00 PM CT tonight</div>
+    </div>
+    <div style="background:rgba(245,224,184,.12); border:1px solid rgba(245,224,184,.4); border-radius:12px; padding:1.4rem; text-align:left">
+      <div style="font-size:.7rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--gold-light); margin-bottom:.4rem">⏰ Bonus #2 — first 30 only</div>
+      <div style="font-family:'Fraunces',serif; font-weight:400; font-style:italic; font-size:1.4rem; color:#fff; line-height:1.2">Custom script back in 5 days</div>
+      <div style="font-size:.85rem; color:rgba(255,255,255,.65); margin-top:.4rem">First 30 buyers submit a personal scenario</div>
+    </div>
+  </div>
+</section>
+
+<!-- 27. BONUS #1 — Profile Diagnostic (Kait + JJ personally review your dating profile) -->
+<section class="slide fab-bonus">
+  <div class="fab-grid">
+    <div class="fab-body">
+      <div class="fab-tag"><span class="num">Bonus 01</span><span>⏰ Expires when this call ends · 9 PM CT</span></div>
+      <h1 class="fab-headline">A personal <em>diagnostic</em> of your online dating profile.</h1>
+      <p class="fab-sub">JJ &amp; Kait pull up your profile. Tell you what's killing your matches. What's attracting the wrong type. And give you our personal playbook to attract spiritually-aligned, emotionally-available people.</p>
+      <p class="fab-sub" style="margin-top:.6rem; font-style:italic; color:var(--gold-light)">It's <em>Pimp My Ride</em> for your dating apps.</p>
+      <div class="fab-value-pill">
+        <span class="val-num">$299</span>
+        <span class="val-tx">value · free tonight</span>
+      </div>
+    </div>
+    <div class="fab-pic-wrap">
+      <div class="fab-cap"><em>Tonight only</em></div>
+      <img src="img/engagement-ai.png" alt="Profile diagnostic" style="object-position:center center">
+    </div>
+  </div>
+</section>
+
+<!-- 28. BONUS #2 — Just Tell Me What to Say (40+ texting scripts) -->
+<section class="slide fab-bonus">
+  <div class="fab-grid">
+    <div class="fab-body">
+      <div class="fab-tag" style="color:var(--gold-deep)"><span class="num" style="background:var(--gold-deep)">Bonus 02</span><span>⏰ Expires when this call ends · 9 PM CT</span></div>
+      <h1 class="fab-headline"><em>"Just Tell Me<br>What to Say."</em></h1>
+      <p class="fab-sub">40+ scripts for every hard conversation in dating. "Where is this going?" · "I need to slow down physically." · The breakup script. The faith conversation. Even the "why are you still single?" Thanksgiving script.</p>
+      <p class="fab-sub" style="margin-top:.6rem; font-style:italic; color:var(--gold-deep)"><strong>First 30 buyers</strong> submit ONE personal scenario, get a custom script back from Kait or a coach within 5 days.</p>
+      <div class="fab-value-pill">
+        <span class="val-num">$197</span>
+        <span class="val-tx">value · free tonight</span>
+      </div>
+    </div>
+    <div class="fab-pic-wrap">
+      <img src="img/coaching-ai.png" alt="Texting script preview" style="object-position:center center">
+    </div>
+  </div>
+</section>
+
+<!-- 32. COHORT CAPS AT 200 (moved up per script — before therapy reframe) -->
+<section class="slide center">
+  <p class="script" style="font-size:clamp(2.5rem,4vw,4rem); color:var(--ink)">School of Dating</p>
+  <div class="eyebrow" style="margin-top:3rem">Heads up</div>
+  <h2 class="section" style="margin-top:1rem; max-width:24ch">Our summer cohort caps at</h2>
+  <h1 class="giant" style="margin-top:.5rem">200 <em>students</em>.</h1>
+  <p class="lede" style="margin-top:2rem">And we are already filling up.</p>
+</section>
+
+<!-- 33. THERAPY VS SOD — JJ loves this slide -->
+<section class="slide theme-dark center">
+  <div class="eyebrow">Put it in perspective</div>
+  <h2 class="section" style="margin-top:1rem; max-width:24ch">If you went to therapy 1:1 every week for <em>3 months</em>…</h2>
+
+  <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:2rem; margin-top:4rem; max-width:1000px; align-items:center">
+    <div style="background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:2.5rem 2rem; text-align:center">
+      <div style="font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:rgba(255,255,255,.5); font-weight:600; margin-bottom:1rem">Therapy 1:1 · 3 months</div>
+      <div style="font-family:'Fraunces',serif; font-weight:400; font-size:clamp(3rem,5vw,5rem); color:var(--bg); line-height:1">$2,400</div>
+      <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:300; font-size:1.1rem; color:rgba(255,255,255,.65); margin-top:1.2rem">And it wasn't<br>about dating.</div>
+    </div>
+    <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:300; font-size:1.6rem; color:var(--gold)">vs.</div>
+    <div style="background:var(--bg); border-radius:14px; padding:2.5rem 2rem; text-align:center; box-shadow:0 30px 60px -20px rgba(0,0,0,.5)">
+      <div style="font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; margin-bottom:1rem">School of Dating</div>
+      <div style="font-family:'Fraunces',serif; font-weight:400; font-size:clamp(3rem,5vw,5rem); color:var(--rose-deep); line-height:1">$997</div>
+      <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:300; font-size:1.1rem; color:var(--ink-soft); margin-top:1.2rem">Built specifically<br>to get you married.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 30. FULL VALUE STACK + BIG CTA (corrected) -->
+<section class="slide" style="padding:4vh 4vw">
+  <div class="stack" style="max-width:1500px; margin:0 auto; width:100%">
+    <div class="eyebrow" style="text-align:center">Tonight's offer</div>
+    <h2 class="section center" style="font-size:clamp(2rem,3.5vw,3.5rem)">All <em>included</em>. One investment.</h2>
+
+    <div style="display:grid; grid-template-columns:1.4fr 1fr; gap:3rem; margin-top:1rem; align-items:center">
+      <table class="value-table">
+        <tbody>
+          <tr><td>School of Dating × 10-Week Mentorship</td><td>$11,838</td></tr>
+          <tr class="bonus"><td>Bonus #1 — Personal Profile Diagnostic w/ Kait &amp; JJ</td><td>$299</td></tr>
+          <tr class="bonus"><td>Bonus #2 — "Just Tell Me What to Say" (40+ scripts)</td><td>$197</td></tr>
+          <tr class="total"><td><strong>Total Value</strong></td><td><strong>$12,334</strong></td></tr>
+          <tr class="offer"><td><strong>Tonight's Offer</strong></td><td><strong>$997</strong></td></tr>
+        </tbody>
+      </table>
+
+      <div style="display:flex; flex-direction:column; gap:1rem">
+        <p class="kicker" style="color:var(--rose-deep); text-align:center">Two payment options</p>
+        <div style="background:linear-gradient(135deg,var(--paper),#faf4e6); border:3px solid var(--gold-deep); border-radius:12px; padding:1.4rem; text-align:center; box-shadow:var(--shadow-strong)">
+          <p class="kicker" style="color:var(--gold-deep); margin-bottom:.4rem; font-size:.78rem">Pay in full</p>
+          <p style="font-family:'Fraunces',serif; font-weight:500; font-size:2.6rem; color:var(--ink); line-height:1">1 × $997</p>
+          <p style="font-size:.78rem; color:var(--gold-deep); font-weight:700; letter-spacing:.16em; margin-top:.4rem">$700 OFF</p>
+        </div>
+        <div style="background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:1rem; text-align:center">
+          <p class="kicker" style="color:var(--muted); margin-bottom:.3rem; font-size:.72rem">6-pay plan</p>
+          <p style="font-family:'Fraunces',serif; font-weight:500; font-size:2rem; color:var(--ink); line-height:1">6 × $198</p>
+          <p style="font-size:.72rem; color:var(--muted); font-weight:500; letter-spacing:.1em; margin-top:.3rem; font-style:italic">first payment today + 5 more</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BIG CHECKOUT CTA — readable from a phone, scannable from the back of the room -->
+    <div style="margin-top:1.5rem; background:linear-gradient(135deg, var(--rose-deep) 0%, #8a3a30 100%); border-radius:16px; padding:1.8rem 2.5rem; display:flex; align-items:center; justify-content:space-between; gap:2rem; box-shadow:0 30px 60px -20px rgba(168,90,78,.5); flex-wrap:wrap">
+      <div style="display:flex; flex-direction:column; gap:.3rem; flex:1; min-width:300px">
+        <span style="font-size:.78rem; letter-spacing:.28em; text-transform:uppercase; font-weight:700; color:rgba(255,255,255,.85)">⏰ Save your seat now</span>
+        <a href="https://schoolofdatingoffer.com" target="_blank" rel="noopener"
+          style="font-family:'Inter',sans-serif; font-weight:800; font-size:clamp(2.4rem,4.5vw,4.5rem); color:#fff; text-decoration:none; letter-spacing:-0.01em; line-height:1; text-transform:lowercase; text-shadow:0 4px 20px rgba(0,0,0,.3)">
+          schoolofdatingoffer.com
+        </a>
+      </div>
+      <div style="background:#fff; padding:.8rem; border-radius:10px; box-shadow:0 12px 30px -8px rgba(0,0,0,.3)">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=6&data=https://schoolofdatingoffer.com" alt="Scan to enroll" style="display:block; width:140px; height:140px">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 31. 72-HOUR MONEY-BACK GUARANTEE — dedicated reassurance slide between value stack and live tracker -->
 <section class="slide" style="background:radial-gradient(ellipse at 50% 30%, rgba(110,128,113,.14), transparent 55%), linear-gradient(135deg, #f1f3ee 0%, var(--bg) 70%); padding:5vh 6vw">
   <div class="stack center" style="max-width:1200px; margin:0 auto">
     <div style="display:inline-flex; align-items:center; justify-content:center; width:96px; height:96px; background:var(--sage); border-radius:50%; box-shadow:0 30px 60px -20px rgba(110,128,113,.5)">
@@ -1873,20 +1796,21 @@ h3 em { font-style: italic; }
     <p class="lede" style="margin:1rem auto 0; max-width:54ch; font-style:italic; font-size:clamp(1.1rem,1.5vw,1.5rem); color:var(--ink-soft)">
       After 72 hours, all sales are final — you're committing to your cohort, and we're committing to you.
     </p>
+
+    <div style="display:flex; gap:1.5rem; margin-top:2.5rem; align-items:center; flex-wrap:wrap; justify-content:center">
+      <a href="https://schoolofdatingoffer.com" target="_blank" rel="noopener"
+        style="display:inline-flex; align-items:center; gap:.6rem; background:var(--sage); color:#fff; padding:1.1rem 2.2rem; border-radius:999px; text-decoration:none; font-family:'Inter',sans-serif; font-weight:700; font-size:1.1rem; letter-spacing:.04em; box-shadow:0 20px 40px -12px rgba(110,128,113,.5); transition:transform .15s">
+        Save my seat → schoolofdatingoffer.com
+      </a>
+      <div style="background:var(--paper); padding:.6rem; border-radius:10px; box-shadow:var(--shadow); display:flex; flex-direction:column; align-items:center; gap:.2rem; border:1px solid var(--line)">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=6&data=https://schoolofdatingoffer.com" alt="Scan to enroll" style="display:block; width:120px; height:120px">
+        <span style="font-size:.55rem; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); font-weight:700">Or scan</span>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- 26. JJ FINAL CLOSE -->
-<section class="slide theme-terra center">
-  <div class="eyebrow">JJ</div>
-  <h2 class="section" style="margin-top:1.5rem; max-width:24ch"><em>Friends.</em></h2>
-  <p class="lede" style="margin-top:2rem; max-width:50ch; color:#fff1d8; font-size:clamp(1.4rem,2vw,2rem)">
-    If this challenge has stirred something in you — this is the moment. The doors close tonight at 9 PM CT. There is no fall cohort. The next time you'll see this is May 2027.
-  </p>
-  <p class="lede" style="margin-top:1.5rem; max-width:46ch; color:#fff; font-style:italic">Don't let another year pass you by.</p>
-</section>
-
-<!-- 27. LIVE TRACKER + COUNTDOWN -->
+<!-- 32. LIVE TRACKER + COUNTDOWN — the camp-out page (compact, fits 100vh) -->
 <section class="slide live-stage" id="slide-tracker" data-noclick style="padding:3vh 4vw">
   <div class="stack" style="max-width:1600px; margin:0 auto; width:100%; gap:1rem">
     <div style="display:flex; justify-content:center; align-items:center; gap:1.5rem; flex-wrap:wrap">
@@ -1905,26 +1829,26 @@ h3 em { font-style: italic; }
       <div class="tracker-card" style="padding:1.2rem">
         <div class="tracker-row" style="padding-bottom:.5rem">
           <div>
-            <div class="tracker-label">📍 Cohort seats</div>
-            <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.2rem; font-size:.82rem">Hard cap at 200 · no fall cohort</p>
-          </div>
-          <div class="tracker-count" style="font-size:2.6rem"><span id="total-taken">—</span><span class="of"> / <span id="total-cap">200</span></span></div>
-        </div>
-        <div class="tracker-bar"><div id="total-bar"></div></div>
-
-        <div class="tracker-row" style="margin-top:.6rem; padding-bottom:.5rem">
-          <div>
             <div class="tracker-label">🔥 Fast Action Bonus seats</div>
-            <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.2rem; font-size:.82rem">Profile Diagnostic + Texting Scripts</p>
+            <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.2rem; font-size:.82rem">Pro trial + Cloud workshop</p>
           </div>
-          <div class="tracker-count" style="font-size:2.2rem"><span id="fab-taken">—</span><span class="of"> / <span id="fab-cap">100</span></span></div>
+          <div class="tracker-count" style="font-size:2.4rem"><span id="fab-taken">—</span><span class="of"> / <span id="fab-cap">100</span></span></div>
         </div>
         <div class="tracker-bar"><div id="fab-bar"></div></div>
+
+        <div class="tracker-row" style="margin-top:.4rem; padding-bottom:.5rem">
+          <div>
+            <div class="tracker-label">📍 Cohort seats</div>
+            <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.2rem; font-size:.82rem">Hard cap at 200</p>
+          </div>
+          <div class="tracker-count" style="font-size:2.4rem"><span id="total-taken">—</span><span class="of"> / <span id="total-cap">200</span></span></div>
+        </div>
+        <div class="tracker-bar"><div id="total-bar"></div></div>
       </div>
 
       <div class="tracker-card" style="padding:1.2rem">
         <div class="tracker-label" style="display:flex; align-items:center; gap:.6rem; margin-bottom:.3rem">
-          <span style="width:8px; height:8px; background:var(--rose); border-radius:50%; animation:pulseDot 1.4s ease-in-out infinite"></span>
+          <span style="width:8px; height:8px; background:var(--gold); border-radius:50%; animation:pulseDot 1.4s ease-in-out infinite"></span>
           Welcome to the cohort
         </div>
         <div class="stream-track" id="stream-track" style="max-height:280px">
@@ -1933,11 +1857,12 @@ h3 em { font-style: italic; }
       </div>
     </div>
 
-    <div style="background:rgba(255,255,255,.06); border:1px solid rgba(184,92,92,.4); border-radius:16px; padding:1.4rem 2rem; display:grid; grid-template-columns:1fr auto; gap:2rem; align-items:center">
+    <!-- MEGA CHECKOUT — pure URL + QR (refund has its own slide) -->
+    <div style="background:rgba(255,255,255,.06); border:1px solid rgba(200,154,74,.4); border-radius:16px; padding:1.4rem 2rem; display:grid; grid-template-columns:1fr auto; gap:2rem; align-items:center">
       <div style="display:flex; flex-direction:column; gap:.5rem">
         <span style="font-size:.78rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold-light); font-weight:700">⏰ Save your seat now</span>
         <a href="https://schoolofdatingoffer.com" target="_blank" rel="noopener"
-          style="font-family:'Inter',sans-serif; font-weight:800; font-size:clamp(2.4rem,5vw,4.8rem); color:#fff; text-decoration:none; letter-spacing:-0.01em; line-height:1; text-transform:lowercase; text-shadow:0 4px 24px rgba(184,92,92,.4)">
+          style="font-family:'Inter',sans-serif; font-weight:800; font-size:clamp(2.4rem,5vw,4.8rem); color:#fff; text-decoration:none; letter-spacing:-0.01em; line-height:1; text-transform:lowercase; text-shadow:0 4px 24px rgba(200,154,74,.4)">
           schoolofdatingoffer.com
         </a>
       </div>
@@ -1949,13 +1874,23 @@ h3 em { font-style: italic; }
   </div>
 </section>
 
-<!-- 28. CODE WORD: BERET -->
+<!-- 32. ENROLL URL -->
+<section class="slide center">
+  <p class="script" style="font-size:clamp(3rem,5vw,5rem); color:var(--ink)">School of Dating</p>
+  <p class="kicker" style="margin-top:2rem">Enroll now at</p>
+  <a class="cta-url" href="https://schoolofdatingoffer.com" target="_blank" rel="noopener">schoolofdatingoffer.com</a>
+  <div style="margin-top:3rem; padding:1rem; background:var(--paper); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow)">
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=10&data=https://schoolofdatingoffer.com" alt="QR" style="display:block; width:220px; height:220px">
+  </div>
+</section>
+
+<!-- CODE WORD BERET (restored — for the FYP attendance scholarship giveaway) -->
 <section class="slide sod-slide">
   <div class="sod-grid">
     <div>
-      <div class="eyebrow" style="color:#fff; opacity:.85">Tonight's giveaway</div>
+      <div class="eyebrow" style="color:#fff; opacity:.85">Big giveaway</div>
       <h1 class="title" style="color:#fff; font-size:clamp(2.8rem, 5vw, 5.5rem); line-height:1; margin-top:1rem">
-        Drop the <em style="color:#f5d49a">code word</em>.<br>Win SOD <em style="color:#f5d49a">free</em>.
+        Show up all <em style="color:#f5d49a">4 nights</em>.<br>Get a <em style="color:#f5d49a">scholarship</em>.
       </h1>
       <p class="lede" style="color:#fbeed4; margin-top:2rem; max-width:36ch">
         To our 10-week intensive mentorship — <em style="color:#fff; font-style:italic">The School of Dating</em>.
@@ -1976,55 +1911,44 @@ h3 em { font-style: italic; }
       <div class="codeword">
         <div class="codeword-label">Tonight's code word</div>
         <div class="codeword-value">BERET</div>
-        <div class="codeword-hint">Drop it in the chat. Then enter your name on the next slide.</div>
+        <div class="codeword-hint">Drop it in the chat before you go.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 29. SCHOLARSHIP ENTRY -->
-<section class="slide theme-dark" data-noclick>
-  <div class="stack" style="max-width:1500px; margin:0 auto; width:100%; gap:1.2rem">
-    <div class="eyebrow" style="text-align:center">Free SOD scholarship · enter to win</div>
-    <h2 class="section center" style="color:#fff">Enter your <em>name</em>.</h2>
-    <p class="lede center" style="color:rgba(255,255,255,.7); margin:0 auto">JJ will pick one live. Confetti, drama, the whole thing.</p>
-    <div class="scholar-entry-wrap" style="margin-top:1.5rem">
-      <div>
-        <form id="scholar-form" class="scholar-form" onsubmit="return false">
-          <input id="scholar-input" type="text" placeholder="Your first name" maxlength="40" autocomplete="off">
-          <button id="scholar-submit" type="button">Enter</button>
-        </form>
-        <p style="margin-top:1.2rem; color:rgba(255,255,255,.55); font-family:'Fraunces',serif; font-style:italic; font-size:1rem">
-          One entry per person. Be present when we pick — you have to claim it live.
-        </p>
-        <p style="margin-top:.4rem; color:rgba(255,255,255,.45); font-size:.78rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600">
-          Entries <span id="scholar-count">0</span>
-        </p>
-      </div>
-      <div class="scholar-entries">
-        <div class="se-label">Live entries</div>
-        <div id="scholar-list">
-          <div class="scholar-empty">No entries yet — be the first!</div>
-        </div>
-      </div>
+<!-- SCHOLARSHIP ENTRY — type names in, build the pool -->
+<section class="slide theme-rose" data-noclick style="padding:5vh 5vw">
+  <div class="stack" style="max-width:1400px; margin:0 auto; width:100%">
+    <div class="eyebrow" style="color:var(--rose-deep)">Type your name to enter</div>
+    <h1 class="title" style="margin-top:.5rem; font-size:clamp(2.4rem,4vw,4.2rem)">SOD <em>Scholarship</em> · enter to win.</h1>
+    <p class="lede" style="margin-top:1rem">Code word was <strong style="color:var(--rose-deep)">BERET</strong>. Drop your full name below — we pull a winner on the next slide.</p>
+    <form id="schol-form" style="display:flex; gap:.8rem; margin-top:1.5rem; max-width:640px">
+      <input id="schol-input" type="text" placeholder="First &amp; last name…" autocomplete="off"
+        style="flex:1; padding:1rem 1.2rem; border:2px solid var(--rose-deep); border-radius:10px; font-family:'Inter',sans-serif; font-size:1.1rem; background:var(--paper); color:var(--ink)">
+      <button type="submit"
+        style="background:var(--rose-deep); color:#fff; border:none; border-radius:10px; padding:0 1.8rem; font-family:'Inter',sans-serif; font-weight:700; font-size:1rem; letter-spacing:.04em; cursor:pointer">
+        Enter →
+      </button>
+    </form>
+    <div style="margin-top:1.8rem; display:flex; gap:1.2rem; align-items:baseline">
+      <span class="eyebrow" style="color:var(--rose-deep)">Pool</span>
+      <span id="schol-count" style="font-family:'Fraunces',serif; font-size:1.6rem; color:var(--ink)">0 entries</span>
     </div>
+    <div id="schol-stream" style="margin-top:1rem; max-height:30vh; overflow-y:auto; display:flex; flex-direction:column; gap:.4rem; padding-right:.5rem"></div>
   </div>
 </section>
 
-<!-- 30. WINNER REVEAL -->
-<section class="slide theme-dark center" id="slide-winner" data-noclick>
-  <div class="winner-stage">
-    <div class="winner-pre">🎉 Tonight's scholarship goes to…</div>
-    <div class="winner-name" id="winner-name">—</div>
-    <div class="winner-prize">Wins <em>School of Dating</em> · FREE</div>
-    <button class="reveal-btn" id="reveal-btn" type="button">Pick a winner</button>
-    <p style="margin-top:1rem; color:rgba(255,255,255,.55); font-family:'Fraunces',serif; font-style:italic; font-size:1rem">
-      Tap the button to draw. Tap again to re-roll.
-    </p>
-  </div>
+<!-- SCHOLARSHIP REVEAL — confetti + winner -->
+<section class="slide center" id="slide-schol-reveal" data-noclick
+  style="background:radial-gradient(ellipse at 50% 35%, rgba(196,122,110,.18), transparent 55%), var(--bg); padding:5vh 5vw">
+  <div class="eyebrow" style="color:var(--rose-deep)">And the winner is…</div>
+  <h1 id="schol-winner" class="title" style="margin-top:1.5rem; font-size:clamp(3.5rem,7vw,8rem); color:var(--rose-deep); font-style:italic">—</h1>
+  <p class="lede" style="margin-top:2rem; max-width:46ch">🎉 Free seat in <em>School of Dating</em> · on us. We'll DM you to set it up.</p>
+  <p class="kicker" style="margin-top:1.5rem; color:var(--muted)">Press <kbd>W</kbd> to draw a new winner</p>
 </section>
 
-<!-- 31. FINAL UPCOMING + LIVE COUNTER -->
+<!-- CAMP-OUT (duplicate of live tracker for loop-back) -->
 <section class="slide live-stage" id="slide-tracker-2" data-noclick style="padding:3vh 4vw">
   <div class="stack" style="max-width:1600px; margin:0 auto; width:100%; gap:1rem">
     <div style="display:flex; justify-content:center; align-items:center; gap:1.5rem; flex-wrap:wrap">
@@ -2042,25 +1966,25 @@ h3 em { font-style: italic; }
       <div class="tracker-card">
         <div class="tracker-row">
           <div>
-            <div class="tracker-label">📍 Cohort seats</div>
-            <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.4rem; font-size:.92rem">Hard cap at 200 · no fall cohort</p>
-          </div>
-          <div class="tracker-count"><span id="total-taken-2">—</span><span class="of"> / 200</span></div>
-        </div>
-        <div class="tracker-bar"><div id="total-bar-2"></div></div>
-        <div class="tracker-row" style="margin-top:.4rem">
-          <div>
             <div class="tracker-label">🔥 Fast Action seats</div>
-            <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.4rem; font-size:.92rem">Profile Diagnostic + Scripts</p>
+            <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.4rem; font-size:.92rem">Pro trial + Cloud workshop</p>
           </div>
           <div class="tracker-count"><span id="fab-taken-2">—</span><span class="of"> / 100</span></div>
         </div>
         <div class="tracker-bar"><div id="fab-bar-2"></div></div>
+        <div class="tracker-row" style="margin-top:.4rem">
+          <div>
+            <div class="tracker-label">📍 Cohort seats</div>
+            <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.4rem; font-size:.92rem">Hard cap at 200</p>
+          </div>
+          <div class="tracker-count"><span id="total-taken-2">—</span><span class="of"> / 200</span></div>
+        </div>
+        <div class="tracker-bar"><div id="total-bar-2"></div></div>
       </div>
 
       <div class="tracker-card">
         <div class="tracker-label" style="display:flex; align-items:center; gap:.6rem; margin-bottom:.4rem">
-          <span style="width:8px; height:8px; background:var(--rose); border-radius:50%; animation:pulseDot 1.4s ease-in-out infinite"></span>
+          <span style="width:8px; height:8px; background:var(--gold); border-radius:50%; animation:pulseDot 1.4s ease-in-out infinite"></span>
           Welcome to the cohort
         </div>
         <div class="stream-track" id="stream-track-3">
@@ -2069,14 +1993,15 @@ h3 em { font-style: italic; }
       </div>
     </div>
 
-    <div style="background:rgba(255,255,255,.06); border:1px solid rgba(184,92,92,.4); border-radius:16px; padding:1.2rem 1.5rem; display:grid; grid-template-columns:1fr auto; gap:1.5rem; align-items:center">
+    <!-- MEGA CHECKOUT — compact -->
+    <div style="background:rgba(255,255,255,.06); border:1px solid rgba(200,154,74,.4); border-radius:16px; padding:1.2rem 1.5rem; display:grid; grid-template-columns:1fr auto; gap:1.5rem; align-items:center">
       <div style="display:flex; flex-direction:column; gap:.4rem">
         <span style="font-size:.7rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold-light); font-weight:700">⏰ Save your seat now</span>
         <a href="https://schoolofdatingoffer.com" target="_blank" rel="noopener"
-          style="font-family:'Inter',sans-serif; font-weight:800; font-size:clamp(2rem,3.8vw,3.6rem); color:#fff; text-decoration:none; letter-spacing:-0.01em; line-height:1; text-transform:lowercase; text-shadow:0 4px 24px rgba(184,92,92,.4)">
+          style="font-family:'Inter',sans-serif; font-weight:800; font-size:clamp(2rem,3.8vw,3.6rem); color:#fff; text-decoration:none; letter-spacing:-0.01em; line-height:1; text-transform:lowercase; text-shadow:0 4px 24px rgba(200,154,74,.4)">
           schoolofdatingoffer.com
         </a>
-        <div style="font-size:.85rem; font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.4rem">🛡️ 72-hour money-back guarantee · info@hodpodcast.com</div>
+        <div style="font-size:.85rem; font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.4rem">🛡️ Covered by our 72-hour money-back guarantee.</div>
       </div>
       <div style="background:#fff; padding:.6rem; border-radius:10px; box-shadow:var(--shadow-strong); display:flex; flex-direction:column; align-items:center; gap:.3rem">
         <img src="https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=6&data=https://schoolofdatingoffer.com" alt="Scan to enroll" style="display:block; width:170px; height:170px">
@@ -2085,6 +2010,7 @@ h3 em { font-style: italic; }
     </div>
   </div>
 </section>
+
 </div>
 
 <div class="chrome">
@@ -2216,9 +2142,7 @@ show((startHash && !isNaN(startHash)) ? startHash - 1 : 0);
 // LIVE TRACKER — polls /api/sod-counts + injects 18 timed fake signups while on camp-out
 //
 const POLL_MS = 8000;
-const CART_CLOSE_ISO = "2026-05-30T02:00:00Z"; // 9 PM CT Fri May 29 (Night 4 close)
-const LAST_24H_BASELINE_KEY = "sod_n4_24h_baseline_v1"; // captured on first N4 load
-const SCHOLARSHIP_ENTRIES_KEY = "sod_n4_scholarship_entries_v1";
+const CART_CLOSE_ISO = "2026-05-29T02:00:00Z"; // 9 PM CT Thu May 28
 // lastTotal, lastFab, fakeIndex, fakeOffset, fakeTimer, fakeEnabled, trackerActiveSince — declared at top before show()
 
 //
@@ -2277,6 +2201,20 @@ function applyCountsRaw(d, forceCelebrate, fakePerson) {
 
   ["fab-taken", "fab-taken-2"].forEach(id => setNum(id, displayedFab));
   ["total-taken", "total-taken-2"].forEach(id => setNum(id, displayedTotal));
+
+  // N4 intro slide #3: 24-hour delta + spots left
+  // Baseline = total at first N4 page load. Persists in localStorage.
+  try {
+    const N4_BASELINE_KEY = "sod_n4_24h_baseline_v1";
+    let baseline = localStorage.getItem(N4_BASELINE_KEY);
+    if (baseline === null) {
+      baseline = String(d.total || 0);
+      localStorage.setItem(N4_BASELINE_KEY, baseline);
+    }
+    const delta = Math.max(0, displayedTotal - parseInt(baseline, 10));
+    setNum("n4-new-24h", delta);
+    setNum("n4-spots-left", Math.max(0, (d.capTotal || 200) - displayedTotal));
+  } catch (e) {}
   setNum("fab-cap", d.capFab);
   setNum("total-cap", d.capTotal);
 
@@ -2312,25 +2250,6 @@ function applyCountsRaw(d, forceCelebrate, fakePerson) {
   lastFab = d.fabTaken;
   lastTotal = d.total;
   updateStream(d.recentSignups || PRESEEDED);
-
-  // N4 — update "new in last 24h" + "spots left" on slide 3
-  updateN4Stats(d);
-}
-
-// N4 — capture baseline on first load, then compute 24h delta from that
-function updateN4Stats(d) {
-  if (!d || typeof d.total !== 'number') return;
-  let baseline;
-  try { baseline = JSON.parse(localStorage.getItem(LAST_24H_BASELINE_KEY) || 'null'); } catch (e) { baseline = null; }
-  if (baseline === null || typeof baseline !== 'number') {
-    baseline = d.total;
-    try { localStorage.setItem(LAST_24H_BASELINE_KEY, JSON.stringify(baseline)); } catch (e) {}
-  }
-  const delta = Math.max(0, (d.total + fakeOffset) - baseline);
-  const spots = Math.max(0, (d.capTotal || 200) - (d.total + fakeOffset));
-  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-  set('new-students-24h', delta);
-  set('spots-left-200', spots);
 }
 
 // Pre-seeded welcomes for the camera demo (shown until real data arrives)
@@ -2370,7 +2289,7 @@ function celebrate(signup) {
     // Confetti
     const stage = document.createElement("div");
     stage.className = "confetti-stage";
-    const palette = ['#c89a4a', '#f5e0b8', '#b85c5c', '#8a3a3a', '#6e2a2a', '#fff1d8', '#8a6627'];
+    const palette = ['#c89a4a', '#f5e0b8', '#c47a6e', '#6e8071', '#fff1d8', '#8a6627'];
     for (let n = 0; n < 80; n++) {
       const p = document.createElement("div");
       p.className = "confetti-piece";
@@ -2460,122 +2379,71 @@ const cached = localStorage.getItem("sod_last");
 if (cached) { try { applyCounts(JSON.parse(cached)); } catch (e) {} }
 
 //
-// N4 — SCHOLARSHIP entries (localStorage only, no backend)
+// SCHOLARSHIP — name entry pool + winner reveal (N4 only)
 //
-function getScholarEntries() {
-  try { return JSON.parse(localStorage.getItem(SCHOLARSHIP_ENTRIES_KEY) || '[]'); } catch (e) { return []; }
-}
-function saveScholarEntries(arr) {
-  try { localStorage.setItem(SCHOLARSHIP_ENTRIES_KEY, JSON.stringify(arr)); } catch (e) {}
-}
-function renderScholarEntries() {
-  const list = document.getElementById('scholar-list');
-  const countEl = document.getElementById('scholar-count');
-  const entries = getScholarEntries();
-  if (countEl) countEl.textContent = entries.length;
-  if (!list) return;
-  if (!entries.length) {
-    list.innerHTML = '<div class="scholar-empty">No entries yet — be the first!</div>';
-    return;
-  }
-  // newest first
-  list.innerHTML = entries.slice().reverse().map(e =>
-    `<div class="se-item">✨ <strong>${escapeHtml(e.name)}</strong></div>`
+const SCHOL_KEY = "sod_n4_scholarship_entries_v1";
+let scholEntries = [];
+try { scholEntries = JSON.parse(localStorage.getItem(SCHOL_KEY) || '[]'); } catch (e) { scholEntries = []; }
+
+function renderScholStream() {
+  const stream = document.getElementById('schol-stream');
+  const count = document.getElementById('schol-count');
+  if (count) count.textContent = `${scholEntries.length} ${scholEntries.length === 1 ? 'entry' : 'entries'}`;
+  if (!stream) return;
+  stream.innerHTML = scholEntries.slice().reverse().map(name =>
+    `<div style="font-family:'Fraunces',serif; font-size:1.1rem; color:var(--ink); padding:.4rem .8rem; background:rgba(196,122,110,.08); border-radius:6px">🎟️ ${escapeHtml(name)}</div>`
   ).join('');
 }
-function addScholarEntry(rawName) {
-  const name = String(rawName || '').trim().slice(0, 40);
-  if (!name) return false;
-  const entries = getScholarEntries();
-  // dedupe by lowercase name
-  if (entries.some(e => e.name.toLowerCase() === name.toLowerCase())) {
-    flashToast(`${name} is already entered`, '#8a3a3a');
-    return false;
-  }
-  entries.push({ name, addedAt: new Date().toISOString() });
-  saveScholarEntries(entries);
-  renderScholarEntries();
-  flashToast(`✨ ${name} entered!`, '#b85c5c');
-  return true;
-}
 
-const scholarSubmit = document.getElementById('scholar-submit');
-const scholarInput = document.getElementById('scholar-input');
-if (scholarSubmit && scholarInput) {
-  scholarSubmit.addEventListener('click', () => {
-    if (addScholarEntry(scholarInput.value)) {
-      scholarInput.value = '';
-      scholarInput.focus();
-    }
-  });
-  scholarInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      if (addScholarEntry(scholarInput.value)) {
-        scholarInput.value = '';
-      }
-    }
-    // Stop deck nav keys from hijacking typing
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === ' ') {
-      e.stopPropagation();
-    }
+const scholForm = document.getElementById('schol-form');
+if (scholForm) {
+  scholForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const input = document.getElementById('schol-input');
+    const name = (input.value || '').trim();
+    if (!name) return;
+    scholEntries.push(name);
+    try { localStorage.setItem(SCHOL_KEY, JSON.stringify(scholEntries)); } catch (e) {}
+    input.value = '';
+    renderScholStream();
   });
 }
-renderScholarEntries();
+renderScholStream();
 
-//
-// N4 — WINNER REVEAL (drama + confetti)
-//
-function pickWinner() {
-  const entries = getScholarEntries();
-  const nameEl = document.getElementById('winner-name');
-  if (!nameEl) return;
-  if (!entries.length) {
-    nameEl.textContent = 'No entries yet';
-    flashToast('No scholarship entries yet', '#8a3a3a');
-    return;
-  }
-  // Dramatic shuffle reveal
-  const winner = entries[Math.floor(Math.random() * entries.length)];
-  let ticks = 0;
-  const maxTicks = 22;
-  const interval = setInterval(() => {
-    const r = entries[Math.floor(Math.random() * entries.length)];
-    nameEl.textContent = r.name.toUpperCase();
-    ticks++;
-    if (ticks >= maxTicks) {
-      clearInterval(interval);
-      nameEl.textContent = winner.name.toUpperCase();
-      // Big confetti burst on the winner slide
-      const slide = document.getElementById('slide-winner');
-      if (slide) {
-        const stage = document.createElement('div');
-        stage.className = 'confetti-stage';
-        const palette = ['#c89a4a', '#f5e0b8', '#b85c5c', '#8a3a3a', '#6e2a2a', '#fff1d8', '#8a6627'];
-        for (let n = 0; n < 220; n++) {
-          const p = document.createElement('div');
-          p.className = 'confetti-piece';
-          p.style.background = palette[n % palette.length];
-          const angle = Math.random() * Math.PI * 2;
-          const distance = 300 + Math.random() * 700;
-          p.style.setProperty('--dx', `${Math.cos(angle) * distance}px`);
-          p.style.setProperty('--dy', `${Math.sin(angle) * distance}px`);
-          p.style.animationDelay = `${Math.random() * 0.4}s`;
-          p.style.transform = `rotate(${Math.random() * 360}deg)`;
-          stage.appendChild(p);
-        }
-        slide.appendChild(stage);
-        setTimeout(() => stage.remove(), 5000);
-      }
+function drawScholWinner() {
+  const el = document.getElementById('schol-winner');
+  if (!el) return;
+  if (!scholEntries.length) { el.textContent = '(no entries yet)'; return; }
+  // Dramatic shuffle: cycle through names quickly, settle on a random one
+  let cycles = 0;
+  const winner = scholEntries[Math.floor(Math.random() * scholEntries.length)];
+  const iv = setInterval(() => {
+    el.textContent = scholEntries[Math.floor(Math.random() * scholEntries.length)];
+    cycles++;
+    if (cycles > 22) {
+      clearInterval(iv);
+      el.textContent = winner;
+      celebrate({ firstName: winner.split(' ')[0] || winner, lastInitial: (winner.split(' ')[1] || '')[0] || '' });
     }
-  }, 90);
+  }, 80);
 }
-const revealBtn = document.getElementById('reveal-btn');
-if (revealBtn) revealBtn.addEventListener('click', pickWinner);
 
-// Re-render scholar list whenever we land on entry slide (in case other tabs added entries)
-const _origShow = show;
-window.addEventListener('hashchange', renderScholarEntries);
+// Auto-draw when reveal slide activates; press W to redraw
+const observer = new MutationObserver(() => {
+  const reveal = document.getElementById('slide-schol-reveal');
+  if (reveal && reveal.classList.contains('active')) {
+    const el = document.getElementById('schol-winner');
+    if (el && el.textContent === '—') drawScholWinner();
+  }
+});
+const revealEl = document.getElementById('slide-schol-reveal');
+if (revealEl) observer.observe(revealEl, { attributes: true, attributeFilter: ['class'] });
+
+document.addEventListener('keydown', e => {
+  if ((e.key === 'w' || e.key === 'W') && document.getElementById('slide-schol-reveal')?.classList.contains('active')) {
+    drawScholWinner();
+  }
+});
 </script>
 
 </body>
