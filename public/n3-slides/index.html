@@ -2033,10 +2033,11 @@ let i = 0;
 // Manual fake-purchase state — press C to fire next from queue
 // Persisted to localStorage so the count survives page reloads during the live show.
 const FAKE_STATE_KEY = "sod_fake_state_v1";
-const RESET_AT_KEY = "sod_reset_at_v1";  // ISO ts — welcome list hides signups older than this
+const FIRED_FAKES_KEY = "sod_fired_fakes_v1";  // array of {firstName,lastInitial,addedAt} persisted across polls
 let fakeIndex = 0;
 let fakeOffset = 0;
-let resetAt = localStorage.getItem(RESET_AT_KEY) || null;
+let firedFakes = [];
+try { firedFakes = JSON.parse(localStorage.getItem(FIRED_FAKES_KEY) || '[]'); } catch (e) { firedFakes = []; }
 try {
   const url = new URL(location.href);
   if (url.searchParams.get('reset') === '1') {
@@ -2121,16 +2122,10 @@ document.addEventListener('keydown', e => {
     if (confirm('Reset fake-purchase state to 0? (use this before going live)')) {
       fakeIndex = 0;
       fakeOffset = 0;
+      firedFakes = [];
       localStorage.removeItem(FAKE_STATE_KEY);
-      // Set reset baseline — welcome stream now hides every signup older than this moment
-      resetAt = new Date().toISOString();
-      localStorage.setItem(RESET_AT_KEY, resetAt);
-      // Wipe welcome lists immediately
-      ["stream-track", "stream-track-3"].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.innerHTML = '';
-      });
-      flashToast('🧹 Reset · counts + welcome list cleared', '#6e8071');
+      localStorage.removeItem(FIRED_FAKES_KEY);
+      flashToast('🧹 Reset · queue + C-fires cleared (real list preserved)', '#6e8071');
       // Force re-apply to remove the offset from displayed counts
       const cached = localStorage.getItem("sod_last");
       if (cached) { try { applyCounts(JSON.parse(cached)); } catch (e) {} }
@@ -2179,20 +2174,23 @@ const FAKE_QUEUE = [
 ];
 
 function fireFakeSignup(person) {
-  // 1. bump displayed counts by triggering applyCounts with current cached + offset
+  // Persist this C-fire so it survives the next API poll (otherwise the 8s
+  // fetchCounts overwrites recentSignups with API-only data and the fake vanishes).
+  const fakeEntry = {
+    firstName: person.firstName,
+    lastInitial: person.lastInitial,
+    addedAt: new Date().toISOString()
+  };
+  firedFakes.unshift(fakeEntry);
+  try { localStorage.setItem(FIRED_FAKES_KEY, JSON.stringify(firedFakes)); } catch (e) {}
+
   const cached = localStorage.getItem("sod_last");
   if (cached) {
     try {
       const d = JSON.parse(cached);
-      // Inject fake recent signup at top of stream
-      d.recentSignups = [
-        { firstName: person.firstName, lastInitial: person.lastInitial, addedAt: new Date().toISOString() },
-        ...(d.recentSignups || []).slice(0, 7)
-      ];
       applyCountsRaw(d, /*forceCelebrate*/ true, person);
     } catch (e) {}
   } else {
-    // No cache yet — just fire the celebration UI without count change
     celebrate(person);
   }
 }
@@ -2306,23 +2304,24 @@ function celebrate(signup) {
 }
 
 function updateStream(signups) {
-  if (!signups) return;
+  signups = signups || [];
   const tracks = [
     document.getElementById("stream-track"),
     document.getElementById("stream-track-3")
   ];
-  // Honor reset baseline — hide anything that happened before R was pressed
-  let filtered = signups;
-  if (resetAt) {
-    const baseline = new Date(resetAt).getTime();
-    filtered = signups.filter(s => s.addedAt && new Date(s.addedAt).getTime() >= baseline);
-  }
-  if (!filtered.length) {
+  // Merge C-fires on top of real API signups (deduped by name+addedAt to be safe)
+  const seen = new Set();
+  const merged = [...firedFakes, ...signups].filter(s => {
+    const k = `${s.firstName}|${s.lastInitial}|${s.addedAt}`;
+    if (seen.has(k)) return false;
+    seen.add(k); return true;
+  });
+  if (!merged.length) {
     for (const t of tracks) if (t) t.innerHTML = '';
     return;
   }
   // Show ALL students — newest at top, scrollable so JJ/Kait can scroll to shout people out
-  const html = filtered.map(s => {
+  const html = merged.map(s => {
     const name = `${s.firstName}${s.lastInitial ? ' ' + s.lastInitial + '.' : ''}`;
     const when = timeAgo(s.addedAt);
     return `<div class="stream-item">
