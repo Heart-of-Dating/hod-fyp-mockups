@@ -1312,7 +1312,8 @@ h3 em { font-style: italic; }
   font-size:clamp(1.1rem,1.6vw,1.5rem); text-align:left; letter-spacing:-.01em
 }
 .vs-table thead th.feat { background:transparent; color:var(--ink-soft); font-size:.78rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; font-family:'Inter',sans-serif }
-.vs-table thead th.them { background:#f1ece6; color:var(--ink-soft); font-style:italic; opacity:.85 }
+.vs-table thead th.them { background:linear-gradient(135deg,#7a6e64 0%,#5d534b 100%); color:#fff; font-style:italic; opacity:.95; position:relative }
+.vs-table thead th.them::before { content:"the others"; display:block; font-size:.65rem; letter-spacing:.28em; opacity:.7; margin-bottom:.2rem; font-family:'Inter',sans-serif; font-weight:700; font-style:normal; text-transform:uppercase }
 .vs-table thead th.us {
   background:linear-gradient(135deg,var(--rose-deep) 0%,#8a3a30 100%);
   color:#fff; position:relative
@@ -1367,8 +1368,8 @@ h3 em { font-style: italic; }
 <!-- NOT FOR YOU — 4 conditions, max POP: alternating burgundy/cream tiles, oversized numerals, accent line, motion-ready -->
 <style>
 .notfor-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; margin-top:1.8rem }
-.notfor-card { position:relative; padding:2rem 1.8rem 1.8rem 4.5rem; border-radius:14px; overflow:hidden; box-shadow:0 30px 60px -28px rgba(40,28,18,.45) }
-.notfor-card .nf-num { position:absolute; left:1rem; top:1.2rem; font-family:'Fraunces',serif; font-style:italic; font-weight:300; font-size:3.4rem; line-height:1; letter-spacing:-.04em }
+.notfor-card { position:relative; padding:2rem 1.8rem 1.8rem 6rem; border-radius:14px; overflow:hidden; box-shadow:0 30px 60px -28px rgba(40,28,18,.45) }
+.notfor-card .nf-num { position:absolute; left:1.1rem; top:1.6rem; font-family:'Fraunces',serif; font-style:italic; font-weight:300; font-size:3.2rem; line-height:1; letter-spacing:-.04em }
 .notfor-card .nf-hed { font-family:'Fraunces',serif; font-weight:500; font-size:1.25rem; line-height:1.2; margin:0 0 .6rem }
 .notfor-card .nf-body { font-size:.98rem; line-height:1.5; margin:0 }
 .notfor-card.a { background:#1c0f0d; color:#fff1d8 }
@@ -1559,6 +1560,50 @@ h3 em { font-style: italic; }
   </div>
 </section>
 
+<!-- $700 OFF TONIGHT — discount reveal between Two Ways to Join and FAB intro -->
+<section class="slide">
+  <div class="stack" style="max-width:1300px; margin:0 auto">
+    <div class="eyebrow" style="text-align:center; color:var(--rose-deep)">⏰ Tonight only</div>
+    <h1 class="title" style="text-align:center; font-size:clamp(3.5rem,6.5vw,6.5rem)">$700 <em>off</em>. Tonight.</h1>
+
+    <div class="tiers" style="margin-top:3rem">
+      <div class="tier sod recommended">
+        <div class="tier-tag">School of Dating</div>
+        <h4>SOD</h4>
+        <ul>
+          <li>16 LIVE Two-Hour Group Teachings</li>
+          <li>200+ Page Physical Workbook</li>
+          <li>Community Support System</li>
+          <li>Personal SOD Coach</li>
+          <li>Weekly Thursday Q&amp;A</li>
+          <li>Lifetime Access</li>
+        </ul>
+        <div class="price-row">
+          <span class="price-old">$1,697</span>
+          <span class="price-new" style="color:var(--gold-deep)">$997</span>
+        </div>
+      </div>
+
+      <div class="tier pro">
+        <div class="tier-tag">School of Dating PRO</div>
+        <h4>SOD <em>PRO</em></h4>
+        <ul>
+          <li>Everything in SOD</li>
+          <li>Lifetime Access</li>
+        </ul>
+        <div class="calls-badge">
+          <div class="num">20 weeks of <em style="font-style:italic">1:1 coaching</em></div>
+          <div class="label">10 in program + 10 weeks after</div>
+        </div>
+        <div class="price-row">
+          <span class="price-old">$3,197</span>
+          <span class="price-new">$2,497</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FAB intro — straight from $700 off discount reveal to "it gets better" -->
 <section class="slide bonus-banner-bg center" style="padding:5vh 6vw">
   <div class="eyebrow">🔥 Fast Action Bonus · Night 4 ONLY</div>
@@ -1572,9 +1617,9 @@ h3 em { font-style: italic; }
       <div style="font-size:1.05rem; color:rgba(255,255,255,.75)">≈ 9:00 PM CT tonight</div>
     </div>
     <div style="background:rgba(245,224,184,.15); border:2px solid rgba(245,224,184,.5); border-radius:16px; padding:2.2rem 2rem; text-align:left; box-shadow:0 20px 40px -16px rgba(0,0,0,.4)">
-      <div style="font-size:.8rem; letter-spacing:.24em; text-transform:uppercase; font-weight:800; color:var(--gold-light); margin-bottom:.8rem">⏰ Bonus #2 — instant</div>
-      <div style="font-family:'Fraunces',serif; font-weight:500; font-style:italic; font-size:clamp(2rem,2.8vw,2.8rem); color:#fff; line-height:1.05; margin-bottom:.6rem">40+ scripts in your inbox</div>
-      <div style="font-size:1.05rem; color:rgba(255,255,255,.75)">Delivered as a full guide to every enrollee</div>
+      <div style="font-size:.8rem; letter-spacing:.24em; text-transform:uppercase; font-weight:800; color:var(--gold-light); margin-bottom:.8rem">⏰ Bonus #2 deadline</div>
+      <div style="font-family:'Fraunces',serif; font-weight:500; font-style:italic; font-size:clamp(2rem,2.8vw,2.8rem); color:#fff; line-height:1.05; margin-bottom:.6rem">Midnight CT tonight</div>
+      <div style="font-size:1.05rem; color:rgba(255,255,255,.75)">A few extra hours for Bonus #2 — full script guide in your inbox</div>
     </div>
   </div>
 </section>
@@ -1606,7 +1651,7 @@ h3 em { font-style: italic; }
 <section class="slide fab-bonus">
   <div class="fab-grid">
     <div class="fab-body">
-      <div class="fab-tag" style="color:var(--gold-deep)"><span class="num" style="background:var(--gold-deep)">Bonus 02</span><span>⏰ Expires when this call ends · 9 PM CT</span></div>
+      <div class="fab-tag" style="color:var(--gold-deep)"><span class="num" style="background:var(--gold-deep)">Bonus 02</span><span>⏰ Expires at MIDNIGHT CT tonight</span></div>
       <h1 class="fab-headline"><em>"Just Tell Me<br>What to Say."</em></h1>
       <p class="fab-sub">40+ scripts for every hard conversation in dating. "Where is this going?" · "I need to slow down physically." · The breakup script. The faith conversation. Even the "why are you still single?" Thanksgiving script.</p>
       <p class="fab-sub" style="margin-top:.6rem; font-style:italic; color:var(--gold-deep)">A complete guide. Delivered to every enrollee tonight.</p>
