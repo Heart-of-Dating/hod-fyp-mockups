@@ -1659,7 +1659,7 @@ h3 em { font-style: italic; }
     </div>
     <div class="fab-pic-wrap">
       <div class="fab-cap"><em>Tonight only</em></div>
-      <img src="img/engagement-ai.png" alt="Profile diagnostic" style="object-position:center center">
+      <img src="img/gemini/profile-zoom.png" alt="Kait coaching a student through her dating profile on Zoom" style="object-position:center center">
     </div>
   </div>
 </section>
@@ -1918,35 +1918,104 @@ h3 em { font-style: italic; }
   </div>
 </section>
 
-<!-- SCHOLARSHIP ENTRY — type names in, build the pool -->
-<section class="slide theme-rose" data-noclick style="padding:5vh 5vw">
-  <div class="stack" style="max-width:1400px; margin:0 auto; width:100%">
-    <div class="eyebrow" style="color:var(--rose-deep)">Type your name to enter</div>
-    <h1 class="title" style="margin-top:.5rem; font-size:clamp(2.4rem,4vw,4.2rem)">SOD <em>Scholarship</em> · enter to win.</h1>
-    <p class="lede" style="margin-top:1rem">Code word was <strong style="color:var(--rose-deep)">BERET</strong>. Drop your full name below — we pull a winner on the next slide.</p>
-    <form id="schol-form" style="display:flex; gap:.8rem; margin-top:1.5rem; max-width:640px">
-      <input id="schol-input" type="text" placeholder="First &amp; last name…" autocomplete="off"
-        style="flex:1; padding:1rem 1.2rem; border:2px solid var(--rose-deep); border-radius:10px; font-family:'Inter',sans-serif; font-size:1.1rem; background:var(--paper); color:var(--ink)">
-      <button type="submit"
-        style="background:var(--rose-deep); color:#fff; border:none; border-radius:10px; padding:0 1.8rem; font-family:'Inter',sans-serif; font-weight:700; font-size:1rem; letter-spacing:.04em; cursor:pointer">
-        Enter →
-      </button>
-    </form>
-    <div style="margin-top:1.8rem; display:flex; gap:1.2rem; align-items:baseline">
-      <span class="eyebrow" style="color:var(--rose-deep)">Pool</span>
-      <span id="schol-count" style="font-family:'Fraunces',serif; font-size:1.6rem; color:var(--ink)">0 entries</span>
+<!-- SCHOLARSHIP ENTRY POOL — big QR + URL + 4 code words + live count + 60s timer -->
+<section class="slide theme-rose" id="slide-schol-pool" data-noclick style="padding:4vh 4vw">
+  <div class="stack" style="max-width:1600px; margin:0 auto; width:100%; gap:1.2rem">
+    <div style="display:flex; justify-content:space-between; align-items:baseline; gap:2rem; flex-wrap:wrap">
+      <div>
+        <div class="eyebrow" style="color:var(--rose-deep)">Scan or type · enter all 4 code words</div>
+        <h1 class="title" style="margin-top:.3rem; font-size:clamp(2.4rem,4vw,4.2rem); line-height:1">SOD <em>Scholarship</em>.</h1>
+      </div>
+      <div style="display:flex; gap:1rem; align-items:center">
+        <div style="text-align:right">
+          <div class="eyebrow" style="color:var(--rose-deep); font-size:.7rem">Entries</div>
+          <div id="schol-live-count" style="font-family:'Fraunces',serif; font-size:clamp(2.6rem,4vw,4rem); color:var(--rose-deep); line-height:1; font-weight:500">0</div>
+        </div>
+        <div style="text-align:right">
+          <div class="eyebrow" style="color:var(--rose-deep); font-size:.7rem">Closes in</div>
+          <div id="schol-countdown" style="font-family:'Fraunces',serif; font-size:clamp(2.6rem,4vw,4rem); color:var(--ink); line-height:1; font-weight:500">1:00</div>
+        </div>
+      </div>
     </div>
-    <div id="schol-stream" style="margin-top:1rem; max-height:30vh; overflow-y:auto; display:flex; flex-direction:column; gap:.4rem; padding-right:.5rem"></div>
+
+    <div style="display:grid; grid-template-columns:1.1fr 1fr; gap:2rem; margin-top:.5rem; align-items:start">
+      <!-- LEFT: QR + URL + button-style instruction -->
+      <div style="background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:2rem; box-shadow:var(--shadow-strong); text-align:center">
+        <p class="kicker" style="color:var(--rose-deep); margin-bottom:.6rem">Step 1 · Open</p>
+        <div style="font-family:'Inter',sans-serif; font-weight:800; font-size:clamp(1.8rem,3vw,2.6rem); color:var(--ink); letter-spacing:-.01em; line-height:1; margin-bottom:1rem">
+          fyp.heartofdating.com/<em style="color:var(--rose-deep); font-style:italic; font-family:'Fraunces',serif; font-weight:500">win</em>
+        </div>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=600x600&margin=8&data=https://fyp.heartofdating.com/win"
+             alt="Scan to enter" style="display:block; margin:0 auto; width:240px; height:240px; border-radius:10px; border:1px solid var(--line)">
+        <p class="kicker" style="margin-top:1rem; color:var(--muted); font-style:italic">Step 2 · Enter all 4 code words → Submit</p>
+      </div>
+
+      <!-- RIGHT: the 4 code words spelled out + live entry stream -->
+      <div style="display:flex; flex-direction:column; gap:1rem">
+        <div style="background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:1.4rem 1.2rem; box-shadow:var(--shadow)">
+          <div class="eyebrow" style="color:var(--rose-deep); font-size:.7rem">The 4 code words</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:.6rem; margin-top:.8rem">
+            <div style="background:#faf2ef; border-radius:8px; padding:.7rem .9rem">
+              <div style="font-family:'Fraunces',serif; font-style:italic; color:var(--gold-deep); font-size:.8rem">Night 1</div>
+              <div style="font-family:'Fraunces',serif; font-weight:500; color:var(--ink); font-size:1.3rem; letter-spacing:.04em">CROISSANT</div>
+            </div>
+            <div style="background:#faf2ef; border-radius:8px; padding:.7rem .9rem">
+              <div style="font-family:'Fraunces',serif; font-style:italic; color:var(--gold-deep); font-size:.8rem">Night 2</div>
+              <div style="font-family:'Fraunces',serif; font-weight:500; color:var(--ink); font-size:1.3rem; letter-spacing:.04em">BONJOUR</div>
+            </div>
+            <div style="background:#faf2ef; border-radius:8px; padding:.7rem .9rem">
+              <div style="font-family:'Fraunces',serif; font-style:italic; color:var(--gold-deep); font-size:.8rem">Night 3</div>
+              <div style="font-family:'Fraunces',serif; font-weight:500; color:var(--ink); font-size:1.3rem; letter-spacing:.04em">ESCARGOT</div>
+            </div>
+            <div style="background:#faf2ef; border-radius:8px; padding:.7rem .9rem; border:2px solid var(--rose-deep)">
+              <div style="font-family:'Fraunces',serif; font-style:italic; color:var(--rose-deep); font-size:.8rem">Night 4 · tonight</div>
+              <div style="font-family:'Fraunces',serif; font-weight:500; color:var(--rose-deep); font-size:1.3rem; letter-spacing:.04em">BERET</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:1rem 1.2rem; box-shadow:var(--shadow); flex:1; min-height:0">
+          <div class="eyebrow" style="color:var(--rose-deep); font-size:.7rem">Latest entries</div>
+          <div id="schol-live-stream" style="margin-top:.6rem; max-height:22vh; overflow-y:auto; display:flex; flex-direction:column; gap:.3rem"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- SCHOLARSHIP REVEAL — confetti + winner -->
+<!-- SCHOLARSHIP REVEAL — giant explosion winner reveal -->
 <section class="slide center" id="slide-schol-reveal" data-noclick
-  style="background:radial-gradient(ellipse at 50% 35%, rgba(196,122,110,.18), transparent 55%), var(--bg); padding:5vh 5vw">
-  <div class="eyebrow" style="color:var(--rose-deep)">And the winner is…</div>
-  <h1 id="schol-winner" class="title" style="margin-top:1.5rem; font-size:clamp(3.5rem,7vw,8rem); color:var(--rose-deep); font-style:italic">—</h1>
-  <p class="lede" style="margin-top:2rem; max-width:46ch">🎉 Free seat in <em>School of Dating</em> · on us. We'll DM you to set it up.</p>
-  <p class="kicker" style="margin-top:1.5rem; color:var(--muted)">Press <kbd>W</kbd> to draw a new winner</p>
+  style="background:radial-gradient(ellipse at 50% 30%, rgba(196,122,110,.20), transparent 55%), var(--bg); padding:5vh 5vw">
+  <div class="stack center" style="gap:1.5rem">
+    <!-- Confetti burst SVG -->
+    <svg viewBox="0 0 600 120" xmlns="http://www.w3.org/2000/svg" style="width:90%; max-width:520px; height:auto" aria-hidden="true">
+      <defs>
+        <linearGradient id="goldsplash" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#8a6a30"/>
+          <stop offset="50%" stop-color="#f5d49a"/>
+          <stop offset="100%" stop-color="#8a6a30"/>
+        </linearGradient>
+      </defs>
+      <g stroke="url(#goldsplash)" stroke-width="2.5" stroke-linecap="round" fill="none">
+        <line x1="20" y1="60" x2="60" y2="60"/>
+        <line x1="100" y1="40" x2="130" y2="50"/>
+        <line x1="100" y1="80" x2="130" y2="70"/>
+        <line x1="160" y1="60" x2="200" y2="60" stroke-width="3"/>
+        <line x1="470" y1="60" x2="510" y2="60" stroke-width="3"/>
+        <line x1="540" y1="40" x2="570" y2="50"/>
+        <line x1="540" y1="80" x2="570" y2="70"/>
+        <line x1="540" y1="60" x2="580" y2="60"/>
+      </g>
+      <g fill="#b85c5c"><circle cx="90" cy="60" r="4"/><circle cx="510" cy="60" r="4"/></g>
+      <g fill="#c89a4a"><circle cx="155" cy="60" r="3"/><circle cx="445" cy="60" r="3"/></g>
+    </svg>
+
+    <div class="eyebrow" style="color:var(--rose-deep)">And the winner is…</div>
+    <h1 id="schol-winner" class="title" style="font-size:clamp(3.5rem,8vw,9rem); color:var(--rose-deep); font-style:italic; line-height:1; margin:.5rem 0">—</h1>
+    <p class="lede" style="margin-top:1rem; max-width:48ch; font-size:clamp(1.2rem,1.6vw,1.6rem)">🎉 You just won a <em>free seat</em> in School of Dating — on us. We'll DM you to set it up.</p>
+    <p id="schol-pool-size" style="font-family:'Fraunces',serif; font-style:italic; color:var(--muted); font-size:1.1rem; margin-top:.6rem">Drawn from <strong id="schol-pool-num">0</strong> verified entries</p>
+    <p class="kicker" style="margin-top:1rem; color:var(--muted)">Press <kbd>W</kbd> to draw a new winner</p>
+  </div>
 </section>
 
 <!-- CAMP-OUT (duplicate of live tracker for loop-back) -->
@@ -2375,65 +2444,115 @@ const cached = localStorage.getItem("sod_last");
 if (cached) { try { applyCounts(JSON.parse(cached)); } catch (e) {} }
 
 //
-// SCHOLARSHIP — name entry pool + winner reveal (N4 only)
+// SCHOLARSHIP — KV-backed pool from /api/scholarship-list, drawn live on reveal
 //
-const SCHOL_KEY = "sod_n4_scholarship_entries_v1";
-let scholEntries = [];
-try { scholEntries = JSON.parse(localStorage.getItem(SCHOL_KEY) || '[]'); } catch (e) { scholEntries = []; }
+let scholEntries = [];  // [{name, enteredAt}]
 
-function renderScholStream() {
-  const stream = document.getElementById('schol-stream');
-  const count = document.getElementById('schol-count');
-  if (count) count.textContent = `${scholEntries.length} ${scholEntries.length === 1 ? 'entry' : 'entries'}`;
-  if (!stream) return;
-  stream.innerHTML = scholEntries.slice().reverse().map(name =>
-    `<div style="font-family:'Fraunces',serif; font-size:1.1rem; color:var(--ink); padding:.4rem .8rem; background:rgba(196,122,110,.08); border-radius:6px">🎟️ ${escapeHtml(name)}</div>`
-  ).join('');
+async function fetchScholList() {
+  try {
+    const r = await fetch('/api/scholarship-list', { cache: 'no-store' });
+    const d = await r.json();
+    if (!d.ok) return;
+    scholEntries = d.entries || [];
+    renderScholLive();
+  } catch (e) {}
 }
 
-const scholForm = document.getElementById('schol-form');
-if (scholForm) {
-  scholForm.addEventListener('submit', e => {
-    e.preventDefault();
-    const input = document.getElementById('schol-input');
-    const name = (input.value || '').trim();
-    if (!name) return;
-    scholEntries.push(name);
-    try { localStorage.setItem(SCHOL_KEY, JSON.stringify(scholEntries)); } catch (e) {}
-    input.value = '';
-    renderScholStream();
+function renderScholLive() {
+  const count = document.getElementById('schol-live-count');
+  if (count) count.textContent = scholEntries.length.toString();
+  const stream = document.getElementById('schol-live-stream');
+  if (stream) {
+    stream.innerHTML = scholEntries.slice(0, 30).map(e =>
+      `<div style="font-family:'Fraunces',serif; font-size:1rem; color:var(--ink); padding:.35rem .6rem; background:rgba(196,122,110,.08); border-radius:6px">🎟️ ${escapeHtml(e.name)}</div>`
+    ).join('');
+  }
+  const poolNum = document.getElementById('schol-pool-num');
+  if (poolNum) poolNum.textContent = scholEntries.length.toString();
+}
+
+// Poll while the pool slide is active
+let scholPollIv = null;
+let scholCountdownIv = null;
+let scholCountdownStart = null;
+
+function startScholCountdown() {
+  if (scholCountdownIv) return;
+  scholCountdownStart = Date.now();
+  const el = document.getElementById('schol-countdown');
+  scholCountdownIv = setInterval(() => {
+    const elapsed = (Date.now() - scholCountdownStart) / 1000;
+    const remaining = Math.max(0, 60 - elapsed);
+    if (el) {
+      const m = Math.floor(remaining / 60);
+      const s = Math.floor(remaining % 60);
+      el.textContent = `${m}:${String(s).padStart(2, '0')}`;
+      if (remaining <= 10) el.style.color = 'var(--rose-deep)';
+    }
+    if (remaining <= 0) { clearInterval(scholCountdownIv); scholCountdownIv = null; }
+  }, 250);
+}
+
+function stopScholCountdown() {
+  if (scholCountdownIv) { clearInterval(scholCountdownIv); scholCountdownIv = null; }
+  const el = document.getElementById('schol-countdown');
+  if (el) { el.textContent = '1:00'; el.style.color = ''; }
+}
+
+const scholPoolEl = document.getElementById('slide-schol-pool');
+if (scholPoolEl) {
+  const poolObs = new MutationObserver(() => {
+    if (scholPoolEl.classList.contains('active')) {
+      fetchScholList();
+      if (!scholPollIv) scholPollIv = setInterval(fetchScholList, 3000);
+      startScholCountdown();
+    } else {
+      if (scholPollIv) { clearInterval(scholPollIv); scholPollIv = null; }
+      stopScholCountdown();
+    }
   });
+  poolObs.observe(scholPoolEl, { attributes: true, attributeFilter: ['class'] });
 }
-renderScholStream();
 
 function drawScholWinner() {
   const el = document.getElementById('schol-winner');
+  const poolNum = document.getElementById('schol-pool-num');
   if (!el) return;
-  if (!scholEntries.length) { el.textContent = '(no entries yet)'; return; }
-  // Dramatic shuffle: cycle through names quickly, settle on a random one
+  if (!scholEntries.length) {
+    el.textContent = '(no entries yet)';
+    if (poolNum) poolNum.textContent = '0';
+    return;
+  }
+  if (poolNum) poolNum.textContent = scholEntries.length.toString();
+  // Dramatic shuffle
   let cycles = 0;
-  const winner = scholEntries[Math.floor(Math.random() * scholEntries.length)];
+  const winner = scholEntries[Math.floor(Math.random() * scholEntries.length)].name;
   const iv = setInterval(() => {
-    el.textContent = scholEntries[Math.floor(Math.random() * scholEntries.length)];
+    el.textContent = scholEntries[Math.floor(Math.random() * scholEntries.length)].name;
     cycles++;
-    if (cycles > 22) {
+    if (cycles > 28) {
       clearInterval(iv);
       el.textContent = winner;
+      // Burst confetti
       celebrate({ firstName: winner.split(' ')[0] || winner, lastInitial: (winner.split(' ')[1] || '')[0] || '' });
     }
-  }, 80);
+  }, 70);
 }
 
-// Auto-draw when reveal slide activates; press W to redraw
-const observer = new MutationObserver(() => {
-  const reveal = document.getElementById('slide-schol-reveal');
-  if (reveal && reveal.classList.contains('active')) {
-    const el = document.getElementById('schol-winner');
-    if (el && el.textContent === '—') drawScholWinner();
-  }
-});
+// On reveal slide activation → pull latest list then draw
 const revealEl = document.getElementById('slide-schol-reveal');
-if (revealEl) observer.observe(revealEl, { attributes: true, attributeFilter: ['class'] });
+if (revealEl) {
+  const revObs = new MutationObserver(async () => {
+    if (revealEl.classList.contains('active')) {
+      const el = document.getElementById('schol-winner');
+      if (el && el.textContent === '—') {
+        await fetchScholList();
+        drawScholWinner();
+      }
+    }
+  });
+  revObs.observe(revealEl, { attributes: true, attributeFilter: ['class'] });
+}
 
 document.addEventListener('keydown', e => {
   if ((e.key === 'w' || e.key === 'W') && document.getElementById('slide-schol-reveal')?.classList.contains('active')) {

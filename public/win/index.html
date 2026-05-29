@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>FYP Scholarship — Enter to Win</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf6ef;
+    --ink: #2a221c;
+    --ink-soft: #6b5d52;
+    --rose: #b85c5c;
+    --rose-deep: #8a3a3a;
+    --gold: #c89a4a;
+    --gold-deep: #8a6a30;
+    --paper: #fff;
+    --line: #e8ddd1;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin:0; padding:0; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: radial-gradient(ellipse at 50% 0%, rgba(196,122,110,.10), transparent 55%), var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 1.5rem 1.2rem 4rem;
+    line-height: 1.55;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; }
+  .eyebrow {
+    font-size: .72rem;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--rose-deep);
+  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(2rem, 7vw, 2.6rem);
+    margin: .4rem 0 .6rem;
+    line-height: 1.05;
+  }
+  h1 em { color: var(--rose-deep); font-style: italic; font-weight: 400; }
+  .lede {
+    color: var(--ink-soft);
+    font-size: 1rem;
+    margin: 0 0 1.5rem;
+  }
+  .card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 1.4rem 1.2rem;
+    box-shadow: 0 24px 60px -30px rgba(40,28,18,.2);
+  }
+  label {
+    display: block;
+    font-size: .72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--ink-soft);
+    margin-bottom: .4rem;
+  }
+  input[type=text] {
+    width: 100%;
+    padding: .9rem 1rem;
+    font-family: inherit;
+    font-size: 1.05rem;
+    border: 2px solid var(--line);
+    border-radius: 10px;
+    background: #fffaf3;
+    color: var(--ink);
+    transition: border-color .15s;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+  }
+  input[type=text]#name { text-transform: none; letter-spacing: 0; }
+  input[type=text]:focus {
+    outline: none;
+    border-color: var(--rose-deep);
+    background: #fff;
+  }
+  .field { margin-bottom: 1rem; }
+  .field-row {
+    display: grid;
+    grid-template-columns: 1.6rem 1fr;
+    gap: .6rem;
+    align-items: center;
+  }
+  .field-num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--gold-deep);
+    text-align: center;
+  }
+  .hint {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: .92rem;
+    color: var(--ink-soft);
+    margin: -.2rem 0 1.2rem 2.2rem;
+  }
+  button[type=submit] {
+    width: 100%;
+    background: linear-gradient(135deg, var(--rose-deep), #8a3a30);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 1.1rem;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: .04em;
+    cursor: pointer;
+    margin-top: .8rem;
+    box-shadow: 0 14px 30px -10px rgba(168,90,78,.4);
+    transition: transform .1s;
+  }
+  button[type=submit]:active { transform: scale(.98); }
+  button[type=submit]:disabled { opacity: .55; cursor: not-allowed; }
+  .status {
+    margin-top: 1.2rem;
+    padding: 1rem 1.2rem;
+    border-radius: 10px;
+    font-size: .95rem;
+    text-align: center;
+  }
+  .status.ok {
+    background: #eaf4ed;
+    color: #2f5a3d;
+    border: 1px solid #b9d8c2;
+  }
+  .status.err {
+    background: #fdecec;
+    color: var(--rose-deep);
+    border: 1px solid #f0bcbc;
+  }
+  .won {
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+  .won .check {
+    font-size: 4rem;
+    line-height: 1;
+  }
+  .won h2 {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 2rem;
+    color: var(--rose-deep);
+    margin: 1rem 0 .5rem;
+  }
+  .meta {
+    text-align: center;
+    margin-top: 2rem;
+    color: var(--ink-soft);
+    font-size: .82rem;
+  }
+  .meta strong { color: var(--rose-deep); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">FYP Challenge</p>
+  <h1>SOD <em>Scholarship</em><br>Entry.</h1>
+  <p class="lede">Enter all <strong>4 code words</strong> from across the 4 nights to be entered to win a <em>free seat in School of Dating</em>.</p>
+
+  <div class="card" id="form-card">
+    <form id="entry-form" autocomplete="off">
+      <div class="field">
+        <label for="name">Your full name</label>
+        <input type="text" id="name" name="name" placeholder="Jane Doe" required maxlength="80">
+      </div>
+
+      <label style="margin-top:1.4rem">The 4 code words</label>
+      <div class="field-row">
+        <span class="field-num">1</span>
+        <input type="text" id="w1" placeholder="Night 1" required maxlength="40">
+      </div>
+      <div class="field-row" style="margin-top:.6rem">
+        <span class="field-num">2</span>
+        <input type="text" id="w2" placeholder="Night 2" required maxlength="40">
+      </div>
+      <div class="field-row" style="margin-top:.6rem">
+        <span class="field-num">3</span>
+        <input type="text" id="w3" placeholder="Night 3" required maxlength="40">
+      </div>
+      <div class="field-row" style="margin-top:.6rem">
+        <span class="field-num">4</span>
+        <input type="text" id="w4" placeholder="Night 4" required maxlength="40">
+      </div>
+      <p class="hint" style="margin-top:.6rem">Hint: Kait & JJ dropped one each night. Got them all? Submit.</p>
+
+      <button type="submit" id="btn">Enter the Drawing →</button>
+    </form>
+    <div id="status" style="display:none"></div>
+  </div>
+
+  <p class="meta">Drawing happens live on Zoom <strong>tonight</strong>. Stay on the call to find out if you won.</p>
+</div>
+
+<script>
+const form = document.getElementById('entry-form');
+const btn = document.getElementById('btn');
+const statusEl = document.getElementById('status');
+const formCard = document.getElementById('form-card');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+  statusEl.style.display = 'none';
+
+  const name = document.getElementById('name').value.trim();
+  const codeWords = [
+    document.getElementById('w1').value,
+    document.getElementById('w2').value,
+    document.getElementById('w3').value,
+    document.getElementById('w4').value
+  ];
+
+  try {
+    const res = await fetch('/api/scholarship-enter', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ name, codeWords })
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      formCard.innerHTML = `
+        <div class="won">
+          <div class="check">🎉</div>
+          <h2>You're in, ${escapeHtml(name)}!</h2>
+          <p style="color:var(--ink-soft); margin-top:.6rem">Stay on the Zoom for the drawing. We're picking a winner LIVE in just a few minutes.</p>
+        </div>`;
+    } else {
+      statusEl.className = 'status err';
+      statusEl.textContent = data.error === 'one or more code words incorrect'
+        ? '❌ One or more code words is incorrect. Double-check your spelling and try again.'
+        : `❌ ${data.error || 'Something went wrong. Try again.'}`;
+      statusEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Enter the Drawing →';
+    }
+  } catch (err) {
+    statusEl.className = 'status err';
+    statusEl.textContent = '❌ Network issue. Refresh and try again.';
+    statusEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Enter the Drawing →';
+  }
+});
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+</script>
+</body>
+</html>

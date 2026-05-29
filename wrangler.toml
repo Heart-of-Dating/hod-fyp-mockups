@@ -8,3 +8,10 @@ pages_build_output_dir = "public"
 [[analytics_engine_datasets]]
 binding = "AB_ANALYTICS"
 dataset = "ab_test_visitors"
+
+# N4 Scholarship — attendees who submit all 4 code words get added to the pool.
+# Each entry stored under unique key "schol:{timestamp}-{nano}" so concurrent writes
+# from 2K attendees don't race-clobber a shared array.
+[[kv_namespaces]]
+binding = "SCHOLARSHIP"
+id = "e695afe7413e41eaa65be34c6d34f36c"
