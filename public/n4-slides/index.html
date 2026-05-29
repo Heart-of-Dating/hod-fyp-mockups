@@ -1241,133 +1241,130 @@ h3 em { font-style: italic; }
   <p class="kicker" style="margin-top:1rem; color:var(--muted); font-style:italic">videos/sara.mp4 — upload before going live</p>
 </section>
 
-<!-- SOD IS A SYSTEM — luxury SVG infographic of the unbreakable chain -->
+<!-- SOD IS A SYSTEM — clean, no illustration -->
 <section class="slide center theme-dark" style="padding:5vh 5vw">
-  <div class="stack center" style="max-width:1200px; margin:0 auto; gap:1.5rem">
+  <div class="stack center" style="max-width:1100px; margin:0 auto; gap:1.5rem">
     <div class="eyebrow">What SOD actually does</div>
-
-    <!-- Luxury SVG: 3 interlocked gold rings + dotted "system" rail. Represents accountability that won't break. -->
-    <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:640px; height:auto; filter:drop-shadow(0 18px 40px rgba(200,154,74,.25))" aria-hidden="true">
-      <defs>
-        <linearGradient id="goldlux" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#f5d49a"/>
-          <stop offset="50%" stop-color="#c89a4a"/>
-          <stop offset="100%" stop-color="#8a6a30"/>
-        </linearGradient>
-        <linearGradient id="goldlux2" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#8a6a30"/>
-          <stop offset="50%" stop-color="#f5d49a"/>
-          <stop offset="100%" stop-color="#8a6a30"/>
-        </linearGradient>
-      </defs>
-      <!-- horizon rail -->
-      <line x1="60" y1="100" x2="740" y2="100" stroke="url(#goldlux2)" stroke-width="1.5" stroke-dasharray="2 6" opacity=".55"/>
-      <!-- 3 interlocked rings -->
-      <g fill="none" stroke="url(#goldlux)" stroke-width="6" stroke-linecap="round">
-        <circle cx="240" cy="100" r="58"/>
-        <circle cx="400" cy="100" r="58"/>
-        <circle cx="560" cy="100" r="58"/>
-      </g>
-      <!-- inner highlight rings for depth -->
-      <g fill="none" stroke="#fbeed4" stroke-width="1.2" opacity=".5">
-        <circle cx="240" cy="100" r="50"/>
-        <circle cx="400" cy="100" r="50"/>
-        <circle cx="560" cy="100" r="50"/>
-      </g>
-      <!-- ornamental serif labels under each ring -->
-      <g font-family="Fraunces, serif" font-style="italic" font-size="14" fill="#fbeed4" text-anchor="middle" opacity=".82">
-        <text x="240" y="195">live</text>
-        <text x="400" y="195">coached</text>
-        <text x="560" y="195">proven</text>
-      </g>
-      <!-- end caps — small decorative diamonds -->
-      <g fill="url(#goldlux)">
-        <polygon points="60,100 70,94 80,100 70,106"/>
-        <polygon points="720,100 730,94 740,100 730,106"/>
-      </g>
-    </svg>
-
-    <h1 class="title" style="margin-top:.5rem; max-width:24ch; font-size:clamp(2.8rem,5vw,5rem); line-height:1.05">
+    <h1 class="title" style="margin-top:.5rem; max-width:24ch; font-size:clamp(3rem,5.5vw,5.5rem); line-height:1.05">
       SOD is a <em>system</em><br>that <strong style="color:var(--gold)">won't let you quit</strong>.
     </h1>
-    <p class="lede" style="margin-top:1rem; max-width:48ch">There is plenty of content out there. <em>SOD is the structure</em> that turns intention into action.</p>
+    <p class="lede" style="margin-top:1.5rem; max-width:50ch; font-size:clamp(1.3rem,1.7vw,1.7rem)">There is plenty of content out there. <em>SOD is the structure</em> that turns intention into action.</p>
   </div>
 </section>
 
-<!-- 3 REASONS WE KNOW IT WORKS -->
+<!-- 3 REASONS — alternating diagonal layout, oversized italic numerals, gold accents, breathable -->
+<style>
+.three-rsn { display:grid; grid-template-columns:1fr; gap:1.1rem; margin-top:2rem; max-width:1100px }
+.three-rsn .rsn { display:grid; grid-template-columns:6rem 1fr; gap:1.6rem; align-items:start; padding:1.4rem 1.6rem; border-radius:14px; position:relative; overflow:hidden }
+.three-rsn .rsn-num { font-family:'Fraunces',serif; font-style:italic; font-weight:300; font-size:5.5rem; line-height:.85; letter-spacing:-.04em }
+.three-rsn .rsn-hed { font-family:'Fraunces',serif; font-weight:500; font-size:clamp(1.5rem,2.2vw,2.1rem); line-height:1.1; margin:0 0 .5rem; letter-spacing:-.01em }
+.three-rsn .rsn-body { font-size:1.05rem; line-height:1.55; margin:0; max-width:60ch }
+.three-rsn .rsn.a { background:linear-gradient(135deg,#fdf2ed 0%,#faf6f0 100%); border:1px solid #ead2c4 }
+.three-rsn .rsn.a .rsn-num { color:var(--rose-deep) }
+.three-rsn .rsn.a .rsn-hed { color:var(--ink) }
+.three-rsn .rsn.a .rsn-body { color:var(--ink-soft) }
+.three-rsn .rsn.b { background:linear-gradient(135deg,#1c0f0d 0%,#2a1f18 100%); color:#fff1d8; border:1px solid #3a2820 }
+.three-rsn .rsn.b .rsn-num { color:var(--gold-light) }
+.three-rsn .rsn.b .rsn-hed { color:#fff }
+.three-rsn .rsn.b .rsn-body { color:#fbeed4 }
+.three-rsn .rsn::after { content:""; position:absolute; right:-40px; bottom:-40px; width:160px; height:160px; border-radius:50%; background:radial-gradient(circle, rgba(184,92,92,.18), transparent 70%); pointer-events:none }
+.three-rsn .rsn.b::after { background:radial-gradient(circle, rgba(245,212,154,.18), transparent 70%) }
+.three-rsn .rsn-tag { font-size:.68rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; opacity:.65; margin-bottom:.3rem }
+</style>
 <section class="slide" style="padding:5vh 5vw">
-  <div class="stack" style="max-width:1300px; margin:0 auto">
+  <div class="stack center" style="max-width:1200px; margin:0 auto">
     <div class="eyebrow" style="text-align:center">3 reasons we know it works</div>
     <h2 class="section center" style="margin-top:.5rem; font-size:clamp(2rem,3.3vw,3.3rem)">How do you know it'll work for <em>you</em>?</h2>
-    <div class="three-col" style="margin-top:2.5rem; gap:1.5rem">
-      <div style="background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:2rem 1.6rem; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:.8rem">
-        <p class="script" style="font-size:2rem; color:var(--rose-deep)">One</p>
-        <h3 style="font-family:'Fraunces',serif; font-weight:500; font-size:1.4rem; color:var(--ink); line-height:1.2">SOD is <em>LIVE</em>.</h3>
-        <p style="color:var(--ink-soft); font-size:1rem; line-height:1.5">We coach you in real time. Not a course you watch alone at midnight and forget by Friday.</p>
+    <div class="three-rsn">
+      <div class="rsn a">
+        <span class="rsn-num">01</span>
+        <div>
+          <p class="rsn-tag">live · in real time</p>
+          <h3 class="rsn-hed">SOD is <em>LIVE</em>.</h3>
+          <p class="rsn-body">We coach you in real time. Not a course you watch alone at midnight and forget by Friday.</p>
+        </div>
       </div>
-      <div style="background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:2rem 1.6rem; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:.8rem">
-        <p class="script" style="font-size:2rem; color:var(--rose-deep)">Two</p>
-        <h3 style="font-family:'Fraunces',serif; font-weight:500; font-size:1.4rem; color:var(--ink); line-height:1.2">A <em>personal coach</em> — by name.</h3>
-        <p style="color:var(--ink-soft); font-size:1rem; line-height:1.5">Who knows YOUR dating life. Doesn't exist anywhere else. Your coach is responsible for your success — they seek you out.</p>
+      <div class="rsn b">
+        <span class="rsn-num">02</span>
+        <div>
+          <p class="rsn-tag">your coach · by name</p>
+          <h3 class="rsn-hed">A <em>personal coach</em> who knows YOUR dating life.</h3>
+          <p class="rsn-body">Doesn't exist anywhere else. Your coach is responsible for your success — they seek <em>you</em> out, not the other way around.</p>
+        </div>
       </div>
-      <div style="background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:2rem 1.6rem; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:.8rem">
-        <p class="script" style="font-size:2rem; color:var(--rose-deep)">Three</p>
-        <h3 style="font-family:'Fraunces',serif; font-weight:500; font-size:1.4rem; color:var(--ink); line-height:1.2">We <em>built it ourselves</em>.</h3>
-        <p style="color:var(--ink-soft); font-size:1rem; line-height:1.5">Kait &amp; JJ aren't theory people. Phase 1 is what we did. Phase 2 is what we did. Phase 3 is how we ended up married. Proven process — not a framework we read about.</p>
+      <div class="rsn a">
+        <span class="rsn-num">03</span>
+        <div>
+          <p class="rsn-tag">we built it · we lived it</p>
+          <h3 class="rsn-hed">We <em>built it ourselves</em>.</h3>
+          <p class="rsn-body">Phase 1 is what we did. Phase 2 is what we did. Phase 3 is how we ended up married. Proven process — not a framework we read about.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- HOW ARE WE DIFFERENT — JJ, 5 bullets -->
+<!-- HOW ARE WE DIFFERENT — side-by-side compare/contrast table vs other dating programs -->
+<style>
+.vs-table { width:100%; border-collapse:collapse; margin-top:2rem; background:var(--paper); border-radius:14px; overflow:hidden; box-shadow:var(--shadow-strong) }
+.vs-table thead th {
+  padding:1.2rem 1rem; font-family:'Fraunces',serif; font-weight:500;
+  font-size:clamp(1.1rem,1.6vw,1.5rem); text-align:left; letter-spacing:-.01em
+}
+.vs-table thead th.feat { background:transparent; color:var(--ink-soft); font-size:.78rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; font-family:'Inter',sans-serif }
+.vs-table thead th.them { background:#f1ece6; color:var(--ink-soft); font-style:italic; opacity:.85 }
+.vs-table thead th.us {
+  background:linear-gradient(135deg,var(--rose-deep) 0%,#8a3a30 100%);
+  color:#fff; position:relative
+}
+.vs-table thead th.us::before { content:"SOD"; display:block; font-size:.65rem; letter-spacing:.28em; opacity:.8; margin-bottom:.2rem; font-family:'Inter',sans-serif; font-weight:700 }
+.vs-table td { padding:.95rem 1rem; border-top:1px solid var(--line); font-size:1rem; line-height:1.4; vertical-align:middle }
+.vs-table td.feat { font-weight:600; color:var(--ink); width:24% }
+.vs-table td.them { color:var(--ink-soft); width:38%; font-style:italic }
+.vs-table td.them::before { content:"✕  "; color:#b85c5c; font-style:normal; font-weight:700; margin-right:.2rem }
+.vs-table td.us { color:var(--ink); width:38%; background:rgba(196,122,110,.06); font-weight:500 }
+.vs-table td.us::before { content:"✓  "; color:var(--rose-deep); font-weight:800; margin-right:.2rem }
+.vs-table tr:last-child td { padding-bottom:1.1rem }
+</style>
 <section class="slide" style="padding:5vh 5vw; background:radial-gradient(ellipse at 0% 0%, rgba(200,154,74,.10), transparent 50%), var(--bg)">
-  <div class="stack" style="max-width:1200px; margin:0 auto">
-    <h2 class="section" style="margin-top:.5rem; font-size:clamp(2.2rem,3.6vw,3.6rem); max-width:22ch">How are we <em>different</em> from other programs?</h2>
-    <ul style="list-style:none; padding:0; margin-top:2rem; display:flex; flex-direction:column; gap:1rem">
-      <li style="display:flex; gap:1rem; align-items:flex-start"><span style="font-family:'Fraunces',serif; font-style:italic; color:var(--gold-deep); font-size:1.6rem; min-width:2.5rem">01.</span><span style="font-size:1.15rem; line-height:1.5; color:var(--ink)"><strong>LIVE &amp; interactive.</strong> We coach you in real time — not just videos to watch alone.</span></li>
-      <li style="display:flex; gap:1rem; align-items:flex-start"><span style="font-family:'Fraunces',serif; font-style:italic; color:var(--gold-deep); font-size:1.6rem; min-width:2.5rem">02.</span><span style="font-size:1.15rem; line-height:1.5; color:var(--ink)"><strong>A 1:1 coach</strong> assigned for support who proactively reaches out.</span></li>
-      <li style="display:flex; gap:1rem; align-items:flex-start"><span style="font-family:'Fraunces',serif; font-style:italic; color:var(--gold-deep); font-size:1.6rem; min-width:2.5rem">03.</span><span style="font-size:1.15rem; line-height:1.5; color:var(--ink)"><strong>Physical 200+ page workbook</strong> mailed to you — most programs are 100% digital.</span></li>
-      <li style="display:flex; gap:1rem; align-items:flex-start"><span style="font-family:'Fraunces',serif; font-style:italic; color:var(--gold-deep); font-size:1.6rem; min-width:2.5rem">04.</span><span style="font-size:1.15rem; line-height:1.5; color:var(--ink)"><strong>Co-led by Kait &amp; JJ.</strong> Both male and female perspectives, dating from both sides.</span></li>
-      <li style="display:flex; gap:1rem; align-items:flex-start"><span style="font-family:'Fraunces',serif; font-style:italic; color:var(--gold-deep); font-size:1.6rem; min-width:2.5rem">05.</span><span style="font-size:1.15rem; line-height:1.5; color:var(--ink)"><strong>Our SOD process.</strong> We KNOW it works — we did it ourselves to get where we are.</span></li>
-    </ul>
+  <div class="stack" style="max-width:1280px; margin:0 auto">
+    <div class="eyebrow">Compare</div>
+    <h2 class="section" style="margin-top:.3rem; font-size:clamp(2.2rem,3.6vw,3.6rem); max-width:24ch">How we're <em>different</em> from other dating programs.</h2>
+    <table class="vs-table">
+      <thead>
+        <tr>
+          <th class="feat">What you actually get</th>
+          <th class="them">Other dating programs</th>
+          <th class="us">School of Dating</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="feat">Live coaching</td><td class="them">Pre-recorded videos you watch alone</td><td class="us">LIVE sessions, weekly Q&amp;A, real-time interaction</td></tr>
+        <tr><td class="feat">Personal coach</td><td class="them">Slack channel + good luck</td><td class="us">1:1 coach assigned by name — proactively reaches out</td></tr>
+        <tr><td class="feat">Workbook</td><td class="them">PDF download, never opened</td><td class="us">200+ page physical workbook mailed to your door</td></tr>
+        <tr><td class="feat">Perspective</td><td class="them">Single-coach POV</td><td class="us">Co-led by Kait &amp; JJ — male <em>and</em> female perspective</td></tr>
+        <tr><td class="feat">Proven by who?</td><td class="them">A framework someone read about</td><td class="us">The exact process we used — it's how <em>we</em> ended up married</td></tr>
+      </tbody>
+    </table>
   </div>
 </section>
 
-<!-- WHO IS THIS NOT FOR — luxury threshold SVG over giant headline -->
-<section class="slide theme-dark center" style="padding:5vh 5vw">
-  <div class="stack center" style="gap:2rem">
-    <svg viewBox="0 0 280 140" xmlns="http://www.w3.org/2000/svg" style="width:200px; height:auto; filter:drop-shadow(0 16px 30px rgba(245,224,184,.2))" aria-hidden="true">
-      <defs>
-        <linearGradient id="goldthresh" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#8a6a30"/>
-          <stop offset="50%" stop-color="#f5d49a"/>
-          <stop offset="100%" stop-color="#8a6a30"/>
-        </linearGradient>
-      </defs>
-      <!-- Ornamental gate frame: two pillars + arched top + key in center -->
-      <g stroke="url(#goldthresh)" stroke-width="2.5" fill="none" stroke-linecap="round">
-        <!-- left pillar -->
-        <line x1="60" y1="110" x2="60" y2="50"/>
-        <circle cx="60" cy="45" r="4" fill="url(#goldthresh)" stroke="none"/>
-        <!-- right pillar -->
-        <line x1="220" y1="110" x2="220" y2="50"/>
-        <circle cx="220" cy="45" r="4" fill="url(#goldthresh)" stroke="none"/>
-        <!-- arch -->
-        <path d="M 60 50 Q 140 0 220 50"/>
-        <!-- base line -->
-        <line x1="40" y1="115" x2="240" y2="115"/>
-      </g>
-      <!-- center key in the doorway -->
-      <g transform="translate(140,80)">
-        <circle cx="0" cy="-8" r="14" fill="none" stroke="url(#goldthresh)" stroke-width="2.5"/>
-        <circle cx="0" cy="-8" r="6" fill="none" stroke="#f5d49a" stroke-width="1.2" opacity=".7"/>
-        <line x1="0" y1="6" x2="0" y2="34" stroke="url(#goldthresh)" stroke-width="2.5" stroke-linecap="round"/>
-        <line x1="0" y1="22" x2="8" y2="22" stroke="url(#goldthresh)" stroke-width="2.5" stroke-linecap="round"/>
-        <line x1="0" y1="28" x2="6" y2="28" stroke="url(#goldthresh)" stroke-width="2.5" stroke-linecap="round"/>
-      </g>
-    </svg>
-    <div class="eyebrow">Let's be honest</div>
-    <h1 class="giant" style="max-width:18ch">Who is this <em>NOT</em> for?</h1>
+<!-- WHO IS THIS NOT FOR — "imma keep it real with you" Kermit meme + giant headline -->
+<section class="slide theme-dark" style="padding:4vh 5vw">
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center; max-width:1400px; margin:0 auto; height:100%">
+    <div style="display:flex; flex-direction:column; gap:1rem">
+      <div class="eyebrow">Let's be honest</div>
+      <p style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; color:var(--gold-light); font-size:clamp(1.6rem,2.4vw,2.4rem); line-height:1.15; margin:0">"Imma keep it real<br>with you, chief…"</p>
+      <h1 class="giant" style="max-width:14ch; margin-top:.8rem; font-size:clamp(3rem,6vw,6rem)">Who is this <em>NOT</em> for?</h1>
+    </div>
+    <div style="display:flex; justify-content:center; align-items:center">
+      <div style="position:relative; max-width:520px; width:100%; border-radius:14px; overflow:hidden; box-shadow:0 30px 60px -20px rgba(0,0,0,.6); border:1px solid rgba(245,224,184,.15)">
+        <img src="img/gemini/keep-it-real.png" alt="Imma keep it real with you" style="width:100%; height:auto; display:block">
+        <div style="position:absolute; left:0; right:0; bottom:0; padding:1rem; background:linear-gradient(to top, rgba(0,0,0,.85), transparent); text-align:center">
+          <p style="font-family:'Inter',sans-serif; font-weight:800; font-size:clamp(1rem,1.5vw,1.4rem); color:#fff; letter-spacing:.04em; text-transform:uppercase; margin:0; text-shadow:0 2px 6px rgba(0,0,0,.5)">imma keep it real with you</p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1489,29 +1486,23 @@ h3 em { font-style: italic; }
       }
       .marriage-grid-n4 .photo-frame.center img { object-position: center center; }
     </style>
-    <!--
-      TODO for JJ: drop real SOD-couple photos into public/n4-slides/img/sod-couples/
-      then update src= here. Real-couple .jpgs come FIRST below; remaining slots filled
-      with a small Gemini set as backup. JJ to send ZIP.
-    -->
+    <!-- Real SOD-couple photos only — NO AI. 8 originals + 7 from JJ's desktop drop. -->
     <div class="marriage-grid-n4">
-      <!-- Real photos (priority) -->
       <div class="photo-frame"><img src="img/marriage-1.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/real-couples/real-1.png" alt=""></div>
       <div class="photo-frame"><img src="img/marriage-2.png" alt=""></div>
+      <div class="photo-frame"><img src="img/real-couples/real-2.png" alt=""></div>
       <div class="photo-frame"><img src="img/marriage-3.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/real-couples/real-3.png" alt=""></div>
       <div class="photo-frame"><img src="img/marriage-4.png" alt=""></div>
+      <div class="photo-frame"><img src="img/real-couples/real-4.png" alt=""></div>
       <div class="photo-frame center"><img src="img/marriage-5.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/real-couples/real-5.png" alt=""></div>
       <div class="photo-frame"><img src="img/marriage-6.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/real-couples/real-6.png" alt=""></div>
       <div class="photo-frame"><img src="img/marriage-7.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/real-couples/real-7.png" alt=""></div>
       <div class="photo-frame"><img src="img/marriage-8.jpg" alt=""></div>
-      <!-- Gemini regen — style anchored to JJ's 4 reference photos (garden arch / forest kiss / wildflower field / truck tailgate) -->
-      <div class="photo-frame"><img src="img/gemini/fix-9.png"  alt=""></div>
-      <div class="photo-frame"><img src="img/gemini/fix-12.png" alt=""></div>
-      <div class="photo-frame"><img src="img/gemini/fix-14.png" alt=""></div>
-      <div class="photo-frame"><img src="img/gemini/fix-17.png" alt=""></div>
-      <div class="photo-frame"><img src="img/gemini/fix-20.png" alt=""></div>
-      <div class="photo-frame"><img src="img/gemini/fix-23.png" alt=""></div>
-      <div class="photo-frame"><img src="img/gemini/fix-25.png" alt=""></div>
     </div>
   </div>
 </section>
