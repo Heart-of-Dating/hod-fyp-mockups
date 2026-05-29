@@ -7,10 +7,10 @@ const TAG_SOD = 193;       // "School of Dating June 26" — STRICT cohort tag
 const TAG_SOD_PRO = 194;   // "SOD PRO June 26"
 const CAP_TOTAL = 200;
 
-// Tonight's FAB (N4) = the LAST 60 SEATS in the cohort. Anyone who fills seats
-// 141-200 gets tonight's two bonuses (Profile Diagnostic + Texting Scripts).
-const CAP_FAB = 60;
-const FAB_BASELINE = CAP_TOTAL - CAP_FAB; // = 140 → fabTaken = max(0, total - 140)
+// Tonight's FAB (N4) = the LAST 72 SEATS in the cohort. Anyone who fills seats
+// 129-200 gets tonight's two bonuses (Profile Diagnostic + Texting Scripts).
+const CAP_FAB = 72;
+const FAB_BASELINE = CAP_TOTAL - CAP_FAB; // = 128 → fabTaken = max(0, total - 128)
 
 // Pre-event baseline (24 contacts had SOD tag before FYP funnel went live N1).
 // Used for the "X new in last 24h" intro slide on N4.
