@@ -1,0 +1,2373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1600, initial-scale=1">
+<title>FYP Night 3 — Annie F. Downs + SOD Pitch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600;700;800&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6f0;
+  --ink: #1d1815;
+  --ink-soft: #4a3f37;
+  --muted: #8a7e72;
+  --line: #e8dfd2;
+  --gold: #c89a4a;
+  --gold-deep: #8a6627;
+  --gold-light: #f5e0b8;
+  --rose: #c47a6e;
+  --rose-deep: #a85a4e;
+  --sage: #6e8071;
+  --blue: #6c84a3;
+  --cream: #f3ebdc;
+  --paper: #fffaf2;
+  --dark: #1d1815;
+  --shadow: 0 30px 80px -30px rgba(40,28,18,.25);
+  --shadow-strong: 0 40px 100px -30px rgba(40,28,18,.4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  overflow: hidden;
+}
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 5vh 7vw;
+  flex-direction: column; justify-content: center;
+  opacity: 0; transition: opacity .35s ease;
+}
+.slide.active { display: flex; opacity: 1; }
+
+.eyebrow {
+  font-size: 0.85rem; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--gold-deep);
+  font-weight: 600; margin-bottom: 1.5rem;
+}
+.eyebrow .dot {
+  display: inline-block; width: 6px; height: 6px;
+  background: var(--gold); border-radius: 50%;
+  margin: 0 .8em; vertical-align: middle;
+}
+.script {
+  font-family: 'Caveat', cursive;
+  font-weight: 500;
+  font-style: italic;
+}
+h1.title {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: clamp(3.5rem, 7vw, 7.5rem);
+  line-height: 0.95; letter-spacing: -0.025em;
+}
+h1.title em { font-style: italic; font-weight: 400; color: var(--gold-deep); }
+h2.section {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  line-height: 1.0; letter-spacing: -0.02em;
+}
+h2.section em { font-style: italic; color: var(--gold-deep); font-weight: 400; }
+h3 {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 1; letter-spacing: -0.02em;
+}
+h3 em { font-style: italic; }
+.lede {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  line-height: 1.35; font-weight: 300;
+  color: var(--ink-soft); max-width: 38ch;
+}
+.lede em { color: var(--gold-deep); font-style: italic; }
+.kicker {
+  font-size: 1.05rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--muted);
+  font-weight: 500;
+}
+.giant {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: clamp(4rem, 9vw, 10rem);
+  line-height: .9; letter-spacing: -0.04em;
+}
+.giant em { font-style: italic; font-weight: 400; color: var(--gold-deep); }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; align-items: center; height: 100%; }
+.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3vw; align-items: stretch; }
+.center { text-align: center; align-items: center; }
+.center .lede { margin: 0 auto; }
+.stack > * + * { margin-top: 1.5rem; }
+
+.theme-rose { background: linear-gradient(135deg, #faf2ef 0%, var(--bg) 50%); }
+.theme-sage { background: linear-gradient(135deg, #f1f3ee 0%, var(--bg) 50%); }
+.theme-gold { background: linear-gradient(135deg, #faf4e6 0%, var(--bg) 50%); }
+.theme-terra { background: #c47a6e; color: #faf6f0; }
+.theme-terra h1, .theme-terra h2, .theme-terra h3, .theme-terra .lede, .theme-terra .giant { color: #faf6f0; }
+.theme-terra h1 em, .theme-terra h2 em, .theme-terra .giant em { color: #fff1d8; }
+.theme-terra .eyebrow, .theme-terra .kicker { color: #fff1d8; }
+.theme-dark { background: #1d1815; color: var(--bg); }
+.theme-dark .lede, .theme-dark h1, .theme-dark h2, .theme-dark h3 { color: var(--bg); }
+.theme-dark .eyebrow { color: var(--gold); }
+.theme-dark h1 em, .theme-dark h2 em, .theme-dark .giant em { color: var(--gold); }
+
+.pull {
+  font-family: 'Fraunces', serif; font-style: italic;
+  font-weight: 300;
+  font-size: clamp(2rem, 3.5vw, 3.5rem);
+  line-height: 1.15; letter-spacing: -0.015em;
+  color: var(--ink); max-width: 22ch;
+}
+.tag-pill {
+  display: inline-block; padding: 0.4rem 1rem;
+  border-radius: 999px; background: var(--cream);
+  border: 1px solid var(--line);
+  font-size: 0.8rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--ink-soft);
+  font-weight: 600;
+}
+.tag-pill.gold { background: #f5e8c8; color: var(--gold-deep); border-color: #e0c890; }
+.tag-pill.rose { background: rgba(196,122,110,.15); color: var(--rose-deep); border-color: rgba(196,122,110,.4); }
+
+/* Photo frames */
+.photo-frame {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow-strong);
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+.photo-frame img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.photo-frame.tall { aspect-ratio: 3/4; }
+.photo-frame.wide { aspect-ratio: 16/10; }
+.photo-frame.square { aspect-ratio: 1/1; }
+
+/* Marriage photo collage */
+.marriage-collage {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-auto-rows: 100px;
+  gap: 0.6rem;
+  height: 100%;
+  max-height: 70vh;
+}
+.marriage-collage .photo-frame { width: 100%; height: 100%; aspect-ratio: auto; box-shadow: 0 20px 50px -25px rgba(40,28,18,.25); }
+.marriage-collage .photo-frame:nth-child(1) { grid-column: span 3; grid-row: span 3; }
+.marriage-collage .photo-frame:nth-child(2) { grid-column: span 2; grid-row: span 2; }
+.marriage-collage .photo-frame:nth-child(3) { grid-column: span 3; grid-row: span 2; }
+.marriage-collage .photo-frame:nth-child(4) { grid-column: span 2; grid-row: span 3; }
+.marriage-collage .photo-frame:nth-child(5) { grid-column: span 3; grid-row: span 3; }
+.marriage-collage .photo-frame:nth-child(6) { grid-column: span 3; grid-row: span 3; }
+.marriage-collage .photo-frame:nth-child(7) { grid-column: span 2; grid-row: span 2; }
+.marriage-collage .photo-frame:nth-child(8) { grid-column: span 3; grid-row: span 2; }
+
+/* Calendar */
+.cal { display: flex; flex-direction: column; gap: 1.6rem; }
+.cal-row { display: grid; grid-template-columns: 140px 1fr; gap: 2rem; align-items: stretch; }
+.cal-label {
+  font-size: .72rem; letter-spacing:.28em;
+  text-transform: uppercase; font-weight: 700;
+  color: var(--muted); padding-top: 1.5rem;
+  border-right: 1px solid var(--line);
+  padding-right: 1.5rem; text-align: right;
+}
+.cal-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.cal-cards.three { grid-template-columns: repeat(3, 1fr); }
+.cal-card {
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: 8px; padding: 1.4rem 1.6rem;
+  display: grid; grid-template-columns: 80px 1fr;
+  gap: 1.4rem; align-items: center;
+  box-shadow: 0 14px 36px -22px rgba(40,28,18,.15);
+}
+.cal-card.main { border-left: 4px solid var(--gold); background: linear-gradient(135deg, #faf4e6 0%, var(--paper) 60%); }
+.cal-card.bonus { border-left: 3px solid var(--sage); }
+.cal-card.tonight { border-left: 4px solid var(--rose); background: linear-gradient(135deg, #faf2ef 0%, var(--paper) 60%); }
+.cal-date { text-align: center; border-right: 1px solid var(--line); padding-right: 1rem; }
+.cal-day { font-size: .68rem; letter-spacing:.2em; text-transform: uppercase; font-weight: 700; color: var(--gold-deep); }
+.cal-card.bonus .cal-day { color: var(--sage); }
+.cal-card.tonight .cal-day { color: var(--rose-deep); }
+.cal-num { font-family: 'Fraunces', serif; font-weight: 300; font-size: 2.6rem; line-height: 1; color: var(--ink); margin: .15rem 0; }
+.cal-mo { font-size: .7rem; letter-spacing:.2em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.cal-time { font-size: .7rem; letter-spacing:.2em; text-transform: uppercase; font-weight: 600; color: var(--gold-deep); margin-bottom: .35rem; }
+.cal-card.bonus .cal-time { color: var(--sage); }
+.cal-card.tonight .cal-time { color: var(--rose-deep); }
+.cal-speaker { font-family: 'Fraunces', serif; font-weight: 500; font-size: 1.15rem; color: var(--ink); line-height: 1.1; margin-bottom: .25rem; }
+.cal-title { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: .95rem; line-height: 1.3; color: var(--ink-soft); }
+
+/* Progress + nav */
+.chrome {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 2rem; z-index: 100;
+  font-size: 0.78rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--muted);
+  font-weight: 500;
+}
+.progress {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 3px; background: var(--line); z-index: 100;
+}
+.progress > div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-deep));
+  width: 0%; transition: width .35s ease;
+}
+.nav-hint kbd {
+  display: inline-block; padding: 2px 8px;
+  border: 1px solid var(--line); border-radius: 3px;
+  font-size: 0.7rem; margin: 0 2px;
+  color: var(--ink-soft); background: var(--paper);
+}
+
+/* Phase blocks */
+.phase-split {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 3vw;
+  align-items: center;
+  height: 100%;
+}
+.phase-pic-frame {
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow-strong);
+  aspect-ratio: 4/3;
+  max-height: 72vh;
+  position: relative;
+}
+.phase-pic-frame img { width: 100%; height: 100%; object-fit: cover; object-position: center center; }
+.phase-pic-frame .phase-tag-overlay {
+  position: absolute;
+  top: 1.5rem; left: 1.5rem;
+  background: rgba(255,255,255,.9);
+  border-radius: 999px;
+  padding: 0.4rem 1.2rem;
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-style: italic;
+  font-size: 1.6rem;
+  color: var(--ink);
+}
+.phase-body h3 {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: clamp(2rem, 3.5vw, 3.5rem);
+  line-height: 1;
+  margin-bottom: 2rem;
+}
+.phase-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.phase-list li {
+  display: flex;
+  gap: 1.2rem;
+  align-items: baseline;
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: clamp(1.2rem, 1.6vw, 1.6rem);
+  line-height: 1.35;
+  color: var(--ink);
+}
+.phase-list .n {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  color: var(--gold-deep);
+  flex: 0 0 auto;
+  line-height: 1;
+}
+
+/* Archetype slides */
+.archetype {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  text-align: center;
+}
+.archetype-hed {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: clamp(3rem, 6vw, 6.5rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: #faf6f0;
+  text-transform: uppercase;
+  max-width: 22ch;
+}
+.archetype-q {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.6rem, 2.6vw, 2.6rem);
+  color: #fff1d8;
+  letter-spacing: -0.01em;
+}
+
+/* Value table */
+.value-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--paper);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.value-table th, .value-table td {
+  padding: 1.2rem 1.8rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: 1.25rem;
+  color: var(--ink);
+}
+.value-table.compact th, .value-table.compact td { padding: 0.9rem 1.4rem; font-size: 1.05rem; }
+.value-table th {
+  background: var(--cream);
+  font-weight: 500;
+  font-size: 0.78rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-family: 'Inter', sans-serif;
+}
+.value-table td:last-child {
+  text-align: right;
+  font-weight: 400;
+  font-style: italic;
+  font-variant-numeric: tabular-nums;
+}
+.value-table tr.bonus td { background: rgba(200,154,74,.10); color: var(--gold-deep); font-style: normal; font-weight: 500; }
+.value-table tr.total td {
+  background: var(--gold-deep);
+  color: #fff;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 1.4rem;
+}
+.value-table tr.offer td {
+  background: var(--rose);
+  color: #fff;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 1.6rem;
+  padding: 1.4rem 1.8rem;
+}
+.value-table tr:last-child th, .value-table tr:last-child td { border-bottom: 0; }
+
+/* Tiers — punched up */
+.tiers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.tier {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 2.2rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: var(--shadow-strong);
+  position: relative;
+}
+.tier.sod { border-top: 6px solid var(--gold); }
+.tier.pro { border-top: 6px solid var(--rose); }
+.tier h4 {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: 2rem;
+  line-height: 1;
+}
+.tier .tier-tag {
+  font-size: .7rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: .3rem;
+}
+.tier.sod .tier-tag { color: var(--gold-deep); }
+.tier.pro .tier-tag { color: var(--rose); }
+.tier ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.tier li {
+  font-size: 1rem;
+  color: var(--ink-soft);
+  padding-left: 1.6rem;
+  position: relative;
+  line-height: 1.4;
+}
+.tier li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--gold-deep);
+  font-weight: 700;
+}
+.tier.pro li::before { color: var(--rose); }
+
+/* punchy 20× calls badge */
+.calls-badge {
+  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+  color: #fff;
+  border-radius: 10px;
+  padding: 1.1rem 1.4rem;
+  text-align: center;
+  margin: 0.6rem 0;
+  box-shadow: 0 14px 30px -14px rgba(196,122,110,.6);
+  position: relative;
+}
+.calls-badge .num {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 2.3rem;
+  line-height: 1;
+}
+.calls-badge .label {
+  font-size: .7rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 0.4rem;
+}
+
+.tier .price-row {
+  margin-top: auto;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  justify-content: flex-end;
+}
+.tier .price-old {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: 1.6rem;
+  color: var(--muted);
+  text-decoration: line-through;
+}
+.tier .price-new {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 3.2rem;
+  line-height: 1;
+  color: var(--ink);
+}
+.tier.pro .price-new { color: var(--rose-deep); }
+.tier.sod.recommended { background: linear-gradient(135deg, #fffaf0 0%, var(--paper) 80%); }
+.tier.sod.recommended::before {
+  content: "⭐ MOST POPULAR · TONIGHT ⭐";
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
+  color: #fff;
+  font-size: 0.95rem;
+  letter-spacing: 0.22em;
+  font-weight: 800;
+  padding: 0.8rem 1.8rem;
+  border-radius: 999px;
+  box-shadow: 0 18px 36px -10px rgba(138,102,39,.6);
+  white-space: nowrap;
+  animation: glowPop 2.4s ease-in-out infinite;
+}
+@keyframes glowPop {
+  0%, 100% { box-shadow: 0 18px 36px -10px rgba(138,102,39,.6); transform: translateX(-50%) scale(1); }
+  50% { box-shadow: 0 22px 48px -8px rgba(200,154,74,.8); transform: translateX(-50%) scale(1.04); }
+}
+
+/* Scholarship code-word slide */
+.sod-slide {
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(255,255,255,.08), transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(0,0,0,.15), transparent 60%),
+    #b8504a;
+}
+.sod-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 5vw;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+.price-row-big {
+  display: flex; align-items: center;
+  gap: 1.5rem; margin-top: 2.5rem;
+}
+.strike {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: clamp(2.5rem, 4vw, 3.8rem);
+  color: rgba(255,255,255,.55);
+  text-decoration: line-through;
+  text-decoration-thickness: 3px;
+}
+.price-arrow { font-size: 2rem; color: rgba(255,255,255,.6); font-weight: 300; }
+.price-zero-wrap {
+  position: relative; padding: 0.5rem 2rem;
+  display: inline-flex; align-items: baseline;
+}
+.price-circle {
+  position: absolute; inset: -10px -10px;
+  width: calc(100% + 20px); height: calc(100% + 20px); z-index: 1;
+}
+.price-zero {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: clamp(3.5rem, 6vw, 5.5rem);
+  color: #fff; line-height: 1; position: relative; z-index: 2;
+}
+.price-bangs {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: clamp(2.5rem, 4vw, 4rem);
+  color: #f5d49a; margin-left: .15em; line-height: 1;
+  position: relative; z-index: 2;
+}
+.codeword {
+  background: #1a1310;
+  border: 2px solid #f5d49a;
+  border-radius: 8px;
+  padding: 2.2rem 2.5rem;
+  text-align: center;
+  box-shadow: 0 30px 80px -20px rgba(0,0,0,.4);
+  position: relative;
+}
+.codeword::before {
+  content: ""; position: absolute; inset: -8px;
+  border: 1px dashed rgba(245,212,154,.4);
+  border-radius: 10px; pointer-events: none;
+}
+.codeword-label {
+  font-size: .75rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: #f5d49a;
+  font-weight: 700; margin-bottom: 1rem;
+}
+.codeword-value {
+  font-family: 'Fraunces', serif; font-weight: 600;
+  font-size: clamp(2.8rem, 4.5vw, 4.5rem);
+  color: #fff; letter-spacing: 0.06em; line-height: 1;
+}
+.codeword-hint {
+  font-family: 'Fraunces', serif; font-style: italic;
+  font-weight: 300; font-size: 1rem;
+  color: rgba(255,255,255,.65); margin-top: 1rem;
+}
+
+/* Bonus banner */
+.bonus-banner-bg {
+  background: linear-gradient(135deg, #2a1f1a 0%, #3d2a1c 100%);
+  color: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+.bonus-banner-bg::before {
+  content: "";
+  position: absolute;
+  top: -50%; right: -10%;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(200,154,74,.25), transparent 70%);
+  pointer-events: none;
+}
+.bonus-banner-bg .eyebrow { color: var(--gold-light); }
+.bonus-banner-bg h2, .bonus-banner-bg h1 { color: var(--bg); }
+.bonus-banner-bg h2 em, .bonus-banner-bg h1 em { color: var(--gold-light); }
+.bonus-banner-bg .lede { color: rgba(255,255,255,.7); }
+
+/* FAB clickfunnels-style bonus slides */
+.fab-bonus {
+  background: var(--bg);
+}
+.fab-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 4vw;
+  align-items: center;
+  height: 100%;
+}
+.fab-body { display: flex; flex-direction: column; gap: 1.2rem; }
+.fab-tag {
+  font-size: 0.8rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--rose);
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+}
+.fab-tag .num {
+  background: var(--rose);
+  color: #fff;
+  padding: .3rem .7rem;
+  border-radius: 6px;
+  font-size: .82rem;
+  letter-spacing: .14em;
+}
+.fab-headline {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: clamp(2.6rem, 4.5vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.fab-headline em { font-style: italic; color: var(--gold-deep); }
+.fab-sub {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.3rem, 1.8vw, 1.7rem);
+  color: var(--ink-soft);
+  max-width: 38ch;
+  line-height: 1.35;
+}
+.fab-value-pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  background: var(--ink);
+  color: #fff;
+  padding: 1.3rem 2.2rem;
+  border-radius: 999px;
+  margin-top: 1rem;
+  box-shadow: 0 18px 40px -16px rgba(0,0,0,.4);
+  align-self: flex-start;
+}
+.fab-value-pill .val-num {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-style: italic;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--gold-light);
+}
+.fab-value-pill .val-tx {
+  font-size: 0.78rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: rgba(255,255,255,.85);
+}
+.fab-pic-wrap {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow-strong);
+  aspect-ratio: 1/1;
+  max-height: 78vh;
+}
+.fab-pic-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.fab-cap {
+  position: absolute;
+  top: 1.4rem;
+  right: 1.4rem;
+  background: var(--ink);
+  color: #fff;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  box-shadow: 0 10px 20px -8px rgba(0,0,0,.4);
+}
+.fab-cap em { font-style: normal; color: var(--gold-light); }
+.fab-placeholder {
+  background: linear-gradient(135deg, var(--cream), var(--paper));
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: .82rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Live tracker slide — punched up */
+.live-stage {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(200,154,74,.18), transparent 70%),
+    linear-gradient(135deg, #1d1815 0%, #2a2117 100%);
+  color: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+.live-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 80% 110%, rgba(196,122,110,.15), transparent 50%);
+  pointer-events: none;
+}
+.live-stage .eyebrow { color: var(--gold); }
+.live-stage h1 { color: var(--bg); }
+.live-stage h1 em { color: var(--gold); }
+
+.live-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(196,122,110,.18);
+  border: 1px solid var(--rose);
+  border-radius: 999px;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.78rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: #ffc4b8;
+  font-weight: 700;
+}
+.live-banner::before {
+  content: "";
+  width: 8px; height: 8px;
+  background: #ff6651;
+  border-radius: 50%;
+  animation: pulseDot 1.2s ease-in-out infinite;
+  box-shadow: 0 0 12px #ff6651;
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+.countdown-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+.cd-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(0,0,0,.4);
+  border: 1px solid rgba(200,154,74,.4);
+  border-radius: 12px;
+  padding: 1.1rem 1.4rem;
+  min-width: 130px;
+  position: relative;
+  overflow: hidden;
+}
+.cd-unit::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  animation: scan 2.5s ease-in-out infinite;
+}
+@keyframes scan {
+  0%, 100% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+}
+.cd-num {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: 5rem;
+  line-height: 1;
+  color: var(--bg);
+  font-variant-numeric: tabular-nums;
+}
+.cd-label {
+  font-size: .7rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  font-weight: 700;
+  margin-top: .6rem;
+}
+
+.tracker-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 0.8fr;
+  gap: 1.8rem;
+  margin-top: 2rem;
+  align-items: stretch;
+}
+.tracker-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(200,154,74,.4);
+  border-radius: 14px;
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  backdrop-filter: blur(4px);
+}
+.tracker-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.tracker-row:last-child { border-bottom: 0; padding-bottom: 0; }
+.tracker-label {
+  font-size: .78rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--gold-light);
+}
+.tracker-count {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: 3.4rem;
+  line-height: 1;
+  color: var(--bg);
+  font-variant-numeric: tabular-nums;
+}
+.tracker-count .of {
+  font-size: 1.2rem;
+  color: rgba(255,255,255,.55);
+  font-style: italic;
+}
+.tracker-bar {
+  height: 8px;
+  background: rgba(255,255,255,.1);
+  border-radius: 999px;
+  margin-top: .6rem;
+  overflow: hidden;
+  width: 100%;
+}
+.tracker-bar > div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  width: 0%;
+  border-radius: 999px;
+  transition: width .8s ease;
+  box-shadow: 0 0 16px var(--gold);
+}
+.bump { animation: bump .55s cubic-bezier(.2,.7,.3,1.4); }
+@keyframes bump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.32); color: var(--gold-light); text-shadow: 0 0 28px var(--gold); }
+  100% { transform: scale(1); }
+}
+
+/* Confetti explosion */
+.confetti-stage {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 50;
+}
+.confetti-piece {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  animation: confettiFly 2.4s cubic-bezier(.16,1,.3,1) forwards;
+  pointer-events: none;
+}
+@keyframes confettiFly {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(0deg) scale(0);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(180deg) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(720deg) scale(0.4);
+  }
+}
+
+/* Just enrolled mega banner */
+.celebrate-banner {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+  color: var(--ink);
+  padding: 1.5rem 3rem;
+  border-radius: 999px;
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 2.2rem;
+  font-style: italic;
+  letter-spacing: -0.01em;
+  box-shadow: 0 30px 80px -10px rgba(200,154,74,.8), 0 0 60px rgba(245,224,184,.6);
+  z-index: 60;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: celebratePop 3.2s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+@keyframes celebratePop {
+  0% { transform: translate(-50%, -50%) scale(0) rotate(-8deg); opacity: 0; }
+  15% { transform: translate(-50%, -50%) scale(1.15) rotate(2deg); opacity: 1; }
+  25% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+  70% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(.85) rotate(0deg); opacity: 0; }
+}
+.celebrate-banner .who {
+  display: block;
+  font-size: 1.2rem;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: .3rem;
+}
+
+.qr-card {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0.8rem;
+  background: var(--bg);
+  border-radius: 14px;
+  padding: 1.2rem;
+  box-shadow: var(--shadow-strong);
+}
+.qr-card img {
+  width: 200px; height: 200px;
+  border-radius: 6px;
+}
+.qr-card .qr-label {
+  font-size: .7rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+.qr-card .qr-url {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--rose-deep);
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+
+.stream-track {
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  max-height: 300px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(200,154,74,.5) transparent;
+}
+.stream-track::-webkit-scrollbar { width: 8px; }
+.stream-track::-webkit-scrollbar-track { background: transparent; }
+.stream-track::-webkit-scrollbar-thumb { background: rgba(200,154,74,.5); border-radius: 4px; }
+.stream-track::-webkit-scrollbar-thumb:hover { background: rgba(200,154,74,.7); }
+.stream-item {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  padding: .55rem 0;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--bg);
+}
+.stream-item strong { font-style: normal; font-weight: 500; color: var(--gold-light); }
+.stream-item .when {
+  margin-left: auto;
+  font-size: .68rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+}
+.stream-item.new {
+  animation: streamGlow 2.5s ease-out;
+}
+@keyframes streamGlow {
+  0% { color: #fff; transform: scale(1.04); background: rgba(245,212,154,.1); border-radius: 6px; }
+  100% { color: var(--bg); transform: scale(1); background: transparent; }
+}
+
+/* CTA URL */
+.cta-url {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.6rem, 5.5vw, 5.5rem);
+  color: var(--rose-deep);
+  letter-spacing: -0.01em;
+  text-transform: lowercase;
+  text-decoration: none;
+}
+.cta-url:hover { color: var(--gold-deep); }
+
+/* Lock-in deadline banner */
+.deadline-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.9rem 1.8rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  box-shadow: 0 20px 40px -16px rgba(196,122,110,.6);
+}
+.deadline-banner .clock { font-size: 1.3rem; }
+
+/* Video placeholder */
+.video-placeholder {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  aspect-ratio: 16/9;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: var(--shadow-strong);
+  position: relative;
+  overflow: hidden;
+}
+.video-placeholder::before {
+  content: "";
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--rose);
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.15;
+}
+.video-placeholder .play-icon {
+  width: 0; height: 0;
+  border-left: 26px solid var(--rose);
+  border-top: 18px solid transparent;
+  border-bottom: 18px solid transparent;
+  margin-left: 6px;
+  position: relative;
+  z-index: 2;
+}
+.video-placeholder .vid-label {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 1.4rem;
+  color: var(--ink);
+  position: relative;
+  z-index: 2;
+}
+.video-placeholder .vid-meta {
+  font-size: .72rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+  position: relative;
+  z-index: 2;
+}
+</style>
+</head>
+<body>
+
+<div class="progress"><div id="bar"></div></div>
+
+<div class="deck" id="deck">
+
+<!-- 1. WELCOME -->
+<section class="slide active center">
+  <div class="eyebrow">Find Your Person Challenge<span class="dot"></span>Night 3</div>
+  <p class="script" style="font-size:clamp(2.5rem,4vw,4rem); color:var(--ink); margin-bottom:1rem">Welcome to the...</p>
+  <h1 class="title">Find Your <em>Person</em><br>Challenge.</h1>
+  <p class="kicker" style="margin-top:3rem; color:var(--gold-deep)">Kait Tomlin × JJ Tomlin</p>
+</section>
+
+<!-- 2. CALENDAR -->
+<section class="slide">
+  <div class="stack" style="max-width:1400px; margin:0 auto">
+    <div class="eyebrow">What's coming up</div>
+    <h2 class="section">Mark your <em>calendar</em>.</h2>
+    <p class="lede" style="margin-top:.5rem">One more main night. Three bonus events. All 7 PM CT.</p>
+    <div class="cal" style="margin-top:2.5rem">
+      <div class="cal-row">
+        <div class="cal-label">Tonight + 1</div>
+        <div class="cal-cards">
+          <div class="cal-card tonight">
+            <div class="cal-date"><div class="cal-day">THU</div><div class="cal-num">28</div><div class="cal-mo">May</div></div>
+            <div>
+              <div class="cal-time">🔴 Tonight · 7 PM CT</div>
+              <div class="cal-speaker">Annie F. Downs</div>
+              <div class="cal-title">When Your Love Story Isn't Going How You Planned</div>
+            </div>
+          </div>
+          <div class="cal-card main">
+            <div class="cal-date"><div class="cal-day">FRI</div><div class="cal-num">29</div><div class="cal-mo">May</div></div>
+            <div>
+              <div class="cal-time">Night 4 · 7 PM CT</div>
+              <div class="cal-speaker">Kait & JJ</div>
+              <div class="cal-title">How to Build a Relationship That Lasts</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cal-row">
+        <div class="cal-label">Bonus events</div>
+        <div class="cal-cards three">
+          <div class="cal-card bonus">
+            <div class="cal-date"><div class="cal-day">SAT</div><div class="cal-num">30</div><div class="cal-mo">May</div></div>
+            <div><div class="cal-time">7 PM CT</div><div class="cal-speaker">Coach Michael</div><div class="cal-title">The Hot Seat</div></div>
+          </div>
+          <div class="cal-card bonus">
+            <div class="cal-date"><div class="cal-day">MON</div><div class="cal-num">1</div><div class="cal-mo">Jun</div></div>
+            <div><div class="cal-time">7 PM CT</div><div class="cal-speaker">Dating Coaches Panel</div><div class="cal-title">The Ultimate Q&amp;A</div></div>
+          </div>
+          <div class="cal-card bonus">
+            <div class="cal-date"><div class="cal-day">TUE</div><div class="cal-num">2</div><div class="cal-mo">Jun</div></div>
+            <div><div class="cal-time">7 PM CT</div><div class="cal-speaker">ARK Dating</div><div class="cal-title">Free Speed Dating</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. TONIGHT — Annie F. Downs (with photo) -->
+<section class="slide theme-rose">
+  <div class="two-col">
+    <div class="photo-frame tall" style="max-width:520px; margin-left:auto">
+      <img src="img/annie.png" alt="Annie F. Downs">
+    </div>
+    <div class="stack">
+      <div class="eyebrow" style="color:var(--rose-deep)">🔴 Tonight</div>
+      <h1 class="title" style="font-size:clamp(3rem,5.5vw,6rem)">Annie F.<br><em>Downs</em>.</h1>
+      <p class="lede" style="margin-top:1.5rem">
+        <em>"When Your Love Story Isn't Going How You Planned"</em><br>— finding purpose and hope in the wait.
+      </p>
+      <p class="kicker" style="margin-top:1.5rem; color:var(--rose-deep)">7 PM CT · live with us</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4. THERE ARE 3 PATHS -->
+<section class="slide theme-terra center">
+  <div class="eyebrow">After tonight</div>
+  <h1 class="giant" style="margin-top:1rem">There are<br><em>3 different</em><br>paths.</h1>
+</section>
+
+<!-- 5. PATH 1: DO NOTHING -->
+<section class="slide theme-dark center">
+  <div class="eyebrow">Path 1</div>
+  <h1 class="giant" style="margin-top:1.5rem">Do <em>nothing</em>.</h1>
+  <p class="lede" style="margin-top:3rem; max-width:42ch">Close the laptop. Tell yourself you'll figure it out eventually. Wake up next May still single, still searching.</p>
+</section>
+
+<!-- 6. PATH 2: DO IT ALONE -->
+<section class="slide theme-dark center">
+  <div class="eyebrow">Path 2</div>
+  <h1 class="giant" style="margin-top:1.5rem">Do it <em>alone</em>.</h1>
+  <p class="lede" style="margin-top:3rem; max-width:46ch">More books. More podcasts. More therapy. Another year of trying to figure it out by yourself — same patterns, same plateau.</p>
+</section>
+
+<!-- 7. PATH 3: DO IT WITH HELP -->
+<section class="slide theme-terra center">
+  <div class="eyebrow">Path 3</div>
+  <h1 class="giant" style="margin-top:1.5rem">Do it <em>with help</em>.</h1>
+  <p class="lede" style="margin-top:3rem; max-width:46ch; color:#fff1d8">Step into a 10-week guided cohort with coaching, community, and a proven process. Don't reinvent the wheel.</p>
+</section>
+
+<!-- 8. NOT THE PROBLEM — Main Girl Validation reframe -->
+<section class="slide center">
+  <div class="eyebrow" style="color:var(--rose-deep)">Kait — this was me</div>
+  <h1 class="title" style="margin-top:1.5rem; max-width:26ch; font-size:clamp(2.5rem,4.5vw,4.5rem); color:var(--rose-deep); font-weight:700">Therapy. Books. Podcasts.</h1>
+  <h2 class="section" style="margin-top:2rem; max-width:24ch; color:var(--rose-deep); font-weight:600">You're <span style="color:#ff6347; font-weight:800">NOT</span> the problem.<br>Your <em>system</em> is.</h2>
+  <p class="lede" style="margin-top:2.5rem; max-width:46ch; color:var(--rose-deep)">You need a <strong style="color:#ff6347; text-decoration:underline; text-decoration-thickness:2px">strategy</strong>, not more healing.</p>
+</section>
+
+<!-- 9. JESS & RONNY VIDEO — real video embedded -->
+<section class="slide center">
+  <div class="eyebrow" style="color:var(--rose-deep)">Watch what happened</div>
+  <h2 class="section" style="margin-bottom:.5rem"><em>Jess &amp; Ronny.</em></h2>
+  <p class="lede" style="margin:0 auto 1.5rem; max-width:52ch">Jess came through one of our events. Joined School of Dating. Watch the transformation.</p>
+  <video controls preload="auto" playsinline data-noclick data-slide-video
+    style="width:100%; max-width:1000px; aspect-ratio:16/9; border-radius:12px; box-shadow:var(--shadow-strong); background:#000; display:block; margin:0 auto"
+    poster="">
+    <source src="videos/jess-ronny.mp4" type="video/mp4">
+  </video>
+</section>
+
+<!-- 10. SOD INTRO — "Let's GO!" reveal -->
+<section class="slide">
+  <div class="two-col">
+    <div class="stack">
+      <div class="eyebrow">Introducing</div>
+      <p class="script" style="font-size:clamp(3rem,5vw,5rem); color:var(--ink); line-height:1">School of</p>
+      <h1 class="title" style="font-style:italic; font-weight:400; color:var(--gold-deep); margin-top:-1rem; font-size:clamp(4rem,7vw,8rem)">Dating.</h1>
+      <p class="lede" style="margin-top:2rem">A 10-week guided cohort. Coaching, community, and a proven process to date with intention.</p>
+      <div style="display:flex; gap:1rem; margin-top:1.5rem; flex-wrap:wrap">
+        <span class="tag-pill gold">10 weeks</span>
+        <span class="tag-pill gold">3 phases</span>
+        <span class="tag-pill gold">16 live teachings</span>
+        <span class="tag-pill gold">Lifetime access</span>
+      </div>
+    </div>
+    <div class="photo-frame tall" style="max-width:520px">
+      <img src="img/kait-jj-main.png" alt="Kait and JJ Tomlin">
+    </div>
+  </div>
+</section>
+
+<!-- 10. CHANGE YOUR LIFE — 3 phases overview -->
+<section class="slide center">
+  <div class="eyebrow">10 weeks · 3 phases</div>
+  <h2 class="section" style="max-width:24ch">Change your life in <em>10 weeks</em>.</h2>
+  <p class="lede" style="margin-top:1.5rem">Coaching × Community × Proven Process</p>
+  <div class="three-col" style="margin-top:3rem; gap:1.5rem; max-width:1400px">
+    <div style="background:#c47a6e; color:#faf6f0; border-radius:14px; padding:2.5rem 2rem; display:flex; flex-direction:column; gap:1rem; min-height:240px; justify-content:center; box-shadow:var(--shadow-strong)">
+      <p class="script" style="font-size:2.4rem; color:#fff1d8">Phase 1</p>
+      <h3 style="color:#fff; font-size:1.8rem; line-height:1.05">Inner Healing &amp;<br><em>Transformation</em></h3>
+    </div>
+    <div style="background:#b8504a; color:#faf6f0; border-radius:14px; padding:2.5rem 2rem; display:flex; flex-direction:column; gap:1rem; min-height:240px; justify-content:center; box-shadow:var(--shadow-strong)">
+      <p class="script" style="font-size:2.4rem; color:#fff1d8">Phase 2</p>
+      <h3 style="color:#fff; font-size:1.8rem; line-height:1.05">Practical Dating Tools<br><em>Coaching &amp; Accountability</em></h3>
+    </div>
+    <div style="background:#7a7370; color:#faf6f0; border-radius:14px; padding:2.5rem 2rem; display:flex; flex-direction:column; gap:1rem; min-height:240px; justify-content:center; box-shadow:var(--shadow-strong)">
+      <p class="script" style="font-size:2.4rem; color:#fff1d8">Phase 3</p>
+      <h3 style="color:#fff; font-size:1.8rem; line-height:1.05">Dating Challenge &amp;<br><em>Application</em></h3>
+    </div>
+  </div>
+</section>
+
+<!-- 11. PHASE 1 — transparent cutout floats over slide -->
+<section class="slide" style="background:radial-gradient(ellipse at 70% 30%, rgba(200,154,74,.10), transparent 55%), var(--bg)">
+  <div class="phase-split">
+    <div style="position:relative; display:flex; align-items:center; justify-content:center; height:100%; min-height:60vh">
+      <img src="img/phase1-team-cutout.png" alt="Phase 1 coaching team" style="max-width:100%; max-height:78vh; object-fit:contain; filter:drop-shadow(0 30px 60px rgba(40,28,18,.25))">
+      <div class="phase-tag-overlay" style="position:absolute; top:1.5rem; left:1.5rem">Phase 1</div>
+    </div>
+    <div class="phase-body">
+      <h3>Inner Healing &amp;<br><em>Transformation</em></h3>
+      <ul class="phase-list">
+        <li><span class="n">1</span><span>Uncover your pain cycle and attachment pattern, and how it's affecting your love life.</span></li>
+        <li><span class="n">2</span><span>Walk out with clear dealbreakers, red flags, and non-negotiables.</span></li>
+        <li><span class="n">3</span><span>Unshakeable <em>GODfidence</em>.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 12. PHASE 2 — transparent cutout floats over slide -->
+<section class="slide" style="background:radial-gradient(ellipse at 30% 70%, rgba(196,122,110,.10), transparent 55%), linear-gradient(135deg,#faf2ef 0%,var(--bg) 50%)">
+  <div class="phase-split">
+    <div class="phase-body">
+      <h3>Practical Dating Tools.<br><em>Coaching. Accountability.</em></h3>
+      <ul class="phase-list">
+        <li><span class="n">1</span><span>Harness your God-given <em>masculinity</em> or <em>femininity</em> + ultimate texting scripts.</span></li>
+        <li><span class="n">2</span><span>Navigate online dating without burning out.</span></li>
+        <li><span class="n">3</span><span>Master first dates and build rejection resilience.</span></li>
+      </ul>
+    </div>
+    <div style="position:relative; display:flex; align-items:center; justify-content:center; height:100%; min-height:60vh">
+      <img src="img/phase2-team-cutout.png" alt="Phase 2 team" style="max-width:100%; max-height:78vh; object-fit:contain; filter:drop-shadow(0 30px 60px rgba(40,28,18,.25))">
+      <div class="phase-tag-overlay" style="position:absolute; top:1.5rem; right:1.5rem">Phase 2</div>
+    </div>
+  </div>
+</section>
+
+<!-- 13. PHASE 3 — transparent cutout floats over slide (matches Phase 1 & 2) -->
+<section class="slide" style="background:radial-gradient(ellipse at 70% 70%, rgba(196,122,110,.10), transparent 55%), var(--bg)">
+  <div class="phase-split">
+    <div style="position:relative; display:flex; align-items:center; justify-content:center; height:100%; min-height:60vh">
+      <img src="img/phase3-cutout-clean.png" alt="Phase 3 — JJ &amp; Kait podcast" style="max-width:100%; max-height:78vh; object-fit:contain; filter:drop-shadow(0 30px 60px rgba(40,28,18,.25))">
+      <div class="phase-tag-overlay" style="position:absolute; bottom:1.5rem; left:1.5rem">Phase 3</div>
+    </div>
+    <div class="phase-body">
+      <h3>Dating Challenge &amp;<br><em>Application</em></h3>
+      <ul class="phase-list">
+        <li><span class="n">1</span><span>Connection-building texting, communication styles, and anxiety management.</span></li>
+        <li><span class="n">2</span><span>Healthy <em>boundaries</em> — spiritual, emotional, and physical.</span></li>
+        <li><span class="n">3</span><span>Discernment + wisdom: stay, walk away, or leave them better.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 14. SCHEDULE OVERVIEW — inline timeline (iframe was unreadable) -->
+<section class="slide" style="padding:3vh 4vw; background:radial-gradient(ellipse at 0% 0%, rgba(200,154,74,.08), transparent 50%), var(--bg)">
+  <div class="stack" style="max-width:1500px; margin:0 auto; width:100%">
+    <div style="display:flex; justify-content:space-between; align-items:baseline; gap:2rem; flex-wrap:wrap">
+      <div>
+        <div class="eyebrow">The 10-week roadmap</div>
+        <h2 class="section" style="font-size:clamp(2.2rem,4vw,4rem)">Here's <em>every</em> session.</h2>
+      </div>
+      <p class="lede" style="max-width:36ch; text-align:right">16 live teachings · weekly Thursday office hours · Saturday workshops when topics warrant the deeper dive.</p>
+    </div>
+
+    <!-- 3-month timeline strip -->
+    <div style="margin-top:1.5rem; display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.5rem">
+      <!-- JUNE / PHASE 1 -->
+      <div style="background:var(--paper); border:1px solid var(--line); border-top:4px solid var(--gold); border-radius:12px; padding:1.4rem; box-shadow:var(--shadow)">
+        <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:1rem">
+          <p class="script" style="font-size:2rem; color:var(--ink); line-height:1">June</p>
+          <span style="font-size:.65rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--gold-deep)">Phase 1 · Foundations</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:.7rem">
+          <div style="border-left:3px solid var(--gold); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--gold-deep)">Week 1 · Tue Jun 9</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:1rem; color:var(--ink); margin-top:.2rem">Inner Child &amp; Reconnecting</div>
+          </div>
+          <div style="border-left:3px solid var(--gold); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--gold-deep)">Week 2 · Tue Jun 16</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:1rem; color:var(--ink); margin-top:.2rem">Attachment Style &amp; Wounds</div>
+          </div>
+          <div style="border-left:3px solid var(--gold); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--gold-deep)">Week 3 · Tue Jun 23</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:1rem; color:var(--ink); margin-top:.2rem">Triggers &amp; Managing Emotions</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- JULY / PHASE 2 -->
+      <div style="background:var(--paper); border:1px solid var(--line); border-top:4px solid var(--sage); border-radius:12px; padding:1.4rem; box-shadow:var(--shadow)">
+        <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:1rem">
+          <p class="script" style="font-size:2rem; color:var(--ink); line-height:1">July</p>
+          <span style="font-size:.65rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--sage)">Phase 2 · Tools</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:.55rem">
+          <div style="border-left:3px solid var(--sage); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--sage)">Wk 5 · Jul 7</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:.95rem; color:var(--ink)">Godfidence &amp; Healthy Anatomy</div>
+          </div>
+          <div style="border-left:3px solid var(--sage); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--sage)">Wk 6 · Jul 14 + 18</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:.95rem; color:var(--ink)">Type, Attraction, Values + Mindset RESET</div>
+          </div>
+          <div style="border-left:3px solid var(--sage); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--sage)">Wk 7 · Jul 21 + 25</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:.95rem; color:var(--ink)">Feminine &amp; Masculine + Flirting 101</div>
+          </div>
+          <div style="border-left:3px solid var(--sage); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--sage)">Wk 8 · Jul 28</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:.95rem; color:var(--ink)">Online Dating + Dating Challenge</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AUGUST / PHASE 3 -->
+      <div style="background:var(--paper); border:1px solid var(--line); border-top:4px solid var(--rose); border-radius:12px; padding:1.4rem; box-shadow:var(--shadow)">
+        <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:1rem">
+          <p class="script" style="font-size:2rem; color:var(--ink); line-height:1">August</p>
+          <span style="font-size:.65rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">Phase 3 · Action</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:.55rem">
+          <div style="border-left:3px solid var(--rose); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">Wk 10 · Aug 11 + 15</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:.95rem; color:var(--ink)">First Dates + Facing Rejection</div>
+          </div>
+          <div style="border-left:3px solid var(--rose); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">Wk 11 · Aug 18 + 22</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:.95rem; color:var(--ink)">After the First Date + Long Distance</div>
+          </div>
+          <div style="border-left:3px solid var(--rose); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">Wk 12 · Aug 25 + 29 · 🎓 Finale</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:.95rem; color:var(--ink)">DTR + Boundaries + <strong>Graduation</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Break weeks + meta below -->
+    <div style="display:flex; gap:1.5rem; justify-content:center; align-items:center; margin-top:1rem; flex-wrap:wrap">
+      <span style="font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); font-weight:600">Break weeks:</span>
+      <span style="background:var(--cream); border:1px dashed var(--gold); border-radius:999px; padding:.4rem .9rem; font-family:'Fraunces',serif; font-style:italic; font-size:.85rem; color:var(--ink-soft)">Wk 4 · Jun 30 – Jul 4</span>
+      <span style="background:var(--cream); border:1px dashed var(--gold); border-radius:999px; padding:.4rem .9rem; font-family:'Fraunces',serif; font-style:italic; font-size:.85rem; color:var(--ink-soft)">Wk 9 · Aug 4 – 8</span>
+      <span style="font-family:'Fraunces',serif; font-style:italic; font-size:.95rem; color:var(--muted)">+ Office Hours every Thursday · 7 PM CT</span>
+    </div>
+  </div>
+</section>
+
+<!-- 16. WHO IS THIS FOR? -->
+<style>
+.marriage-wall {
+  columns: 4;
+  column-gap: 0.7rem;
+  flex: 1;
+  min-height: 50vh;
+}
+.marriage-wall .photo-frame {
+  break-inside: avoid;
+  margin-bottom: 0.7rem;
+  width: 100%;
+  height: auto;
+  aspect-ratio: auto;
+  box-shadow: 0 18px 40px -22px rgba(40,28,18,.3);
+  border-radius: 10px;
+  display: block;
+  overflow: hidden;
+}
+.marriage-wall .photo-frame img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+</style>
+<section class="slide theme-terra center">
+  <div class="eyebrow">The big question</div>
+  <h1 class="giant" style="margin-top:1.5rem; max-width:14ch">Who is<br>this <em>for</em>?</h1>
+</section>
+
+<!-- 18. archetype 1 -->
+<section class="slide theme-terra">
+  <div class="archetype">
+    <p class="kicker" style="color:#fff1d8">Archetype 1</p>
+    <h1 class="archetype-hed">Burnt out and hopeless</h1>
+    <p class="archetype-q">Is that <em>you</em>?</p>
+  </div>
+</section>
+
+<!-- 19. archetype 2 -->
+<section class="slide" style="background:#b8504a; color:#faf6f0">
+  <div class="archetype">
+    <p class="kicker" style="color:#fff1d8">Archetype 2</p>
+    <h1 class="archetype-hed">Done the work, but need a proven process</h1>
+    <p class="archetype-q">Is that <em>you</em>?</p>
+  </div>
+</section>
+
+<!-- 20. archetype 3 -->
+<section class="slide theme-terra">
+  <div class="archetype">
+    <p class="kicker" style="color:#fff1d8">Archetype 3</p>
+    <h1 class="archetype-hed">Never really dated much</h1>
+    <p class="archetype-q">Is that <em>you</em>?</p>
+  </div>
+</section>
+
+<!-- 21. archetype 4 -->
+<section class="slide" style="background:#b8504a; color:#faf6f0">
+  <div class="archetype">
+    <p class="kicker" style="color:#fff1d8">Archetype 4</p>
+    <h1 class="archetype-hed">Dated all the wrong types</h1>
+    <p class="archetype-q">Is that <em>you</em>?</p>
+  </div>
+</section>
+
+<!-- 22. archetype 5 -->
+<section class="slide theme-terra">
+  <div class="archetype">
+    <p class="kicker" style="color:#fff1d8">Archetype 5</p>
+    <h1 class="archetype-hed">Starting a second chapter</h1>
+    <p class="archetype-q">Is that <em>you</em>?</p>
+  </div>
+</section>
+
+<!-- 23. WHAT'S INCLUDED — value stack with more life -->
+<section class="slide" style="padding:5vh 5vw; background:
+  radial-gradient(ellipse at 0% 0%, rgba(200,154,74,.10), transparent 50%),
+  radial-gradient(ellipse at 100% 100%, rgba(196,122,110,.08), transparent 50%),
+  var(--bg)">
+  <div class="stack center" style="max-width:1200px; margin:0 auto">
+    <div class="eyebrow">The full stack</div>
+    <h2 class="section" style="margin-bottom:.5rem">What's <em>all included</em>?</h2>
+    <p class="lede" style="margin:0 auto 2rem">Every thing you need to actually get married. No upsells. No half-measures.</p>
+    <table class="value-table">
+      <thead><tr><th>What's Included</th><th style="text-align:right">Value</th></tr></thead>
+      <tbody>
+        <tr><td>16 LIVE Sessions <span style="color:var(--muted); font-size:.85rem; font-style:italic">(10 with Kait &amp; JJ, 6 with expert guests &amp; coaches)</span></td><td>$9,000</td></tr>
+        <tr><td>200+ Page Physical Workbook</td><td>$297</td></tr>
+        <tr><td>Co-ed Cohort Community (healing &amp; support)</td><td>$297</td></tr>
+        <tr><td>Personal School of Dating Coach (text support)</td><td>$1,497</td></tr>
+        <tr><td>Weekly Office Hours <span style="color:var(--muted); font-size:.85rem; font-style:italic">(10 weeks of live Q&amp;A with a coach)</span></td><td>$747</td></tr>
+        <tr><td>Lifetime Access to SOD &amp; Alumni Network</td><td><em>Priceless</em></td></tr>
+        <tr class="total"><td><strong>Total Value</strong></td><td><strong>$11,838</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 24. INTRODUCING SOD PRO — lightly intro Pro before testimonials -->
+<section class="slide" style="padding:5vh 5vw; background:
+  radial-gradient(ellipse at 100% 0%, rgba(196,122,110,.14), transparent 55%),
+  radial-gradient(ellipse at 0% 100%, rgba(200,154,74,.08), transparent 55%),
+  var(--bg)">
+  <div class="stack center" style="max-width:1250px; margin:0 auto">
+    <span style="display:inline-flex; align-items:center; gap:.6rem; background:rgba(196,122,110,.12); border:1px solid var(--rose); border-radius:999px; padding:0.4rem 1.1rem; font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">
+      <span style="width:6px; height:6px; background:var(--rose); border-radius:50%"></span>
+      One step deeper
+    </span>
+    <h2 class="section" style="margin-top:1rem">Then there's <em>SOD Pro</em>.</h2>
+    <p class="lede" style="max-width:54ch; margin:.5rem auto 0">Everything in SOD — plus a coach who knows your dating life by name. Weekly 1:1 calls. 20 weeks. <em>10 during the program, 10 after.</em></p>
+
+    <table class="value-table" style="margin-top:2rem">
+      <thead>
+        <tr><th>SOD Pro adds…</th><th style="text-align:right">Value</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Everything in School of Dating</td><td><em>included</em></td></tr>
+        <tr style="background:rgba(196,122,110,.10)"><td><strong style="color:var(--rose-deep)">20 weekly 1:1 coaching calls</strong> <span style="color:var(--muted); font-size:.85rem; font-style:italic">(10 in program + 10 weeks after)</span></td><td><strong style="color:var(--rose-deep)">$3,000</strong></td></tr>
+        <tr class="total" style="background:var(--rose-deep)"><td><strong>Pro Total Value</strong></td><td><strong>$14,838</strong></td></tr>
+      </tbody>
+    </table>
+
+    <p class="kicker" style="margin-top:1.5rem; color:var(--rose-deep); font-style:italic; font-family:'Fraunces',serif; font-weight:300; text-transform:none; letter-spacing:0; font-size:1.05rem">
+      We're not pushing Pro tonight. We just want you to know it exists — because the Fast Action Bonus gives every SOD buyer a free taste of it.
+    </p>
+  </div>
+</section>
+
+<!-- 25. JOEL & JULES VIDEO — real video embedded -->
+<section class="slide center" style="position:relative; overflow:hidden">
+  <div class="eyebrow" style="color:var(--rose-deep)">This one made Kait weepy</div>
+  <h2 class="section" style="margin-bottom:.5rem"><em>Joel &amp; Jules.</em></h2>
+  <p class="lede" style="margin:0 auto 1.5rem; max-width:52ch">Joel was the anxious over-committer. Jules was Ms. Independent. Watch what SOD did with them.</p>
+  <video controls preload="auto" playsinline data-noclick data-slide-video
+    style="width:100%; max-width:1000px; aspect-ratio:16/9; border-radius:12px; box-shadow:var(--shadow-strong); background:#000; display:block; margin:0 auto">
+    <source src="videos/joel-jules.mp4" type="video/mp4">
+  </video>
+  <!-- engagement photo bottom right -->
+  <div style="position:absolute; bottom:3vh; right:3vw; width:clamp(200px, 19vw, 280px); border-radius:14px; overflow:hidden; box-shadow:var(--shadow-strong); border:4px solid #fff; transform:rotate(2deg); z-index:5">
+    <img src="img/engagement-ai.png" alt="" style="width:100%; height:auto; display:block">
+  </div>
+</section>
+
+<!-- 25. AND COUNTLESS OTHERS — marriage wall payoff -->
+<section class="slide" style="padding:4vh 4vw; background:linear-gradient(135deg, #faf2ef 0%, var(--bg) 50%)">
+  <div class="stack" style="max-width:1600px; margin:0 auto; width:100%; height:100%; gap:1.2rem">
+    <div style="display:flex; justify-content:space-between; align-items:baseline; gap:2rem; flex-wrap:wrap">
+      <div>
+        <div class="eyebrow" style="color:var(--rose-deep)">You just heard Joel + Jules</div>
+        <h2 class="section" style="font-size:clamp(2.6rem,5vw,5rem)">And <em>countless</em> others.</h2>
+      </div>
+      <p class="lede" style="max-width:32ch; text-align:right">Real SOD alumni. Real marriages. Real engagements. The proof is in the people.</p>
+    </div>
+    <div class="marriage-wall" style="margin-top:1rem">
+      <div class="photo-frame"><img src="img/marriage-3.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-2.png" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-6.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-4.png" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-1.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-5.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-7.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-8.jpg" alt=""></div>
+    </div>
+    <div style="text-align:center; margin-top:.5rem">
+      <p class="script" style="font-size:clamp(2rem,3vw,3rem); color:var(--rose-deep); line-height:1">…and that's just a few of them.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 26. TWO OPTIONS × FULL PRICE — sprucier, bigger badge, support bubble -->
+<section class="slide" style="background:
+  radial-gradient(ellipse at 80% 0%, rgba(200,154,74,.12), transparent 55%),
+  radial-gradient(ellipse at 0% 100%, rgba(110,128,113,.08), transparent 55%),
+  var(--bg)">
+  <div class="stack" style="max-width:1300px; margin:0 auto">
+    <div style="text-align:center; display:flex; flex-direction:column; align-items:center; gap:0.5rem">
+      <span style="display:inline-flex; align-items:center; gap:.6rem; background:var(--cream); border:1px solid var(--gold); border-radius:999px; padding:0.4rem 1.1rem; font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--gold-deep)">
+        <span style="width:6px; height:6px; background:var(--gold); border-radius:50%"></span>
+        Two ways in
+      </span>
+      <h2 class="section center" style="margin-top:1rem">Two options × <em>full price</em>.</h2>
+      <p class="lede" style="max-width:50ch; margin:0.5rem auto 0">First, here's what these programs normally cost. Then we'll show you what tonight unlocks.</p>
+    </div>
+
+    <div class="tiers" style="margin-top:2.5rem">
+      <div class="tier sod">
+        <div class="tier-tag">School of Dating</div>
+        <h4>SOD</h4>
+        <ul>
+          <li>16 LIVE Two-Hour Group Teachings</li>
+          <li>200+ Page Physical Workbook</li>
+          <li>Community Support System</li>
+          <li>Personal SOD Coach (text support)</li>
+          <li>Weekly Thursday Q&amp;A with a Coach</li>
+          <li>Lifetime Access to SOD &amp; Alumni Network</li>
+        </ul>
+        <div class="price-row">
+          <span class="price-new">$1,697</span>
+        </div>
+      </div>
+
+      <div class="tier pro">
+        <div class="tier-tag">School of Dating PRO</div>
+        <h4>SOD <em>PRO</em></h4>
+        <ul>
+          <li>Everything in SOD</li>
+          <li>Lifetime Access to SOD &amp; Alumni Network</li>
+        </ul>
+        <div class="calls-badge">
+          <div class="num">20 weeks of <em style="font-style:italic">1:1 coaching</em></div>
+          <div class="label">10 in program + 10 weeks after</div>
+        </div>
+        <div class="price-row">
+          <span class="price-new">$3,197</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 25. $700 OFF TONIGHT -->
+<section class="slide">
+  <div class="stack" style="max-width:1300px; margin:0 auto">
+    <div class="eyebrow" style="text-align:center; color:var(--rose-deep)">⏰ Tonight only</div>
+    <h1 class="title" style="text-align:center; font-size:clamp(3.5rem,6.5vw,6.5rem)">$700 <em>off</em>. Tonight.</h1>
+
+    <div class="tiers" style="margin-top:3rem">
+      <div class="tier sod recommended">
+        <div class="tier-tag">School of Dating</div>
+        <h4>SOD</h4>
+        <ul>
+          <li>16 LIVE Two-Hour Group Teachings</li>
+          <li>200+ Page Physical Workbook</li>
+          <li>Community Support System</li>
+          <li>Personal SOD Coach</li>
+          <li>Weekly Thursday Q&amp;A</li>
+          <li>Lifetime Access</li>
+        </ul>
+        <div class="price-row">
+          <span class="price-old">$1,697</span>
+          <span class="price-new" style="color:var(--gold-deep)">$997</span>
+        </div>
+      </div>
+
+      <div class="tier pro">
+        <div class="tier-tag">School of Dating PRO</div>
+        <h4>SOD <em>PRO</em></h4>
+        <ul>
+          <li>Everything in SOD</li>
+          <li>Lifetime Access</li>
+        </ul>
+        <div class="calls-badge">
+          <div class="num">20 weeks of <em style="font-style:italic">1:1 coaching</em></div>
+          <div class="label">10 in program + 10 weeks after</div>
+        </div>
+        <div class="price-row">
+          <span class="price-old">$3,197</span>
+          <span class="price-new">$2,497</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAB intro — straight from $700 off discount reveal to "it gets better" -->
+<section class="slide bonus-banner-bg center" style="padding:5vh 6vw">
+  <div class="eyebrow">🔥 Fast Action Bonus · Night 3 ONLY</div>
+  <h1 class="title" style="margin-top:1rem; max-width:22ch">Two unlocks.<br>Instantly. <em>Free</em>.</h1>
+  <p class="lede" style="margin-top:2rem; max-width:50ch">For the first 100 people who say yes — we're stacking two bonuses you won't find anywhere else.</p>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; max-width:900px; margin:2.5rem auto 0; width:100%">
+    <div style="background:rgba(245,224,184,.12); border:1px solid rgba(245,224,184,.4); border-radius:12px; padding:1.4rem; text-align:left">
+      <div style="font-size:.7rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--gold-light); margin-bottom:.4rem">⏰ Bonus #1 deadline</div>
+      <div style="font-family:'Fraunces',serif; font-weight:400; font-style:italic; font-size:1.4rem; color:#fff; line-height:1.2">When this call ends</div>
+      <div style="font-size:.85rem; color:rgba(255,255,255,.65); margin-top:.4rem">≈ 9:00 PM CT tonight · Caps at 100 students</div>
+    </div>
+    <div style="background:rgba(245,224,184,.12); border:1px solid rgba(245,224,184,.4); border-radius:12px; padding:1.4rem; text-align:left">
+      <div style="font-size:.7rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--gold-light); margin-bottom:.4rem">⏰ Bonus #2 deadline</div>
+      <div style="font-family:'Fraunces',serif; font-weight:400; font-style:italic; font-size:1.4rem; color:#fff; line-height:1.2">Midnight CT tonight</div>
+      <div style="font-size:.85rem; color:rgba(255,255,255,.65); margin-top:.4rem">A few extra hours for Bonus #2 only</div>
+    </div>
+  </div>
+</section>
+
+<!-- 27. BONUS #1 — SOD Pro trial, clickfunnels-bump style -->
+<section class="slide fab-bonus">
+  <div class="fab-grid">
+    <div class="fab-body">
+      <div class="fab-tag"><span class="num">Bonus 01</span><span>⏰ Expires when this call ends · 9 PM CT</span></div>
+      <h1 class="fab-headline">A full month of <em>1:1 coaching</em> calls with your Coach.</h1>
+      <p class="fab-sub">A.k.a. a real <em style="color:var(--gold-deep)">trial of SOD PRO</em>.<br>4 weekly calls. Your coach knows your name.</p>
+      <div class="fab-value-pill">
+        <span class="val-num">$320</span>
+        <span class="val-tx">value · free tonight</span>
+      </div>
+    </div>
+    <div class="fab-pic-wrap">
+      <div class="fab-cap"><em>Caps at 100</em> students</div>
+      <img src="img/coaching-ai.png" alt="Student on 1:1 coaching Zoom call" style="object-position:center center">
+    </div>
+  </div>
+</section>
+
+<!-- 28. BONUS #2 — Dr. Cloud workshop with big photo -->
+<section class="slide fab-bonus">
+  <div class="fab-grid">
+    <div class="fab-body">
+      <div class="fab-tag" style="color:var(--gold-deep)"><span class="num" style="background:var(--gold-deep)">Bonus 02</span><span>⏰ Expires at midnight CT tonight</span></div>
+      <h1 class="fab-headline">Dr. Henry Cloud's<br><em>"How to Get a Date Worth Keeping"</em> Workshop.</h1>
+      <p class="fab-sub">NYT bestselling author of <em>Boundaries</em>. Clinical psychologist. Decades of counsel.</p>
+      <div class="fab-value-pill">
+        <span class="val-num">$99</span>
+        <span class="val-tx">value · free tonight</span>
+      </div>
+    </div>
+    <div class="fab-pic-wrap">
+      <img src="img/cloud.png" alt="Dr. Henry Cloud" style="object-position:center top">
+    </div>
+  </div>
+</section>
+
+<!-- 32. COHORT CAPS AT 200 (moved up per script — before therapy reframe) -->
+<section class="slide center">
+  <p class="script" style="font-size:clamp(2.5rem,4vw,4rem); color:var(--ink)">School of Dating</p>
+  <div class="eyebrow" style="margin-top:3rem">Heads up</div>
+  <h2 class="section" style="margin-top:1rem; max-width:24ch">Our summer cohort caps at</h2>
+  <h1 class="giant" style="margin-top:.5rem">200 <em>students</em>.</h1>
+  <p class="lede" style="margin-top:2rem">And we are already filling up.</p>
+</section>
+
+<!-- 33. THERAPY VS SOD — JJ loves this slide -->
+<section class="slide theme-dark center">
+  <div class="eyebrow">Put it in perspective</div>
+  <h2 class="section" style="margin-top:1rem; max-width:24ch">If you went to therapy 1:1 every week for <em>3 months</em>…</h2>
+
+  <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:2rem; margin-top:4rem; max-width:1000px; align-items:center">
+    <div style="background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:2.5rem 2rem; text-align:center">
+      <div style="font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:rgba(255,255,255,.5); font-weight:600; margin-bottom:1rem">Therapy 1:1 · 3 months</div>
+      <div style="font-family:'Fraunces',serif; font-weight:400; font-size:clamp(3rem,5vw,5rem); color:var(--bg); line-height:1">$2,400</div>
+      <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:300; font-size:1.1rem; color:rgba(255,255,255,.65); margin-top:1.2rem">And it wasn't<br>about dating.</div>
+    </div>
+    <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:300; font-size:1.6rem; color:var(--gold)">vs.</div>
+    <div style="background:var(--bg); border-radius:14px; padding:2.5rem 2rem; text-align:center; box-shadow:0 30px 60px -20px rgba(0,0,0,.5)">
+      <div style="font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; margin-bottom:1rem">School of Dating</div>
+      <div style="font-family:'Fraunces',serif; font-weight:400; font-size:clamp(3rem,5vw,5rem); color:var(--rose-deep); line-height:1">$997</div>
+      <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:300; font-size:1.1rem; color:var(--ink-soft); margin-top:1.2rem">Built specifically<br>to get you married.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 30. FULL VALUE STACK + BIG CTA (corrected) -->
+<section class="slide" style="padding:4vh 4vw">
+  <div class="stack" style="max-width:1500px; margin:0 auto; width:100%">
+    <div class="eyebrow" style="text-align:center">Tonight's offer</div>
+    <h2 class="section center" style="font-size:clamp(2rem,3.5vw,3.5rem)">All <em>included</em>. One investment.</h2>
+
+    <div style="display:grid; grid-template-columns:1.4fr 1fr; gap:3rem; margin-top:1rem; align-items:center">
+      <table class="value-table">
+        <tbody>
+          <tr><td>School of Dating × 10-Week Mentorship</td><td>$11,838</td></tr>
+          <tr class="bonus"><td>4 × 1:1 Private Coaching Calls (SOD PRO trial)</td><td>$320</td></tr>
+          <tr class="bonus"><td>Dr. Cloud's "How to Get a Date Worth Keeping" Workshop</td><td>$99</td></tr>
+          <tr class="total"><td><strong>Total Value</strong></td><td><strong>$12,257</strong></td></tr>
+          <tr class="offer"><td><strong>Tonight's Offer</strong></td><td><strong>$997</strong></td></tr>
+        </tbody>
+      </table>
+
+      <div style="display:flex; flex-direction:column; gap:1rem">
+        <p class="kicker" style="color:var(--rose-deep); text-align:center">Two payment options</p>
+        <div style="background:linear-gradient(135deg,var(--paper),#faf4e6); border:3px solid var(--gold-deep); border-radius:12px; padding:1.4rem; text-align:center; box-shadow:var(--shadow-strong)">
+          <p class="kicker" style="color:var(--gold-deep); margin-bottom:.4rem; font-size:.78rem">Pay in full</p>
+          <p style="font-family:'Fraunces',serif; font-weight:500; font-size:2.6rem; color:var(--ink); line-height:1">1 × $997</p>
+          <p style="font-size:.78rem; color:var(--gold-deep); font-weight:700; letter-spacing:.16em; margin-top:.4rem">$700 OFF</p>
+        </div>
+        <div style="background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:1rem; text-align:center">
+          <p class="kicker" style="color:var(--muted); margin-bottom:.3rem; font-size:.72rem">6-pay plan</p>
+          <p style="font-family:'Fraunces',serif; font-weight:500; font-size:2rem; color:var(--ink); line-height:1">6 × $198</p>
+          <p style="font-size:.72rem; color:var(--muted); font-weight:500; letter-spacing:.1em; margin-top:.3rem; font-style:italic">first payment today + 5 more</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BIG CHECKOUT CTA — readable from a phone, scannable from the back of the room -->
+    <div style="margin-top:1.5rem; background:linear-gradient(135deg, var(--rose-deep) 0%, #8a3a30 100%); border-radius:16px; padding:1.8rem 2.5rem; display:flex; align-items:center; justify-content:space-between; gap:2rem; box-shadow:0 30px 60px -20px rgba(168,90,78,.5); flex-wrap:wrap">
+      <div style="display:flex; flex-direction:column; gap:.3rem; flex:1; min-width:300px">
+        <span style="font-size:.78rem; letter-spacing:.28em; text-transform:uppercase; font-weight:700; color:rgba(255,255,255,.85)">⏰ Save your seat now</span>
+        <a href="https://schoolofdatingoffer.com" target="_blank" rel="noopener"
+          style="font-family:'Inter',sans-serif; font-weight:800; font-size:clamp(2.4rem,4.5vw,4.5rem); color:#fff; text-decoration:none; letter-spacing:-0.01em; line-height:1; text-transform:lowercase; text-shadow:0 4px 20px rgba(0,0,0,.3)">
+          schoolofdatingoffer.com
+        </a>
+      </div>
+      <div style="background:#fff; padding:.8rem; border-radius:10px; box-shadow:0 12px 30px -8px rgba(0,0,0,.3)">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=6&data=https://schoolofdatingoffer.com" alt="Scan to enroll" style="display:block; width:140px; height:140px">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 31. 72-HOUR MONEY-BACK GUARANTEE — dedicated reassurance slide between value stack and live tracker -->
+<section class="slide" style="background:radial-gradient(ellipse at 50% 30%, rgba(110,128,113,.14), transparent 55%), linear-gradient(135deg, #f1f3ee 0%, var(--bg) 70%); padding:5vh 6vw">
+  <div class="stack center" style="max-width:1200px; margin:0 auto">
+    <div style="display:inline-flex; align-items:center; justify-content:center; width:96px; height:96px; background:var(--sage); border-radius:50%; box-shadow:0 30px 60px -20px rgba(110,128,113,.5)">
+      <span style="font-size:3rem">🛡️</span>
+    </div>
+    <div class="eyebrow" style="color:var(--sage); margin-top:1.5rem">Our promise to you</div>
+    <h1 class="title" style="margin-top:.5rem; max-width:22ch; font-size:clamp(2.8rem,5.5vw,5.5rem)">72-hour <em style="color:var(--sage)">money-back</em><br>guarantee.</h1>
+    <p class="lede" style="margin:2rem auto 0; max-width:54ch; font-size:clamp(1.2rem,1.7vw,1.7rem)">
+      If School of Dating isn't right for you, email <strong style="color:var(--sage)">support@heartofdating.com</strong> within 72 hours of enrollment and we'll refund 100%.
+    </p>
+    <p class="lede" style="margin:1rem auto 0; max-width:54ch; font-style:italic; font-size:clamp(1.1rem,1.5vw,1.5rem); color:var(--ink-soft)">
+      After 72 hours, all sales are final — you're committing to your cohort, and we're committing to you.
+    </p>
+
+    <div style="display:flex; gap:1.5rem; margin-top:2.5rem; align-items:center; flex-wrap:wrap; justify-content:center">
+      <a href="https://schoolofdatingoffer.com" target="_blank" rel="noopener"
+        style="display:inline-flex; align-items:center; gap:.6rem; background:var(--sage); color:#fff; padding:1.1rem 2.2rem; border-radius:999px; text-decoration:none; font-family:'Inter',sans-serif; font-weight:700; font-size:1.1rem; letter-spacing:.04em; box-shadow:0 20px 40px -12px rgba(110,128,113,.5); transition:transform .15s">
+        Save my seat → schoolofdatingoffer.com
+      </a>
+      <div style="background:var(--paper); padding:.6rem; border-radius:10px; box-shadow:var(--shadow); display:flex; flex-direction:column; align-items:center; gap:.2rem; border:1px solid var(--line)">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=6&data=https://schoolofdatingoffer.com" alt="Scan to enroll" style="display:block; width:120px; height:120px">
+        <span style="font-size:.55rem; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); font-weight:700">Or scan</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 32. LIVE TRACKER + COUNTDOWN — the camp-out page (compact, fits 100vh) -->
+<section class="slide live-stage" id="slide-tracker" data-noclick style="padding:3vh 4vw">
+  <div class="stack" style="max-width:1600px; margin:0 auto; width:100%; gap:1rem">
+    <div style="display:flex; justify-content:center; align-items:center; gap:1.5rem; flex-wrap:wrap">
+      <div class="live-banner">LIVE · seats filling in real-time</div>
+      <h1 class="title" style="font-size:clamp(1.8rem,2.8vw,2.8rem); line-height:1.05; margin:0">
+        Cart closes at <em>9 PM CT</em>
+      </h1>
+      <div class="countdown-row" style="margin:0; gap:.6rem">
+        <div class="cd-unit" style="min-width:80px; padding:.5rem .7rem"><span class="cd-num" id="cd-h" style="font-size:2.6rem">--</span><span class="cd-label" style="font-size:.6rem; margin-top:.2rem">hours</span></div>
+        <div class="cd-unit" style="min-width:80px; padding:.5rem .7rem"><span class="cd-num" id="cd-m" style="font-size:2.6rem">--</span><span class="cd-label" style="font-size:.6rem; margin-top:.2rem">min</span></div>
+        <div class="cd-unit" style="min-width:80px; padding:.5rem .7rem"><span class="cd-num" id="cd-s" style="font-size:2.6rem">--</span><span class="cd-label" style="font-size:.6rem; margin-top:.2rem">sec</span></div>
+      </div>
+    </div>
+
+    <div class="tracker-grid" style="grid-template-columns:1.2fr 1fr; gap:1.2rem; margin-top:0">
+      <div class="tracker-card" style="padding:1.2rem">
+        <div class="tracker-row" style="padding-bottom:.5rem">
+          <div>
+            <div class="tracker-label">🔥 Fast Action Bonus seats</div>
+            <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.2rem; font-size:.82rem">Pro trial + Cloud workshop</p>
+          </div>
+          <div class="tracker-count" style="font-size:2.4rem"><span id="fab-taken">—</span><span class="of"> / <span id="fab-cap">100</span></span></div>
+        </div>
+        <div class="tracker-bar"><div id="fab-bar"></div></div>
+
+        <div class="tracker-row" style="margin-top:.4rem; padding-bottom:.5rem">
+          <div>
+            <div class="tracker-label">📍 Cohort seats</div>
+            <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.2rem; font-size:.82rem">Hard cap at 200</p>
+          </div>
+          <div class="tracker-count" style="font-size:2.4rem"><span id="total-taken">—</span><span class="of"> / <span id="total-cap">200</span></span></div>
+        </div>
+        <div class="tracker-bar"><div id="total-bar"></div></div>
+      </div>
+
+      <div class="tracker-card" style="padding:1.2rem">
+        <div class="tracker-label" style="display:flex; align-items:center; gap:.6rem; margin-bottom:.3rem">
+          <span style="width:8px; height:8px; background:var(--gold); border-radius:50%; animation:pulseDot 1.4s ease-in-out infinite"></span>
+          Welcome to the cohort
+        </div>
+        <div class="stream-track" id="stream-track" style="max-height:280px">
+          <div class="stream-item" style="opacity:.5">Loading…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEGA CHECKOUT — pure URL + QR (refund has its own slide) -->
+    <div style="background:rgba(255,255,255,.06); border:1px solid rgba(200,154,74,.4); border-radius:16px; padding:1.4rem 2rem; display:grid; grid-template-columns:1fr auto; gap:2rem; align-items:center">
+      <div style="display:flex; flex-direction:column; gap:.5rem">
+        <span style="font-size:.78rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold-light); font-weight:700">⏰ Save your seat now</span>
+        <a href="https://schoolofdatingoffer.com" target="_blank" rel="noopener"
+          style="font-family:'Inter',sans-serif; font-weight:800; font-size:clamp(2.4rem,5vw,4.8rem); color:#fff; text-decoration:none; letter-spacing:-0.01em; line-height:1; text-transform:lowercase; text-shadow:0 4px 24px rgba(200,154,74,.4)">
+          schoolofdatingoffer.com
+        </a>
+      </div>
+      <div style="background:#fff; padding:.8rem; border-radius:12px; box-shadow:var(--shadow-strong); display:flex; flex-direction:column; align-items:center; gap:.3rem">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=360x360&margin=6&data=https://schoolofdatingoffer.com" alt="Scan to enroll" style="display:block; width:200px; height:200px">
+        <span style="font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-soft); font-weight:700">Scan to enroll</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 32. ENROLL URL -->
+<section class="slide center">
+  <p class="script" style="font-size:clamp(3rem,5vw,5rem); color:var(--ink)">School of Dating</p>
+  <p class="kicker" style="margin-top:2rem">Enroll now at</p>
+  <a class="cta-url" href="https://schoolofdatingoffer.com" target="_blank" rel="noopener">schoolofdatingoffer.com</a>
+  <div style="margin-top:3rem; padding:1rem; background:var(--paper); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow)">
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=10&data=https://schoolofdatingoffer.com" alt="QR" style="display:block; width:220px; height:220px">
+  </div>
+</section>
+
+<!-- CODE WORD ESCARGOT (restored — for the FYP attendance scholarship giveaway) -->
+<section class="slide sod-slide">
+  <div class="sod-grid">
+    <div>
+      <div class="eyebrow" style="color:#fff; opacity:.85">Big giveaway</div>
+      <h1 class="title" style="color:#fff; font-size:clamp(2.8rem, 5vw, 5.5rem); line-height:1; margin-top:1rem">
+        Show up all <em style="color:#f5d49a">4 nights</em>.<br>Get a <em style="color:#f5d49a">scholarship</em>.
+      </h1>
+      <p class="lede" style="color:#fbeed4; margin-top:2rem; max-width:36ch">
+        To our 10-week intensive mentorship — <em style="color:#fff; font-style:italic">The School of Dating</em>.
+      </p>
+      <div class="price-row-big">
+        <span class="strike">$1,697</span>
+        <span class="price-arrow">→</span>
+        <span class="price-zero-wrap">
+          <svg class="price-circle" viewBox="0 0 240 110" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="120" cy="55" rx="100" ry="42" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 4" opacity=".85"/>
+          </svg>
+          <span class="price-zero">$0</span>
+          <span class="price-bangs">!!!</span>
+        </span>
+      </div>
+    </div>
+    <div style="display:flex; justify-content:center">
+      <div class="codeword">
+        <div class="codeword-label">Tonight's code word</div>
+        <div class="codeword-value">ESCARGOT</div>
+        <div class="codeword-hint">Drop it in the chat before you go.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- (Welcome new students slide deleted — redundant with welcome stream on tracker) -->
+
+<!-- CAMP-OUT (duplicate of live tracker for loop-back) -->
+<section class="slide live-stage" id="slide-tracker-2" data-noclick style="padding:3vh 4vw">
+  <div class="stack" style="max-width:1600px; margin:0 auto; width:100%; gap:1rem">
+    <div style="display:flex; justify-content:center; align-items:center; gap:1.5rem; flex-wrap:wrap">
+      <div class="live-banner">LIVE · scan to enroll right now</div>
+      <h1 class="title" style="font-size:clamp(1.8rem,2.8vw,2.8rem); line-height:1.05; margin:0">
+        Cart closes at <em>9 PM CT</em>
+      </h1>
+      <div class="countdown-row" style="margin:0; gap:.6rem">
+        <div class="cd-unit" style="min-width:80px; padding:.5rem .7rem"><span class="cd-num" id="cd-h2" style="font-size:2.6rem">--</span><span class="cd-label" style="font-size:.6rem; margin-top:.2rem">hours</span></div>
+        <div class="cd-unit" style="min-width:80px; padding:.5rem .7rem"><span class="cd-num" id="cd-m2" style="font-size:2.6rem">--</span><span class="cd-label" style="font-size:.6rem; margin-top:.2rem">min</span></div>
+        <div class="cd-unit" style="min-width:80px; padding:.5rem .7rem"><span class="cd-num" id="cd-s2" style="font-size:2.6rem">--</span><span class="cd-label" style="font-size:.6rem; margin-top:.2rem">sec</span></div>
+      </div>
+    </div>
+    <div class="tracker-grid" style="grid-template-columns:1.2fr 1fr; gap:1.2rem; margin-top:0">
+      <div class="tracker-card">
+        <div class="tracker-row">
+          <div>
+            <div class="tracker-label">🔥 Fast Action seats</div>
+            <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.4rem; font-size:.92rem">Pro trial + Cloud workshop</p>
+          </div>
+          <div class="tracker-count"><span id="fab-taken-2">—</span><span class="of"> / 100</span></div>
+        </div>
+        <div class="tracker-bar"><div id="fab-bar-2"></div></div>
+        <div class="tracker-row" style="margin-top:.4rem">
+          <div>
+            <div class="tracker-label">📍 Cohort seats</div>
+            <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.4rem; font-size:.92rem">Hard cap at 200</p>
+          </div>
+          <div class="tracker-count"><span id="total-taken-2">—</span><span class="of"> / 200</span></div>
+        </div>
+        <div class="tracker-bar"><div id="total-bar-2"></div></div>
+      </div>
+
+      <div class="tracker-card">
+        <div class="tracker-label" style="display:flex; align-items:center; gap:.6rem; margin-bottom:.4rem">
+          <span style="width:8px; height:8px; background:var(--gold); border-radius:50%; animation:pulseDot 1.4s ease-in-out infinite"></span>
+          Welcome to the cohort
+        </div>
+        <div class="stream-track" id="stream-track-3">
+          <div class="stream-item" style="opacity:.5">Loading…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEGA CHECKOUT — compact -->
+    <div style="background:rgba(255,255,255,.06); border:1px solid rgba(200,154,74,.4); border-radius:16px; padding:1.2rem 1.5rem; display:grid; grid-template-columns:1fr auto; gap:1.5rem; align-items:center">
+      <div style="display:flex; flex-direction:column; gap:.4rem">
+        <span style="font-size:.7rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold-light); font-weight:700">⏰ Save your seat now</span>
+        <a href="https://schoolofdatingoffer.com" target="_blank" rel="noopener"
+          style="font-family:'Inter',sans-serif; font-weight:800; font-size:clamp(2rem,3.8vw,3.6rem); color:#fff; text-decoration:none; letter-spacing:-0.01em; line-height:1; text-transform:lowercase; text-shadow:0 4px 24px rgba(200,154,74,.4)">
+          schoolofdatingoffer.com
+        </a>
+        <div style="font-size:.85rem; font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.4rem">🛡️ Covered by our 72-hour money-back guarantee.</div>
+      </div>
+      <div style="background:#fff; padding:.6rem; border-radius:10px; box-shadow:var(--shadow-strong); display:flex; flex-direction:column; align-items:center; gap:.3rem">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=6&data=https://schoolofdatingoffer.com" alt="Scan to enroll" style="display:block; width:170px; height:170px">
+        <span style="font-size:.58rem; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-soft); font-weight:700">Scan to enroll</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<div class="chrome">
+  <span id="counter">01 / 38</span><!-- auto-updated by JS · -1 welcome-students + 1 refund = same -->
+
+
+  <span class="nav-hint">use <kbd>←</kbd> <kbd>→</kbd> or <kbd>space</kbd></span>
+  <span></span>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const bar = document.getElementById('bar');
+const counter = document.getElementById('counter');
+let i = 0;
+
+// Manual fake-purchase state — press C to fire next from queue
+// Persisted to localStorage so the count survives page reloads during the live show.
+const FAKE_STATE_KEY = "sod_fake_state_v1";
+const RESET_AT_KEY = "sod_reset_at_v1";  // ISO ts — welcome list hides signups older than this
+let fakeIndex = 0;
+let fakeOffset = 0;
+let resetAt = localStorage.getItem(RESET_AT_KEY) || null;
+try {
+  const url = new URL(location.href);
+  if (url.searchParams.get('reset') === '1') {
+    localStorage.removeItem(FAKE_STATE_KEY);
+    // strip query so future reloads don't re-reset
+    url.searchParams.delete('reset');
+    history.replaceState(null, '', url.toString());
+    console.log('🧹 Fake state reset to 0');
+  } else {
+    const saved = JSON.parse(localStorage.getItem(FAKE_STATE_KEY) || '{}');
+    if (typeof saved.fakeIndex === 'number') fakeIndex = saved.fakeIndex;
+    if (typeof saved.fakeOffset === 'number') fakeOffset = saved.fakeOffset;
+  }
+} catch (e) {}
+function persistFakeState() {
+  try {
+    localStorage.setItem(FAKE_STATE_KEY, JSON.stringify({ fakeIndex, fakeOffset }));
+  } catch (e) {}
+}
+function flashToast(text, bg) {
+  const toast = document.createElement('div');
+  toast.textContent = text;
+  toast.style.cssText = `position:fixed; top:20px; right:20px; background:${bg}; color:#fff; padding:.7rem 1.2rem; border-radius:999px; font-family:Inter; font-size:.8rem; font-weight:700; letter-spacing:.12em; z-index:9999; box-shadow:0 10px 30px rgba(0,0,0,.3)`;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2000);
+}
+let lastTotal = null, lastFab = null;
+// Real signups that happened while JJ was OFF the tracker — replayed on arrival
+let pendingRealSignups = [];
+
+function show(n) {
+  i = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+  bar.style.width = ((i + 1) / slides.length * 100) + '%';
+  counter.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+  history.replaceState(null, '', '#' + (i + 1));
+
+  // Pause every video, then auto-play any video on the now-active slide
+  document.querySelectorAll('video[data-slide-video]').forEach(v => {
+    v.pause();
+    if (!v.closest('.slide.active')) { try { v.currentTime = 0; } catch(e){} }
+  });
+  const activeVideo = document.querySelector('.slide.active video[data-slide-video]');
+  if (activeVideo) {
+    activeVideo.muted = false;
+    activeVideo.play().catch(() => {
+      activeVideo.muted = true;
+      activeVideo.play().catch(()=>{});
+    });
+  }
+
+  // Arriving at a tracker slide — drain any queued real signups that happened while off-tracker
+  const onTrackerNow = document.querySelector('.slide.active#slide-tracker, .slide.active#slide-tracker-2');
+  if (onTrackerNow && pendingRealSignups.length > 0) {
+    const queue = pendingRealSignups.slice();
+    pendingRealSignups = [];
+    // Stagger so it feels like a momentum burst, not a flood
+    queue.forEach((person, idx) => {
+      setTimeout(() => celebrate(person), 600 + idx * 1800);
+    });
+  }
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+  // Press "C" / "c" to fire the next fake purchase from the queue
+  if (e.key === 'c' || e.key === 'C') {
+    if (fakeIndex < FAKE_QUEUE.length) {
+      const next = FAKE_QUEUE[fakeIndex];
+      fakeIndex++;
+      fakeOffset++;
+      persistFakeState();
+      fireFakeSignup(next);
+    } else {
+      flashToast('Queue empty (18/18 fired)', '#8a7e72');
+    }
+  }
+  // Press "R" / "r" to reset fake state to 0 — use before going live
+  if (e.key === 'r' || e.key === 'R') {
+    if (confirm('Reset fake-purchase state to 0? (use this before going live)')) {
+      fakeIndex = 0;
+      fakeOffset = 0;
+      localStorage.removeItem(FAKE_STATE_KEY);
+      // Set reset baseline — welcome stream now hides every signup older than this moment
+      resetAt = new Date().toISOString();
+      localStorage.setItem(RESET_AT_KEY, resetAt);
+      // Wipe welcome lists immediately
+      ["stream-track", "stream-track-3"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = '';
+      });
+      flashToast('🧹 Reset · counts + welcome list cleared', '#6e8071');
+      // Force re-apply to remove the offset from displayed counts
+      const cached = localStorage.getItem("sod_last");
+      if (cached) { try { applyCounts(JSON.parse(cached)); } catch (e) {} }
+      else fetchCounts();
+    }
+  }
+});
+document.addEventListener('click', e => {
+  if (e.target.closest('a, button, kbd, input, iframe, [data-noclick]')) return;
+  const half = window.innerWidth / 2;
+  show(e.clientX > half ? i + 1 : i - 1);
+});
+const startHash = parseInt(location.hash.slice(1), 10);
+show((startHash && !isNaN(startHash)) ? startHash - 1 : 0);
+
+//
+// LIVE TRACKER — polls /api/sod-counts + injects 18 timed fake signups while on camp-out
+//
+const POLL_MS = 8000;
+const CART_CLOSE_ISO = "2026-05-29T02:00:00Z"; // 9 PM CT Thu May 28
+// lastTotal, lastFab, fakeIndex, fakeOffset, fakeTimer, fakeEnabled, trackerActiveSince — declared at top before show()
+
+//
+// FAKE PURCHASE QUEUE — press C to fire next. 18 names, 78/22 F/M.
+// Each press: confetti + counter bump + welcome stream entry.
+//
+const FAKE_QUEUE = [
+  { firstName: 'Hannah',   lastInitial: 'M' },
+  { firstName: 'Sarah',    lastInitial: 'W' },
+  { firstName: 'Rachel',   lastInitial: 'B' },
+  { firstName: 'David',    lastInitial: 'C' },
+  { firstName: 'Olivia',   lastInitial: 'K' },
+  { firstName: 'Bethany',  lastInitial: 'P' },
+  { firstName: 'Mary',     lastInitial: 'D' },
+  { firstName: 'Grace',    lastInitial: 'A' },
+  { firstName: 'Caleb',    lastInitial: 'T' },
+  { firstName: 'Lydia',    lastInitial: 'V' },
+  { firstName: 'Emily',    lastInitial: 'O' },
+  { firstName: 'Anna',     lastInitial: 'R' },
+  { firstName: 'Lauren',   lastInitial: 'S' },
+  { firstName: 'Joshua',   lastInitial: 'N' },
+  { firstName: 'Megan',    lastInitial: 'H' },
+  { firstName: 'Naomi',    lastInitial: 'G' },
+  { firstName: 'Hope',     lastInitial: 'L' },
+  { firstName: 'Michael',  lastInitial: 'F' }
+];
+
+function fireFakeSignup(person) {
+  // 1. bump displayed counts by triggering applyCounts with current cached + offset
+  const cached = localStorage.getItem("sod_last");
+  if (cached) {
+    try {
+      const d = JSON.parse(cached);
+      // Inject fake recent signup at top of stream
+      d.recentSignups = [
+        { firstName: person.firstName, lastInitial: person.lastInitial, addedAt: new Date().toISOString() },
+        ...(d.recentSignups || []).slice(0, 7)
+      ];
+      applyCountsRaw(d, /*forceCelebrate*/ true, person);
+    } catch (e) {}
+  } else {
+    // No cache yet — just fire the celebration UI without count change
+    celebrate(person);
+  }
+}
+
+function applyCountsRaw(d, forceCelebrate, fakePerson) {
+  const setNum = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  const setW = (id, w) => { const el = document.getElementById(id); if (el) el.style.width = Math.min(100, w) + "%"; };
+
+  const displayedTotal = (d.total || 0) + fakeOffset;
+  const displayedFab   = (d.fabTaken || 0) + fakeOffset;
+
+  ["fab-taken", "fab-taken-2"].forEach(id => setNum(id, displayedFab));
+  ["total-taken", "total-taken-2"].forEach(id => setNum(id, displayedTotal));
+  setNum("fab-cap", d.capFab);
+  setNum("total-cap", d.capTotal);
+
+  ["fab-bar", "fab-bar-2"].forEach(id => setW(id, displayedFab / d.capFab * 100));
+  ["total-bar", "total-bar-2"].forEach(id => setW(id, displayedTotal / d.capTotal * 100));
+
+  // Bump animations on count change
+  const realIncrease = lastFab !== null && d.fabTaken > lastFab;
+  if (forceCelebrate || realIncrease) {
+    ["fab-taken", "fab-taken-2", "total-taken", "total-taken-2"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); }
+    });
+
+    // Determine the people who just signed up
+    const newCount = realIncrease ? (d.fabTaken - lastFab) : 0;
+    const newPeople = fakePerson
+      ? [fakePerson]
+      : (d.recentSignups || []).slice(0, Math.max(1, newCount));
+
+    const onTracker = document.querySelector('.slide.active#slide-tracker, .slide.active#slide-tracker-2');
+    if (onTracker || fakePerson) {
+      // Celebrate immediately, staggered if multiple
+      newPeople.forEach((person, idx) => {
+        setTimeout(() => celebrate(person), idx * 1500);
+      });
+    } else if (realIncrease) {
+      // Off-tracker — queue for replay when JJ arrives
+      pendingRealSignups.push(...newPeople);
+    }
+  }
+
+  lastFab = d.fabTaken;
+  lastTotal = d.total;
+  updateStream(d.recentSignups || PRESEEDED);
+}
+
+// Pre-seeded welcomes for the camera demo (shown until real data arrives)
+const PRESEEDED = [
+  { firstName: "Sarah", lastInitial: "J", addedAt: new Date(Date.now() - 25 * 1000).toISOString() },
+  { firstName: "Maria", lastInitial: "G", addedAt: new Date(Date.now() - 48 * 1000).toISOString() },
+  { firstName: "David", lastInitial: "K", addedAt: new Date(Date.now() - 71 * 1000).toISOString() },
+  { firstName: "Bethany", lastInitial: "P", addedAt: new Date(Date.now() - 95 * 1000).toISOString() },
+  { firstName: "Jonathan", lastInitial: "L", addedAt: new Date(Date.now() - 120 * 1000).toISOString() }
+];
+
+async function fetchCounts() {
+  try {
+    const r = await fetch("/api/sod-counts", { cache: "no-store" });
+    const d = await r.json();
+    if (!d.ok) return;
+    applyCounts(d);
+    localStorage.setItem("sod_last", JSON.stringify(d));
+  } catch (e) {
+    const cached = localStorage.getItem("sod_last");
+    if (cached && lastTotal === null) applyCounts(JSON.parse(cached));
+  }
+}
+
+function applyCounts(d) {
+  applyCountsRaw(d, /*forceCelebrate*/ false);
+}
+
+// 🎉 Confetti + banner on new enrollment
+function celebrate(signup) {
+  const trackerSlides = [document.getElementById("slide-tracker"), document.getElementById("slide-tracker-2")];
+  const name = `${signup.firstName}${signup.lastInitial ? ' ' + signup.lastInitial + '.' : ''}`;
+
+  for (const slide of trackerSlides) {
+    if (!slide || !slide.classList.contains("active")) continue;
+
+    // Confetti
+    const stage = document.createElement("div");
+    stage.className = "confetti-stage";
+    const palette = ['#c89a4a', '#f5e0b8', '#c47a6e', '#6e8071', '#fff1d8', '#8a6627'];
+    for (let n = 0; n < 80; n++) {
+      const p = document.createElement("div");
+      p.className = "confetti-piece";
+      p.style.background = palette[n % palette.length];
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 200 + Math.random() * 500;
+      p.style.setProperty('--dx', `${Math.cos(angle) * distance}px`);
+      p.style.setProperty('--dy', `${Math.sin(angle) * distance}px`);
+      p.style.animationDelay = `${Math.random() * 0.2}s`;
+      p.style.transform = `rotate(${Math.random() * 360}deg)`;
+      stage.appendChild(p);
+    }
+    slide.appendChild(stage);
+
+    // Banner
+    const banner = document.createElement("div");
+    banner.className = "celebrate-banner";
+    banner.innerHTML = `<span class="who">🎉 Just enrolled</span>Welcome <strong>${escapeHtml(name)}</strong>!`;
+    slide.appendChild(banner);
+
+    setTimeout(() => { stage.remove(); banner.remove(); }, 3400);
+  }
+}
+
+function updateStream(signups) {
+  if (!signups) return;
+  const tracks = [
+    document.getElementById("stream-track"),
+    document.getElementById("stream-track-3")
+  ];
+  // Honor reset baseline — hide anything that happened before R was pressed
+  let filtered = signups;
+  if (resetAt) {
+    const baseline = new Date(resetAt).getTime();
+    filtered = signups.filter(s => s.addedAt && new Date(s.addedAt).getTime() >= baseline);
+  }
+  if (!filtered.length) {
+    for (const t of tracks) if (t) t.innerHTML = '';
+    return;
+  }
+  // Show ALL students — newest at top, scrollable so JJ/Kait can scroll to shout people out
+  const html = filtered.map(s => {
+    const name = `${s.firstName}${s.lastInitial ? ' ' + s.lastInitial + '.' : ''}`;
+    const when = timeAgo(s.addedAt);
+    return `<div class="stream-item">
+      <span>🎉</span>
+      <span>Welcome <strong>${escapeHtml(name)}</strong> to School of Dating</span>
+      <span class="when">${when}</span>
+    </div>`;
+  }).join('');
+  for (const t of tracks) if (t) t.innerHTML = html;
+}
+
+function timeAgo(iso) {
+  if (!iso) return '';
+  const sec = Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 1000));
+  if (sec < 60) return `${sec}s ago`;
+  if (sec < 3600) return `${Math.floor(sec/60)}m ago`;
+  if (sec < 86400) return `${Math.floor(sec/3600)}h ago`;
+  return `${Math.floor(sec/86400)}d ago`;
+}
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+
+function tick() {
+  const close = new Date(CART_CLOSE_ISO).getTime();
+  let diff = Math.max(0, Math.floor((close - Date.now()) / 1000));
+  const h = Math.floor(diff / 3600);
+  const m = Math.floor((diff % 3600) / 60);
+  const s = diff % 60;
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = String(v).padStart(2, '0'); };
+  ["cd-h", "cd-h2"].forEach(id => set(id, h));
+  ["cd-m", "cd-m2"].forEach(id => set(id, m));
+  ["cd-s", "cd-s2"].forEach(id => set(id, s));
+}
+
+// Show preseeded immediately for the demo before first API call returns
+updateStream(PRESEEDED);
+fetchCounts();
+setInterval(fetchCounts, POLL_MS);
+tick();
+setInterval(tick, 1000);
+
+const cached = localStorage.getItem("sod_last");
+if (cached) { try { applyCounts(JSON.parse(cached)); } catch (e) {} }
+</script>
+
+</body>
+</html>

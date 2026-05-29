@@ -133,7 +133,7 @@ function isoDay(d) { return new Date(d).toISOString().slice(0, 10); }
 // Worker CPU limits when admin auto-refreshes every 60s. Keyed by request
 // shape (live vs specific date range) so different views don't collide.
 let _cache = { at: 0, key: null, body: null };
-const CACHE_TTL_MS = 120 * 1000; // bumped from 60s — every successful MISS is expensive (~5-8s, large AC pagination), so let cache age longer to amortize. Frontend auto-refresh is still 60s.
+const CACHE_TTL_MS = 30 * 1000; // dropped from 120s during live event — Kait needs near-real-time Sent_N1 counts during SMS sends. Tradeoff: 4x more cold MISSes per minute, but each MISS still amortized across many viewers.
 
 const LAUNCH_CUTOFF = "2026-05-01"; // earliest meaningful date for range mode
 
@@ -257,11 +257,17 @@ export async function onRequestGet(context) {
     const yesterdayDateUtc = isoDay(new Date(Date.now() - 86400000));
     const yesterdayStart = yesterdayDateUtc + "T00:00:00Z";
     const yesterdayEnd = todayDateUtc + "T00:00:00Z";
+    // BUG FIX 2026-05-26: switched from updated_after → created_after.
+    // updated_after inflates daily counts by ANY contact touched today (tag
+    // bumps, opens, clicks, SMS backfills, etc). created_after gives TRUE new
+    // registrations only. Today's count went from ~4,242 (inflated) to ~1,248
+    // (real) once the welcome SMS backfill started bumping udate on existing
+    // SMS_Optin_Yes contacts.
     let regsTodayAll = 0, regsYesterdayAll = 0;
     try {
       const [tData, yData] = await Promise.all([
-        ac(env, `/contacts?listid=${LIST_ID}&filters[updated_after]=${encodeURIComponent(todayUtcStart)}&limit=1`),
-        ac(env, `/contacts?listid=${LIST_ID}&filters[updated_after]=${encodeURIComponent(yesterdayStart)}&filters[updated_before]=${encodeURIComponent(yesterdayEnd)}&limit=1`),
+        ac(env, `/contacts?listid=${LIST_ID}&filters[created_after]=${encodeURIComponent(todayUtcStart)}&limit=1`),
+        ac(env, `/contacts?listid=${LIST_ID}&filters[created_after]=${encodeURIComponent(yesterdayStart)}&filters[created_before]=${encodeURIComponent(yesterdayEnd)}&limit=1`),
       ]);
       regsTodayAll = parseInt(tData?.meta?.total || "0", 10);
       regsYesterdayAll = parseInt(yData?.meta?.total || "0", 10);
@@ -444,22 +450,121 @@ export async function onRequestGet(context) {
 
     // A/B test tag counts — LP variants + VIP variants.
     // Tags are created on-the-fly by register.js when first applied, so resolve by name.
+    //
+    // LP A/B contamination fix: LP-v1 tagging shipped in register.js BEFORE the
+    // /fyp/ rotation middleware (commit 98806e4 at 2026-05-22T02:04:14Z). Pre-middleware,
+    // 100% of /fyp/ traffic was tagged LP-v1. To get an apples-to-apples lift,
+    // scope LP counts to post-middleware time only. VIP A/B isn't affected — it
+    // was deployed atomically with VIP tagging.
+    const LP_AB_START = "2026-05-22T02:04:14Z";
+    const lpRange = (() => {
+      const since = rangeFilter?.since && rangeFilter.since > LP_AB_START ? rangeFilter.since : LP_AB_START;
+      const until = rangeFilter?.until || null;
+      return until ? { since, until } : { since };
+    })();
     const abSearch = await ac(env, `/tags?search=${encodeURIComponent("LP-v")}`).catch(() => null);
     const vipAbSearch = await ac(env, `/tags?search=${encodeURIComponent("VIP-v")}`).catch(() => null);
     const lpV1Id = findId(abSearch, "LP-v1");
     const lpV2Id = findId(abSearch, "LP-v2");
     const vipV1Id = findId(vipAbSearch, "VIP-v1");
     const vipV2Id = findId(vipAbSearch, "VIP-v2");
-    const [lpV1Count, lpV2Count, vipV1Count, vipV2Count] = await Promise.all([
+    const [lpV1Count, lpV2Count, lpV1AllCount, lpV2AllCount, vipV1Count, vipV2Count] = await Promise.all([
+      lpV1Id ? countContactsForTag(env, lpV1Id, lpRange) : 0,
+      lpV2Id ? countContactsForTag(env, lpV2Id, lpRange) : 0,
       lpV1Id ? countContactsForTag(env, lpV1Id, rangeFilter) : 0,
       lpV2Id ? countContactsForTag(env, lpV2Id, rangeFilter) : 0,
       vipV1Id ? countContactsForTag(env, vipV1Id, rangeFilter) : 0,
       vipV2Id ? countContactsForTag(env, vipV2Id, rangeFilter) : 0,
     ]);
+    // Per-variant unique visitor counts from Analytics Engine. Middleware writes
+    // one datapoint per new sticky-cookie assignment with blob1 = "v1" | "v2".
+    //
+    // CONV-RATE WINDOW: visitor instrumentation went live AFTER the LP rotation
+    // middleware (separate deploys). For apples-to-apples conv-rate math, both
+    // visitors AND regs in `convRateRange` use the same floor — the earliest
+    // visitor timestamp in AE (since that's the earliest point we have BOTH
+    // metrics). Falls back to lpRange.since if AE query fails or no data yet.
+    // Failure here MUST NOT break the dashboard — wrap, default to 0.
+    let lpV1Visitors = 0, lpV2Visitors = 0;
+    let convRateSince = lpRange.since; // updated below to actual AE floor
+    if (env.CF_ANALYTICS_TOKEN && env.CF_ACCOUNT_ID) {
+      try {
+        // AE SQL toDateTime() requires 'YYYY-MM-DD HH:MM:SS' — strip milliseconds + Z.
+        const fmt = (iso) => iso.slice(0, 19).replace("T", " ");
+        // First find MIN(timestamp) across all rows — that's our true conv-rate floor
+        const minSql = `SELECT formatDateTime(min(timestamp), '%Y-%m-%dT%H:%i:%SZ') AS first_ts FROM ab_test_visitors FORMAT JSON`;
+        const minResp = await fetch(
+          `https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/analytics_engine/sql`,
+          { method: "POST", headers: { "Authorization": `Bearer ${env.CF_ANALYTICS_TOKEN}`, "Content-Type": "text/plain" }, body: minSql }
+        );
+        if (minResp.ok) {
+          const minJson = await minResp.json();
+          const firstTs = minJson?.data?.[0]?.first_ts;
+          if (firstTs && firstTs > convRateSince) convRateSince = firstTs;
+        }
+        const sinceIso = convRateSince;
+        const untilIso = lpRange.until || new Date().toISOString();
+        const sql = `SELECT blob1 AS variant, COUNT() AS visitors
+          FROM ab_test_visitors
+          WHERE timestamp >= toDateTime('${fmt(sinceIso)}')
+            AND timestamp <= toDateTime('${fmt(untilIso)}')
+          GROUP BY blob1
+          FORMAT JSON`;
+        const aeResp = await fetch(
+          `https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/analytics_engine/sql`,
+          {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${env.CF_ANALYTICS_TOKEN}`,
+              "Content-Type": "text/plain",
+            },
+            body: sql,
+          }
+        );
+        if (aeResp.ok) {
+          const aeJson = await aeResp.json();
+          for (const row of (aeJson?.data || [])) {
+            if (row.variant === "v1") lpV1Visitors = parseInt(row.visitors, 10) || 0;
+            else if (row.variant === "v2") lpV2Visitors = parseInt(row.visitors, 10) || 0;
+          }
+        }
+      } catch (_) { /* fail silent — viz degrades to "—" */ }
+    }
+    // For conv-rate apples-to-apples: re-count regs from the AE-instrumentation floor.
+    // (Different from lpRange.since which is middleware-ship time — earlier.)
+    let lpV1RegsConvWindow = lpV1Count, lpV2RegsConvWindow = lpV2Count;
+    if (convRateSince !== lpRange.since && lpV1Id && lpV2Id) {
+      try {
+        const cwRange = { since: convRateSince, until: lpRange.until };
+        [lpV1RegsConvWindow, lpV2RegsConvWindow] = await Promise.all([
+          countContactsForTag(env, lpV1Id, cwRange),
+          countContactsForTag(env, lpV2Id, cwRange),
+        ]);
+      } catch (_) { /* keep wider-window regs if scoped query fails */ }
+    }
+    const pct = (num, denom) => denom > 0 ? +(num / denom * 100).toFixed(2) : null;
+
     const ab_test = {
       lp: {
-        v1: { regs: lpV1Count, label: "/fyp/ (control)" },
-        v2: { regs: lpV2Count, label: "/fyp/v2/ (AFD + Cloud hero)" },
+        v1: {
+          regs: lpV1Count,
+          visitors: lpV1Visitors,
+          regs_conv_window: lpV1RegsConvWindow,
+          conv_rate: pct(lpV1RegsConvWindow, lpV1Visitors),
+          label: "/fyp/ (control)",
+        },
+        v2: {
+          regs: lpV2Count,
+          visitors: lpV2Visitors,
+          regs_conv_window: lpV2RegsConvWindow,
+          conv_rate: pct(lpV2RegsConvWindow, lpV2Visitors),
+          label: "/fyp/v2/ (AFD + Cloud hero)",
+        },
+        v1_all: lpV1AllCount,
+        v2_all: lpV2AllCount,
+        since: lpRange.since,
+        conv_rate_since: convRateSince,
+        note: "Lift % uses regs scoped to post-middleware (LP-v1 tagging predates rotation). Conv-rate % uses regs + visitors both scoped to the AE-instrumentation floor (earliest visitor row) for apples-to-apples math.",
       },
       vip: {
         v1: { regs: vipV1Count, label: "/fyp/vip (control)" },
@@ -487,6 +592,97 @@ export async function onRequestGet(context) {
       delta_pp: 0, // computed below
     };
     sms_optin.delta_pp = +(sms_optin.post_flip.pct - sms_optin.pre_flip.pct).toFixed(1);
+
+    // ---------- Telnyx live delivery metrics (last 30d) ----------
+    // Use messaging-profile metrics endpoint — single API call, free, returns
+    // sent / delivered / error totals. Wrapped in try so a Telnyx outage doesn't
+    // break the dashboard.
+    let telnyxMetrics = { sent: 0, delivered: 0, errors: 0, delivery_pct: null };
+    if (env.TELNYX_API_KEY && env.TELNYX_MESSAGING_PROFILE_ID) {
+      try {
+        const r = await fetch(
+          `https://api.telnyx.com/v2/messaging_profiles/${env.TELNYX_MESSAGING_PROFILE_ID}/metrics?time_frame=30d`,
+          { headers: { "Authorization": `Bearer ${env.TELNYX_API_KEY}` } }
+        );
+        if (r.ok) {
+          const tj = await r.json();
+          const ov = tj?.data?.overview?.outbound || {};
+          telnyxMetrics.sent = ov.sent || 0;
+          telnyxMetrics.delivered = ov.delivered || 0;
+          telnyxMetrics.errors = ov.errors || 0;
+          telnyxMetrics.delivery_pct = telnyxMetrics.sent > 0
+            ? +(telnyxMetrics.delivered / telnyxMetrics.sent * 100).toFixed(1)
+            : null;
+        }
+      } catch (_) { /* non-fatal */ }
+    }
+
+    // ---------- Per-night SMS reminder sent counts (Sent_N1/N2/N3/N4 tags) ----------
+    // Counts contacts who've received tonight's reminder. Updates as the send
+    // batches apply the tag asynchronously. Used by command center SMS Ops tab.
+    const smsNightCounts = { n1: 0, n2: 0, n3: 0, n4: 0 };
+    try {
+      const sentTagsSearch = await ac(env, `/tags?search=${encodeURIComponent("Sent_N")}`);
+      const nightTagIds = {};
+      for (const t of (sentTagsSearch?.tags || [])) {
+        const m = (t.tag || "").match(/^Sent_N([1-4])$/);
+        if (m) nightTagIds["n" + m[1]] = t.id;
+      }
+      const counts = await Promise.all(
+        ["n1","n2","n3","n4"].map(k => nightTagIds[k]
+          ? countContactsForTag(env, nightTagIds[k], null).catch(() => 0)
+          : Promise.resolve(0))
+      );
+      counts.forEach((c, i) => smsNightCounts["n" + (i+1)] = c);
+    } catch (_) { /* leave at 0 */ }
+
+    // ---------- SOD June 2026 enrollment tracker (live, for Command Center) ----------
+    // Tag 193 = "School of Dating June 26". Total cap 250. JJ confirmed 2026-05-26.
+    // Headroom = 250 - current_count. Used by Kait's live pitch screen Night 3.
+    //
+    // "tonight" / "during-challenge" lift uses a BASELINE SNAPSHOT instead of an
+    // updated_after filter, because filters[updated_after] on AC tag queries
+    // returns ANY tagged contact whose udate was bumped today (coach editing
+    // notes, contact field updates from automations, etc.) — not just new
+    // tag-applications. The 18-vs-actual-0 inflation we saw at first deploy
+    // was Pierre/Alana editing existing SOD students. Baseline = 24 (confirmed
+    // 2026-05-26 ~13:30 CT). Lift = current_total - baseline.
+    const SOD_J26_TAG = 193;
+    // SOD_CAP = INTERNAL working ceiling. If demand pops past, we extend on backend.
+    const SOD_CAP = 200;
+    const SOD_PRO_FAB_CAP = 100;
+    // Baseline = count of SOD students who enrolled BEFORE the FYP challenge
+    // started. Kait's pitch frame: "we only have 174 slots tonight" (= 200 - 26)
+    // rather than "we have 176 because 24 already bought." Tighter scarcity, cleaner
+    // story. Baseline locked at 26 (Kait's call 2026-05-26 ~14:30 CT).
+    const SOD_CHALLENGE_BASELINE = 26;
+    let sodTotal = 0;
+    try {
+      sodTotal = await countContactsForTag(env, SOD_J26_TAG, null);
+    } catch (_) {}
+    const sodLift = Math.max(0, sodTotal - SOD_CHALLENGE_BASELINE);
+    // PITCH NUMBERS = the ones Kait reads off Tab 5 during the live pitch.
+    // Pre-challenge baseline is hidden from the pitch frame so urgency math is clean.
+    const sodPitchCap = SOD_CAP - SOD_CHALLENGE_BASELINE;       // 174
+    const sodPitchEnrolled = sodLift;                            // new this challenge only
+    const sodPitchRemaining = Math.max(0, sodPitchCap - sodPitchEnrolled);
+    const sod = {
+      // Admin/internal view (everything)
+      total: sodTotal,
+      tonight: sodLift,
+      baseline: SOD_CHALLENGE_BASELINE,
+      cap: SOD_CAP,
+      headroom: Math.max(0, SOD_CAP - sodTotal),
+      cap_pct: SOD_CAP > 0 ? +(sodTotal / SOD_CAP * 100).toFixed(1) : 0,
+      // Pitch view (Kait's live screen — baseline hidden, 174-slot framing)
+      pitch: {
+        enrolled: sodPitchEnrolled,        // starts at 0, grows as new SODs come in
+        cap: sodPitchCap,                  // 174 (= 200 - 26)
+        remaining: sodPitchRemaining,      // counts down from 174
+        cap_pct: sodPitchCap > 0 ? +(sodPitchEnrolled / sodPitchCap * 100).toFixed(1) : 0,
+      },
+      pro_fab_cap: SOD_PRO_FAB_CAP,
+    };
 
     // CF Web Analytics pageview pull (GraphQL).
     // Note: Web Analytics enabled ~22:30 UTC May 13. Today's numbers are PARTIAL
@@ -620,6 +816,9 @@ export async function onRequestGet(context) {
         recent_vip: recentVipList,
         ab_test,
         sms_optin,
+        telnyx: telnyxMetrics,
+        sms_nights: smsNightCounts,
+        sod,
         range: rangeBlock,
         generated_at: new Date().toISOString(),
       }, null, 2);
@@ -628,7 +827,7 @@ export async function onRequestGet(context) {
     // Write to CF edge cache for cross-isolate sharing within the colo
     const responseHeaders = {
       "Content-Type": "application/json",
-      "Cache-Control": "public, s-maxage=120, max-age=0",
+      "Cache-Control": "public, s-maxage=30, max-age=0",
       "Access-Control-Allow-Origin": "*",
       "X-Cache": "MISS",
     };

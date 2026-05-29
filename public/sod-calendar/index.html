@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1600, initial-scale=1">
+<title>School of Dating · Calendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6f0;
+  --ink: #1d1815;
+  --ink-soft: #4a3f37;
+  --muted: #8a7e72;
+  --line: #e8dfd2;
+  --gold: #c89a4a;
+  --gold-deep: #8a6627;
+  --rose: #c47a6e;
+  --sage: #6e8071;
+  --blue: #6c84a3;
+  --cream: #f3ebdc;
+  --paper: #fffaf2;
+  --shadow: 0 30px 80px -30px rgba(40,28,18,.22);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { min-height: 100vh; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  padding: 4vh 3vw 6vh;
+}
+
+.slide {
+  max-width: 1820px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  font-size: 0.78rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+}
+h1.title {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+}
+h1.title em { font-style: italic; font-weight: 400; color: var(--gold-deep); }
+.meta {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: flex-end;
+}
+.meta-row {
+  display: flex;
+  gap: 1.2rem;
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: 1rem;
+  color: var(--ink-soft);
+}
+.meta-row .num {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--ink);
+}
+.meta-row strong {
+  font-style: italic;
+  color: var(--gold-deep);
+  font-weight: 400;
+}
+.meta .start {
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+.meta .start strong { color: var(--gold-deep); font-weight: 700; }
+
+/* MONTH STRIP */
+.months {
+  display: grid;
+  grid-template-columns: 3fr 4.35fr 3.65fr;
+  gap: 0.8rem;
+  padding: 0;
+}
+.month {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.4rem 0.2rem;
+  border-bottom: 1px solid var(--line);
+}
+.month-name {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--ink);
+}
+.month-year {
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* WEEK GRID — 12 columns: 3 Phase 1 + Break + 4 Phase 2 + Break + 3 Phase 3 */
+.weeks {
+  display: grid;
+  grid-template-columns:
+    repeat(3, 0.95fr) 0.45fr
+    repeat(4, 0.95fr) 0.45fr
+    repeat(3, 0.95fr);
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.wk {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.7rem 0.7rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-shadow: 0 16px 40px -28px rgba(40,28,18,.2);
+  position: relative;
+  min-height: 320px;
+}
+.wk::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 10px; right: 10px;
+  height: 3px;
+  border-radius: 3px;
+}
+.wk.p1::before { background: var(--gold); }
+.wk.p2::before { background: var(--sage); }
+.wk.p3::before { background: var(--rose); }
+
+.wk-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.3rem;
+  padding-top: 0.2rem;
+}
+.wk-num {
+  font-size: 0.56rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--muted);
+}
+.wk.p1 .wk-num { color: var(--gold-deep); }
+.wk.p2 .wk-num { color: var(--sage); }
+.wk.p3 .wk-num { color: var(--rose); }
+.wk-range {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: 0.78rem;
+  color: var(--ink);
+}
+
+/* day-block — each main session day */
+.day {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  padding: 0.45rem 0 0.4rem 0.5rem;
+  border-left: 2px solid var(--gold);
+}
+.wk.p2 .day { border-left-color: var(--sage); }
+.wk.p3 .day { border-left-color: var(--rose); }
+.day + .day { margin-top: 0.2rem; }
+
+.day-tag {
+  font-size: 0.5rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--gold-deep);
+}
+.wk.p2 .day-tag { color: var(--sage); }
+.wk.p3 .day-tag { color: var(--rose); }
+
+.session-num {
+  font-size: 0.52rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.1rem;
+}
+.session-time {
+  font-size: 0.52rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 0.2rem;
+}
+.session-topic {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 0.78rem;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+/* office hours stays subtle */
+.oh {
+  margin-top: auto;
+  font-size: 0.56rem;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  color: var(--ink-soft);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.3rem 0.5rem;
+  background: var(--cream);
+  border-radius: 999px;
+  align-self: flex-start;
+}
+.oh::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+/* break week */
+.wk.brk {
+  background: var(--cream);
+  border: 1px dashed var(--gold);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0.8rem 0.3rem;
+  gap: 0.4rem;
+}
+.wk.brk::before { display: none; }
+.brk-tag {
+  font-size: 0.52rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--gold-deep);
+}
+.brk-week {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--ink-soft);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+.brk-dates {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: 0.62rem;
+  color: var(--muted);
+}
+
+/* PHASE BANDS */
+.phases {
+  display: grid;
+  grid-template-columns:
+    repeat(3, 0.95fr) 0.45fr
+    repeat(4, 0.95fr) 0.45fr
+    repeat(3, 0.95fr);
+  gap: 0.5rem;
+  padding-top: 0.6rem;
+}
+.phase-band {
+  border-top: 3px solid;
+  padding-top: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.phase-band.p1 { grid-column: 1 / 4; border-color: var(--gold); }
+.phase-band.p2 { grid-column: 5 / 9; border-color: var(--sage); }
+.phase-band.p3 { grid-column: 10 / 13; border-color: var(--rose); }
+
+.phase-tag {
+  font-size: 0.62rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.phase-band.p1 .phase-tag { color: var(--gold-deep); }
+.phase-band.p2 .phase-tag { color: var(--sage); }
+.phase-band.p3 .phase-tag { color: var(--rose); }
+
+.phase-name {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: 1.3rem;
+  line-height: 1.1;
+  color: var(--ink);
+}
+.phase-name em { font-style: italic; }
+.phase-meta {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 0.1rem;
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+  .weeks, .phases { grid-template-columns: 1fr; }
+  .phase-band { grid-column: 1 / -1 !important; }
+  .wk { min-height: 0; }
+  .months { grid-template-columns: 1fr; gap: 0.2rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div>
+      <div class="brand">School of Dating · Cohort June 2026</div>
+      <h1 class="title">10 weeks. <em>3 phases.</em> 2 break weeks.</h1>
+    </div>
+    <div class="meta">
+      <div class="meta-row">
+        <span><span class="num">10</span> <strong>weeks</strong></span>
+        <span><span class="num">3</span> <strong>phases</strong></span>
+        <span><span class="num">16</span> <strong>sessions</strong></span>
+      </div>
+      <div class="meta-row" style="font-size:.9rem">+ weekly office hours · Thu 7–8 PM CT</div>
+      <div class="start">Cohort begins <strong>Tuesday June 9</strong></div>
+    </div>
+  </header>
+
+  <!-- MONTH STRIP -->
+  <div class="months">
+    <div class="month"><span class="month-name">June</span><span class="month-year">2026</span></div>
+    <div class="month"><span class="month-name">July</span><span class="month-year">2026</span></div>
+    <div class="month"><span class="month-name">August</span><span class="month-year">2026</span></div>
+  </div>
+
+  <!-- WEEK GRID -->
+  <div class="weeks">
+
+    <!-- WK 1 -->
+    <div class="wk p1">
+      <div class="wk-head"><span class="wk-num">Week 1</span><span class="wk-range">Jun 9–13</span></div>
+      <div class="day">
+        <div class="day-tag">TUE Jun 9</div>
+        <div class="session-num">Session 1</div>
+        <div class="session-time">7–9 PM CT</div>
+        <div class="session-topic">Intro to Core Wound, Inner Child/Teen &amp; Reconnecting with Parts of Self</div>
+      </div>
+      <div class="oh">Office Hours · Thu Jun 11</div>
+    </div>
+
+    <!-- WK 2 -->
+    <div class="wk p1">
+      <div class="wk-head"><span class="wk-num">Week 2</span><span class="wk-range">Jun 16–20</span></div>
+      <div class="day">
+        <div class="day-tag">TUE Jun 16</div>
+        <div class="session-num">Session 2</div>
+        <div class="session-time">7–9 PM CT</div>
+        <div class="session-topic">Attachment Style &amp; Wounds</div>
+      </div>
+      <div class="oh">Office Hours · Thu Jun 18</div>
+    </div>
+
+    <!-- WK 3 -->
+    <div class="wk p1">
+      <div class="wk-head"><span class="wk-num">Week 3</span><span class="wk-range">Jun 23–27</span></div>
+      <div class="day">
+        <div class="day-tag">TUE Jun 23</div>
+        <div class="session-num">Session 3</div>
+        <div class="session-time">7–9 PM CT</div>
+        <div class="session-topic">Core Wound, Triggers &amp; Managing Emotions</div>
+      </div>
+      <div class="oh">Office Hours · Thu Jun 25</div>
+    </div>
+
+    <!-- BREAK 1 -->
+    <div class="wk brk">
+      <div class="brk-tag">Break</div>
+      <div class="brk-week">Week 4</div>
+      <div class="brk-dates">Jun 30 – Jul 4</div>
+    </div>
+
+    <!-- WK 5 -->
+    <div class="wk p2">
+      <div class="wk-head"><span class="wk-num">Week 5</span><span class="wk-range">Jul 7–11</span></div>
+      <div class="day">
+        <div class="day-tag">TUE Jul 7</div>
+        <div class="session-num">Session 4</div>
+        <div class="session-time">7–9 PM CT</div>
+        <div class="session-topic">Godfidence &amp; Healthy Anatomy of a Relationship</div>
+      </div>
+      <div class="oh">Office Hours · Thu Jul 9</div>
+    </div>
+
+    <!-- WK 6 -->
+    <div class="wk p2">
+      <div class="wk-head"><span class="wk-num">Week 6</span><span class="wk-range">Jul 14–18</span></div>
+      <div class="day">
+        <div class="day-tag">TUE Jul 14</div>
+        <div class="session-num">Session 5</div>
+        <div class="session-time">7–9 PM CT</div>
+        <div class="session-topic">Type, Attraction &amp; Clarity in Your Values</div>
+      </div>
+      <div class="day">
+        <div class="day-tag">SAT Jul 18</div>
+        <div class="session-num">Session 6</div>
+        <div class="session-time">11 AM–1 PM CT</div>
+        <div class="session-topic">Dating Mindset RESET</div>
+      </div>
+      <div class="oh">Office Hours · Thu Jul 16</div>
+    </div>
+
+    <!-- WK 7 -->
+    <div class="wk p2">
+      <div class="wk-head"><span class="wk-num">Week 7</span><span class="wk-range">Jul 21–25</span></div>
+      <div class="day">
+        <div class="day-tag">TUE Jul 21</div>
+        <div class="session-num">Session 7</div>
+        <div class="session-time">7–9 PM CT</div>
+        <div class="session-topic">Feminine &amp; Masculine</div>
+      </div>
+      <div class="day">
+        <div class="day-tag">SAT Jul 25</div>
+        <div class="session-num">Session 8</div>
+        <div class="session-time">11 AM–1 PM CT</div>
+        <div class="session-topic">Flirting 101</div>
+      </div>
+      <div class="oh">Office Hours · Thu Jul 23</div>
+    </div>
+
+    <!-- WK 8 -->
+    <div class="wk p2">
+      <div class="wk-head"><span class="wk-num">Week 8</span><span class="wk-range">Jul 28 – Aug 1</span></div>
+      <div class="day">
+        <div class="day-tag">TUE Jul 28</div>
+        <div class="session-num">Session 9</div>
+        <div class="session-time">7–9 PM CT</div>
+        <div class="session-topic">Online Dating + Dating Challenge</div>
+      </div>
+      <div class="oh">Office Hours · Thu Jul 30</div>
+    </div>
+
+    <!-- BREAK 2 -->
+    <div class="wk brk">
+      <div class="brk-tag">Break</div>
+      <div class="brk-week">Week 9</div>
+      <div class="brk-dates">Aug 4 – 8</div>
+    </div>
+
+    <!-- WK 10 -->
+    <div class="wk p3">
+      <div class="wk-head"><span class="wk-num">Week 10</span><span class="wk-range">Aug 11–15</span></div>
+      <div class="day">
+        <div class="day-tag">TUE Aug 11</div>
+        <div class="session-num">Session 11</div>
+        <div class="session-time">7–9 PM CT</div>
+        <div class="session-topic">First Dates</div>
+      </div>
+      <div class="day">
+        <div class="day-tag">SAT Aug 15</div>
+        <div class="session-num">Session 12</div>
+        <div class="session-time">11 AM–1 PM CT</div>
+        <div class="session-topic">Facing Rejection</div>
+      </div>
+      <div class="oh">Office Hours · Thu Aug 13</div>
+    </div>
+
+    <!-- WK 11 -->
+    <div class="wk p3">
+      <div class="wk-head"><span class="wk-num">Week 11</span><span class="wk-range">Aug 18–22</span></div>
+      <div class="day">
+        <div class="day-tag">TUE Aug 18</div>
+        <div class="session-num">Session 13</div>
+        <div class="session-time">7–9 PM CT</div>
+        <div class="session-topic">After the First Date: Anxiety, Texting &amp; Communication</div>
+      </div>
+      <div class="day">
+        <div class="day-tag">SAT Aug 22</div>
+        <div class="session-num">Session 14</div>
+        <div class="session-time">11 AM–1 PM CT</div>
+        <div class="session-topic">Long Distance &amp; Dating Hot Seat</div>
+      </div>
+      <div class="oh">Office Hours · Thu Aug 20</div>
+    </div>
+
+    <!-- WK 12 -->
+    <div class="wk p3">
+      <div class="wk-head"><span class="wk-num">Wk 12 · Finale</span><span class="wk-range">Aug 25–29</span></div>
+      <div class="day">
+        <div class="day-tag">TUE Aug 25</div>
+        <div class="session-num">Session 15</div>
+        <div class="session-time">7–9 PM CT</div>
+        <div class="session-topic">DTR, Boundaries &amp; Hard Conversations</div>
+      </div>
+      <div class="day">
+        <div class="day-tag">SAT Aug 29</div>
+        <div class="session-num">Session 16</div>
+        <div class="session-time">11 AM–1 PM CT</div>
+        <div class="session-topic" style="font-weight:500; color:var(--rose-deep, var(--rose))">🎓 Graduation</div>
+      </div>
+      <div class="oh">Office Hours · Thu Aug 27</div>
+    </div>
+
+  </div>
+
+  <!-- PHASE BANDS -->
+  <div class="phases">
+    <div class="phase-band p1">
+      <div class="phase-tag">Phase One · Foundations</div>
+      <div class="phase-name"><em>Healing</em> the inner world</div>
+      <div class="phase-meta">Weeks 1–3 · Sessions 1–3 · Jun 9 – 27</div>
+    </div>
+    <div class="phase-band p2">
+      <div class="phase-tag">Phase Two · Identity &amp; Tools</div>
+      <div class="phase-name"><em>Godfidence</em>, values, and practical dating</div>
+      <div class="phase-meta">Weeks 5–8 · Sessions 4–9 · Jul 7 – Aug 1</div>
+    </div>
+    <div class="phase-band p3">
+      <div class="phase-tag">Phase Three · Application</div>
+      <div class="phase-name"><em>Dating</em> with direction</div>
+      <div class="phase-meta">Weeks 10–12 · Sessions 11–16 · Aug 11 – 29</div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

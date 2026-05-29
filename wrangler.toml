@@ -1,0 +1,10 @@
+name = "hod-fyp"
+compatibility_date = "2025-05-22"
+pages_build_output_dir = "public"
+
+# Analytics Engine — unique-visitor counter for /fyp/ A/B test middleware.
+# Each new sticky-cookie assignment writes one datapoint with blob1 = "v1" | "v2".
+# Dashboard queries via SQL: SELECT blob1, COUNT() FROM ab_test_visitors GROUP BY blob1.
+[[analytics_engine_datasets]]
+binding = "AB_ANALYTICS"
+dataset = "ab_test_visitors"

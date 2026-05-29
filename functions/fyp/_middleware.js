@@ -22,17 +22,31 @@ function readCookie(req, name) {
 }
 
 export async function onRequest(context) {
-  const { request, next } = context;
+  const { request, next, env } = context;
   const url = new URL(request.url);
 
   // Only act on the bare /fyp/ root — let subpaths (vip, vip-paid, v2, thank-you-*, etc) pass through
   const isRoot = url.pathname === "/fyp" || url.pathname === "/fyp/" || url.pathname === "/fyp/index.html";
   if (!isRoot) return next();
 
-  // Sticky assignment
-  let variant = readCookie(request, COOKIE_NAME);
-  if (variant !== "v1" && variant !== "v2") {
+  // Sticky assignment. If no cookie present, this is a NEW unique visitor —
+  // we coin-flip + log one Analytics Engine datapoint so the dashboard can
+  // compute true conv rate (regs / visitors) per variant. Returning visitors
+  // (cookie already set) are NOT logged, so each visitor is counted exactly once.
+  const existingCookie = readCookie(request, COOKIE_NAME);
+  let variant = existingCookie;
+  const isNewAssignment = variant !== "v1" && variant !== "v2";
+  if (isNewAssignment) {
     variant = Math.random() < 0.5 ? "v1" : "v2";
+    // Fire Analytics Engine datapoint. Wrapped in try/catch so a missing
+    // binding (preview / local dev) or AE outage NEVER breaks /fyp/ rotation.
+    try {
+      env.AB_ANALYTICS?.writeDataPoint({
+        blobs: [variant], // blob1 = variant — group by this in SQL
+        doubles: [1],     // doubles1 = visitor count (1 per datapoint)
+        indexes: [variant], // sampling index — keeps per-variant fidelity
+      });
+    } catch (_) { /* non-fatal — rotation must not depend on AE */ }
   }
 
   let response;

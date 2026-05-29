@@ -1,0 +1,3 @@
+# /FYPN[1-4] and /FYPVIP short-link redirects are now handled by Pages Functions
+# (functions/FYPN1.js etc) so we can log click events to Analytics Engine
+# before issuing the 302. See functions/_lib/click-redirect.js for shared logic.

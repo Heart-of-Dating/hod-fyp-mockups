@@ -1,1 +1,4 @@
 scripts/logs/
+scripts/.env
+.env
+.dev.vars

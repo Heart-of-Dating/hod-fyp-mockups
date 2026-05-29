@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FYP Command Center · Night 2 LIVE</title>
+<meta name="robots" content="noindex,nofollow" />
+<style>
+  * { box-sizing: border-box; }
+  :root {
+    --bg: #0a0a0a; --panel: #181818; --border: #2a2a2a; --ink: #f5f5f5; --mute: #888;
+    --green: #4ade80; --gold: #facc15; --red: #f87171; --blue: #60a5fa; --terra: #C9603F;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    margin: 0; padding: 12px 16px; background: var(--bg); color: var(--ink);
+    font-size: 14px; line-height: 1.4; font-feature-settings: "tnum"; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  h1 .live { display: inline-block; background: var(--red); color: #fff; padding: 2px 8px;
+    border-radius: 4px; font-size: 10px; vertical-align: middle; margin-left: 8px;
+    text-transform: uppercase; letter-spacing: 0.15em; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: 0.55 } }
+  .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .updated { font-size: 11px; color: var(--mute); }
+  .tabs { display: flex; gap: 4px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .tab { padding: 9px 16px; background: transparent; border: 0; color: var(--mute); cursor: pointer;
+    font-size: 13px; font-family: inherit; border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s; }
+  .tab:hover { color: var(--ink); }
+  .tab.active { color: var(--ink); border-bottom-color: var(--green); font-weight: 600; }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px; }
+  .card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--mute); margin-bottom: 6px; font-weight: 600; }
+  .card .big { font-size: 34px; font-weight: 700; color: #fff; line-height: 1; font-feature-settings: "tnum"; }
+  .card .big.green { color: var(--green); }
+  .card .big.gold { color: var(--gold); }
+  .card .big.terra { color: var(--terra); }
+  .card .sub { font-size: 12px; color: var(--mute); margin-top: 4px; }
+  .card .sub strong { color: var(--ink); font-weight: 600; }
+  .progress { background: #222; border-radius: 6px; overflow: hidden; height: 10px;
+    margin-top: 8px; position: relative; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--terra)); border-radius: 6px; transition: width 0.4s; }
+  .progress-fill.over-80 { background: linear-gradient(90deg, var(--gold), var(--red)); }
+  .row { display: flex; justify-content: space-between; padding: 6px 0;
+    border-bottom: 1px solid var(--border); font-size: 13px; }
+  .row:last-child { border-bottom: 0; }
+  .row .label { color: var(--mute); }
+  .row .val { color: #fff; font-weight: 600; }
+  .placeholder { color: var(--mute); font-style: italic; padding: 40px 20px; text-align: center; }
+  /* --- PITCH SCREEN (Tab 5: Live Enrollment Tracker for Kait) --- */
+  #pitch-screen { display: none; padding: 0; }
+  #pitch-screen.active { display: block; }
+  .pitch-stage { background: #000; min-height: calc(100vh - 120px); padding: 40px 50px;
+    border-radius: 12px; display: flex; flex-direction: column; justify-content: space-between; }
+  .pitch-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .pitch-side { text-align: center; }
+  .pitch-num { font-size: 220px; font-weight: 800; line-height: 0.9;
+    font-feature-settings: "tnum"; transition: color 0.4s; }
+  .pitch-num.enrolled { color: var(--green); }
+  .pitch-num.remaining { color: var(--terra); }
+  .pitch-num.alert { animation: blink 1s infinite alternate; }
+  @keyframes blink { from { opacity: 1 } to { opacity: 0.4 } }
+  .pitch-label { font-size: 16px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--mute); margin-top: 18px; font-weight: 600; }
+  .pitch-progress { margin-top: 38px; height: 22px; background: #1a1a1a; border-radius: 12px; overflow: hidden;
+    border: 1px solid #2a2a2a; }
+  .pitch-progress-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--terra));
+    transition: width 0.6s; }
+  .pitch-progress-fill.over-80 { background: linear-gradient(90deg, var(--gold), var(--red)); }
+  .pitch-bottom { display: flex; justify-content: space-around; margin-top: 30px;
+    padding-top: 24px; border-top: 1px solid #2a2a2a; }
+  .pitch-stat { text-align: center; }
+  .pitch-stat .v { font-size: 36px; font-weight: 700; line-height: 1; }
+  .pitch-stat .v.gold { color: var(--gold); }
+  .pitch-stat .v.green { color: var(--green); }
+  .pitch-stat .v.blue { color: var(--blue); }
+  .pitch-stat .l { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--mute); margin-top: 6px; }
+  .full-screen-btn { position: absolute; top: 12px; right: 16px; background: var(--terra);
+    color: #fff; border: 0; padding: 8px 14px; border-radius: 6px; font-size: 11px;
+    cursor: pointer; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
+  .full-screen-btn:hover { opacity: 0.85; }
+  .fade-in { animation: fadeIn 0.5s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <h1>FYP Command Center <span class="live">LIVE · NIGHT 2</span></h1>
+  <div class="updated">Refresh in <span id="next-refresh">60</span>s · last: <span id="updated-at">—</span></div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" data-tab="funnel">📊 Live Funnel</button>
+  <button class="tab" data-tab="nights">🎬 Run of Show</button>
+  <button class="tab" data-tab="convfunnel">📈 Conv by Night</button>
+  <button class="tab" data-tab="sms">📱 SMS Ops</button>
+  <button class="tab" data-tab="pitch">🎯 Pitch Screen (Kait)</button>
+</div>
+
+<!-- ============ TAB 1: LIVE FUNNEL ============ -->
+<div class="tab-pane active" id="tab-funnel">
+  <div class="grid">
+    <div class="card">
+      <div class="label">Today's Regs</div>
+      <div class="big green" id="regs-today">—</div>
+      <div class="sub"><span id="regs-today-delta">—</span> vs yesterday</div>
+    </div>
+    <div class="card">
+      <div class="label">Yesterday</div>
+      <div class="big" id="regs-yest">—</div>
+      <div class="sub">last 24hr trend</div>
+    </div>
+    <div class="card">
+      <div class="label">Total Since May 1</div>
+      <div class="big" id="regs-may1">—</div>
+      <div class="sub">cumulative list size</div>
+    </div>
+    <div class="card">
+      <div class="label">VIP Buyers</div>
+      <div class="big gold" id="vip-total">—</div>
+      <div class="sub"><span id="vip-rate">—</span> reg→VIP · $<span id="vip-rev">—</span> rev</div>
+    </div>
+  </div>
+
+  <h3 style="margin: 22px 0 10px; color: var(--mute); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">Channel Split</h3>
+  <div class="grid">
+    <div class="card">
+      <div class="label">Paid</div>
+      <div class="big" id="ch-paid">—</div>
+      <div class="sub"><span id="ch-paid-pct">—</span> · paid→VIP <span id="ch-paid-vip">—</span></div>
+    </div>
+    <div class="card">
+      <div class="label">Organic</div>
+      <div class="big green" id="ch-org">—</div>
+      <div class="sub"><span id="ch-org-pct">—</span> · org→VIP <span id="ch-org-vip">—</span></div>
+    </div>
+  </div>
+
+  <h3 style="margin: 22px 0 10px; color: var(--mute); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">SOD Enrollment — June 2026 Cohort</h3>
+
+  <!-- PITCH VIEW (the number Kait reads) -->
+  <div class="card" style="margin-bottom: 10px; border: 1px solid var(--terra);">
+    <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--terra); font-weight: 700; margin-bottom: 6px;">PITCH VIEW · what Kait reads off Tab 5</div>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div class="label">Enrolled Tonight / 174 Available</div>
+        <div class="big terra"><span id="sod-pitch-enrolled">—</span> <span style="font-size: 24px; color: var(--mute);">/ <span id="sod-pitch-cap">174</span></span></div>
+        <div class="sub"><strong id="sod-pitch-remaining">—</strong> spots remaining tonight</div>
+      </div>
+      <div style="text-align: right;">
+        <div class="big gold" id="sod-pitch-cap-pct">—%</div>
+        <div class="sub" style="margin-top: 4px;">of 174 filled</div>
+      </div>
+    </div>
+    <div class="progress" style="margin-top: 14px; height: 16px;">
+      <div class="progress-fill" id="sod-bar" style="width: 0%;"></div>
+    </div>
+  </div>
+
+  <!-- INTERNAL/ADMIN VIEW (true totals incl baseline) -->
+  <div class="card" style="margin-bottom: 10px;">
+    <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mute); font-weight: 700; margin-bottom: 6px;">INTERNAL · true count (incl. 26 pre-challenge enrollees)</div>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div class="label">Total Enrolled / 200 Hard Cap</div>
+        <div class="big" style="color: #fff;"><span id="sod-total">—</span> <span style="font-size: 24px; color: var(--mute);">/ 200</span></div>
+        <div class="sub"><span id="sod-baseline">26</span> pre-challenge + <strong id="sod-tonight">—</strong> new tonight · <span id="sod-headroom">—</span> hard headroom</div>
+      </div>
+      <div style="text-align: right;">
+        <div style="font-size: 22px; font-weight: 700; color: var(--mute);" id="sod-cap-pct">—%</div>
+        <div class="sub" style="margin-top: 4px;">hard-cap fill</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin: 22px 0 10px; color: var(--mute); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">SMS Pipeline</h3>
+  <div class="grid">
+    <div class="card">
+      <div class="label">SMS Opt-Ins</div>
+      <div class="big blue" id="sms-total">—</div>
+      <div class="sub">pre/post-flip · <span id="sms-rate">—</span>%</div>
+    </div>
+    <div class="card">
+      <div class="label">Welcome SMS Delivered (30d)</div>
+      <div class="big green" id="telnyx-delivered-big">—</div>
+      <div class="sub"><strong id="telnyx-sent-big">—</strong> sent · <span id="telnyx-pct-big">—</span>% delivery rate · <span id="telnyx-errors-big">0</span> errors</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TAB 2: RUN OF SHOW ============ -->
+<div class="tab-pane" id="tab-nights">
+  <div style="font-size: 12px; color: var(--mute); margin-bottom: 14px;">
+    Schedule + assets per night. Click a card to expand. All times CT.
+  </div>
+
+  <!-- Night 1 -->
+  <details class="ros-card">
+    <summary>
+      <span class="ros-num">N1</span>
+      <span class="ros-name">Dr. Henry Cloud</span>
+      <span class="ros-meta">Tue 5/26 · 7:00 PM CT · Boundaries author</span>
+      <span class="ros-status status-done">DONE</span>
+    </summary>
+    <div class="ros-body">
+      <div class="ros-section">
+        <div class="ros-section-title">📱 SMS Schedule</div>
+        <table class="ros-sms">
+          <tr><th>Time CT</th><th>Batch</th><th>Recipients</th><th>Body</th></tr>
+          <tr><td>6:08 PM</td><td><span class="bx ec-early">EC-Early</span></td><td>~5,048</td><td>"See you in a bit"</td></tr>
+          <tr><td>6:30 PM</td><td><span class="bx ec-late">EC-Late</span></td><td>~5,048</td><td>"Doors opening soon"</td></tr>
+          <tr><td>7:02 PM</td><td><span class="bx west">West</span></td><td>~1,866</td><td>"Just kicked off"</td></tr>
+        </table>
+      </div>
+      <div class="ros-section">
+        <div class="ros-section-title">🎯 Show Items</div>
+        <ul class="ros-list">
+          <li>Cloud teaching · ~45 min · main session</li>
+          <li>VIP Q&amp;A after main · same Zoom link (FYPVIP redirect)</li>
+          <li>FAB / EON: <em>TBD</em> (per Pierre's brief)</li>
+        </ul>
+      </div>
+      <div class="ros-section">
+        <div class="ros-section-title">🔗 Assets</div>
+        <ul class="ros-links">
+          <li><a href="https://docs.google.com/document/d/1hrvo17lOAOArzGzV0Kf-E7jjxrAiQyEP6s-URt4CbHY/edit?tab=t.0" target="_blank">Script — Night 1 (Google Doc, tab "NIGHT 1")</a></li>
+          <li><span class="placeholder-link">Slide deck (Canva) — TBD, ask Pierre for link</span></li>
+          <li><a href="https://fyp.heartofdating.com/FYPN1" target="_blank">Zoom link (FYPN1 redirect)</a></li>
+        </ul>
+      </div>
+    </div>
+  </details>
+
+  <!-- Night 2 -->
+  <details class="ros-card" open>
+    <summary>
+      <span class="ros-num">N2</span>
+      <span class="ros-name">Kait + JJ</span>
+      <span class="ros-meta">Wed 5/27 · 7:00 PM CT · couple's teaching</span>
+      <span class="ros-status status-tonight">🔴 LIVE TONIGHT</span>
+    </summary>
+    <div class="ros-body">
+      <div class="ros-section">
+        <div class="ros-section-title">📱 SMS Schedule — actual batches tonight</div>
+        <table class="ros-sms">
+          <tr><th>Time CT</th><th>Batch</th><th>Recipients</th><th>Status</th></tr>
+          <tr><td>~6:18 PM</td><td><span class="bx ec-late">EC-Late</span></td><td>3,744</td><td style="color: var(--green);">✓ SENT</td></tr>
+          <tr><td>~6:30 PM</td><td><span class="bx ec-early">EC-Early</span></td><td>3,559</td><td style="color: var(--green);">✓ SENT</td></tr>
+          <tr><td>6:50 PM</td><td><span class="bx" style="background:rgba(250,204,21,0.15);color:var(--gold);border:1px solid rgba(250,204,21,0.35);">VIP</span></td><td>queued</td><td style="color: var(--gold);">⏳ QUEUED</td></tr>
+          <tr><td>7:02 PM</td><td><span class="bx west">West</span></td><td>queued</td><td style="color: var(--gold);">⏳ QUEUED</td></tr>
+        </table>
+        <div class="ros-note">Live Sent_N2 tag count on SMS Ops tab</div>
+      </div>
+      <div class="ros-section">
+        <div class="ros-section-title">🎯 Show Items</div>
+        <ul class="ros-list">
+          <li>Kait + JJ teaching · main session</li>
+          <li>Q&amp;A heavy — pre-leak SOD pitch hooks for Night 3</li>
+          <li>VIP Q&amp;A after</li>
+        </ul>
+      </div>
+      <div class="ros-section">
+        <div class="ros-section-title">🔗 Assets</div>
+        <ul class="ros-links">
+          <li><a href="https://docs.google.com/document/d/1hrvo17lOAOArzGzV0Kf-E7jjxrAiQyEP6s-URt4CbHY/edit?tab=t.f72psl" target="_blank">Script — Night 2 (Google Doc, tab "NIGHT 2")</a></li>
+          <li><span class="placeholder-link">Slide deck (Canva) — TBD</span></li>
+          <li><a href="https://fyp.heartofdating.com/FYPN2" target="_blank">Zoom link (FYPN2 redirect)</a></li>
+        </ul>
+      </div>
+    </div>
+  </details>
+
+  <!-- Night 3 — THE BIG ONE -->
+  <details class="ros-card big-night">
+    <summary>
+      <span class="ros-num">N3</span>
+      <span class="ros-name">Annie F. Downs</span>
+      <span class="ros-meta">Thu 5/28 · 7:00 PM CT · 🔥 SOD pitch night</span>
+      <span class="ros-status status-pitch">PITCH NIGHT</span>
+    </summary>
+    <div class="ros-body">
+      <div class="ros-section">
+        <div class="ros-section-title">📱 SMS Schedule</div>
+        <table class="ros-sms">
+          <tr><th>Time CT</th><th>Batch</th><th>Recipients</th><th>Body</th></tr>
+          <tr><td>6:08 PM</td><td><span class="bx ec-early">EC-Early</span></td><td>~5,500*</td><td>"Annie tonight, the Queen"</td></tr>
+          <tr><td>6:30 PM</td><td><span class="bx ec-late">EC-Late</span></td><td>~5,500*</td><td>"AFD starting soon"</td></tr>
+          <tr><td>7:02 PM</td><td><span class="bx west">West</span></td><td>~2,000*</td><td>"AFD is LIVE"</td></tr>
+        </table>
+      </div>
+      <div class="ros-section">
+        <div class="ros-section-title">🎯 Show Items (SOD pitch flow)</div>
+        <ul class="ros-list">
+          <li>JJ intro Annie</li>
+          <li>AFD talk (~30 min)</li>
+          <li><strong>SOD Pitch (Kait + JJ)</strong> between Annie's talk and her Q&amp;A — pitch screen LIVE for cap counter (174 remaining)</li>
+          <li>Annie Q&amp;A</li>
+          <li>Final call · VIP Q&amp;A after</li>
+        </ul>
+      </div>
+      <div class="ros-section">
+        <div class="ros-section-title">💰 Offer Stack</div>
+        <ul class="ros-list">
+          <li>SOD $997 (or 6× $198) · 6-payment plan</li>
+          <li>SOD Pro $2,497</li>
+          <li>FAB: 1mo SOD Pro free (cap 100)</li>
+          <li>EON: Dr. Cloud workshop "How to Get a Date Worth Keeping" — <em style="color: var(--gold);">pending permissions from Cloud's team</em></li>
+        </ul>
+      </div>
+      <div class="ros-section">
+        <div class="ros-section-title">🔗 Assets</div>
+        <ul class="ros-links">
+          <li><a href="https://docs.google.com/document/d/1hrvo17lOAOArzGzV0Kf-E7jjxrAiQyEP6s-URt4CbHY/edit?tab=t.hleykktcvvla" target="_blank"><strong>Script — Night 3 SOD Pitch</strong> (Google Doc, tab "NIGHT 3" — 1,807 words)</a></li>
+          <li><span class="placeholder-link">Slide deck (Canva) — TBD, ask Pierre — pages 36-60 are the pitch</span></li>
+          <li><a href="https://fyp.heartofdating.com/FYPN3" target="_blank">Zoom link (FYPN3 redirect)</a></li>
+          <li><a href="#tab-pitch" onclick="document.querySelector('[data-tab=pitch]').click(); return false;">→ Open Pitch Screen tab</a> (Kait reads off this during the pitch)</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+
+  <!-- Night 4 -->
+  <details class="ros-card">
+    <summary>
+      <span class="ros-num">N4</span>
+      <span class="ros-name">Kait + JJ Finale</span>
+      <span class="ros-meta">Fri 5/29 · 7:00 PM CT · cart close + EON deadline</span>
+      <span class="ros-status status-upcoming">UPCOMING</span>
+    </summary>
+    <div class="ros-body">
+      <div class="ros-section">
+        <div class="ros-section-title">📱 SMS Schedule</div>
+        <table class="ros-sms">
+          <tr><th>Time CT</th><th>Batch</th><th>Recipients</th><th>Body</th></tr>
+          <tr><td>6:08 PM</td><td><span class="bx ec-early">EC-Early</span></td><td>~5,500*</td><td>"Final Night, closing time"</td></tr>
+          <tr><td>6:30 PM</td><td><span class="bx ec-late">EC-Late</span></td><td>~5,500*</td><td>"Final Night starting soon"</td></tr>
+          <tr><td>7:02 PM</td><td><span class="bx west">West</span></td><td>~2,000*</td><td>"Final Night LIVE — last call"</td></tr>
+        </table>
+      </div>
+      <div class="ros-section">
+        <div class="ros-section-title">🎯 Show Items</div>
+        <ul class="ros-list">
+          <li>Kait + JJ teaching + Q&amp;A finale</li>
+          <li>SOD cart-close push (midnight)</li>
+          <li>EON: Dr. Cloud workshop deadline (midnight)</li>
+          <li>VIP Q&amp;A after — final intimate session</li>
+        </ul>
+      </div>
+      <div class="ros-section">
+        <div class="ros-section-title">🔗 Assets</div>
+        <ul class="ros-links">
+          <li><a href="https://docs.google.com/document/d/1hrvo17lOAOArzGzV0Kf-E7jjxrAiQyEP6s-URt4CbHY/edit?tab=t.ulp1pu" target="_blank">Script — Night 4 (Google Doc, tab "NIGHT 4")</a></li>
+          <li><span class="placeholder-link">Slide deck (Canva) — TBD</span></li>
+          <li><a href="https://fyp.heartofdating.com/FYPN4" target="_blank">Zoom link (FYPN4 redirect)</a></li>
+        </ul>
+      </div>
+    </div>
+  </details>
+
+  <div class="ros-howto">
+    <strong>To fire tonight's SMS batches:</strong>
+    <code>cd /Users/jjtomlin/Documents/hod-fyp-mockups &amp;&amp; ./scripts/schedule-night-staggered.sh 1</code>
+    <br>For N2/N3/N4: same script, change the night number (2/3/4).
+    Times default to 18:08 / 18:30 / 19:02 CT. Override: <code>./schedule-night-staggered.sh 2 18:08 18:30 19:02</code>
+  </div>
+</div>
+
+<style>
+  .ros-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    margin-bottom: 10px; overflow: hidden; }
+  .ros-card[open] { border-color: var(--green); }
+  .ros-card.big-night { border-left: 4px solid var(--terra); }
+  .ros-card summary { padding: 14px 16px; cursor: pointer; display: flex; align-items: center;
+    gap: 14px; user-select: none; list-style: none; }
+  .ros-card summary::-webkit-details-marker { display: none; }
+  .ros-card summary::before { content: "▸"; color: var(--mute); transition: transform 0.2s; font-size: 11px; }
+  .ros-card[open] summary::before { transform: rotate(90deg); }
+  .ros-num { background: var(--navy); color: #fff; font-weight: 700; padding: 3px 9px;
+    border-radius: 4px; font-size: 11px; letter-spacing: 0.1em; }
+  .ros-name { font-weight: 600; font-size: 14px; color: #fff; }
+  .ros-meta { color: var(--mute); font-size: 12px; flex: 1; }
+  .ros-status { font-size: 9px; padding: 3px 8px; border-radius: 3px; letter-spacing: 0.1em;
+    text-transform: uppercase; font-weight: 700; }
+  .status-tonight { background: rgba(248,113,113,0.18); color: var(--red); border: 1px solid rgba(248,113,113,0.5); animation: pulse 2s ease-in-out infinite; }
+  .status-done { background: rgba(74,222,128,0.12); color: var(--green); border: 1px solid rgba(74,222,128,0.3); }
+  .status-pitch { background: rgba(201,96,63,0.15); color: var(--terra); border: 1px solid rgba(201,96,63,0.4); }
+  .status-upcoming { background: #2a2a2a; color: var(--mute); }
+  .ros-body { padding: 4px 16px 16px; border-top: 1px solid var(--border); }
+  .ros-section { margin: 14px 0; }
+  .ros-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--mute); font-weight: 700; margin-bottom: 8px; }
+  .ros-sms { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .ros-sms th { text-align: left; padding: 6px 8px; background: #0d0d0d; color: var(--mute);
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: 10px;
+    border-bottom: 1px solid var(--border); }
+  .ros-sms td { padding: 6px 8px; border-bottom: 1px solid #1f1f1f; color: #ddd; }
+  .ros-sms tr:last-child td { border-bottom: 0; }
+  .bx { display: inline-block; padding: 2px 7px; border-radius: 3px; font-size: 10px;
+    font-weight: 600; letter-spacing: 0.05em; }
+  .bx.ec-early { background: rgba(96,165,250,0.15); color: var(--blue); border: 1px solid rgba(96,165,250,0.35); }
+  .bx.ec-late { background: rgba(74,222,128,0.15); color: var(--green); border: 1px solid rgba(74,222,128,0.35); }
+  .bx.west { background: rgba(212,165,116,0.15); color: var(--gold); border: 1px solid rgba(212,165,116,0.35); }
+  .ros-note { font-size: 10px; color: var(--mute); margin-top: 6px; font-style: italic; }
+  .ros-list { font-size: 12px; line-height: 1.7; color: #ddd; padding-left: 18px; }
+  .ros-list li { margin: 2px 0; }
+  .ros-list strong { color: #fff; }
+  .ros-list em { color: var(--gold); }
+  .ros-links { font-size: 12px; line-height: 1.8; padding-left: 18px; }
+  .ros-links li { margin: 2px 0; color: #ddd; }
+  .ros-links a { color: var(--blue); text-decoration: none; }
+  .ros-links a:hover { text-decoration: underline; }
+  .ros-links strong { color: #fff; }
+  .placeholder-link { color: var(--mute); font-style: italic; }
+  .ros-howto { margin-top: 20px; padding: 14px 16px; background: #0d0d0d;
+    border: 1px dashed var(--border); border-radius: 8px; font-size: 12px;
+    color: #ccc; line-height: 1.6; }
+  .ros-howto code { background: #1f1f1f; color: var(--green); padding: 2px 6px;
+    border-radius: 3px; font-size: 11px; }
+</style>
+
+<!-- ============ TAB 3: CONV BY NIGHT ============ -->
+<div class="tab-pane" id="tab-convfunnel">
+  <div class="placeholder">Coming tomorrow — per-night conversion funnel (Night 2 Q&A pre-leak indicators, Night 3 pitch live tracker, Night 4 bonus EON conversions).</div>
+</div>
+
+<!-- ============ TAB 4: SMS OPS — schedule + scripts visible to team ============ -->
+<div class="tab-pane" id="tab-sms">
+  <!-- LIVE TONIGHT'S SEND COUNT (top of tab — what Kait sees first) -->
+  <div style="background: linear-gradient(135deg, #1a2447 0%, #2a3a5a 100%); border: 1px solid var(--gold);
+       border-radius: 10px; padding: 18px 22px; margin-bottom: 16px;">
+    <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gold); font-weight: 700; margin-bottom: 8px;">
+      🔴 LIVE — Tonight's Night 2 SMS Send (Kait + JJ)
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: end; flex-wrap: wrap; gap: 16px;">
+      <div>
+        <div style="font-size: 48px; font-weight: 800; color: #fff; line-height: 1; font-feature-settings: 'tnum';">
+          <span id="sms-n2-sent">—</span> <span style="font-size: 22px; color: rgba(255,255,255,0.5);">Sent_N2</span>
+        </div>
+        <div style="font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 8px;">
+          Live count of contacts tagged Sent_N2 in ActiveCampaign · refreshes every 30s · if frozen for 2+ min → something's wrong, ping JJ
+        </div>
+      </div>
+      <div style="text-align: right;">
+        <div style="font-size: 14px; color: rgba(255,255,255,0.6);">Doors open <strong style="color: #fff;">7:00 PM CT</strong> · Expected total: <strong style="color:#fff;">~8,800</strong></div>
+        <div style="font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 6px; line-height: 1.7;">
+          <span style="color: var(--green);">🟢 EC-Early in-flight · 3,559</span><br>
+          <span style="color: var(--green);">🟢 EC-Late retry in-flight · 3,021</span><br>
+          <span style="color: var(--green);">🟢 VIP in-flight · 1,459</span><br>
+          <span style="color: var(--gold);">⏳ West queued · 7:02 PM · ~1,800</span>
+        </div>
+        <div style="font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 6px; font-style: italic;">
+          ✅ Verify: Sent_N2 number should be climbing +100-300/min<br>
+          Last text out: ~7:20 PM CT
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+       padding: 14px 16px; margin-bottom: 16px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+      <div>
+        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--mute); margin-bottom: 4px;">Pipeline Status</div>
+        <div style="font-size: 16px; font-weight: 600;">Welcome SMS: <span style="color: var(--green);">LIVE</span> · Night 2 reminders: <span style="color: var(--red);">🔴 IN-FLIGHT</span> · VIP/West <span style="color: var(--gold);">queued</span></div>
+      </div>
+      <div style="font-size: 11px; color: var(--mute); text-align: right;">
+        4 numbers · Telnyx 10DLC · AT&T 4 MPS, T-Mo cap 2K/day (vetting pending Aegis)<br>
+        Routing: East→917 · Central→615 (×2) · West→213
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin: 18px 0 10px; color: var(--mute); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">📅 Send Schedule — 5 messages, 4 nights</h3>
+
+  <!-- Welcome SMS -->
+  <div class="sms-row" data-status="live">
+    <div class="sms-tag">SENT ON-REG</div>
+    <div class="sms-meta">
+      <div class="sms-when"><strong>Welcome SMS</strong> · fires on every new registration</div>
+      <div class="sms-stat">Delivery: <strong style="color: var(--green);">LIVE</strong> · Sent (30d): <strong id="telnyx-sent">—</strong> · Delivered: <strong id="telnyx-delivered">—</strong> (<span id="telnyx-pct">—</span>%)</div>
+    </div>
+    <div class="sms-body">Locked In for FYP Challenge. We'll text you 20 min before each night with the link. That's it. No spam, pinky promise.<br><br>Kait &amp; JJ</div>
+  </div>
+
+  <!-- Night 1 -->
+  <div class="sms-row" data-status="live">
+    <div class="sms-tag" style="background: rgba(74,222,128,0.15); color: var(--green); border: 1px solid rgba(74,222,128,0.35);">SENT 5/26</div>
+    <div class="sms-meta">
+      <div class="sms-when"><strong>Night 1 — Dr. Henry Cloud</strong> · Tue 5/26 7:00 PM CT</div>
+      <div class="sms-stat">Recipients: <span class="dyn-sms-total">—</span> SMS_Optin_Yes · ✓ delivered last night</div>
+    </div>
+    <div class="sms-body">FYP Night 1 x the Dr. Henry Cloud... Doors open in 20 min. The guy who wrote Boundaries, How to Get a Date Worth Keeping.. The GOAT.. See you soon!<br>fyp.heartofdating.com/FYPN1<br><br>Kait &amp; JJ</div>
+  </div>
+
+  <!-- Night 2 -->
+  <div class="sms-row" data-status="scheduled">
+    <div class="sms-tag tag-tonight">🔴 LIVE TONIGHT</div>
+    <div class="sms-meta">
+      <div class="sms-when"><strong>Night 2 — Kait + JJ</strong> · Wed 5/27 7:00 PM CT</div>
+      <div class="sms-stat">EC-Early in-flight (3,559) · EC-Late retry in-flight (3,021) · VIP in-flight (1,459) · West queued 7:02 (~1,800) · Done ~7:20 PM</div>
+    </div>
+    <div class="sms-body">FYP Night 2. It's me JJ tonight.. oh and Kait.. Bring snacks, listening ears, receipts. All of it. 20 min out. Love u.<br>fyp.heartofdating.com/FYPN2<br><br>- JJ (&amp; Kait)</div>
+  </div>
+
+  <!-- Night 3 — the big one -->
+  <div class="sms-row" data-status="pending" style="border-left: 3px solid var(--terra);">
+    <div class="sms-tag tag-big">THU 6:40 CT</div>
+    <div class="sms-meta">
+      <div class="sms-when"><strong>Night 3 — Annie F. Downs</strong> · Thu 5/28 7:00 PM CT · 🔥 SOD PITCH NIGHT</div>
+      <div class="sms-stat">Biggest send. Pitch screen goes live for Kait. SOD cart opens during this night.</div>
+    </div>
+    <div class="sms-body">FYP Night 3 x Annie F. Downs. Yes, the Queen herself. She is joining and we're still not over it.<br>fyp.heartofdating.com/FYPN3<br><br>Kait &amp; JJ</div>
+  </div>
+
+  <!-- Night 4 -->
+  <div class="sms-row" data-status="pending">
+    <div class="sms-tag">FRI 6:40 CT</div>
+    <div class="sms-meta">
+      <div class="sms-when"><strong>Night 4 — Kait + JJ Teaching + Q&amp;A Finale</strong> · Fri 5/29 7:00 PM CT</div>
+      <div class="sms-stat">Cart-close push · EON bonus (Dr. Cloud workshop) deadline</div>
+    </div>
+    <div class="sms-body">FYP Final Night: It's closing time... If you don't get married from this challenge I will personally refund your expensive ticket it cost to register. Love u.<br>fyp.heartofdating.com/FYPN4<br><br>Kait &amp; Awesome JJ</div>
+  </div>
+
+  <h3 style="margin: 24px 0 10px; color: var(--mute); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">⚙️ Send Logistics</h3>
+  <div class="grid">
+    <div class="card">
+      <div class="label">Throughput</div>
+      <div style="font-size: 13px; line-height: 1.6; color: #ddd;">
+        AT&amp;T: <strong>4 MPS</strong> campaign-wide<br>
+        T-Mobile: <strong>2,000/day cap</strong> (LOW tier — Aegis vetting filed 5/22 to bump → 200K/day)<br>
+        Time to drain 6K list: <strong>~25 min</strong>
+      </div>
+    </div>
+    <div class="card">
+      <div class="label">From-Number Routing</div>
+      <div style="font-size: 13px; line-height: 1.6; color: #ddd;">
+        East (NY, FL, etc): <strong>+1-917</strong><br>
+        Central (TX, TN, etc): <strong>+1-615-9970</strong> / <strong>+1-615-9956</strong><br>
+        West (CA, WA, etc): <strong>+1-213</strong>
+      </div>
+    </div>
+    <div class="card">
+      <div class="label">URL Tracking</div>
+      <div style="font-size: 13px; line-height: 1.6; color: #ddd;">
+        Each link logs a tap event to Analytics Engine<br>
+        <code style="background: #222; padding: 1px 4px; border-radius: 3px;">/FYPN1</code> → Zoom · plus <code>?c=&lt;cid&gt;</code> when wired<br>
+        Tomorrow: per-link click count in this tab
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin: 24px 0 10px; color: var(--mute); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;">⚠️ Open items / risks</h3>
+  <ul style="font-size: 13px; color: #ddd; line-height: 1.7; padding-left: 22px;">
+    <li>T-Mobile cap at 2,000/day means we'll burn through ~35% of opt-ins each night → some Verizon/AT&amp;T users get reminders, T-Mo users may miss. Aegis vetting upgrade resolves this (1-2 day approval).</li>
+    <li>N2 staggered send in-flight: EC-Late ✓ 3,744 + EC-Early ✓ 3,559 already out. VIP batch 6:50, West 7:02 still queued. Watch for delivery errors as VIP fires.</li>
+    <li>Welcome SMS backfill bumps <code>udate</code> on existing contacts → was inflating today/yesterday reg counts (fixed 5/26).</li>
+    <li>T-Mobile cap at 2,000/day means we'll burn cap each night → some T-Mo users may miss the reminder. Aegis vetting upgrade pending.</li>
+  </ul>
+</div>
+
+<style>
+  .sms-row { display: grid; grid-template-columns: 110px 1fr 1.4fr; gap: 14px;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+    padding: 12px 14px; margin-bottom: 8px; align-items: start; }
+  .sms-row[data-status="live"] { border-left: 3px solid var(--green); }
+  .sms-row[data-status="scheduled"] { border-left: 3px solid var(--gold); }
+  .sms-row[data-status="pending"] { border-left: 3px solid #444; }
+  .sms-tag { background: #333; color: #ddd; font-size: 9px; padding: 4px 8px; border-radius: 3px;
+    text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; text-align: center;
+    height: fit-content; }
+  .sms-tag.tag-tonight { background: rgba(250, 204, 21, 0.15); color: var(--gold); border: 1px solid rgba(250,204,21,0.4); }
+  .sms-tag.tag-big { background: rgba(201, 96, 63, 0.15); color: var(--terra); border: 1px solid rgba(201,96,63,0.4); }
+  .sms-meta { font-size: 12px; line-height: 1.5; }
+  .sms-when { color: #fff; margin-bottom: 4px; font-weight: 500; }
+  .sms-stat { color: var(--mute); font-size: 11px; }
+  .sms-body { background: #0d0d0d; border: 1px solid #222; border-radius: 6px;
+    padding: 10px 12px; font-size: 12px; line-height: 1.5; color: #ddd;
+    font-family: -apple-system, "Helvetica Neue", sans-serif; white-space: pre-wrap; }
+</style>
+
+<!-- ============ TAB 5: PITCH SCREEN (the one Kait reads from) ============ -->
+<div class="tab-pane" id="tab-pitch">
+  <button class="full-screen-btn" onclick="toggleFullscreen()">Fullscreen</button>
+  <div class="pitch-stage">
+    <div class="pitch-hero">
+      <div class="pitch-side">
+        <div class="pitch-num enrolled" id="pitch-enrolled">—</div>
+        <div class="pitch-label">Enrolled Tonight</div>
+      </div>
+      <div class="pitch-side">
+        <div class="pitch-num remaining" id="pitch-remaining">—</div>
+        <div class="pitch-label">of 174 Spots</div>
+      </div>
+    </div>
+    <div>
+      <div class="pitch-progress">
+        <div class="pitch-progress-fill" id="pitch-bar" style="width: 0%;"></div>
+      </div>
+      <div class="pitch-bottom">
+        <div class="pitch-stat">
+          <div class="v gold" id="pitch-tonight">—</div>
+          <div class="l">Enrolled Tonight</div>
+        </div>
+        <div class="pitch-stat">
+          <div class="v green" id="pitch-pro-fab">—</div>
+          <div class="l">SOD Pro FAB / 100</div>
+        </div>
+        <div class="pitch-stat">
+          <div class="v blue" id="pitch-vip">—</div>
+          <div class="l">VIP Buyers Watching</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const fmt = (n) => n == null ? "—" : Number(n).toLocaleString("en-US");
+const pct = (n) => n == null ? "—" : Number(n).toFixed(1) + "%";
+
+let refreshTimer = null;
+let nextSec = 20;
+
+async function loadData() {
+  try {
+    const t = Date.now();
+    const r = await fetch("/api/dashboard?_t=" + t, {
+      cache: "no-store",
+      headers: { "Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache" },
+    });
+    if (!r.ok) throw new Error("dash " + r.status);
+    const d = await r.json();
+    render(d);
+    document.getElementById("updated-at").textContent = new Date().toLocaleTimeString("en-US");
+    nextSec = 20;
+  } catch (e) {
+    console.warn("load failed:", e);
+  }
+}
+
+function render(d) {
+  // TAB 1: Funnel
+  const today = d.regs?.today ?? 0;
+  const yest = d.regs?.yesterday ?? 0;
+  const may1 = d.regs?.since_may_1 ?? 0;
+  document.getElementById("regs-today").textContent = fmt(today);
+  document.getElementById("regs-yest").textContent = fmt(yest);
+  document.getElementById("regs-may1").textContent = fmt(may1);
+  const delta = yest > 0 ? ((today - yest) / yest * 100).toFixed(0) : 0;
+  document.getElementById("regs-today-delta").textContent = (delta >= 0 ? "+" : "") + delta + "%";
+
+  // VIP
+  const vip = d.vip || {};
+  document.getElementById("vip-total").textContent = fmt(vip.total);
+  document.getElementById("vip-rate").textContent = vip.reg_to_vip_pct == null ? "—" : vip.reg_to_vip_pct + "%";
+  document.getElementById("vip-rev").textContent = fmt((vip.total || 0) * 17);
+
+  // Channel
+  const ch = d.channel || {};
+  const chTotal = (ch.paid || 0) + (ch.organic || 0);
+  document.getElementById("ch-paid").textContent = fmt(ch.paid);
+  document.getElementById("ch-paid-pct").textContent = chTotal > 0 ? (ch.paid * 100 / chTotal).toFixed(1) + "%" : "—";
+  document.getElementById("ch-paid-vip").textContent = vip.paid_reg_to_vip_pct == null ? "—" : vip.paid_reg_to_vip_pct + "%";
+  document.getElementById("ch-org").textContent = fmt(ch.organic);
+  document.getElementById("ch-org-pct").textContent = chTotal > 0 ? (ch.organic * 100 / chTotal).toFixed(1) + "%" : "—";
+  document.getElementById("ch-org-vip").textContent = vip.organic_reg_to_vip_pct == null ? "—" : vip.organic_reg_to_vip_pct + "%";
+
+  // SOD
+  const sod = d.sod || {};
+  const sodTotal = sod.total || 0;
+  const sodPct = sod.cap_pct || 0;
+  const pitch = sod.pitch || { enrolled: 0, cap: 174, remaining: 174, cap_pct: 0 };
+
+  // Internal/admin view
+  document.getElementById("sod-total").textContent = fmt(sodTotal);
+  document.getElementById("sod-tonight").textContent = fmt(sod.tonight || 0);
+  document.getElementById("sod-headroom").textContent = fmt(sod.headroom);
+  document.getElementById("sod-baseline").textContent = fmt(sod.baseline || 26);
+  document.getElementById("sod-cap-pct").textContent = sodPct.toFixed(1) + "%";
+
+  // Pitch view (the live framing Kait reads)
+  document.getElementById("sod-pitch-enrolled").textContent = fmt(pitch.enrolled);
+  document.getElementById("sod-pitch-cap").textContent = fmt(pitch.cap);
+  document.getElementById("sod-pitch-remaining").textContent = fmt(pitch.remaining);
+  document.getElementById("sod-pitch-cap-pct").textContent = pitch.cap_pct.toFixed(1) + "%";
+  const sodBar = document.getElementById("sod-bar");
+  sodBar.style.width = pitch.cap_pct + "%";
+  sodBar.classList.toggle("over-80", pitch.cap_pct >= 80);
+
+  // SMS
+  const sms = d.sms_optin || {};
+  document.getElementById("sms-total").textContent = fmt(sms.total);
+  const rate = sms.post_flip?.pct;
+  document.getElementById("sms-rate").textContent = rate == null ? "—" : rate;
+  // Update recipient counts on each per-night SMS card
+  document.querySelectorAll(".dyn-sms-total").forEach(el => el.textContent = fmt(sms.total));
+
+  // Tonight's SMS send count (Sent_N2 tag count from AC — Night 2 live)
+  const smsN = d.sms_nights || {};
+  const n2Sent = smsN.n2 || 0;
+  const n2El = document.getElementById("sms-n2-sent");
+  if (n2El) n2El.textContent = fmt(n2Sent);
+
+  // Telnyx live metrics
+  const tx = d.telnyx || {};
+  document.getElementById("telnyx-sent").textContent = fmt(tx.sent);
+  document.getElementById("telnyx-delivered").textContent = fmt(tx.delivered);
+  document.getElementById("telnyx-pct").textContent = tx.delivery_pct == null ? "—" : tx.delivery_pct;
+  document.getElementById("telnyx-delivered-big").textContent = fmt(tx.delivered);
+  document.getElementById("telnyx-sent-big").textContent = fmt(tx.sent);
+  document.getElementById("telnyx-pct-big").textContent = tx.delivery_pct == null ? "—" : tx.delivery_pct;
+  document.getElementById("telnyx-errors-big").textContent = fmt(Math.round((tx.sent || 0) * (tx.errors || 0) / 100));
+
+  // TAB 5: Pitch screen — uses pitch.* (baseline-adjusted framing, 174 cap)
+  document.getElementById("pitch-enrolled").textContent = fmt(pitch.enrolled);
+  document.getElementById("pitch-remaining").textContent = fmt(pitch.remaining);
+  document.getElementById("pitch-tonight").textContent = fmt(pitch.enrolled);
+  document.getElementById("pitch-pro-fab").textContent = "—"; // wire when Pro FAB tag set
+  document.getElementById("pitch-vip").textContent = fmt(vip.total);
+  const pitchBar = document.getElementById("pitch-bar");
+  pitchBar.style.width = pitch.cap_pct + "%";
+  pitchBar.classList.toggle("over-80", pitch.cap_pct >= 80);
+
+  // Alert pulse when near cap (174 - 25 = 149 enrolled = pulse on)
+  document.getElementById("pitch-remaining").classList.toggle("alert", pitch.remaining < 25);
+}
+
+// Tab switching
+document.querySelectorAll(".tab").forEach(t => {
+  t.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+    document.querySelectorAll(".tab-pane").forEach(x => x.classList.remove("active"));
+    t.classList.add("active");
+    document.getElementById("tab-" + t.dataset.tab).classList.add("active");
+  });
+});
+
+// Refresh countdown
+function startTimer() {
+  refreshTimer = setInterval(() => {
+    nextSec--;
+    document.getElementById("next-refresh").textContent = nextSec;
+    if (nextSec <= 0) { loadData(); }
+  }, 1000);
+}
+
+function toggleFullscreen() {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+}
+
+loadData();
+startTimer();
+
+// On pitch tab, refresh every 15s instead of 60s for live ticker feel
+document.querySelector('[data-tab="pitch"]').addEventListener("click", () => {
+  clearInterval(refreshTimer);
+  loadData();
+  nextSec = 15;
+  refreshTimer = setInterval(() => {
+    nextSec--;
+    document.getElementById("next-refresh").textContent = nextSec;
+    if (nextSec <= 0) { loadData(); nextSec = 15; }
+  }, 1000);
+});
+</script>
+
+</body>
+</html>

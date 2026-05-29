@@ -619,12 +619,89 @@
 
   <!-- Night attendance -->
   <div class="card" style="margin-top:8px;">
-    <h2>Expected Night Attendance <span style="font-size:11px;color:#888;font-weight:400;">SMS-adjusted +~20% vs fall (no SMS reminders in fall)</span></h2>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;">
-      <div><div style="font-size:11px;color:#888;">Night 1</div><div style="font-size:22px;font-weight:700;" id="att-n1">—</div><div style="font-size:11px;color:#666;">~18% · May 26</div></div>
-      <div><div style="font-size:11px;color:#888;">Night 2</div><div style="font-size:22px;font-weight:700;" id="att-n2">—</div><div style="font-size:11px;color:#666;">~14% · May 27</div></div>
-      <div><div style="font-size:11px;color:#888;">Night 3 <span style="color:#facc15;">(SOD pitch)</span></div><div style="font-size:22px;font-weight:700;color:#facc15;" id="att-n3">—</div><div style="font-size:11px;color:#666;">~10% · May 28</div></div>
-      <div><div style="font-size:11px;color:#888;">Night 4</div><div style="font-size:22px;font-weight:700;" id="att-n4">—</div><div style="font-size:11px;color:#666;">~7.5% · May 29</div></div>
+    <h2>Show-Up Rates · Attendance Forecast <span style="font-size:11px;color:#888;font-weight:400;">N1 actual from tonight · N2-4 projected · VIP-separate</span></h2>
+
+    <!-- All-attendee row -->
+    <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:0.1em;margin:8px 0 4px;font-weight:600;">All Attendees</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+      <div style="border-left:3px solid #4ade80;padding-left:8px;">
+        <div style="font-size:11px;color:#888;">N1 · Cloud <span style="color:#4ade80;font-weight:700;">ACTUAL</span></div>
+        <div style="font-size:22px;font-weight:700;" id="att-n1">—</div>
+        <div style="font-size:10px;color:#666;" id="att-n1-base">—</div>
+        <div style="font-size:11px;color:#4ade80;">~25% · ⚠️ hit 3K cap +~1,200 locked out</div>
+      </div>
+      <div style="border-left:3px solid #2a2a2a;padding-left:8px;">
+        <div style="font-size:11px;color:#888;">N2 · Kait+JJ <span style="color:#888;">proj</span></div>
+        <div style="font-size:22px;font-weight:700;" id="att-n2">—</div>
+        <div style="font-size:10px;color:#666;" id="att-n2-base">—</div>
+        <div style="font-size:11px;color:#666;">~19% · 5/27 (+1d org)</div>
+      </div>
+      <div style="border-left:3px solid #facc15;padding-left:8px;">
+        <div style="font-size:11px;color:#888;">N3 · AFD <span style="color:#facc15;font-weight:700;">PITCH</span></div>
+        <div style="font-size:22px;font-weight:700;color:#facc15;" id="att-n3">—</div>
+        <div style="font-size:10px;color:#666;" id="att-n3-base">—</div>
+        <div style="font-size:11px;color:#facc15;">~19% · 5/28 (+2d org) 🔥 cart open</div>
+      </div>
+      <div style="border-left:3px solid #2a2a2a;padding-left:8px;">
+        <div style="font-size:11px;color:#888;">N4 · Finale</div>
+        <div style="font-size:22px;font-weight:700;" id="att-n4">—</div>
+        <div style="font-size:10px;color:#666;" id="att-n4-base">—</div>
+        <div style="font-size:11px;color:#666;">~14% · 5/29 (+3d org) cart close</div>
+      </div>
+    </div>
+
+    <!-- VIP row -->
+    <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:0.1em;margin:14px 0 4px;font-weight:600;">⭐ VIP Show-Up <span style="color:#facc15;font-weight:400;text-transform:none;letter-spacing:0;">(higher converts to SOD)</span></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+      <div style="border-left:3px solid #4ade80;padding-left:8px;">
+        <div style="font-size:11px;color:#888;">N1 VIP <span style="color:#4ade80;font-weight:700;">ACTUAL</span></div>
+        <div style="font-size:22px;font-weight:700;color:#facc15;" id="att-vip-n1">—</div>
+        <div style="font-size:10px;color:#666;" id="att-vip-n1-base">—</div>
+        <div style="font-size:11px;color:#4ade80;">~36% · 700 attended</div>
+      </div>
+      <div style="border-left:3px solid #2a2a2a;padding-left:8px;">
+        <div style="font-size:11px;color:#888;">N2 VIP <span style="color:#888;">proj</span></div>
+        <div style="font-size:22px;font-weight:700;color:#facc15;" id="att-vip-n2">—</div>
+        <div style="font-size:10px;color:#666;" id="att-vip-n2-base">—</div>
+        <div style="font-size:11px;color:#666;">~32% · +30 VIP/day</div>
+      </div>
+      <div style="border-left:3px solid #facc15;padding-left:8px;">
+        <div style="font-size:11px;color:#888;">N3 VIP <span style="color:#facc15;font-weight:700;">PITCH</span></div>
+        <div style="font-size:22px;font-weight:700;color:#facc15;" id="att-vip-n3">—</div>
+        <div style="font-size:10px;color:#666;" id="att-vip-n3-base">—</div>
+        <div style="font-size:11px;color:#facc15;">~38% · pitch boost</div>
+      </div>
+      <div style="border-left:3px solid #2a2a2a;padding-left:8px;">
+        <div style="font-size:11px;color:#888;">N4 VIP</div>
+        <div style="font-size:22px;font-weight:700;color:#facc15;" id="att-vip-n4">—</div>
+        <div style="font-size:10px;color:#666;" id="att-vip-n4-base">—</div>
+        <div style="font-size:11px;color:#666;">~28% · cart-close drop</div>
+      </div>
+    </div>
+
+    <!-- Editable growth assumptions -->
+    <div style="margin-top:14px;padding:10px 12px;background:#0d0d0d;border:1px dashed #2a2a2a;border-radius:6px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;">
+      <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;">Growth assumptions</div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <label style="font-size:11px;color:#aaa;">+ Org regs/day</label>
+        <input type="number" id="growth-org" value="250" min="0" max="2000" step="25"
+          style="width:64px;padding:4px 6px;background:#1a1a1a;border:1px solid #2a2a2a;color:#fff;border-radius:4px;font-size:12px;font-feature-settings:'tnum';">
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <label style="font-size:11px;color:#aaa;">+ VIP buyers/day</label>
+        <input type="number" id="growth-vip" value="30" min="0" max="500" step="5"
+          style="width:54px;padding:4px 6px;background:#1a1a1a;border:1px solid #2a2a2a;color:#fff;border-radius:4px;font-size:12px;font-feature-settings:'tnum';">
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <label style="font-size:11px;color:#aaa;">$ ad spend/day remaining</label>
+        <input type="number" id="growth-spend" value="500" min="0" max="10000" step="100"
+          style="width:72px;padding:4px 6px;background:#1a1a1a;border:1px solid #2a2a2a;color:#fff;border-radius:4px;font-size:12px;font-feature-settings:'tnum';">
+      </div>
+      <button id="growth-reset" style="margin-left:auto;padding:4px 10px;font-size:10px;background:transparent;border:1px solid #2a2a2a;color:#888;border-radius:4px;cursor:pointer;letter-spacing:0.05em;">reset</button>
+    </div>
+
+    <div style="font-size:10px;color:#666;margin-top:10px;line-height:1.4;font-style:italic;">
+      N1 uses historical reg snapshot (16,398 at doors). N2 uses current + 1 day growth. N3 = +2 days, N4 = +3 days. Paid is OFF for rest of week. Edit growth rates above to model different scenarios — values persist locally. N1 hit Zoom cap — true demand was higher. VIP show-up runs ~1.5× All Attendees because they paid the tripwire.
     </div>
   </div>
 
@@ -681,6 +758,8 @@
       Counts are unique AC contacts tagged with the variant. LP test runs once James duplicates ad sets pointing half at /fyp/v2/. VIP test routes 50/50 via deterministic email-hash on registration. Conversion-rate split (variant → VIP buyer) pending tag-intersection wiring.
       <br><br>
       <b>LP lift math:</b> middleware splits traffic 50/50 server-side so both variants see equal pageviews. Ratio of regs = ratio of conv rates. Lift = (v2 − v1) / v1. Confidence threshold: sample &lt; 100 = too small · 100–500 = directional only · 500–1500 needs &gt;8% lift to be directional · 1500+ with &gt;5% lift = solid signal.
+      <br><br>
+      <b>Scope note:</b> LP-v1 tagging shipped in register.js ~24h before the /fyp/ rotation middleware. Pre-middleware, 100% of /fyp/ traffic was tagged LP-v1, which inflated v1 counts. LP counts above are scoped to post-middleware (2026-05-22 02:04 UTC) for an apples-to-apples comparison.
     </div>
   </div>
 </div>
@@ -911,7 +990,7 @@ async function refresh() {
     document.getElementById('vip-rev').textContent = '$' + (d.vip.total * 17).toLocaleString();
 
     // SOD Forecast — cache dash data so price tabs can re-render
-    window._lastDashData = d;
+    window._lastDashDataata = d;
     renderSODForecast(d);
     renderABWidget(d);
 
@@ -1220,7 +1299,44 @@ function renderABWidget(d) {
   document.getElementById('ab-lp-v2').textContent = fmt(ab.lp.v2.regs);
   document.getElementById('ab-lp-v1-label').textContent = ab.lp.v1.label;
   document.getElementById('ab-lp-v2-label').textContent = ab.lp.v2.label;
-  document.getElementById('ab-lp-balance').innerHTML = liftReport(ab.lp.v1.regs, ab.lp.v2.regs);
+  // Clean (post-middleware) lift is the truth signal
+  const cleanLift = liftReport(ab.lp.v1.regs, ab.lp.v2.regs);
+  // Conv-rate-per-variant: regs / unique-visitors from Analytics Engine.
+  // Apples-to-apples because middleware logs one datapoint per new sticky cookie,
+  // so visitors and regs share the same post-middleware time window. Note: visitor
+  // counts only start from the moment the AE hook deployed, not from middleware
+  // launch — earlier regs will exist without matching visitor datapoints.
+  const v1Visitors = ab.lp.v1.visitors ?? 0;
+  const v2Visitors = ab.lp.v2.visitors ?? 0;
+  const v1Conv = ab.lp.v1.conv_rate; // null if no visitors yet
+  const v2Conv = ab.lp.v2.conv_rate;
+  const convReady = v1Visitors > 0 && v2Visitors > 0 && v1Conv != null && v2Conv != null;
+  const convLiftPct = (convReady && v1Conv > 0) ? ((v2Conv - v1Conv) / v1Conv * 100) : null;
+  const convLiftStr = convLiftPct == null ? '—'
+    : (convLiftPct > 0 ? '+' : '') + convLiftPct.toFixed(1) + '%';
+  const convLiftColor = convLiftPct == null ? '#888'
+    : convLiftPct > 0 ? '#4ade80' : '#f87171';
+  const convBlock = convReady
+    ? `<b style="color:#aaa;">Conv rate:</b> v1 <b style="color:#fff;">${v1Conv.toFixed(2)}%</b> (${fmt(ab.lp.v1.regs)}/${fmt(v1Visitors)}) · v2 <b style="color:#facc15;">${v2Conv.toFixed(2)}%</b> (${fmt(ab.lp.v2.regs)}/${fmt(v2Visitors)}) · <b style="color:${convLiftColor};">variant ${convLiftStr} conv-rate lift</b>`
+    : `<span style="color:#888;"><b style="color:#aaa;">Conv rate:</b> visitor instrumentation warming — v1 ${fmt(v1Visitors)} · v2 ${fmt(v2Visitors)} visitors logged so far (since AE middleware hook deployed)</span>`;
+  // Show contaminated all-time vs clean for transparency
+  const v1All = ab.lp.v1_all ?? ab.lp.v1.regs;
+  const v2All = ab.lp.v2_all ?? ab.lp.v2.regs;
+  const contaminatedLift = v1All > 0 ? ((v2All - v1All) / v1All * 100).toFixed(1) : "—";
+  const cleanCount = ab.lp.v1.regs + ab.lp.v2.regs;
+  const allCount = v1All + v2All;
+  const excluded = allCount - cleanCount;
+  document.getElementById('ab-lp-balance').innerHTML = `
+    <div style="margin-bottom:6px;">${cleanLift}</div>
+    <div style="font-size:12px;line-height:1.6;padding-top:6px;border-top:1px solid #2a2a2a;margin-top:6px;">
+      ${convBlock}
+    </div>
+    <div style="font-size:11px;color:#888;line-height:1.5;padding-top:6px;border-top:1px solid #2a2a2a;margin-top:6px;">
+      <b style="color:#aaa;">Contaminated (all-time):</b> v1 ${fmt(v1All)} · v2 ${fmt(v2All)} · lift ${contaminatedLift}%
+      <span style="color:#f87171;">← misleading</span><br>
+      <b style="color:#aaa;">Clean (since middleware):</b> v1 ${fmt(ab.lp.v1.regs)} · v2 ${fmt(ab.lp.v2.regs)} ·
+      <span style="color:#4ade80;">${fmt(excluded)} pre-rotation v1 regs excluded</span>
+    </div>`;
 
   document.getElementById('ab-vip-v1').textContent = fmt(ab.vip.v1.regs);
   document.getElementById('ab-vip-v2').textContent = fmt(ab.vip.v2.regs);
@@ -1248,8 +1364,23 @@ const SOD_RATES = {
   1697: { vipSod: 0.025, nonVipSod: 0.0030 },
 };
 const REG_TO_VIP_FALL = { paid: 0.0955, organic: 0.1617 };
-// SMS-adjusted: fall rates +~20% (adds nightly SMS reminders we didn't have)
-const ATTENDANCE_SMS = { n1: 0.184, n2: 0.143, n3: 0.102, n4: 0.075 };
+// N1 actual demand: hit 3K Zoom cap + ~1,200 locked out = ~4,200 unique humans
+// tried to attend. Out of ~15.3K total list = ~27% demand show-up. JJ called it
+// "~25%" which we use as floor. N2-N4 projected from N1 baseline using typical
+// challenge attrition curve (N3 gets pitch-night bump from AFD draw).
+// Updated 2026-05-26 post-N1.
+const ATTENDANCE_SMS = { n1: 0.25, n2: 0.19, n3: 0.19, n4: 0.14 };
+// VIP show-up tonight: ~700 attended / ~1,945 total VIPs = 36% (some VIPs were
+// in the lockout window too — likely true VIP demand ~38-40%). VIP curve is
+// flatter than non-VIP (they paid, they show up). N3 pitch night gets the biggest
+// VIP boost since SOD upgrade is the pitch.
+const ATTENDANCE_SMS_VIP = { n1: 0.36, n2: 0.32, n3: 0.38, n4: 0.28 };
+// Per-night reg pool growth. N1 reg pool locked at historical snapshot. N2-N4 grow
+// from current `totalLeads`. Growth rates are EDITABLE in the widget — defaults
+// based on tonight's observed organic pace (~18/hr × 14hr active = ~250/day).
+const N1_HISTORICAL_REGS = 16398;
+let DAILY_ORG_GROWTH = parseInt(localStorage.getItem("fyp_daily_org_growth")) || 250;
+let DAILY_VIP_GROWTH = parseInt(localStorage.getItem("fyp_daily_vip_growth")) || 30;
 let sodPromoPrice = 997;
 let sodLiveDefaults = null; // {paid, org, spend, cpl, rates}
 let sodLastEdit = 'paid';   // tracks whether user last edited paid-leads or spend (for ↔ link)
@@ -1343,11 +1474,44 @@ function sodRecompute() {
   // CPL display
   document.getElementById('sod-cpl-sub').textContent = `@ CPL $${cpl.toFixed(2)}`;
 
-  // Attendance (SMS-adjusted)
-  document.getElementById('att-n1').textContent = Math.round(result.totalLeads * ATTENDANCE_SMS.n1).toLocaleString();
-  document.getElementById('att-n2').textContent = Math.round(result.totalLeads * ATTENDANCE_SMS.n2).toLocaleString();
-  document.getElementById('att-n3').textContent = Math.round(result.totalLeads * ATTENDANCE_SMS.n3).toLocaleString();
-  document.getElementById('att-n4').textContent = Math.round(result.totalLeads * ATTENDANCE_SMS.n4).toLocaleString();
+  // Attendance — All Attendees
+  // result.totalLeads is the FORECASTED end-of-challenge reg count (current + days remaining × growth).
+  // So N4 baseline = totalLeads (final), and we BACK-PROJECT for earlier nights:
+  //   N3 = N4 − 1 day of growth
+  //   N2 = N4 − 2 days of growth
+  //   N1 = historical snapshot (16,398 at N1 doors).
+  const dailyGrowth = window._fypDailyTotalGrowth || DAILY_ORG_GROWTH;
+  const n1Base = N1_HISTORICAL_REGS;
+  const n4Base = result.totalLeads;
+  const n3Base = Math.max(0, result.totalLeads - dailyGrowth);
+  const n2Base = Math.max(0, result.totalLeads - dailyGrowth * 2);
+  document.getElementById('att-n1').textContent = Math.round(n1Base * ATTENDANCE_SMS.n1).toLocaleString();
+  document.getElementById('att-n2').textContent = Math.round(n2Base * ATTENDANCE_SMS.n2).toLocaleString();
+  document.getElementById('att-n3').textContent = Math.round(n3Base * ATTENDANCE_SMS.n3).toLocaleString();
+  document.getElementById('att-n4').textContent = Math.round(n4Base * ATTENDANCE_SMS.n4).toLocaleString();
+
+  // Surface the reg pool each night used (so JJ can sanity-check the projection)
+  const setBase = (id, n) => { const el = document.getElementById(id); if (el) el.textContent = `of ${n.toLocaleString()} regs`; };
+  setBase('att-n1-base', n1Base);
+  setBase('att-n2-base', n2Base);
+  setBase('att-n3-base', n3Base);
+  setBase('att-n4-base', n4Base);
+
+  // VIP — same per-night growth applied to VIP base (+30/day)
+  // VIP — same back-projection pattern. vipBase here is forecasted end-of-challenge VIPs.
+  const vipBase = result.vips || 0;
+  const v4 = vipBase;
+  const v3 = Math.max(0, vipBase - DAILY_VIP_GROWTH);
+  const v2 = Math.max(0, vipBase - DAILY_VIP_GROWTH * 2);
+  const v1 = Math.max(0, vipBase - DAILY_VIP_GROWTH * 3);
+  document.getElementById('att-vip-n1').textContent = Math.round(v1 * ATTENDANCE_SMS_VIP.n1).toLocaleString();
+  document.getElementById('att-vip-n2').textContent = Math.round(v2 * ATTENDANCE_SMS_VIP.n2).toLocaleString();
+  document.getElementById('att-vip-n3').textContent = Math.round(v3 * ATTENDANCE_SMS_VIP.n3).toLocaleString();
+  document.getElementById('att-vip-n4').textContent = Math.round(v4 * ATTENDANCE_SMS_VIP.n4).toLocaleString();
+  setBase('att-vip-n1-base', v1);
+  setBase('att-vip-n2-base', v2);
+  setBase('att-vip-n3-base', v3);
+  setBase('att-vip-n4-base', v4);
 }
 
 function renderSODForecast(d) {
@@ -1374,40 +1538,51 @@ function renderSODForecast(d) {
     ? Math.max(1.0, metaLeadsToDate / acPaidToDate)
     : 1.20; // fallback to a sensible default before we have enough signal
 
-  // Paid projection — Meta-side first, then deflate to AC truth
-  const metaProjected = pacing?.projected_total_leads || pacing?.leads_to_date || 0;
-  const paidProjected = Math.round(metaProjected / inflation);
-  // Organic projection: extrapolate current org regs to event date using paid pacing factor
-  const acPaidNow = d.channel?.paid || 1;
-  const factor = acPaidNow > 0 ? Math.max(1, paidProjected / acPaidNow) : 1;
-  const orgToDate = d.channel?.organic || 0;
-  const orgProjected = Math.round(orgToDate * factor);
+  // ---- LIVE FORECAST TO CART CLOSE (Fri 5/29 midnight) ----
+  // Days remaining for additional reg growth (today through cart close)
+  const CHALLENGE_END = new Date("2026-05-29T23:59:00-05:00");
+  const daysRemaining = Math.max(0, Math.ceil((CHALLENGE_END - new Date()) / 86400000));
 
-  // Current CPL — prefer FYP-to-date blended (Meta's cost-per-lead).
-  // Also expose the AC-truth CPL for reference (CPL × inflation).
+  // Paid projection: current AC paid count + new daily spend / CPL × days remaining
+  // JJ added $500/day male-lead test spend Wed 5/27 onward. Pull editable spend input.
+  const acPaidNow = d.channel?.paid || 0;
+  const dailySpendRemaining = parseInt(localStorage.getItem("fyp_daily_spend_remain")) || 500;
   const cpl = (meta?.lifetime?.cpl) || (meta?.cpl) || 4.0;
   const cplAcTruth = cpl * inflation;
-  const spendProjected = Math.round(paidProjected * cplAcTruth);
+  const newPaidFromBudget = cplAcTruth > 0 ? Math.round((dailySpendRemaining * daysRemaining) / cplAcTruth) : 0;
+  const paidProjected = acPaidNow + newPaidFromBudget;
+  // Total spend = budget already burned + remaining
+  const spendBurnedToDate = pacing?.spend_to_date || 43467; // fallback to last seen
+  const spendProjected = Math.round(spendBurnedToDate + (dailySpendRemaining * daysRemaining));
 
-  // Default spend anchor at $35K (JJ's chosen launch budget). Back-calc paid leads
-  // from spend / AC-truth CPL so the widget defaults to the budget we're actually running.
-  const DEFAULT_SPEND = 35000;
-  const paidFromBudget = cplAcTruth > 0 ? Math.round(DEFAULT_SPEND / cplAcTruth) : paidProjected;
+  // Organic projection: current + DAILY_ORG_GROWTH × days remaining (honest forecast,
+  // doesn't depend on paid-pacing factor since paid is mostly off).
+  const orgToDate = d.channel?.organic || 0;
+  const orgProjected = orgToDate + (DAILY_ORG_GROWTH * daysRemaining);
 
   sodLiveDefaults = {
-    paid: paidFromBudget,
+    paid: paidProjected,
     org: orgProjected,
-    spend: DEFAULT_SPEND,
-    cpl: cplAcTruth,  // AC-truth CPL keeps unit econ honest
+    spend: spendProjected,
+    cpl: cplAcTruth,
     rates: liveRates,
     inflation,
+    daysRemaining,
+    dailySpendRemaining,
   };
 
-  // Surface what's applied so JJ can see the inflation factor + budget anchor
+  // Cache the daily total growth (org + paid combined) so the per-night
+  // attendance widget can back-project N4 → N3 → N2 properly. N4 baseline =
+  // totalLeads (forecast end-of-challenge). N3 = N4 − 1 day. N2 = N4 − 2 days.
+  const dailyPaidGrowth = cplAcTruth > 0 ? dailySpendRemaining / cplAcTruth : 0;
+  window._fypDailyTotalGrowth = DAILY_ORG_GROWTH + dailyPaidGrowth;
+
+  // Surface what's applied so JJ can see the formula
   const inflPct = ((inflation - 1) * 100).toFixed(1);
   document.getElementById('sod-paid-sub').textContent =
-    `from $${DEFAULT_SPEND.toLocaleString()} budget @ $${cplAcTruth.toFixed(2)} CPL · Meta inflation ${inflation.toFixed(2)}x (+${inflPct}%)`;
-  document.getElementById('sod-org-sub').textContent = `live projection: ${orgProjected.toLocaleString()}`;
+    `${acPaidNow.toLocaleString()} now + ${newPaidFromBudget.toLocaleString()} forecast ($${dailySpendRemaining}/day × ${daysRemaining}d @ $${cplAcTruth.toFixed(2)} CPL)`;
+  document.getElementById('sod-org-sub').textContent =
+    `${orgToDate.toLocaleString()} now + ${(DAILY_ORG_GROWTH * daysRemaining).toLocaleString()} forecast (${DAILY_ORG_GROWTH}/day × ${daysRemaining}d)`;
 
   // Seed inputs when (a) never seeded with real meta yet, AND (b) user hasn't manually edited
   const haveRealMeta = paidProjected > 0 && cpl > 0.5;
@@ -1433,6 +1608,42 @@ document.addEventListener('DOMContentLoaded', () => {
     sodRecompute();
   });
   document.getElementById('sod-input-paid')?.addEventListener('input', () => { sodLastEdit = 'paid'; sodUserEdited = true; sodRecompute(); });
+
+  // Growth-rate inputs (editable from widget, persist via localStorage)
+  const gOrg = document.getElementById('growth-org');
+  const gVip = document.getElementById('growth-vip');
+  const gSpend = document.getElementById('growth-spend');
+  if (gOrg) gOrg.value = DAILY_ORG_GROWTH;
+  if (gVip) gVip.value = DAILY_VIP_GROWTH;
+  if (gSpend) gSpend.value = parseInt(localStorage.getItem("fyp_daily_spend_remain")) || 500;
+  gOrg?.addEventListener('input', (e) => {
+    DAILY_ORG_GROWTH = parseInt(e.target.value, 10) || 0;
+    localStorage.setItem("fyp_daily_org_growth", String(DAILY_ORG_GROWTH));
+    sodRecompute();
+    // Org input controls live forecast — trigger a re-render of SOD forecast
+    if (window._lastDashData) renderSODForecast(window._lastDashData);
+  });
+  gVip?.addEventListener('input', (e) => {
+    DAILY_VIP_GROWTH = parseInt(e.target.value, 10) || 0;
+    localStorage.setItem("fyp_daily_vip_growth", String(DAILY_VIP_GROWTH));
+    sodRecompute();
+  });
+  gSpend?.addEventListener('input', (e) => {
+    const v = parseInt(e.target.value, 10) || 0;
+    localStorage.setItem("fyp_daily_spend_remain", String(v));
+    if (window._lastDashData) renderSODForecast(window._lastDashData);
+  });
+  document.getElementById('growth-reset')?.addEventListener('click', () => {
+    DAILY_ORG_GROWTH = 250; DAILY_VIP_GROWTH = 30;
+    if (gOrg) gOrg.value = 250;
+    if (gVip) gVip.value = 30;
+    if (gSpend) gSpend.value = 500;
+    localStorage.removeItem("fyp_daily_org_growth");
+    localStorage.removeItem("fyp_daily_vip_growth");
+    localStorage.removeItem("fyp_daily_spend_remain");
+    sodRecompute();
+    if (window._lastDashData) renderSODForecast(window._lastDashData);
+  });
   document.getElementById('sod-input-spend')?.addEventListener('input', () => { sodLastEdit = 'spend'; sodUserEdited = true; sodRecompute(); });
   document.getElementById('sod-input-org')?.addEventListener('input', () => { sodUserEdited = true; sodRecompute(); });
 });
@@ -1640,10 +1851,10 @@ async function refreshMeta() {
     // Stash meta data globally so SOD calculator can read it regardless of
     // which endpoint completes first (race: meta may land before dashboard).
     window._lastMetaData = d;
-    if (window._lastDashData) {
-      window._lastDashData.meta = d;
-      window._lastDashData.pacing = d.pacing;
-      renderSODForecast(window._lastDashData);
+    if (window._lastDashDataata) {
+      window._lastDashDataata.meta = d;
+      window._lastDashDataata.pacing = d.pacing;
+      renderSODForecast(window._lastDashDataata);
     }
 
     // Spend timeline (last 14d in live mode, range in range mode)

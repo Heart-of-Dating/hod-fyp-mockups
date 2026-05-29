@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>School of Dating · June 2026 Cohort</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6f0;
+  --ink: #1d1815;
+  --ink-soft: #4a3f37;
+  --muted: #8a7e72;
+  --line: #e8dfd2;
+  --gold: #c89a4a;
+  --gold-deep: #8a6627;
+  --gold-light: #f5e0b8;
+  --rose: #c47a6e;
+  --sage: #6e8071;
+  --blue: #6c84a3;
+  --cream: #f3ebdc;
+  --paper: #fffaf2;
+  --dark: #1d1815;
+  --shadow-lg: 0 40px 100px -40px rgba(40,28,18,.28);
+  --shadow-md: 0 20px 50px -25px rgba(40,28,18,.18);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+html, body { min-height: 100vh; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  line-height: 1.5;
+}
+
+/* ====== TYPOGRAPHY ====== */
+h1, h2, h3 { font-family: 'Fraunces', serif; font-weight: 300; letter-spacing: -0.025em; line-height: 1; }
+h1 em, h2 em, h3 em { font-style: italic; font-weight: 400; color: var(--gold-deep); }
+.kicker {
+  font-size: 0.78rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  font-weight: 700;
+}
+.lede {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: clamp(1.15rem, 1.5vw, 1.4rem);
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+.lede em { color: var(--gold-deep); font-style: italic; }
+
+/* ====== HERO (TOP FOLD — projector view) ====== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background:
+    radial-gradient(ellipse at 80% 20%, rgba(200,154,74,.10), transparent 50%),
+    radial-gradient(ellipse at 20% 80%, rgba(196,122,110,.06), transparent 50%),
+    var(--bg);
+}
+.hero-inner {
+  max-width: 1700px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 3vh 4vw 0;
+  flex: 1;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 2rem;
+}
+
+/* hero header */
+.hero-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+}
+.brand-tag {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.brand-tag .kicker { color: var(--gold-deep); }
+.brand-tag .meta {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+/* Countdown clock */
+.countdown {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
+}
+.countdown .label {
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--rose);
+}
+.countdown .timer {
+  display: flex;
+  gap: 0.8rem;
+}
+.countdown .unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 56px;
+  padding: 0.4rem 0.6rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.countdown .num {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: 1.7rem;
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.countdown .ulabel {
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+.countdown .triggers {
+  font-size: 0.65rem;
+  color: var(--muted);
+  font-weight: 500;
+  margin-top: 0.2rem;
+  text-align: right;
+}
+
+/* hero main */
+.hero-body {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 4vw;
+  align-items: center;
+}
+@media (max-width: 1100px) {
+  .hero-body { grid-template-columns: 1fr; }
+}
+
+.hero-headline {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.hero-headline h1 {
+  font-size: clamp(3rem, 5.5vw, 5.5rem);
+  line-height: 0.95;
+}
+.hero-headline .lede {
+  max-width: 36ch;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.6rem;
+  border-radius: 999px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  border: 2px solid;
+  transition: transform .15s, box-shadow .2s, background .15s;
+  cursor: pointer;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn.primary {
+  background: var(--gold-deep);
+  border-color: var(--gold-deep);
+  color: #fff;
+  box-shadow: 0 18px 40px -18px rgba(138,102,39,.55);
+}
+.btn.primary:hover { background: #6d4f1d; box-shadow: 0 22px 48px -16px rgba(138,102,39,.65); }
+.btn.secondary {
+  background: transparent;
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.btn.secondary:hover { background: var(--ink); color: var(--bg); }
+.btn .price {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-style: italic;
+}
+.btn .sub {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+/* live tracker card */
+.tracker {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.8rem 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  box-shadow: var(--shadow-md);
+  position: relative;
+}
+.tracker::before {
+  content: "";
+  position: absolute;
+  top: -1px; left: 18px; right: 18px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--rose));
+  border-radius: 3px;
+}
+.tracker .pulse {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--rose);
+}
+.tracker .dot {
+  width: 8px;
+  height: 8px;
+  background: var(--rose);
+  border-radius: 50%;
+  animation: pulseDot 1.6s ease-in-out infinite;
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+.tracker .row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.tracker .row-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.tracker .row-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.tracker .row.fab .row-label { color: var(--gold-deep); }
+.tracker .row.total .row-label { color: var(--sage); }
+.tracker .row-count {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: 1.4rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.tracker .row-count strong {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-style: italic;
+  font-size: 2.6rem;
+  color: var(--ink);
+  margin-right: 0.15rem;
+}
+.tracker .row-count .of {
+  color: var(--muted);
+  font-size: 1.05rem;
+  font-style: italic;
+}
+.tracker .progress {
+  height: 8px;
+  background: var(--cream);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.tracker .bar {
+  height: 100%;
+  border-radius: 999px;
+  transition: width .8s ease;
+}
+.tracker .row.fab .bar { background: linear-gradient(90deg, var(--gold), var(--gold-deep)); }
+.tracker .row.total .bar { background: linear-gradient(90deg, var(--sage), #4a594b); }
+.tracker .row-sub {
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+.tracker .row-sub em { font-style: italic; color: var(--gold-deep); }
+
+.bump {
+  animation: bump .55s cubic-bezier(.2,.7,.3,1.4);
+}
+@keyframes bump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+/* hero footer / welcome stream */
+.welcome-stream {
+  margin-top: auto;
+  padding: 1.2rem 0 0.6rem;
+  border-top: 1px solid var(--line);
+}
+.welcome-stream .stream-label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 0.7rem;
+}
+.welcome-stream .stream-label .dot {
+  width: 6px;
+  height: 6px;
+  background: var(--sage);
+  border-radius: 50%;
+  animation: pulseDot 1.6s ease-in-out infinite;
+}
+.stream {
+  display: flex;
+  gap: 2.5rem;
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.stream-track {
+  display: flex;
+  gap: 2.5rem;
+  animation: streamScroll 70s linear infinite;
+}
+.stream:hover .stream-track { animation-play-state: paused; }
+@keyframes streamScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.stream-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  white-space: nowrap;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+}
+.stream-item .emoji { font-style: normal; }
+.stream-item strong {
+  font-style: normal;
+  font-weight: 500;
+  color: var(--ink);
+}
+.stream-item .when {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+}
+.stream-item.new {
+  animation: streamGlow 3s ease-out;
+}
+@keyframes streamGlow {
+  0% { color: var(--gold-deep); transform: scale(1.04); }
+  100% { color: var(--ink-soft); transform: scale(1); }
+}
+
+/* scroll hint */
+.scroll-hint {
+  text-align: center;
+  margin-top: 0.6rem;
+  padding-bottom: 1rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+.scroll-hint::after {
+  content: " ↓ ";
+  display: inline-block;
+  animation: scrollArrow 1.8s ease-in-out infinite;
+  margin-left: 0.3em;
+}
+@keyframes scrollArrow {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(3px); opacity: 1; }
+}
+
+/* ====== SECTIONS ====== */
+section.s {
+  padding: 5vh 4vw;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+section.s + section.s { padding-top: 2vh; }
+
+.section-head {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+.section-head h2 { font-size: clamp(2.2rem, 4vw, 3.6rem); }
+.section-head .lede { max-width: 50ch; text-align: center; margin: 0 auto; }
+
+/* What you get grid */
+.what-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+@media (max-width: 900px) { .what-grid { grid-template-columns: 1fr; } }
+.what-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 2rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: var(--shadow-md);
+}
+.what-card .what-num {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 2.6rem;
+  line-height: 1;
+  color: var(--gold-deep);
+}
+.what-card h3 {
+  font-size: 1.4rem;
+  line-height: 1.15;
+}
+.what-card p {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+/* FAB bonus stack */
+.bonus-banner {
+  background: linear-gradient(135deg, #2a1f1a 0%, #3d2a1c 100%);
+  color: var(--bg);
+  padding: 4vh 4vw;
+  border-radius: 16px;
+  margin: 3vh auto;
+  max-width: 1500px;
+  position: relative;
+  overflow: hidden;
+}
+.bonus-banner::before {
+  content: "";
+  position: absolute;
+  top: -50%; right: -10%;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(200,154,74,.25), transparent 70%);
+  pointer-events: none;
+}
+.bonus-banner .kicker { color: var(--gold-light); }
+.bonus-banner h2 { color: var(--bg); margin: 1rem 0 0.5rem; }
+.bonus-banner h2 em { color: var(--gold-light); }
+.bonus-banner .lede { color: rgba(255,255,255,.7); max-width: 50ch; }
+.bonus-stack {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+@media (max-width: 800px) { .bonus-stack { grid-template-columns: 1fr; } }
+.bonus-item {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(200,154,74,.25);
+  border-radius: 10px;
+  padding: 1.8rem 1.6rem;
+  position: relative;
+}
+.bonus-item .price-tag {
+  position: absolute;
+  top: 1.4rem;
+  right: 1.6rem;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1.2rem;
+  color: var(--gold-light);
+}
+.bonus-item .bonus-tag {
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--gold-light);
+  margin-bottom: 0.6rem;
+}
+.bonus-item h3 {
+  color: var(--bg);
+  font-size: 1.4rem;
+  margin-bottom: 0.6rem;
+}
+.bonus-item h3 em { color: var(--gold-light); }
+.bonus-item p {
+  font-size: 0.92rem;
+  color: rgba(255,255,255,.7);
+  line-height: 1.55;
+}
+
+/* Calendar embed */
+.calendar-wrap {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  margin: 0 auto;
+  max-width: 1700px;
+}
+.calendar-iframe {
+  width: 100%;
+  height: 920px;
+  border: 0;
+  display: block;
+}
+@media (max-width: 1200px) { .calendar-iframe { height: 1400px; } }
+
+/* Comparison */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+@media (max-width: 800px) { .compare { grid-template-columns: 1fr; } }
+.tier {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 2.2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  box-shadow: var(--shadow-md);
+  position: relative;
+}
+.tier.sod { border-top: 4px solid var(--gold); }
+.tier.pro { border-top: 4px solid var(--rose); }
+.tier.recommended::before {
+  content: "MOST POPULAR · TONIGHT";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gold-deep);
+  color: #fff;
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  font-weight: 700;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+}
+
+.tier-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.tier-tag {
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.tier.sod .tier-tag { color: var(--gold-deep); }
+.tier.pro .tier-tag { color: var(--rose); }
+.tier h3 {
+  font-size: 2rem;
+  line-height: 1;
+}
+.tier .tier-desc {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1rem;
+  color: var(--ink-soft);
+}
+
+.tier .price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.tier .price {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.tier .price-old {
+  font-size: 1.2rem;
+  color: var(--muted);
+  text-decoration: line-through;
+}
+.tier .price-each {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.tier ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.tier li {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  padding-left: 1.6rem;
+  position: relative;
+  line-height: 1.4;
+}
+.tier li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--gold-deep);
+  font-weight: 700;
+}
+.tier.pro li::before { color: var(--rose); }
+.tier li strong { color: var(--ink); font-weight: 600; }
+
+.tier .tier-cta {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.tier .btn { justify-content: center; width: 100%; }
+.tier .alt-pay {
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-align: center;
+  font-style: italic;
+}
+.tier .alt-pay a { color: var(--gold-deep); text-decoration: underline; }
+
+/* FAQ */
+.faq {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.faq details {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+}
+.faq summary {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: 1.15rem;
+  color: var(--ink);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.faq summary::after {
+  content: "+";
+  color: var(--gold-deep);
+  font-size: 1.4rem;
+  font-weight: 400;
+  transition: transform .2s;
+}
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq details p {
+  margin-top: 0.8rem;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+/* Sticky CTA bar */
+.cta-sticky {
+  position: fixed;
+  bottom: 1.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: var(--bg);
+  border-radius: 999px;
+  padding: 0.7rem 0.7rem 0.7rem 1.6rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,.45);
+  z-index: 50;
+  font-size: 0.88rem;
+  font-weight: 500;
+  max-width: 92vw;
+  transition: opacity .3s, transform .3s;
+}
+.cta-sticky.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(20px);
+}
+.cta-sticky .timer-inline {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--gold-light);
+  font-variant-numeric: tabular-nums;
+}
+.cta-sticky .btn {
+  padding: 0.6rem 1.2rem;
+  font-size: 0.85rem;
+}
+.cta-sticky .btn.primary { background: var(--gold-light); color: var(--ink); border-color: var(--gold-light); }
+.cta-sticky .seats-inline {
+  color: var(--gold-light);
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+}
+@media (max-width: 700px) {
+  .cta-sticky { padding: 0.6rem 0.6rem 0.6rem 1rem; font-size: 0.75rem; }
+  .cta-sticky .timer-inline, .cta-sticky .seats-inline { display: none; }
+}
+
+/* footer */
+footer {
+  padding: 4vh 4vw 6vh;
+  text-align: center;
+  border-top: 1px solid var(--line);
+  margin-top: 4vh;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+footer .marks {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  margin-top: 0.8rem;
+  font-size: 0.78rem;
+}
+footer .marks a { color: var(--ink-soft); text-decoration: none; }
+footer .marks a:hover { color: var(--gold-deep); }
+</style>
+</head>
+<body>
+
+<!-- ============================================ -->
+<!-- HERO — top fold, projector view -->
+<!-- ============================================ -->
+<section class="hero">
+  <div class="hero-inner">
+
+    <!-- HERO TOP — brand + countdown -->
+    <div class="hero-top">
+      <div class="brand-tag">
+        <div class="kicker">School of Dating · Cohort begins June 9, 2026</div>
+        <div class="meta">10 weeks · 3 phases · 2 break weeks · weekly office hours</div>
+      </div>
+
+      <div class="countdown">
+        <div class="label">⏱ Fast Action Offer Closes In</div>
+        <div class="timer" id="timer">
+          <div class="unit"><span class="num" id="t-h">--</span><span class="ulabel">hours</span></div>
+          <div class="unit"><span class="num" id="t-m">--</span><span class="ulabel">min</span></div>
+          <div class="unit"><span class="num" id="t-s">--</span><span class="ulabel">sec</span></div>
+        </div>
+        <div class="triggers">whichever comes first: 100 seats taken · 9 PM CT tonight</div>
+      </div>
+    </div>
+
+    <!-- HERO BODY — headline + tracker -->
+    <div class="hero-body">
+
+      <!-- LEFT: headline + CTAs -->
+      <div class="hero-headline">
+        <h1>Date <em>intentionally</em>.<br>For the next <em>10 weeks</em>.</h1>
+        <p class="lede">A 10-week guided cohort to heal the inner work, build clarity in your values, and date with direction. Weekly live teaching from <em>Kait &amp; JJ</em>, office hours every Thursday, and a private cohort community.</p>
+
+        <div class="hero-ctas">
+          <a class="btn primary" href="#enroll">
+            <span class="price">Save my seat</span>
+            <span class="sub">SOD · $997</span>
+          </a>
+          <a class="btn secondary" href="#tiers">
+            <span>See what's included</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- RIGHT: live tracker -->
+      <div class="tracker">
+        <div class="pulse"><span class="dot"></span>Live seat tracker</div>
+
+        <div class="row fab">
+          <div class="row-head">
+            <span class="row-label">🔥 Fast Action Bonus seats</span>
+            <span class="row-count"><strong id="fab-taken">—</strong><span class="of">/ <span id="fab-cap">100</span></span></span>
+          </div>
+          <div class="progress"><div class="bar" id="fab-bar" style="width: 0%"></div></div>
+          <div class="row-sub"><em id="fab-remaining">—</em> Fast Action seats left · unlocks <strong>SOD Pro trial</strong> + <strong>Dr. Cloud workshop</strong></div>
+        </div>
+
+        <div class="row total">
+          <div class="row-head">
+            <span class="row-label">📍 Cohort seats taken</span>
+            <span class="row-count"><strong id="total-taken">—</strong><span class="of">/ <span id="total-cap">200</span></span></span>
+          </div>
+          <div class="progress"><div class="bar" id="total-bar" style="width: 0%"></div></div>
+          <div class="row-sub">Cohort hard-caps at 200 · cart closes when full</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HERO FOOTER — welcome stream -->
+    <div class="welcome-stream">
+      <div class="stream-label">
+        <span class="dot"></span>
+        Welcome to the cohort
+      </div>
+      <div class="stream">
+        <div class="stream-track" id="stream-track">
+          <div class="stream-item" style="opacity:.5">
+            <span class="emoji">⏳</span>
+            <span>Loading recent signups…</span>
+          </div>
+        </div>
+      </div>
+      <div class="scroll-hint">Scroll for details</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- WHAT YOU GET -->
+<!-- ============================================ -->
+<section class="s" id="what">
+  <div class="section-head">
+    <div class="kicker">What's inside</div>
+    <h2>Three <em>phases</em>. One transformation.</h2>
+    <p class="lede">Foundations · Identity · Action. Each phase builds on the last, so when you arrive at "go date with intention," you actually have the tools to do it.</p>
+  </div>
+
+  <div class="what-grid">
+    <div class="what-card">
+      <div class="what-num">01</div>
+      <h3><em>Heal</em> the inner world.</h3>
+      <p>Core wound work, inner-child / inner-teen reconnection, attachment style mastery, and learning to manage triggers without spiraling. Weeks 1-3.</p>
+    </div>
+    <div class="what-card">
+      <div class="what-num">02</div>
+      <h3>Build <em>godfidence</em>.</h3>
+      <p>What a healthy relationship actually looks like, what YOUR values and dealbreakers really are, and how to reset your dating mindset for the next chapter. Weeks 5-7.</p>
+    </div>
+    <div class="what-card">
+      <div class="what-num">03</div>
+      <h3>Date with <em>direction</em>.</h3>
+      <p>The actual playbook for finding, vetting, and committing to your person. Weeks 8-10. By the end you'll know what you want, what you won't tolerate, and how to ask for clarity without flinching.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- CALENDAR — embedded -->
+<!-- ============================================ -->
+<section class="s" id="calendar">
+  <div class="section-head">
+    <div class="kicker">The 10-week roadmap</div>
+    <h2>Here's <em>every</em> session.</h2>
+    <p class="lede">Live Tuesday sessions, Thursday office hours, plus dedicated Saturday workshops when topics warrant the deeper dive.</p>
+  </div>
+  <div class="calendar-wrap">
+    <iframe class="calendar-iframe" src="/sod-calendar/" title="SOD June 2026 Calendar"></iframe>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- FAST ACTION BONUS -->
+<!-- ============================================ -->
+<div class="bonus-banner">
+  <div class="kicker">🔥 Fast Action Bonus · First 100 only</div>
+  <h2>Lock in tonight. <em>Two unlocks</em> instantly.</h2>
+  <p class="lede">For the first 100 people who say yes during this window, we're adding two bonuses that won't exist after 9 PM CT.</p>
+
+  <div class="bonus-stack">
+    <div class="bonus-item">
+      <div class="price-tag">$997 value</div>
+      <div class="bonus-tag">Bonus #1</div>
+      <h3><em>SOD Pro</em> trial — 4 free Pro calls</h3>
+      <p>You get a 4-call trial of School of Dating <em>Pro</em>, our 1-on-1 coaching tier, included with your SOD enrollment. Taste the deeper work. Upgrade to full Pro if it's for you, or keep coasting on SOD core — your call.</p>
+    </div>
+    <div class="bonus-item">
+      <div class="price-tag">$497 value</div>
+      <div class="bonus-tag">Bonus #2</div>
+      <h3>Live <em>Dr. Henry Cloud</em> workshop</h3>
+      <p>An exclusive 90-minute live workshop with Dr. Cloud (author of <em>Boundaries</em>, <em>How to Get a Date Worth Keeping</em>). The dude wrote the book. Twice. Q&amp;A included.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- TIER COMPARISON / ENROLL -->
+<!-- ============================================ -->
+<section class="s" id="tiers">
+  <div class="section-head">
+    <div class="kicker">Pick your path</div>
+    <h2>Two ways <em>in</em>.</h2>
+    <p class="lede">Most people start with SOD and add the Pro trial via the Fast Action Bonus. A small group is ready for full Pro coaching from day one.</p>
+  </div>
+
+  <div class="compare">
+
+    <!-- SOD -->
+    <div class="tier sod recommended" id="enroll">
+      <div class="tier-head">
+        <div class="tier-tag">School of Dating</div>
+        <h3><em>SOD</em></h3>
+        <p class="tier-desc">10 weeks of guided cohort + community + weekly live teaching.</p>
+      </div>
+
+      <div class="price-row">
+        <span class="price-old">$1,697</span>
+        <span class="price">$997</span>
+        <span class="price-each">one-time</span>
+      </div>
+
+      <ul>
+        <li><strong>10 live sessions</strong> with Kait &amp; JJ (Tuesdays 7–9 PM CT)</li>
+        <li><strong>Weekly office hours</strong> (Thursdays 7–8 PM CT)</li>
+        <li><strong>Private cohort community</strong> · 200-seat hard cap</li>
+        <li><strong>Lifetime replay access</strong> to all sessions</li>
+        <li><strong>SOD workbook + frameworks</strong></li>
+        <li>🔥 <strong>Fast Action Bonus:</strong> SOD Pro trial (4 calls) + Dr. Cloud workshop</li>
+      </ul>
+
+      <div class="tier-cta">
+        <a class="btn primary" href="https://heartofdating.thrivecart.com/sod-june-2026/" target="_blank" rel="noopener">Get SOD · $997</a>
+        <p class="alt-pay">or <a href="https://heartofdating.thrivecart.com/sod-june-2026-6pay/" target="_blank" rel="noopener">6-month plan available</a> [CONFIRM URL]</p>
+      </div>
+    </div>
+
+    <!-- SOD PRO -->
+    <div class="tier pro">
+      <div class="tier-head">
+        <div class="tier-tag">School of Dating Pro</div>
+        <h3><em>SOD Pro</em></h3>
+        <p class="tier-desc">Everything in SOD + 1-on-1 coaching cadence with our team.</p>
+      </div>
+
+      <div class="price-row">
+        <span class="price">$2,500</span>
+        <span class="price-each">one-time</span>
+      </div>
+
+      <ul>
+        <li><strong>Everything in SOD</strong> · all 10 sessions + replays + community</li>
+        <li><strong>Personalized 1-on-1 coaching calls</strong> with the Pro team</li>
+        <li><strong>Direct DM access</strong> for in-between-session support</li>
+        <li><strong>Custom dating action plan</strong> tailored to you</li>
+        <li><strong>Priority cohort placement</strong> + smaller Pro-only breakouts</li>
+        <li>🔥 <strong>Fast Action Bonus included</strong> by default</li>
+      </ul>
+
+      <div class="tier-cta">
+        <a class="btn secondary" href="https://heartofdating.thrivecart.com/sod-pro-june-2026/" target="_blank" rel="noopener">Get SOD Pro · $2,500</a>
+        <p class="alt-pay">or <a href="https://heartofdating.thrivecart.com/sod-pro-june-2026-3pay/" target="_blank" rel="noopener">3-month plan: $833/mo × 3</a> [CONFIRM URL]</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- FAQ -->
+<!-- ============================================ -->
+<section class="s" id="faq">
+  <div class="section-head">
+    <div class="kicker">Common questions</div>
+    <h2>Want to know more?</h2>
+  </div>
+
+  <div class="faq">
+    <details>
+      <summary>What if I can't attend a session live?</summary>
+      <p>All 10 sessions are recorded and posted in the private cohort community within 24 hours. You get lifetime replay access. Many cohort members watch replays + show up to office hours for personalized integration.</p>
+    </details>
+    <details>
+      <summary>Is this just for women, or for everyone?</summary>
+      <p>School of Dating is for everyone pursuing a healthy Christian relationship — single men and women, all stages of healing, both newly-single and long-single. The curriculum applies universally; the community is mixed.</p>
+    </details>
+    <details>
+      <summary>What does "SOD Pro trial" actually mean?</summary>
+      <p>If you grab the Fast Action Bonus, you get 4 free 1-on-1 coaching calls (a $997 value) inside the regular SOD cohort window. After your 4 calls you can either upgrade to full SOD Pro at a member rate or stay in SOD core — no pressure.</p>
+    </details>
+    <details>
+      <summary>When does the cohort actually start?</summary>
+      <p>Tuesday June 9, 2026 at 7 PM CT. You'll get onboarding materials starting the day after you enroll, plus a welcome session in early June to get oriented.</p>
+    </details>
+    <details>
+      <summary>Refund policy?</summary>
+      <p>14-day money-back guarantee from enrollment. After 14 days, no refunds — we honor the commitment of the people who are in the cohort with you.</p>
+    </details>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- STICKY CTA -->
+<!-- ============================================ -->
+<div class="cta-sticky" id="sticky">
+  <span class="seats-inline"><strong id="sticky-fab">—</strong>/100 Fast Action seats left</span>
+  <span class="timer-inline">closes <span id="sticky-timer">—:—:—</span></span>
+  <a class="btn primary" href="#enroll">Enroll · $997 →</a>
+</div>
+
+<footer>
+  <div>Heart of Dating · School of Dating · Cohort begins June 9, 2026</div>
+  <div class="marks">
+    <a href="https://heartofdating.com/privacy">Privacy</a>
+    <a href="https://heartofdating.com/terms">Terms</a>
+    <a href="mailto:support@heartofdating.com">Support</a>
+  </div>
+</footer>
+
+<script>
+//
+// LIVE TRACKER — polls /api/sod-counts every 8s
+// Auto-animates count changes + injects new welcome lines.
+//
+const POLL_INTERVAL_MS = 8000;
+const CART_CLOSE_ISO = "2026-05-29T02:00:00Z";  // 9 PM CT Thu May 28
+
+let lastTotal = null;
+let lastFab = null;
+let lastSignupKeys = new Set();
+
+const $ = (id) => document.getElementById(id);
+
+async function fetchCounts() {
+  try {
+    const r = await fetch("/api/sod-counts", { cache: "no-store" });
+    const d = await r.json();
+    if (!d.ok) return;
+    applyCounts(d);
+    localStorage.setItem("sod_last", JSON.stringify(d));
+  } catch (e) {
+    // Fail silent — last known counts stay visible
+    const cached = localStorage.getItem("sod_last");
+    if (cached && lastTotal === null) applyCounts(JSON.parse(cached));
+  }
+}
+
+function applyCounts(d) {
+  // FAB row
+  $("fab-taken").textContent = d.fabTaken;
+  $("fab-remaining").textContent = d.fabRemaining;
+  $("fab-cap").textContent = d.capFab;
+  $("fab-bar").style.width = `${Math.min(100, d.fabTaken / d.capFab * 100)}%`;
+
+  // Total row
+  $("total-taken").textContent = d.total;
+  $("total-cap").textContent = d.capTotal;
+  $("total-bar").style.width = `${Math.min(100, d.total / d.capTotal * 100)}%`;
+
+  // Sticky
+  $("sticky-fab").textContent = d.fabRemaining;
+
+  // Bump animation if count changed
+  if (lastFab !== null && d.fabTaken > lastFab) {
+    $("fab-taken").classList.remove("bump");
+    void $("fab-taken").offsetWidth;
+    $("fab-taken").classList.add("bump");
+  }
+  if (lastTotal !== null && d.total > lastTotal) {
+    $("total-taken").classList.remove("bump");
+    void $("total-taken").offsetWidth;
+    $("total-taken").classList.add("bump");
+  }
+  lastFab = d.fabTaken;
+  lastTotal = d.total;
+
+  // Welcome stream
+  updateStream(d.recentSignups);
+}
+
+function updateStream(signups) {
+  if (!signups || !signups.length) return;
+  const track = $("stream-track");
+
+  // Build the items (duplicated for seamless scroll)
+  const buildLine = (s) => {
+    const name = `${s.firstName}${s.lastInitial ? ' ' + s.lastInitial + '.' : ''}`;
+    const where = s.state ? ` · from ${s.state}` : '';
+    const when = timeAgo(s.addedAt);
+    const key = `${name}|${s.addedAt}`;
+    const isNew = !lastSignupKeys.has(key);
+    return `<div class="stream-item ${isNew ? 'new' : ''}">
+      <span class="emoji">🎉</span>
+      <span>Welcome <strong>${escapeHtml(name)}</strong>${escapeHtml(where)}</span>
+      <span class="when">${when}</span>
+    </div>`;
+  };
+
+  const html = signups.map(buildLine).join('');
+  // duplicate for seamless infinite-scroll marquee
+  track.innerHTML = html + html;
+
+  // remember keys for next diff
+  lastSignupKeys = new Set(signups.map(s => `${s.firstName}${s.lastInitial ? ' ' + s.lastInitial + '.' : ''}|${s.addedAt}`));
+}
+
+function timeAgo(iso) {
+  if (!iso) return '';
+  const now = Date.now();
+  const then = new Date(iso).getTime();
+  const sec = Math.max(0, Math.floor((now - then) / 1000));
+  if (sec < 60) return `${sec}s ago`;
+  if (sec < 3600) return `${Math.floor(sec/60)}m ago`;
+  if (sec < 86400) return `${Math.floor(sec/3600)}h ago`;
+  return `${Math.floor(sec/86400)}d ago`;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+
+//
+// COUNTDOWN
+//
+function tick() {
+  const close = new Date(CART_CLOSE_ISO).getTime();
+  const now = Date.now();
+  let diff = Math.max(0, Math.floor((close - now) / 1000));
+  const h = Math.floor(diff / 3600);
+  const m = Math.floor((diff % 3600) / 60);
+  const s = diff % 60;
+  $("t-h").textContent = String(h).padStart(2, '0');
+  $("t-m").textContent = String(m).padStart(2, '0');
+  $("t-s").textContent = String(s).padStart(2, '0');
+  $("sticky-timer").textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+//
+// STICKY VISIBILITY
+//
+function onScroll() {
+  const sticky = $("sticky");
+  // hide when at top, show after scrolling past hero
+  if (window.scrollY > window.innerHeight * 0.6) {
+    sticky.classList.remove("hidden");
+  } else {
+    sticky.classList.add("hidden");
+  }
+}
+
+// Init
+document.addEventListener("DOMContentLoaded", () => {
+  fetchCounts();
+  setInterval(fetchCounts, POLL_INTERVAL_MS);
+  tick();
+  setInterval(tick, 1000);
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  // Boot from localStorage if API is slow
+  const cached = localStorage.getItem("sod_last");
+  if (cached) {
+    try { applyCounts(JSON.parse(cached)); } catch (e) {}
+  }
+});
+</script>
+
+</body>
+</html>
