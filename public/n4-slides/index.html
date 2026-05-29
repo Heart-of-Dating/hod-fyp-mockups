@@ -1,0 +1,2582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1600, initial-scale=1">
+<title>FYP Night 4 — The Final SOD Pitch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600;700;800&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6f0;
+  --ink: #1d1815;
+  --ink-soft: #4a3f37;
+  --muted: #8a7e72;
+  --line: #e8dfd2;
+  --gold: #c89a4a;
+  --gold-deep: #8a6627;
+  --gold-light: #f5e0b8;
+  --rose: #b85c5c;
+  --rose-deep: #8a3a3a;
+  --rose-burgundy: #6e2a2a;
+  --sage: #6e8071;
+  --blue: #6c84a3;
+  --cream: #efe4cf;
+  --paper: #fffaf2;
+  --dark: #1d1815;
+  --shadow: 0 30px 80px -30px rgba(40,28,18,.25);
+  --shadow-strong: 0 40px 100px -30px rgba(40,28,18,.4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  overflow: hidden;
+}
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 5vh 7vw;
+  flex-direction: column; justify-content: center;
+  opacity: 0; transition: opacity .35s ease;
+}
+.slide.active { display: flex; opacity: 1; }
+
+.eyebrow {
+  font-size: 0.85rem; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--gold-deep);
+  font-weight: 600; margin-bottom: 1.5rem;
+}
+.eyebrow .dot {
+  display: inline-block; width: 6px; height: 6px;
+  background: var(--gold); border-radius: 50%;
+  margin: 0 .8em; vertical-align: middle;
+}
+.script {
+  font-family: 'Caveat', cursive;
+  font-weight: 500;
+  font-style: italic;
+}
+h1.title {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: clamp(3.5rem, 7vw, 7.5rem);
+  line-height: 0.95; letter-spacing: -0.025em;
+}
+h1.title em { font-style: italic; font-weight: 400; color: var(--gold-deep); }
+h2.section {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  line-height: 1.0; letter-spacing: -0.02em;
+}
+h2.section em { font-style: italic; color: var(--gold-deep); font-weight: 400; }
+h3 {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 1; letter-spacing: -0.02em;
+}
+h3 em { font-style: italic; }
+.lede {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  line-height: 1.35; font-weight: 300;
+  color: var(--ink-soft); max-width: 38ch;
+}
+.lede em { color: var(--gold-deep); font-style: italic; }
+.kicker {
+  font-size: 1.05rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--muted);
+  font-weight: 500;
+}
+.giant {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: clamp(4rem, 9vw, 10rem);
+  line-height: .9; letter-spacing: -0.04em;
+}
+.giant em { font-style: italic; font-weight: 400; color: var(--gold-deep); }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; align-items: center; height: 100%; }
+.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3vw; align-items: stretch; }
+.center { text-align: center; align-items: center; }
+.center .lede { margin: 0 auto; }
+.stack > * + * { margin-top: 1.5rem; }
+
+.theme-rose { background: linear-gradient(135deg, #faf2ef 0%, var(--bg) 50%); }
+.theme-sage { background: linear-gradient(135deg, #f1f3ee 0%, var(--bg) 50%); }
+.theme-gold { background: linear-gradient(135deg, #faf4e6 0%, var(--bg) 50%); }
+.theme-terra { background: #c47a6e; color: #faf6f0; }
+.theme-terra h1, .theme-terra h2, .theme-terra h3, .theme-terra .lede, .theme-terra .giant { color: #faf6f0; }
+.theme-terra h1 em, .theme-terra h2 em, .theme-terra .giant em { color: #fff1d8; }
+.theme-terra .eyebrow, .theme-terra .kicker { color: #fff1d8; }
+.theme-dark { background: #1a1410; color: var(--bg); }
+.theme-dark .lede, .theme-dark h1, .theme-dark h2, .theme-dark h3 { color: var(--bg); }
+.theme-dark .eyebrow { color: var(--gold); }
+.theme-dark h1 em, .theme-dark h2 em, .theme-dark .giant em { color: var(--gold); }
+
+.pull {
+  font-family: 'Fraunces', serif; font-style: italic;
+  font-weight: 300;
+  font-size: clamp(2rem, 3.5vw, 3.5rem);
+  line-height: 1.15; letter-spacing: -0.015em;
+  color: var(--ink); max-width: 22ch;
+}
+.tag-pill {
+  display: inline-block; padding: 0.4rem 1rem;
+  border-radius: 999px; background: var(--cream);
+  border: 1px solid var(--line);
+  font-size: 0.8rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--ink-soft);
+  font-weight: 600;
+}
+.tag-pill.gold { background: #f5e8c8; color: var(--gold-deep); border-color: #e0c890; }
+.tag-pill.rose { background: rgba(196,122,110,.15); color: var(--rose-deep); border-color: rgba(196,122,110,.4); }
+
+/* Photo frames */
+.photo-frame {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow-strong);
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+.photo-frame img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.photo-frame.tall { aspect-ratio: 3/4; }
+.photo-frame.wide { aspect-ratio: 16/10; }
+.photo-frame.square { aspect-ratio: 1/1; }
+
+/* Marriage photo collage */
+.marriage-collage {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-auto-rows: 100px;
+  gap: 0.6rem;
+  height: 100%;
+  max-height: 70vh;
+}
+.marriage-collage .photo-frame { width: 100%; height: 100%; aspect-ratio: auto; box-shadow: 0 20px 50px -25px rgba(40,28,18,.25); }
+.marriage-collage .photo-frame:nth-child(1) { grid-column: span 3; grid-row: span 3; }
+.marriage-collage .photo-frame:nth-child(2) { grid-column: span 2; grid-row: span 2; }
+.marriage-collage .photo-frame:nth-child(3) { grid-column: span 3; grid-row: span 2; }
+.marriage-collage .photo-frame:nth-child(4) { grid-column: span 2; grid-row: span 3; }
+.marriage-collage .photo-frame:nth-child(5) { grid-column: span 3; grid-row: span 3; }
+.marriage-collage .photo-frame:nth-child(6) { grid-column: span 3; grid-row: span 3; }
+.marriage-collage .photo-frame:nth-child(7) { grid-column: span 2; grid-row: span 2; }
+.marriage-collage .photo-frame:nth-child(8) { grid-column: span 3; grid-row: span 2; }
+
+/* Calendar */
+.cal { display: flex; flex-direction: column; gap: 1.6rem; }
+.cal-row { display: grid; grid-template-columns: 140px 1fr; gap: 2rem; align-items: stretch; }
+.cal-label {
+  font-size: .72rem; letter-spacing:.28em;
+  text-transform: uppercase; font-weight: 700;
+  color: var(--muted); padding-top: 1.5rem;
+  border-right: 1px solid var(--line);
+  padding-right: 1.5rem; text-align: right;
+}
+.cal-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.cal-cards.three { grid-template-columns: repeat(3, 1fr); }
+.cal-card {
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: 8px; padding: 1.4rem 1.6rem;
+  display: grid; grid-template-columns: 80px 1fr;
+  gap: 1.4rem; align-items: center;
+  box-shadow: 0 14px 36px -22px rgba(40,28,18,.15);
+}
+.cal-card.main { border-left: 4px solid var(--gold); background: linear-gradient(135deg, #faf4e6 0%, var(--paper) 60%); }
+.cal-card.bonus { border-left: 3px solid var(--sage); }
+.cal-card.tonight { border-left: 4px solid var(--rose); background: linear-gradient(135deg, #faf2ef 0%, var(--paper) 60%); }
+.cal-date { text-align: center; border-right: 1px solid var(--line); padding-right: 1rem; }
+.cal-day { font-size: .68rem; letter-spacing:.2em; text-transform: uppercase; font-weight: 700; color: var(--gold-deep); }
+.cal-card.bonus .cal-day { color: var(--sage); }
+.cal-card.tonight .cal-day { color: var(--rose-deep); }
+.cal-num { font-family: 'Fraunces', serif; font-weight: 300; font-size: 2.6rem; line-height: 1; color: var(--ink); margin: .15rem 0; }
+.cal-mo { font-size: .7rem; letter-spacing:.2em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.cal-time { font-size: .7rem; letter-spacing:.2em; text-transform: uppercase; font-weight: 600; color: var(--gold-deep); margin-bottom: .35rem; }
+.cal-card.bonus .cal-time { color: var(--sage); }
+.cal-card.tonight .cal-time { color: var(--rose-deep); }
+.cal-speaker { font-family: 'Fraunces', serif; font-weight: 500; font-size: 1.15rem; color: var(--ink); line-height: 1.1; margin-bottom: .25rem; }
+.cal-title { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: .95rem; line-height: 1.3; color: var(--ink-soft); }
+
+/* Progress + nav */
+.chrome {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 2rem; z-index: 100;
+  font-size: 0.78rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--muted);
+  font-weight: 500;
+}
+.progress {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 3px; background: var(--line); z-index: 100;
+}
+.progress > div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--rose), var(--rose-burgundy));
+  width: 0%; transition: width .35s ease;
+}
+.nav-hint kbd {
+  display: inline-block; padding: 2px 8px;
+  border: 1px solid var(--rose); border-radius: 3px;
+  font-size: 0.7rem; margin: 0 2px;
+  color: var(--ink-soft); background: var(--paper);
+}
+
+/* Phase blocks */
+.phase-split {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 3vw;
+  align-items: center;
+  height: 100%;
+}
+.phase-pic-frame {
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow-strong);
+  aspect-ratio: 4/3;
+  max-height: 72vh;
+  position: relative;
+}
+.phase-pic-frame img { width: 100%; height: 100%; object-fit: cover; object-position: center center; }
+.phase-pic-frame .phase-tag-overlay {
+  position: absolute;
+  top: 1.5rem; left: 1.5rem;
+  background: rgba(255,255,255,.9);
+  border-radius: 999px;
+  padding: 0.4rem 1.2rem;
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-style: italic;
+  font-size: 1.6rem;
+  color: var(--ink);
+}
+.phase-body h3 {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: clamp(2rem, 3.5vw, 3.5rem);
+  line-height: 1;
+  margin-bottom: 2rem;
+}
+.phase-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.phase-list li {
+  display: flex;
+  gap: 1.2rem;
+  align-items: baseline;
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: clamp(1.2rem, 1.6vw, 1.6rem);
+  line-height: 1.35;
+  color: var(--ink);
+}
+.phase-list .n {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  color: var(--gold-deep);
+  flex: 0 0 auto;
+  line-height: 1;
+}
+
+/* Archetype slides */
+.archetype {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  text-align: center;
+}
+.archetype-hed {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: clamp(3rem, 6vw, 6.5rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: #faf6f0;
+  text-transform: uppercase;
+  max-width: 22ch;
+}
+.archetype-q {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.6rem, 2.6vw, 2.6rem);
+  color: #fff1d8;
+  letter-spacing: -0.01em;
+}
+
+/* Value table */
+.value-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--paper);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.value-table th, .value-table td {
+  padding: 1.2rem 1.8rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: 1.25rem;
+  color: var(--ink);
+}
+.value-table.compact th, .value-table.compact td { padding: 0.9rem 1.4rem; font-size: 1.05rem; }
+.value-table th {
+  background: var(--cream);
+  font-weight: 500;
+  font-size: 0.78rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-family: 'Inter', sans-serif;
+}
+.value-table td:last-child {
+  text-align: right;
+  font-weight: 400;
+  font-style: italic;
+  font-variant-numeric: tabular-nums;
+}
+.value-table tr.bonus td { background: rgba(200,154,74,.10); color: var(--gold-deep); font-style: normal; font-weight: 500; }
+.value-table tr.total td {
+  background: var(--gold-deep);
+  color: #fff;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 1.4rem;
+}
+.value-table tr.offer td {
+  background: var(--rose);
+  color: #fff;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 1.6rem;
+  padding: 1.4rem 1.8rem;
+}
+.value-table tr:last-child th, .value-table tr:last-child td { border-bottom: 0; }
+
+/* Tiers — punched up */
+.tiers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.tier {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 2.2rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: var(--shadow-strong);
+  position: relative;
+}
+.tier.sod { border-top: 6px solid var(--gold); }
+.tier.pro { border-top: 6px solid var(--rose); }
+.tier h4 {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: 2rem;
+  line-height: 1;
+}
+.tier .tier-tag {
+  font-size: .7rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: .3rem;
+}
+.tier.sod .tier-tag { color: var(--gold-deep); }
+.tier.pro .tier-tag { color: var(--rose); }
+.tier ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.tier li {
+  font-size: 1rem;
+  color: var(--ink-soft);
+  padding-left: 1.6rem;
+  position: relative;
+  line-height: 1.4;
+}
+.tier li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--gold-deep);
+  font-weight: 700;
+}
+.tier.pro li::before { color: var(--rose); }
+
+/* punchy 20× calls badge */
+.calls-badge {
+  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+  color: #fff;
+  border-radius: 10px;
+  padding: 1.1rem 1.4rem;
+  text-align: center;
+  margin: 0.6rem 0;
+  box-shadow: 0 14px 30px -14px rgba(196,122,110,.6);
+  position: relative;
+}
+.calls-badge .num {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 2.3rem;
+  line-height: 1;
+}
+.calls-badge .label {
+  font-size: .7rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 0.4rem;
+}
+
+.tier .price-row {
+  margin-top: auto;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  justify-content: flex-end;
+}
+.tier .price-old {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: 1.6rem;
+  color: var(--muted);
+  text-decoration: line-through;
+}
+.tier .price-new {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 3.2rem;
+  line-height: 1;
+  color: var(--ink);
+}
+.tier.pro .price-new { color: var(--rose-deep); }
+.tier.sod.recommended { background: linear-gradient(135deg, #fffaf0 0%, var(--paper) 80%); }
+.tier.sod.recommended::before {
+  content: "⭐ MOST POPULAR · TONIGHT ⭐";
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
+  color: #fff;
+  font-size: 0.95rem;
+  letter-spacing: 0.22em;
+  font-weight: 800;
+  padding: 0.8rem 1.8rem;
+  border-radius: 999px;
+  box-shadow: 0 18px 36px -10px rgba(138,102,39,.6);
+  white-space: nowrap;
+  animation: glowPop 2.4s ease-in-out infinite;
+}
+@keyframes glowPop {
+  0%, 100% { box-shadow: 0 18px 36px -10px rgba(138,102,39,.6); transform: translateX(-50%) scale(1); }
+  50% { box-shadow: 0 22px 48px -8px rgba(200,154,74,.8); transform: translateX(-50%) scale(1.04); }
+}
+
+/* Scholarship code-word slide */
+.sod-slide {
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(255,255,255,.08), transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(0,0,0,.15), transparent 60%),
+    #b8504a;
+}
+.sod-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 5vw;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+.price-row-big {
+  display: flex; align-items: center;
+  gap: 1.5rem; margin-top: 2.5rem;
+}
+.strike {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: clamp(2.5rem, 4vw, 3.8rem);
+  color: rgba(255,255,255,.55);
+  text-decoration: line-through;
+  text-decoration-thickness: 3px;
+}
+.price-arrow { font-size: 2rem; color: rgba(255,255,255,.6); font-weight: 300; }
+.price-zero-wrap {
+  position: relative; padding: 0.5rem 2rem;
+  display: inline-flex; align-items: baseline;
+}
+.price-circle {
+  position: absolute; inset: -10px -10px;
+  width: calc(100% + 20px); height: calc(100% + 20px); z-index: 1;
+}
+.price-zero {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: clamp(3.5rem, 6vw, 5.5rem);
+  color: #fff; line-height: 1; position: relative; z-index: 2;
+}
+.price-bangs {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: clamp(2.5rem, 4vw, 4rem);
+  color: #f5d49a; margin-left: .15em; line-height: 1;
+  position: relative; z-index: 2;
+}
+.codeword {
+  background: #1a1310;
+  border: 2px solid #f5d49a;
+  border-radius: 8px;
+  padding: 2.2rem 2.5rem;
+  text-align: center;
+  box-shadow: 0 30px 80px -20px rgba(0,0,0,.4);
+  position: relative;
+}
+.codeword::before {
+  content: ""; position: absolute; inset: -8px;
+  border: 1px dashed rgba(245,212,154,.4);
+  border-radius: 10px; pointer-events: none;
+}
+.codeword-label {
+  font-size: .75rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: #f5d49a;
+  font-weight: 700; margin-bottom: 1rem;
+}
+.codeword-value {
+  font-family: 'Fraunces', serif; font-weight: 600;
+  font-size: clamp(2.8rem, 4.5vw, 4.5rem);
+  color: #fff; letter-spacing: 0.06em; line-height: 1;
+}
+.codeword-hint {
+  font-family: 'Fraunces', serif; font-style: italic;
+  font-weight: 300; font-size: 1rem;
+  color: rgba(255,255,255,.65); margin-top: 1rem;
+}
+
+/* Bonus banner */
+.bonus-banner-bg {
+  background: linear-gradient(135deg, #2a1f1a 0%, #3d2a1c 100%);
+  color: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+.bonus-banner-bg::before {
+  content: "";
+  position: absolute;
+  top: -50%; right: -10%;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(200,154,74,.25), transparent 70%);
+  pointer-events: none;
+}
+.bonus-banner-bg .eyebrow { color: var(--gold-light); }
+.bonus-banner-bg h2, .bonus-banner-bg h1 { color: var(--bg); }
+.bonus-banner-bg h2 em, .bonus-banner-bg h1 em { color: var(--gold-light); }
+.bonus-banner-bg .lede { color: rgba(255,255,255,.7); }
+
+/* FAB clickfunnels-style bonus slides */
+.fab-bonus {
+  background: var(--bg);
+}
+.fab-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 4vw;
+  align-items: center;
+  height: 100%;
+}
+.fab-body { display: flex; flex-direction: column; gap: 1.2rem; }
+.fab-tag {
+  font-size: 0.8rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--rose);
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+}
+.fab-tag .num {
+  background: var(--rose);
+  color: #fff;
+  padding: .3rem .7rem;
+  border-radius: 6px;
+  font-size: .82rem;
+  letter-spacing: .14em;
+}
+.fab-headline {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: clamp(2.6rem, 4.5vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.fab-headline em { font-style: italic; color: var(--gold-deep); }
+.fab-sub {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.3rem, 1.8vw, 1.7rem);
+  color: var(--ink-soft);
+  max-width: 38ch;
+  line-height: 1.35;
+}
+.fab-value-pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  background: var(--ink);
+  color: #fff;
+  padding: 1.3rem 2.2rem;
+  border-radius: 999px;
+  margin-top: 1rem;
+  box-shadow: 0 18px 40px -16px rgba(0,0,0,.4);
+  align-self: flex-start;
+}
+.fab-value-pill .val-num {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-style: italic;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--gold-light);
+}
+.fab-value-pill .val-tx {
+  font-size: 0.78rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: rgba(255,255,255,.85);
+}
+.fab-pic-wrap {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow-strong);
+  aspect-ratio: 1/1;
+  max-height: 78vh;
+}
+.fab-pic-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.fab-cap {
+  position: absolute;
+  top: 1.4rem;
+  right: 1.4rem;
+  background: var(--ink);
+  color: #fff;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  box-shadow: 0 10px 20px -8px rgba(0,0,0,.4);
+}
+.fab-cap em { font-style: normal; color: var(--gold-light); }
+.fab-placeholder {
+  background: linear-gradient(135deg, var(--cream), var(--paper));
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: .82rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Live tracker slide — punched up */
+.live-stage {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(200,154,74,.18), transparent 70%),
+    linear-gradient(135deg, #1d1815 0%, #2a2117 100%);
+  color: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+.live-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 80% 110%, rgba(196,122,110,.15), transparent 50%);
+  pointer-events: none;
+}
+.live-stage .eyebrow { color: var(--gold); }
+.live-stage h1 { color: var(--bg); }
+.live-stage h1 em { color: var(--gold); }
+
+.live-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(196,122,110,.18);
+  border: 1px solid var(--rose);
+  border-radius: 999px;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.78rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: #ffc4b8;
+  font-weight: 700;
+}
+.live-banner::before {
+  content: "";
+  width: 8px; height: 8px;
+  background: #ff6651;
+  border-radius: 50%;
+  animation: pulseDot 1.2s ease-in-out infinite;
+  box-shadow: 0 0 12px #ff6651;
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+.countdown-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+.cd-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(0,0,0,.4);
+  border: 1px solid rgba(200,154,74,.4);
+  border-radius: 12px;
+  padding: 1.1rem 1.4rem;
+  min-width: 130px;
+  position: relative;
+  overflow: hidden;
+}
+.cd-unit::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  animation: scan 2.5s ease-in-out infinite;
+}
+@keyframes scan {
+  0%, 100% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+}
+.cd-num {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: 5rem;
+  line-height: 1;
+  color: var(--bg);
+  font-variant-numeric: tabular-nums;
+}
+.cd-label {
+  font-size: .7rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  font-weight: 700;
+  margin-top: .6rem;
+}
+
+.tracker-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 0.8fr;
+  gap: 1.8rem;
+  margin-top: 2rem;
+  align-items: stretch;
+}
+.tracker-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(200,154,74,.4);
+  border-radius: 14px;
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  backdrop-filter: blur(4px);
+}
+.tracker-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.tracker-row:last-child { border-bottom: 0; padding-bottom: 0; }
+.tracker-label {
+  font-size: .78rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--gold-light);
+}
+.tracker-count {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: 3.4rem;
+  line-height: 1;
+  color: var(--bg);
+  font-variant-numeric: tabular-nums;
+}
+.tracker-count .of {
+  font-size: 1.2rem;
+  color: rgba(255,255,255,.55);
+  font-style: italic;
+}
+.tracker-bar {
+  height: 8px;
+  background: rgba(255,255,255,.1);
+  border-radius: 999px;
+  margin-top: .6rem;
+  overflow: hidden;
+  width: 100%;
+}
+.tracker-bar > div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  width: 0%;
+  border-radius: 999px;
+  transition: width .8s ease;
+  box-shadow: 0 0 16px var(--gold);
+}
+.bump { animation: bump .55s cubic-bezier(.2,.7,.3,1.4); }
+@keyframes bump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.32); color: var(--gold-light); text-shadow: 0 0 28px var(--gold); }
+  100% { transform: scale(1); }
+}
+
+/* Confetti explosion */
+.confetti-stage {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 50;
+}
+.confetti-piece {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  animation: confettiFly 2.4s cubic-bezier(.16,1,.3,1) forwards;
+  pointer-events: none;
+}
+@keyframes confettiFly {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(0deg) scale(0);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(180deg) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(720deg) scale(0.4);
+  }
+}
+
+/* Just enrolled mega banner */
+.celebrate-banner {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+  color: var(--ink);
+  padding: 1.5rem 3rem;
+  border-radius: 999px;
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 2.2rem;
+  font-style: italic;
+  letter-spacing: -0.01em;
+  box-shadow: 0 30px 80px -10px rgba(200,154,74,.8), 0 0 60px rgba(245,224,184,.6);
+  z-index: 60;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: celebratePop 3.2s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+@keyframes celebratePop {
+  0% { transform: translate(-50%, -50%) scale(0) rotate(-8deg); opacity: 0; }
+  15% { transform: translate(-50%, -50%) scale(1.15) rotate(2deg); opacity: 1; }
+  25% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+  70% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(.85) rotate(0deg); opacity: 0; }
+}
+.celebrate-banner .who {
+  display: block;
+  font-size: 1.2rem;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: .3rem;
+}
+
+.qr-card {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0.8rem;
+  background: var(--bg);
+  border-radius: 14px;
+  padding: 1.2rem;
+  box-shadow: var(--shadow-strong);
+}
+.qr-card img {
+  width: 200px; height: 200px;
+  border-radius: 6px;
+}
+.qr-card .qr-label {
+  font-size: .7rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+.qr-card .qr-url {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--rose-deep);
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+
+.stream-track {
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  max-height: 300px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(200,154,74,.5) transparent;
+}
+.stream-track::-webkit-scrollbar { width: 8px; }
+.stream-track::-webkit-scrollbar-track { background: transparent; }
+.stream-track::-webkit-scrollbar-thumb { background: rgba(200,154,74,.5); border-radius: 4px; }
+.stream-track::-webkit-scrollbar-thumb:hover { background: rgba(200,154,74,.7); }
+.stream-item {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  padding: .55rem 0;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--bg);
+}
+.stream-item strong { font-style: normal; font-weight: 500; color: var(--gold-light); }
+.stream-item .when {
+  margin-left: auto;
+  font-size: .68rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+}
+.stream-item.new {
+  animation: streamGlow 2.5s ease-out;
+}
+@keyframes streamGlow {
+  0% { color: #fff; transform: scale(1.04); background: rgba(245,212,154,.1); border-radius: 6px; }
+  100% { color: var(--bg); transform: scale(1); background: transparent; }
+}
+
+/* CTA URL */
+.cta-url {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.6rem, 5.5vw, 5.5rem);
+  color: var(--rose-deep);
+  letter-spacing: -0.01em;
+  text-transform: lowercase;
+  text-decoration: none;
+}
+.cta-url:hover { color: var(--gold-deep); }
+
+/* Lock-in deadline banner */
+.deadline-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.9rem 1.8rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  box-shadow: 0 20px 40px -16px rgba(196,122,110,.6);
+}
+.deadline-banner .clock { font-size: 1.3rem; }
+
+/* Video placeholder */
+.video-placeholder {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  aspect-ratio: 16/9;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: var(--shadow-strong);
+  position: relative;
+  overflow: hidden;
+}
+.video-placeholder::before {
+  content: "";
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--rose);
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.15;
+}
+.video-placeholder .play-icon {
+  width: 0; height: 0;
+  border-left: 26px solid var(--rose);
+  border-top: 18px solid transparent;
+  border-bottom: 18px solid transparent;
+  margin-left: 6px;
+  position: relative;
+  z-index: 2;
+}
+.video-placeholder .vid-label {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 1.4rem;
+  color: var(--ink);
+  position: relative;
+  z-index: 2;
+}
+.video-placeholder .vid-meta {
+  font-size: .72rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+  position: relative;
+  z-index: 2;
+}
+
+/* N4 — Scholarship entry */
+.scholar-entry-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4vw;
+  align-items: center;
+  width: 100%;
+}
+.scholar-form {
+  display: flex; gap: .8rem; margin-top: 2rem;
+}
+.scholar-form input {
+  flex: 1;
+  background: rgba(255,255,255,.08);
+  border: 1px solid var(--rose);
+  border-radius: 999px;
+  padding: 1.1rem 1.6rem;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  outline: none;
+}
+.scholar-form input::placeholder { color: rgba(255,255,255,.5); }
+.scholar-form input:focus { border-color: var(--gold); background: rgba(255,255,255,.14); }
+.scholar-form button {
+  background: linear-gradient(135deg, var(--rose) 0%, var(--rose-burgundy) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 1.1rem 2rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 18px 40px -16px rgba(184,92,92,.6);
+}
+.scholar-form button:hover { transform: translateY(-1px); }
+.scholar-entries {
+  background: rgba(0,0,0,.3);
+  border: 1px solid rgba(245,212,154,.3);
+  border-radius: 14px;
+  padding: 1.6rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.scholar-entries .se-label {
+  font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+  font-weight: 700; color: var(--gold-light); margin-bottom: 1rem;
+  display: flex; align-items: center; gap: .6rem;
+}
+.scholar-entries .se-label::before {
+  content: ""; width: 8px; height: 8px; background: var(--rose);
+  border-radius: 50%; animation: pulseDot 1.4s ease-in-out infinite;
+}
+.scholar-entries .se-item {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 1.15rem;
+  color: #fff;
+  padding: .5rem 0;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.scholar-entries .se-item:last-child { border-bottom: 0; }
+.scholar-empty {
+  font-family: 'Fraunces', serif; font-style: italic;
+  color: rgba(255,255,255,.4);
+  text-align: center; padding: 2rem 0;
+}
+
+/* N4 — Winner reveal */
+.winner-stage {
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 2rem;
+  position: relative;
+  width: 100%;
+}
+.winner-name {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: clamp(4rem, 10vw, 11rem);
+  color: #fff;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-shadow: 0 4px 40px rgba(245,212,154,.5);
+  animation: winnerPop 1.2s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes winnerPop {
+  0% { opacity: 0; transform: scale(.4) rotate(-4deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0); }
+}
+.winner-pre {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: clamp(2.4rem, 4vw, 4rem);
+  color: var(--gold-light);
+  line-height: 1;
+}
+.winner-prize {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2rem, 4vw, 3.6rem);
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin-top: 1rem;
+}
+.winner-prize em { font-style: italic; color: var(--gold); font-family: 'Fraunces', serif; font-weight: 500; }
+.reveal-btn {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 1.4rem 3rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 20px 50px -16px rgba(200,154,74,.7);
+}
+
+/* N4 — Marriage grid (25 couples) */
+.marriage-grid-25 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+  max-width: 1400px;
+  margin: 1rem auto 0;
+  width: 100%;
+}
+.marriage-grid-25 .photo-frame {
+  aspect-ratio: 1/1;
+  box-shadow: 0 10px 24px -16px rgba(40,28,18,.4);
+  border-radius: 6px;
+}
+.marriage-grid-25 .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+/* N4 — Upcoming events list */
+.events-list {
+  display: flex; flex-direction: column; gap: 1.4rem;
+  max-width: 900px; margin: 2rem auto 0;
+  width: 100%;
+}
+.event-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 2rem;
+  padding: 1.4rem 1.6rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--rose);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  align-items: center;
+}
+.event-row .ev-tag {
+  font-size: .68rem; letter-spacing: .26em; text-transform: uppercase;
+  font-weight: 700; color: var(--rose-deep);
+}
+.event-row .ev-title {
+  font-family: 'Fraunces', serif; font-weight: 500;
+  font-size: 1.4rem; color: var(--ink); line-height: 1.2;
+}
+.event-row .ev-sub {
+  font-family: 'Fraunces', serif; font-style: italic;
+  color: var(--ink-soft); font-size: 1rem; margin-top: .3rem;
+}
+
+/* N4 — Not for you cards */
+.not-for-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem; max-width: 1200px; margin: 2rem auto 0; width: 100%;
+}
+.not-for-card {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.15);
+  border-left: 4px solid var(--rose);
+  border-radius: 12px;
+  padding: 1.6rem 1.8rem;
+  color: var(--bg);
+}
+.not-for-card .nfc-tag {
+  font-size: .7rem; letter-spacing: .22em; text-transform: uppercase;
+  font-weight: 700; color: var(--rose); margin-bottom: .6rem;
+}
+.not-for-card .nfc-head {
+  font-family: 'Fraunces', serif; font-weight: 500;
+  font-size: 1.5rem; line-height: 1.15; color: #fff;
+}
+.not-for-card .nfc-body {
+  font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
+  font-size: 1rem; color: rgba(255,255,255,.7);
+  margin-top: .6rem; line-height: 1.4;
+}
+
+/* N4 — Diff bullets */
+.diff-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: 1.2rem; max-width: 1400px; margin: 2rem auto 0; width: 100%;
+}
+.diff-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--rose);
+  border-radius: 10px;
+  padding: 1.4rem 1.2rem;
+  text-align: center;
+  display: flex; flex-direction: column; gap: .6rem;
+  box-shadow: var(--shadow);
+}
+.diff-card .dc-n {
+  font-family: 'Caveat', cursive; font-weight: 700;
+  font-size: 2.4rem; color: var(--rose-deep); line-height: 1;
+}
+.diff-card .dc-h {
+  font-family: 'Fraunces', serif; font-weight: 500;
+  font-size: 1.1rem; line-height: 1.2; color: var(--ink);
+}
+
+/* New students 24h slide */
+.stat-cards {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 2rem; max-width: 1000px; margin: 2.5rem auto 0; width: 100%;
+}
+.stat-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  box-shadow: var(--shadow-strong);
+  border-top: 4px solid var(--rose);
+}
+.stat-card .sc-num {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: clamp(4rem, 8vw, 8rem); color: var(--rose-deep);
+  line-height: 1;
+}
+.stat-card .sc-label {
+  font-size: .78rem; letter-spacing: .22em; text-transform: uppercase;
+  font-weight: 700; color: var(--ink-soft); margin-top: 1rem;
+}
+</style>
+</head>
+<body>
+
+<div class="progress"><div id="bar"></div></div>
+
+<div class="deck" id="deck">
+
+<!-- 1. TITLE -->
+<section class="slide active center">
+  <div class="eyebrow" style="color:var(--rose-deep)">FYP Challenge<span class="dot"></span>Night 4</div>
+  <p class="script" style="font-size:clamp(2.5rem,4vw,4rem); color:var(--ink); margin-bottom:1rem">Welcome to the…</p>
+  <h1 class="title">Final SOD <em>Pitch</em>.</h1>
+  <p class="kicker" style="margin-top:3rem; color:var(--rose-deep)">Kait Tomlin × JJ Tomlin · 7 PM CT</p>
+</section>
+
+<!-- 2. UPCOMING EVENTS (HOD) -->
+<section class="slide">
+  <div class="stack" style="max-width:1200px; margin:0 auto; width:100%">
+    <div class="eyebrow" style="text-align:center; color:var(--rose-deep)">What's coming up at HOD</div>
+    <h2 class="section center"><em>Mark your</em> calendar.</h2>
+    <p class="lede center" style="margin:1rem auto 0">Beyond tonight — here's where we'll be next.</p>
+    <div class="events-list">
+      <div class="event-row">
+        <div><div class="ev-tag">2026 · Fall</div></div>
+        <div><div class="ev-title">HOD Marriage Retreat</div><div class="ev-sub">A weekend away with Kait &amp; JJ. Details soon.</div></div>
+      </div>
+      <div class="event-row">
+        <div><div class="ev-tag">2026 · Tour</div></div>
+        <div><div class="ev-title">HOD Live · 2026 Tour Dates</div><div class="ev-sub">Cities + dates dropping in your inbox.</div></div>
+      </div>
+      <div class="event-row">
+        <div><div class="ev-tag">Weekly</div></div>
+        <div><div class="ev-title">The Heart of Dating Podcast</div><div class="ev-sub">New episodes every week — wherever you listen.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. WELCOME NEW SOD STUDENTS (live 24h count) -->
+<section class="slide theme-dark center">
+  <div class="eyebrow">Before we pitch a thing</div>
+  <h2 class="section" style="margin-top:1rem; max-width:24ch">Welcome our <em>newest</em> students.</h2>
+  <div class="stat-cards">
+    <div class="stat-card">
+      <div class="sc-num" id="new-students-24h">—</div>
+      <div class="sc-label">New in the last 24 hours</div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-num" id="spots-left-200">—</div>
+      <div class="sc-label">Spots left of 200</div>
+    </div>
+  </div>
+  <p class="lede" style="margin-top:2.5rem; max-width:50ch; color:rgba(255,255,255,.75)">If you came in after Night 3, we see you. Welcome to the cohort.</p>
+</section>
+
+<!-- 4. SCHOLARSHIP AFTER OUR TALK -->
+<section class="slide theme-terra center">
+  <div class="eyebrow">Heads up</div>
+  <h1 class="giant" style="margin-top:1.5rem; max-width:18ch">Scholarship<br>comes <em>after</em>.</h1>
+  <p class="lede" style="margin-top:2.5rem; max-width:46ch; color:#fff1d8">Stay on with us tonight. We're picking one person live and they win School of Dating <em>free</em>.</p>
+</section>
+
+<!-- 5. LIVE Q&A AFTER -->
+<section class="slide center">
+  <div class="eyebrow" style="color:var(--rose-deep)">After the pitch</div>
+  <h2 class="section" style="margin-top:1rem; max-width:22ch">Live Q&amp;A. <em>Anything</em> and <em>everything</em>.</h2>
+  <p class="lede" style="margin-top:2rem">Bring your questions. We're not going anywhere.</p>
+</section>
+
+<!-- 6. SCHOOL OF DATING TITLE -->
+<section class="slide">
+  <div class="two-col">
+    <div class="stack">
+      <div class="eyebrow">Introducing</div>
+      <p class="script" style="font-size:clamp(3rem,5vw,5rem); color:var(--ink); line-height:1">School of</p>
+      <h1 class="title" style="font-style:italic; font-weight:400; color:var(--rose-deep); margin-top:-1rem; font-size:clamp(4rem,7vw,8rem)">Dating.</h1>
+      <p class="lede" style="margin-top:2rem">A 10-week guided cohort. Coaching, community, and a proven process to date with intention.</p>
+      <div style="display:flex; gap:1rem; margin-top:1.5rem; flex-wrap:wrap">
+        <span class="tag-pill rose">10 weeks</span>
+        <span class="tag-pill rose">16 live teachings</span>
+        <span class="tag-pill gold">Personal coach</span>
+        <span class="tag-pill gold">Lifetime access</span>
+      </div>
+    </div>
+    <div class="photo-frame tall" style="max-width:520px">
+      <img src="img/kait-jj-main.png" alt="Kait and JJ Tomlin">
+    </div>
+  </div>
+</section>
+
+<!-- 7. KAIT INTRO -->
+<section class="slide center">
+  <div class="eyebrow" style="color:var(--rose-deep)">Kait</div>
+  <h2 class="section" style="margin-top:1rem; max-width:24ch"><em>OK friends…</em></h2>
+  <p class="lede" style="margin-top:2.5rem; max-width:60ch">
+    We will get to Q&amp;A momentarily — but for those who missed last night, we are <em>so sorry</em>. Tonight is the night we finally tell you everything about School of Dating. Stay with us.
+  </p>
+</section>
+
+<!-- 8. SARA VIDEO -->
+<section class="slide center">
+  <div class="eyebrow" style="color:var(--rose-deep)">Meet</div>
+  <h2 class="section" style="margin-bottom:.5rem"><em>Sara.</em></h2>
+  <p class="lede" style="margin:0 auto 1.5rem; max-width:52ch">She came in skeptical. Watch what happened.</p>
+  <video controls preload="auto" playsinline data-noclick data-slide-video
+    style="width:100%; max-width:1000px; aspect-ratio:16/9; border-radius:12px; box-shadow:var(--shadow-strong); background:#000; display:block; margin:0 auto"
+    poster="">
+    <source src="videos/sara.mp4" type="video/mp4">
+  </video>
+</section>
+
+<!-- 9. SYSTEM THAT WON'T LET YOU QUIT -->
+<section class="slide theme-dark center">
+  <div class="eyebrow">Why SOD works</div>
+  <h2 class="section" style="margin-top:1rem; max-width:24ch">SOD is a <em>system</em> that won't let you quit.</h2>
+  <div class="three-col" style="margin-top:3rem; gap:1.5rem; max-width:1400px">
+    <div style="background:rgba(255,255,255,.05); border:1px solid rgba(184,92,92,.4); border-left:4px solid var(--rose); border-radius:14px; padding:2.2rem 1.8rem; display:flex; flex-direction:column; gap:.8rem; min-height:240px">
+      <p class="script" style="font-size:2.2rem; color:var(--gold-light)">Reason 1</p>
+      <h3 style="color:#fff; font-size:1.6rem; line-height:1.1">LIVE coaching.<br><em>Every week.</em></h3>
+      <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.7); font-size:1rem; margin-top:auto">Not a course you binge alone — humans showing up with you.</p>
+    </div>
+    <div style="background:rgba(255,255,255,.05); border:1px solid rgba(184,92,92,.4); border-left:4px solid var(--rose); border-radius:14px; padding:2.2rem 1.8rem; display:flex; flex-direction:column; gap:.8rem; min-height:240px">
+      <p class="script" style="font-size:2.2rem; color:var(--gold-light)">Reason 2</p>
+      <h3 style="color:#fff; font-size:1.6rem; line-height:1.1">A personal <em>coach</em>.</h3>
+      <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.7); font-size:1rem; margin-top:auto">Someone who knows your name and your dating life — by text.</p>
+    </div>
+    <div style="background:rgba(255,255,255,.05); border:1px solid rgba(184,92,92,.4); border-left:4px solid var(--rose); border-radius:14px; padding:2.2rem 1.8rem; display:flex; flex-direction:column; gap:.8rem; min-height:240px">
+      <p class="script" style="font-size:2.2rem; color:var(--gold-light)">Reason 3</p>
+      <h3 style="color:#fff; font-size:1.6rem; line-height:1.1">We <em>built</em> it.<br>We <em>run</em> it.</h3>
+      <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.7); font-size:1rem; margin-top:auto">No outsourced "coaches." This is Kait, JJ, and our hand-picked team.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 10. HOW WE'RE DIFFERENT (JJ) -->
+<section class="slide">
+  <div class="stack" style="max-width:1500px; margin:0 auto; width:100%">
+    <div class="eyebrow" style="text-align:center; color:var(--rose-deep)">JJ</div>
+    <h2 class="section center" style="margin-top:.5rem">How we're <em>different</em>.</h2>
+    <div class="diff-grid">
+      <div class="diff-card"><div class="dc-n">1</div><div class="dc-h">Live &amp; interactive</div></div>
+      <div class="diff-card"><div class="dc-n">2</div><div class="dc-h">1:1 personal coach</div></div>
+      <div class="diff-card"><div class="dc-n">3</div><div class="dc-h">Physical mailed workbook</div></div>
+      <div class="diff-card"><div class="dc-n">4</div><div class="dc-h">Co-led by Kait &amp; JJ</div></div>
+      <div class="diff-card"><div class="dc-n">5</div><div class="dc-h">A proven, repeatable process</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 11. WHO THIS IS NOT FOR (intro) -->
+<section class="slide theme-terra center">
+  <div class="eyebrow">Real talk</div>
+  <h1 class="giant" style="margin-top:1rem; max-width:18ch">Who this is<br><em>NOT</em> for.</h1>
+</section>
+
+<!-- 12. NOT FOR YOU IF... -->
+<section class="slide theme-dark">
+  <div class="stack" style="max-width:1400px; margin:0 auto; width:100%">
+    <div class="eyebrow" style="text-align:center">SOD is not for you if…</div>
+    <h2 class="section center" style="margin-top:.5rem; color:#fff">This isn't your <em>season</em>.</h2>
+    <div class="not-for-grid">
+      <div class="not-for-card">
+        <div class="nfc-tag">01</div>
+        <div class="nfc-head">You won't do the work.</div>
+        <div class="nfc-body">SOD is a system, not a miracle. If you're not willing to show up and do the reps, save your money.</div>
+      </div>
+      <div class="not-for-card">
+        <div class="nfc-tag">02</div>
+        <div class="nfc-head">You're cynical.</div>
+        <div class="nfc-body">If you came in believing nothing can help, you'll find evidence for that. We can't out-coach a closed heart.</div>
+      </div>
+      <div class="not-for-card">
+        <div class="nfc-tag">03</div>
+        <div class="nfc-head">You can't be coached.</div>
+        <div class="nfc-body">If feedback feels like attack, this cohort will be hard. SOD is a feedback engine, on purpose.</div>
+      </div>
+      <div class="not-for-card">
+        <div class="nfc-tag">04</div>
+        <div class="nfc-head">You're in a hard financial season.</div>
+        <div class="nfc-body">Take BOD through our VIP path — it's basically free right now. SOD will be here when the season changes.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 13. WHAT'S INCLUDED — value table -->
+<section class="slide" style="padding:5vh 5vw; background:
+  radial-gradient(ellipse at 0% 0%, rgba(184,92,92,.10), transparent 50%),
+  radial-gradient(ellipse at 100% 100%, rgba(200,154,74,.08), transparent 50%),
+  var(--bg)">
+  <div class="stack center" style="max-width:1200px; margin:0 auto">
+    <div class="eyebrow">The full stack</div>
+    <h2 class="section" style="margin-bottom:.5rem">What's <em>all included</em>?</h2>
+    <p class="lede" style="margin:0 auto 2rem">Everything you need to actually get married. No upsells. No half-measures.</p>
+    <table class="value-table">
+      <thead><tr><th>What's Included</th><th style="text-align:right">Value</th></tr></thead>
+      <tbody>
+        <tr><td>16 LIVE Sessions + Weekly Q&amp;A <span style="color:var(--muted); font-size:.85rem; font-style:italic">(10 with Kait &amp; JJ, 6 with expert guests &amp; coaches)</span></td><td>$9,000</td></tr>
+        <tr><td>200+ Page Physical Workbook</td><td>$297</td></tr>
+        <tr><td>Co-ed Cohort Community</td><td>$297</td></tr>
+        <tr><td>Personal SOD Coach (text support)</td><td>$1,497</td></tr>
+        <tr><td>Weekly Office Hours</td><td>$747</td></tr>
+        <tr><td>Lifetime Access to SOD &amp; Alumni Network</td><td><em>Priceless</em></td></tr>
+        <tr class="total"><td><strong>Total Value</strong></td><td><strong>$11,839</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 14. KAIT TRANSITION TO AMIE -->
+<section class="slide center">
+  <div class="eyebrow" style="color:var(--rose-deep)">Kait</div>
+  <h2 class="section" style="margin-top:1.5rem; max-width:26ch">Before we reveal tonight's <em>special invite</em>…</h2>
+  <p class="lede" style="margin-top:2rem; max-width:46ch">…we have to meet one more person. Her name is <em>Amie</em>.</p>
+</section>
+
+<!-- 15. AMIE VIDEO -->
+<section class="slide center">
+  <div class="eyebrow" style="color:var(--rose-deep)">Meet</div>
+  <h2 class="section" style="margin-bottom:.5rem"><em>Amie.</em></h2>
+  <p class="lede" style="margin:0 auto 1.5rem; max-width:52ch">A story we couldn't end the week without.</p>
+  <video controls preload="auto" playsinline data-noclick data-slide-video
+    style="width:100%; max-width:1000px; aspect-ratio:16/9; border-radius:12px; box-shadow:var(--shadow-strong); background:#000; display:block; margin:0 auto"
+    poster="">
+    <source src="videos/amie.mp4" type="video/mp4">
+  </video>
+</section>
+
+<!-- 16. WE WANT THIS FOR YOU — 25 couples grid -->
+<section class="slide" style="padding:4vh 4vw; background:linear-gradient(135deg, #faf2ef 0%, var(--bg) 50%)">
+  <div class="stack" style="max-width:1500px; margin:0 auto; width:100%; height:100%; gap:1rem">
+    <div style="text-align:center">
+      <div class="eyebrow" style="color:var(--rose-deep)">25 couples. Real marriages. Real engagements.</div>
+      <h2 class="section center" style="font-size:clamp(2.4rem,4.5vw,4.5rem); margin-top:.5rem">We want <em>this</em> for you.</h2>
+    </div>
+    <div class="marriage-grid-25">
+      <div class="photo-frame"><img src="img/marriage-1.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-2.png" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-3.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-4.png" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-5.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-6.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-7.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-8.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-1.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-2.png" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-3.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-4.png" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-5.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-6.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-7.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-8.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-1.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-2.png" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-3.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-4.png" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-5.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-6.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-7.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-8.jpg" alt=""></div>
+      <div class="photo-frame"><img src="img/marriage-1.jpg" alt=""></div>
+    </div>
+  </div>
+</section>
+
+<!-- 17. NOW HERE IS WHERE IT GETS FUN (JJ transition) -->
+<section class="slide theme-terra center">
+  <div class="eyebrow">JJ</div>
+  <h1 class="giant" style="margin-top:1.5rem; max-width:20ch">Now here's where it gets <em>fun</em>.</h1>
+</section>
+
+<!-- 18. TWO WAYS TO JOIN -->
+<section class="slide" style="background:
+  radial-gradient(ellipse at 80% 0%, rgba(200,154,74,.12), transparent 55%),
+  radial-gradient(ellipse at 0% 100%, rgba(184,92,92,.10), transparent 55%),
+  var(--bg)">
+  <div class="stack" style="max-width:1300px; margin:0 auto">
+    <div style="text-align:center; display:flex; flex-direction:column; align-items:center; gap:0.5rem">
+      <span style="display:inline-flex; align-items:center; gap:.6rem; background:rgba(184,92,92,.12); border:1px solid var(--rose); border-radius:999px; padding:0.4rem 1.1rem; font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">
+        <span style="width:6px; height:6px; background:var(--rose); border-radius:50%"></span>
+        Two ways in
+      </span>
+      <h2 class="section center" style="margin-top:1rem">Two options. <em>Pick yours.</em></h2>
+      <p class="lede" style="max-width:50ch; margin:0.5rem auto 0">The difference is simple — twenty 1:1 calls with your coach across the program and beyond.</p>
+    </div>
+
+    <div class="tiers" style="margin-top:2.5rem">
+      <div class="tier sod recommended">
+        <div class="tier-tag">School of Dating</div>
+        <h4>SOD</h4>
+        <ul>
+          <li>16 LIVE Two-Hour Group Teachings</li>
+          <li>200+ Page Physical Workbook</li>
+          <li>Community Support System</li>
+          <li>Personal SOD Coach (text support)</li>
+          <li>Weekly Thursday Q&amp;A</li>
+          <li>Lifetime Access</li>
+        </ul>
+        <div class="price-row">
+          <span class="price-new" style="color:var(--rose-deep)">$997</span>
+        </div>
+      </div>
+
+      <div class="tier pro">
+        <div class="tier-tag">School of Dating PRO</div>
+        <h4>SOD <em>PRO</em></h4>
+        <ul>
+          <li>Everything in SOD</li>
+          <li>Lifetime Access</li>
+        </ul>
+        <div class="calls-badge">
+          <div class="num">20 weekly <em style="font-style:italic">1:1 LIVE calls</em></div>
+          <div class="label">10 in program + 10 weeks after · 30 min each</div>
+        </div>
+        <div class="price-row">
+          <span class="price-new">$2,497</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 19. TONIGHT ONLY — TWO MASSIVE BONUSES -->
+<section class="slide bonus-banner-bg center" style="padding:5vh 6vw">
+  <div class="eyebrow">🔥 Tonight only · Final night</div>
+  <h1 class="title" style="margin-top:1rem; max-width:24ch">Two <em>massive</em> bonuses on top.</h1>
+  <p class="lede" style="margin-top:2rem; max-width:50ch">For anyone who jumps in tonight — we're stacking these on top of the SOD + Pro offer.</p>
+</section>
+
+<!-- 20. BONUS #1 — PROFILE DIAGNOSTIC -->
+<section class="slide fab-bonus">
+  <div class="fab-grid">
+    <div class="fab-body">
+      <div class="fab-tag"><span class="num">Bonus 01</span><span>⏰ Tonight only</span></div>
+      <h1 class="fab-headline">The <em>Profile Diagnostic</em>.</h1>
+      <p class="fab-sub">"Pimp My Ride" — for your dating apps. <em>JJ and Kait</em> personally diagnose your online dating profile. Photos. Bio. Prompts. The whole stack.</p>
+      <div class="fab-value-pill">
+        <span class="val-num">$299</span>
+        <span class="val-tx">value · free tonight</span>
+      </div>
+    </div>
+    <div class="fab-pic-wrap">
+      <div class="fab-cap"><em>Free</em> · for every SOD buyer</div>
+      <img src="img/engagement-ai.png" alt="Profile diagnostic" style="object-position:center center">
+    </div>
+  </div>
+</section>
+
+<!-- 21. BONUS #2 — JUST TELL ME WHAT TO SAY -->
+<section class="slide fab-bonus">
+  <div class="fab-grid">
+    <div class="fab-body">
+      <div class="fab-tag" style="color:var(--gold-deep)"><span class="num" style="background:var(--gold-deep)">Bonus 02</span><span>⏰ Tonight only · First 30 get custom scripts</span></div>
+      <h1 class="fab-headline"><em>"Just tell me what to say."</em></h1>
+      <p class="fab-sub">40+ texting scripts for the hard conversations.<br>"Where is this going?" · "I need to slow down physically." · The breakup script. The faith conversation. The Thanksgiving family pressure response.</p>
+      <p class="fab-sub" style="color:var(--rose-deep); font-style:normal; font-weight:500"><strong>First 30 buyers</strong> submit one personal scenario — we write a custom script back within 5 days.</p>
+      <div class="fab-value-pill">
+        <span class="val-num">$197</span>
+        <span class="val-tx">value · free tonight</span>
+      </div>
+    </div>
+    <div class="fab-pic-wrap">
+      <img src="img/coaching-ai.png" alt="Just tell me what to say" style="object-position:center top">
+    </div>
+  </div>
+</section>
+
+<!-- 22. FINAL VALUE STACK -->
+<!--
+  Math note: JJ's outline used $11,588 base + bonuses = $12,084.
+  The value table on slide 13 sums to $11,839, which is the source of truth.
+  Final = $11,839 + $299 + $197 = $12,335. JJ — adjust here if you want a different total.
+-->
+<section class="slide" style="padding:4vh 4vw">
+  <div class="stack" style="max-width:1500px; margin:0 auto; width:100%">
+    <div class="eyebrow" style="text-align:center; color:var(--rose-deep)">Tonight's full stack</div>
+    <h2 class="section center" style="font-size:clamp(2rem,3.5vw,3.5rem)">All <em>included</em>. One investment.</h2>
+
+    <div style="display:grid; grid-template-columns:1.4fr 1fr; gap:3rem; margin-top:1rem; align-items:center">
+      <table class="value-table">
+        <tbody>
+          <tr><td>School of Dating · 10-Week Mentorship</td><td>$11,839</td></tr>
+          <tr class="bonus"><td>Bonus 01 · Profile Diagnostic (Kait + JJ)</td><td>$299</td></tr>
+          <tr class="bonus"><td>Bonus 02 · "Just Tell Me What to Say" Scripts</td><td>$197</td></tr>
+          <tr class="total"><td><strong>Total Value</strong></td><td><strong>$12,335</strong></td></tr>
+          <tr class="offer"><td><strong>Yours for</strong></td><td><strong>$997</strong></td></tr>
+        </tbody>
+      </table>
+
+      <div style="display:flex; flex-direction:column; gap:1rem">
+        <p class="kicker" style="color:var(--rose-deep); text-align:center">Two payment options</p>
+        <div style="background:linear-gradient(135deg,var(--paper),#faf2ef); border:3px solid var(--rose-deep); border-radius:12px; padding:1.4rem; text-align:center; box-shadow:var(--shadow-strong)">
+          <p class="kicker" style="color:var(--rose-deep); margin-bottom:.4rem; font-size:.78rem">Pay in full</p>
+          <p style="font-family:'Fraunces',serif; font-weight:500; font-size:2.6rem; color:var(--ink); line-height:1">1 × $997</p>
+          <p style="font-size:.78rem; color:var(--rose-deep); font-weight:700; letter-spacing:.16em; margin-top:.4rem">$700 OFF</p>
+        </div>
+        <div style="background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:1rem; text-align:center">
+          <p class="kicker" style="color:var(--muted); margin-bottom:.3rem; font-size:.72rem">6-pay plan</p>
+          <p style="font-family:'Fraunces',serif; font-weight:500; font-size:2rem; color:var(--ink); line-height:1">6 × $198</p>
+          <p style="font-size:.72rem; color:var(--muted); font-weight:500; letter-spacing:.1em; margin-top:.3rem; font-style:italic">first payment today + 5 more</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:1.5rem; background:linear-gradient(135deg, var(--rose-deep) 0%, var(--rose-burgundy) 100%); border-radius:16px; padding:1.8rem 2.5rem; display:flex; align-items:center; justify-content:space-between; gap:2rem; box-shadow:0 30px 60px -20px rgba(110,42,42,.5); flex-wrap:wrap">
+      <div style="display:flex; flex-direction:column; gap:.3rem; flex:1; min-width:300px">
+        <span style="font-size:.78rem; letter-spacing:.28em; text-transform:uppercase; font-weight:700; color:rgba(255,255,255,.85)">⏰ Save your seat now</span>
+        <a href="https://schoolofdatingoffer.com" target="_blank" rel="noopener"
+          style="font-family:'Inter',sans-serif; font-weight:800; font-size:clamp(2.4rem,4.5vw,4.5rem); color:#fff; text-decoration:none; letter-spacing:-0.01em; line-height:1; text-transform:lowercase; text-shadow:0 4px 20px rgba(0,0,0,.3)">
+          schoolofdatingoffer.com
+        </a>
+      </div>
+      <div style="background:#fff; padding:.8rem; border-radius:10px; box-shadow:0 12px 30px -8px rgba(0,0,0,.3)">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=6&data=https://schoolofdatingoffer.com" alt="Scan to enroll" style="display:block; width:140px; height:140px">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 23. SUMMER SCHEDULE -->
+<section class="slide" style="padding:3vh 4vw; background:radial-gradient(ellipse at 0% 0%, rgba(184,92,92,.08), transparent 50%), var(--bg)">
+  <div class="stack" style="max-width:1500px; margin:0 auto; width:100%">
+    <div style="display:flex; justify-content:space-between; align-items:baseline; gap:2rem; flex-wrap:wrap">
+      <div>
+        <div class="eyebrow" style="color:var(--rose-deep)">The 10-week roadmap</div>
+        <h2 class="section" style="font-size:clamp(2.2rem,4vw,4rem)">Summer <em>schedule</em>.</h2>
+      </div>
+      <p class="lede" style="max-width:36ch; text-align:right">Starts Tuesday June 9. Tue · Thu · Sat. 16 live teachings + weekly office hours.</p>
+    </div>
+
+    <div style="margin-top:1.5rem; display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.5rem">
+      <div style="background:var(--paper); border:1px solid var(--line); border-top:4px solid var(--rose); border-radius:12px; padding:1.4rem; box-shadow:var(--shadow)">
+        <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:1rem">
+          <p class="script" style="font-size:2rem; color:var(--ink); line-height:1">June</p>
+          <span style="font-size:.65rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">Phase 1 · Foundations</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:.7rem">
+          <div style="border-left:3px solid var(--rose); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">Week 1 · Tue Jun 9</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:1rem; color:var(--ink); margin-top:.2rem">Inner Child &amp; Reconnecting</div>
+          </div>
+          <div style="border-left:3px solid var(--rose); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">Week 2 · Tue Jun 16</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:1rem; color:var(--ink); margin-top:.2rem">Attachment Style &amp; Wounds</div>
+          </div>
+          <div style="border-left:3px solid var(--rose); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--rose-deep)">Week 3 · Tue Jun 23</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:1rem; color:var(--ink); margin-top:.2rem">Triggers &amp; Managing Emotions</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--paper); border:1px solid var(--line); border-top:4px solid var(--sage); border-radius:12px; padding:1.4rem; box-shadow:var(--shadow)">
+        <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:1rem">
+          <p class="script" style="font-size:2rem; color:var(--ink); line-height:1">July</p>
+          <span style="font-size:.65rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--sage)">Phase 2 · Tools</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:.55rem">
+          <div style="border-left:3px solid var(--sage); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--sage)">Wk 5 · Jul 7</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:.95rem; color:var(--ink)">Godfidence &amp; Healthy Anatomy</div>
+          </div>
+          <div style="border-left:3px solid var(--sage); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--sage)">Wk 6 · Jul 14 + 18</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:.95rem; color:var(--ink)">Type, Attraction, Values + Mindset RESET</div>
+          </div>
+          <div style="border-left:3px solid var(--sage); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--sage)">Wk 7 · Jul 21 + 25</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:.95rem; color:var(--ink)">Feminine &amp; Masculine + Flirting 101</div>
+          </div>
+          <div style="border-left:3px solid var(--sage); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--sage)">Wk 8 · Jul 28</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:.95rem; color:var(--ink)">Online Dating + Dating Challenge</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--paper); border:1px solid var(--line); border-top:4px solid var(--gold); border-radius:12px; padding:1.4rem; box-shadow:var(--shadow)">
+        <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:1rem">
+          <p class="script" style="font-size:2rem; color:var(--ink); line-height:1">August</p>
+          <span style="font-size:.65rem; letter-spacing:.22em; text-transform:uppercase; font-weight:700; color:var(--gold-deep)">Phase 3 · Action</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:.55rem">
+          <div style="border-left:3px solid var(--gold); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--gold-deep)">Wk 10 · Aug 11 + 15</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:.95rem; color:var(--ink)">First Dates + Facing Rejection</div>
+          </div>
+          <div style="border-left:3px solid var(--gold); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--gold-deep)">Wk 11 · Aug 18 + 22</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:.95rem; color:var(--ink)">After the First Date + Long Distance</div>
+          </div>
+          <div style="border-left:3px solid var(--gold); padding-left:.8rem">
+            <div style="font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:var(--gold-deep)">Wk 12 · Aug 25 + 29 · 🎓 Finale</div>
+            <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:.95rem; color:var(--ink)">DTR + Boundaries + <strong>Graduation</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:1.5rem; justify-content:center; align-items:center; margin-top:1rem; flex-wrap:wrap">
+      <span style="font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); font-weight:600">Sessions:</span>
+      <span style="background:var(--cream); border:1px dashed var(--rose); border-radius:999px; padding:.4rem .9rem; font-family:'Fraunces',serif; font-style:italic; font-size:.85rem; color:var(--ink-soft)">Tue · Thu · Sat</span>
+      <span style="font-family:'Fraunces',serif; font-style:italic; font-size:.95rem; color:var(--muted)">+ Office Hours every Thursday · 7 PM CT</span>
+    </div>
+  </div>
+</section>
+
+<!-- 24. NO FALL COHORT / 200 CAP -->
+<section class="slide theme-dark center">
+  <div class="eyebrow">Kait</div>
+  <h2 class="section" style="margin-top:1rem; max-width:24ch">There's no <em>fall cohort</em>.</h2>
+  <h1 class="giant" style="margin-top:1.5rem">This is it<br><em>until 2027</em>.</h1>
+  <p class="lede" style="margin-top:2.5rem; max-width:50ch; color:rgba(255,255,255,.75)">Cohort caps at <strong style="color:var(--gold-light)">200</strong>. After Sunday night, the doors close until next May.</p>
+</section>
+
+<!-- 25. REFUND POLICY -->
+<section class="slide" style="background:radial-gradient(ellipse at 50% 30%, rgba(110,128,113,.14), transparent 55%), linear-gradient(135deg, #f1f3ee 0%, var(--bg) 70%); padding:5vh 6vw">
+  <div class="stack center" style="max-width:1200px; margin:0 auto">
+    <div style="display:inline-flex; align-items:center; justify-content:center; width:96px; height:96px; background:var(--sage); border-radius:50%; box-shadow:0 30px 60px -20px rgba(110,128,113,.5)">
+      <span style="font-size:3rem">🛡️</span>
+    </div>
+    <div class="eyebrow" style="color:var(--sage); margin-top:1.5rem">Our promise to you</div>
+    <h1 class="title" style="margin-top:.5rem; max-width:22ch; font-size:clamp(2.8rem,5.5vw,5.5rem)">72-hour <em style="color:var(--sage)">money-back</em><br>guarantee.</h1>
+    <p class="lede" style="margin:2rem auto 0; max-width:54ch; font-size:clamp(1.2rem,1.7vw,1.7rem)">
+      If School of Dating isn't right for you, email <strong style="color:var(--sage)">info@hodpodcast.com</strong> within 72 hours of enrollment and we'll refund 100%.
+    </p>
+    <p class="lede" style="margin:1rem auto 0; max-width:54ch; font-style:italic; font-size:clamp(1.1rem,1.5vw,1.5rem); color:var(--ink-soft)">
+      After 72 hours, all sales are final — you're committing to your cohort, and we're committing to you.
+    </p>
+  </div>
+</section>
+
+<!-- 26. JJ FINAL CLOSE -->
+<section class="slide theme-terra center">
+  <div class="eyebrow">JJ</div>
+  <h2 class="section" style="margin-top:1.5rem; max-width:24ch"><em>Friends.</em></h2>
+  <p class="lede" style="margin-top:2rem; max-width:50ch; color:#fff1d8; font-size:clamp(1.4rem,2vw,2rem)">
+    If this challenge has stirred something in you — this is the moment. The doors close tonight at 9 PM CT. There is no fall cohort. The next time you'll see this is May 2027.
+  </p>
+  <p class="lede" style="margin-top:1.5rem; max-width:46ch; color:#fff; font-style:italic">Don't let another year pass you by.</p>
+</section>
+
+<!-- 27. LIVE TRACKER + COUNTDOWN -->
+<section class="slide live-stage" id="slide-tracker" data-noclick style="padding:3vh 4vw">
+  <div class="stack" style="max-width:1600px; margin:0 auto; width:100%; gap:1rem">
+    <div style="display:flex; justify-content:center; align-items:center; gap:1.5rem; flex-wrap:wrap">
+      <div class="live-banner">LIVE · seats filling in real-time</div>
+      <h1 class="title" style="font-size:clamp(1.8rem,2.8vw,2.8rem); line-height:1.05; margin:0">
+        Cart closes at <em>9 PM CT</em>
+      </h1>
+      <div class="countdown-row" style="margin:0; gap:.6rem">
+        <div class="cd-unit" style="min-width:80px; padding:.5rem .7rem"><span class="cd-num" id="cd-h" style="font-size:2.6rem">--</span><span class="cd-label" style="font-size:.6rem; margin-top:.2rem">hours</span></div>
+        <div class="cd-unit" style="min-width:80px; padding:.5rem .7rem"><span class="cd-num" id="cd-m" style="font-size:2.6rem">--</span><span class="cd-label" style="font-size:.6rem; margin-top:.2rem">min</span></div>
+        <div class="cd-unit" style="min-width:80px; padding:.5rem .7rem"><span class="cd-num" id="cd-s" style="font-size:2.6rem">--</span><span class="cd-label" style="font-size:.6rem; margin-top:.2rem">sec</span></div>
+      </div>
+    </div>
+
+    <div class="tracker-grid" style="grid-template-columns:1.2fr 1fr; gap:1.2rem; margin-top:0">
+      <div class="tracker-card" style="padding:1.2rem">
+        <div class="tracker-row" style="padding-bottom:.5rem">
+          <div>
+            <div class="tracker-label">📍 Cohort seats</div>
+            <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.2rem; font-size:.82rem">Hard cap at 200 · no fall cohort</p>
+          </div>
+          <div class="tracker-count" style="font-size:2.6rem"><span id="total-taken">—</span><span class="of"> / <span id="total-cap">200</span></span></div>
+        </div>
+        <div class="tracker-bar"><div id="total-bar"></div></div>
+
+        <div class="tracker-row" style="margin-top:.6rem; padding-bottom:.5rem">
+          <div>
+            <div class="tracker-label">🔥 Fast Action Bonus seats</div>
+            <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.2rem; font-size:.82rem">Profile Diagnostic + Texting Scripts</p>
+          </div>
+          <div class="tracker-count" style="font-size:2.2rem"><span id="fab-taken">—</span><span class="of"> / <span id="fab-cap">100</span></span></div>
+        </div>
+        <div class="tracker-bar"><div id="fab-bar"></div></div>
+      </div>
+
+      <div class="tracker-card" style="padding:1.2rem">
+        <div class="tracker-label" style="display:flex; align-items:center; gap:.6rem; margin-bottom:.3rem">
+          <span style="width:8px; height:8px; background:var(--rose); border-radius:50%; animation:pulseDot 1.4s ease-in-out infinite"></span>
+          Welcome to the cohort
+        </div>
+        <div class="stream-track" id="stream-track" style="max-height:280px">
+          <div class="stream-item" style="opacity:.5">Loading…</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:rgba(255,255,255,.06); border:1px solid rgba(184,92,92,.4); border-radius:16px; padding:1.4rem 2rem; display:grid; grid-template-columns:1fr auto; gap:2rem; align-items:center">
+      <div style="display:flex; flex-direction:column; gap:.5rem">
+        <span style="font-size:.78rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold-light); font-weight:700">⏰ Save your seat now</span>
+        <a href="https://schoolofdatingoffer.com" target="_blank" rel="noopener"
+          style="font-family:'Inter',sans-serif; font-weight:800; font-size:clamp(2.4rem,5vw,4.8rem); color:#fff; text-decoration:none; letter-spacing:-0.01em; line-height:1; text-transform:lowercase; text-shadow:0 4px 24px rgba(184,92,92,.4)">
+          schoolofdatingoffer.com
+        </a>
+      </div>
+      <div style="background:#fff; padding:.8rem; border-radius:12px; box-shadow:var(--shadow-strong); display:flex; flex-direction:column; align-items:center; gap:.3rem">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=360x360&margin=6&data=https://schoolofdatingoffer.com" alt="Scan to enroll" style="display:block; width:200px; height:200px">
+        <span style="font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-soft); font-weight:700">Scan to enroll</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 28. CODE WORD: BERET -->
+<section class="slide sod-slide">
+  <div class="sod-grid">
+    <div>
+      <div class="eyebrow" style="color:#fff; opacity:.85">Tonight's giveaway</div>
+      <h1 class="title" style="color:#fff; font-size:clamp(2.8rem, 5vw, 5.5rem); line-height:1; margin-top:1rem">
+        Drop the <em style="color:#f5d49a">code word</em>.<br>Win SOD <em style="color:#f5d49a">free</em>.
+      </h1>
+      <p class="lede" style="color:#fbeed4; margin-top:2rem; max-width:36ch">
+        To our 10-week intensive mentorship — <em style="color:#fff; font-style:italic">The School of Dating</em>.
+      </p>
+      <div class="price-row-big">
+        <span class="strike">$1,697</span>
+        <span class="price-arrow">→</span>
+        <span class="price-zero-wrap">
+          <svg class="price-circle" viewBox="0 0 240 110" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="120" cy="55" rx="100" ry="42" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 4" opacity=".85"/>
+          </svg>
+          <span class="price-zero">$0</span>
+          <span class="price-bangs">!!!</span>
+        </span>
+      </div>
+    </div>
+    <div style="display:flex; justify-content:center">
+      <div class="codeword">
+        <div class="codeword-label">Tonight's code word</div>
+        <div class="codeword-value">BERET</div>
+        <div class="codeword-hint">Drop it in the chat. Then enter your name on the next slide.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 29. SCHOLARSHIP ENTRY -->
+<section class="slide theme-dark" data-noclick>
+  <div class="stack" style="max-width:1500px; margin:0 auto; width:100%; gap:1.2rem">
+    <div class="eyebrow" style="text-align:center">Free SOD scholarship · enter to win</div>
+    <h2 class="section center" style="color:#fff">Enter your <em>name</em>.</h2>
+    <p class="lede center" style="color:rgba(255,255,255,.7); margin:0 auto">JJ will pick one live. Confetti, drama, the whole thing.</p>
+    <div class="scholar-entry-wrap" style="margin-top:1.5rem">
+      <div>
+        <form id="scholar-form" class="scholar-form" onsubmit="return false">
+          <input id="scholar-input" type="text" placeholder="Your first name" maxlength="40" autocomplete="off">
+          <button id="scholar-submit" type="button">Enter</button>
+        </form>
+        <p style="margin-top:1.2rem; color:rgba(255,255,255,.55); font-family:'Fraunces',serif; font-style:italic; font-size:1rem">
+          One entry per person. Be present when we pick — you have to claim it live.
+        </p>
+        <p style="margin-top:.4rem; color:rgba(255,255,255,.45); font-size:.78rem; letter-spacing:.16em; text-transform:uppercase; font-weight:600">
+          Entries <span id="scholar-count">0</span>
+        </p>
+      </div>
+      <div class="scholar-entries">
+        <div class="se-label">Live entries</div>
+        <div id="scholar-list">
+          <div class="scholar-empty">No entries yet — be the first!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 30. WINNER REVEAL -->
+<section class="slide theme-dark center" id="slide-winner" data-noclick>
+  <div class="winner-stage">
+    <div class="winner-pre">🎉 Tonight's scholarship goes to…</div>
+    <div class="winner-name" id="winner-name">—</div>
+    <div class="winner-prize">Wins <em>School of Dating</em> · FREE</div>
+    <button class="reveal-btn" id="reveal-btn" type="button">Pick a winner</button>
+    <p style="margin-top:1rem; color:rgba(255,255,255,.55); font-family:'Fraunces',serif; font-style:italic; font-size:1rem">
+      Tap the button to draw. Tap again to re-roll.
+    </p>
+  </div>
+</section>
+
+<!-- 31. FINAL UPCOMING + LIVE COUNTER -->
+<section class="slide live-stage" id="slide-tracker-2" data-noclick style="padding:3vh 4vw">
+  <div class="stack" style="max-width:1600px; margin:0 auto; width:100%; gap:1rem">
+    <div style="display:flex; justify-content:center; align-items:center; gap:1.5rem; flex-wrap:wrap">
+      <div class="live-banner">LIVE · scan to enroll right now</div>
+      <h1 class="title" style="font-size:clamp(1.8rem,2.8vw,2.8rem); line-height:1.05; margin:0">
+        Cart closes at <em>9 PM CT</em>
+      </h1>
+      <div class="countdown-row" style="margin:0; gap:.6rem">
+        <div class="cd-unit" style="min-width:80px; padding:.5rem .7rem"><span class="cd-num" id="cd-h2" style="font-size:2.6rem">--</span><span class="cd-label" style="font-size:.6rem; margin-top:.2rem">hours</span></div>
+        <div class="cd-unit" style="min-width:80px; padding:.5rem .7rem"><span class="cd-num" id="cd-m2" style="font-size:2.6rem">--</span><span class="cd-label" style="font-size:.6rem; margin-top:.2rem">min</span></div>
+        <div class="cd-unit" style="min-width:80px; padding:.5rem .7rem"><span class="cd-num" id="cd-s2" style="font-size:2.6rem">--</span><span class="cd-label" style="font-size:.6rem; margin-top:.2rem">sec</span></div>
+      </div>
+    </div>
+    <div class="tracker-grid" style="grid-template-columns:1.2fr 1fr; gap:1.2rem; margin-top:0">
+      <div class="tracker-card">
+        <div class="tracker-row">
+          <div>
+            <div class="tracker-label">📍 Cohort seats</div>
+            <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.4rem; font-size:.92rem">Hard cap at 200 · no fall cohort</p>
+          </div>
+          <div class="tracker-count"><span id="total-taken-2">—</span><span class="of"> / 200</span></div>
+        </div>
+        <div class="tracker-bar"><div id="total-bar-2"></div></div>
+        <div class="tracker-row" style="margin-top:.4rem">
+          <div>
+            <div class="tracker-label">🔥 Fast Action seats</div>
+            <p style="font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.4rem; font-size:.92rem">Profile Diagnostic + Scripts</p>
+          </div>
+          <div class="tracker-count"><span id="fab-taken-2">—</span><span class="of"> / 100</span></div>
+        </div>
+        <div class="tracker-bar"><div id="fab-bar-2"></div></div>
+      </div>
+
+      <div class="tracker-card">
+        <div class="tracker-label" style="display:flex; align-items:center; gap:.6rem; margin-bottom:.4rem">
+          <span style="width:8px; height:8px; background:var(--rose); border-radius:50%; animation:pulseDot 1.4s ease-in-out infinite"></span>
+          Welcome to the cohort
+        </div>
+        <div class="stream-track" id="stream-track-3">
+          <div class="stream-item" style="opacity:.5">Loading…</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:rgba(255,255,255,.06); border:1px solid rgba(184,92,92,.4); border-radius:16px; padding:1.2rem 1.5rem; display:grid; grid-template-columns:1fr auto; gap:1.5rem; align-items:center">
+      <div style="display:flex; flex-direction:column; gap:.4rem">
+        <span style="font-size:.7rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold-light); font-weight:700">⏰ Save your seat now</span>
+        <a href="https://schoolofdatingoffer.com" target="_blank" rel="noopener"
+          style="font-family:'Inter',sans-serif; font-weight:800; font-size:clamp(2rem,3.8vw,3.6rem); color:#fff; text-decoration:none; letter-spacing:-0.01em; line-height:1; text-transform:lowercase; text-shadow:0 4px 24px rgba(184,92,92,.4)">
+          schoolofdatingoffer.com
+        </a>
+        <div style="font-size:.85rem; font-family:'Fraunces',serif; font-style:italic; color:rgba(255,255,255,.6); margin-top:.4rem">🛡️ 72-hour money-back guarantee · info@hodpodcast.com</div>
+      </div>
+      <div style="background:#fff; padding:.6rem; border-radius:10px; box-shadow:var(--shadow-strong); display:flex; flex-direction:column; align-items:center; gap:.3rem">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=6&data=https://schoolofdatingoffer.com" alt="Scan to enroll" style="display:block; width:170px; height:170px">
+        <span style="font-size:.58rem; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-soft); font-weight:700">Scan to enroll</span>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="chrome">
+  <span id="counter">01 / 38</span><!-- auto-updated by JS · -1 welcome-students + 1 refund = same -->
+
+
+  <span class="nav-hint">use <kbd>←</kbd> <kbd>→</kbd> or <kbd>space</kbd></span>
+  <span></span>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const bar = document.getElementById('bar');
+const counter = document.getElementById('counter');
+let i = 0;
+
+// Manual fake-purchase state — press C to fire next from queue
+// Persisted to localStorage so the count survives page reloads during the live show.
+const FAKE_STATE_KEY = "sod_fake_state_v1";
+const FIRED_FAKES_KEY = "sod_fired_fakes_v1";  // array of {firstName,lastInitial,addedAt} persisted across polls
+let fakeIndex = 0;
+let fakeOffset = 0;
+let firedFakes = [];
+try { firedFakes = JSON.parse(localStorage.getItem(FIRED_FAKES_KEY) || '[]'); } catch (e) { firedFakes = []; }
+try {
+  const url = new URL(location.href);
+  if (url.searchParams.get('reset') === '1') {
+    localStorage.removeItem(FAKE_STATE_KEY);
+    // strip query so future reloads don't re-reset
+    url.searchParams.delete('reset');
+    history.replaceState(null, '', url.toString());
+    console.log('🧹 Fake state reset to 0');
+  } else {
+    const saved = JSON.parse(localStorage.getItem(FAKE_STATE_KEY) || '{}');
+    if (typeof saved.fakeIndex === 'number') fakeIndex = saved.fakeIndex;
+    if (typeof saved.fakeOffset === 'number') fakeOffset = saved.fakeOffset;
+  }
+} catch (e) {}
+function persistFakeState() {
+  try {
+    localStorage.setItem(FAKE_STATE_KEY, JSON.stringify({ fakeIndex, fakeOffset }));
+  } catch (e) {}
+}
+function flashToast(text, bg) {
+  const toast = document.createElement('div');
+  toast.textContent = text;
+  toast.style.cssText = `position:fixed; top:20px; right:20px; background:${bg}; color:#fff; padding:.7rem 1.2rem; border-radius:999px; font-family:Inter; font-size:.8rem; font-weight:700; letter-spacing:.12em; z-index:9999; box-shadow:0 10px 30px rgba(0,0,0,.3)`;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2000);
+}
+let lastTotal = null, lastFab = null;
+// Real signups that happened while JJ was OFF the tracker — replayed on arrival
+let pendingRealSignups = [];
+
+function show(n) {
+  i = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+  bar.style.width = ((i + 1) / slides.length * 100) + '%';
+  counter.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+  history.replaceState(null, '', '#' + (i + 1));
+
+  // Pause every video, then auto-play any video on the now-active slide
+  document.querySelectorAll('video[data-slide-video]').forEach(v => {
+    v.pause();
+    if (!v.closest('.slide.active')) { try { v.currentTime = 0; } catch(e){} }
+  });
+  const activeVideo = document.querySelector('.slide.active video[data-slide-video]');
+  if (activeVideo) {
+    activeVideo.muted = false;
+    activeVideo.play().catch(() => {
+      activeVideo.muted = true;
+      activeVideo.play().catch(()=>{});
+    });
+  }
+
+  // Arriving at a tracker slide — drain any queued real signups that happened while off-tracker
+  const onTrackerNow = document.querySelector('.slide.active#slide-tracker, .slide.active#slide-tracker-2');
+  if (onTrackerNow && pendingRealSignups.length > 0) {
+    const queue = pendingRealSignups.slice();
+    pendingRealSignups = [];
+    // Stagger so it feels like a momentum burst, not a flood
+    queue.forEach((person, idx) => {
+      setTimeout(() => celebrate(person), 600 + idx * 1800);
+    });
+  }
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+  // Press "C" / "c" to fire the next fake purchase from the queue
+  if (e.key === 'c' || e.key === 'C') {
+    if (fakeIndex < FAKE_QUEUE.length) {
+      const next = FAKE_QUEUE[fakeIndex];
+      fakeIndex++;
+      fakeOffset++;
+      persistFakeState();
+      fireFakeSignup(next);
+    } else {
+      flashToast('Queue empty (18/18 fired)', '#8a7e72');
+    }
+  }
+  // Press "R" / "r" to reset fake state to 0 — use before going live
+  if (e.key === 'r' || e.key === 'R') {
+    if (confirm('Reset fake-purchase state to 0? (use this before going live)')) {
+      fakeIndex = 0;
+      fakeOffset = 0;
+      firedFakes = [];
+      localStorage.removeItem(FAKE_STATE_KEY);
+      localStorage.removeItem(FIRED_FAKES_KEY);
+      flashToast('🧹 Reset · queue + C-fires cleared (real list preserved)', '#6e8071');
+      // Force re-apply to remove the offset from displayed counts
+      const cached = localStorage.getItem("sod_last");
+      if (cached) { try { applyCounts(JSON.parse(cached)); } catch (e) {} }
+      else fetchCounts();
+    }
+  }
+});
+document.addEventListener('click', e => {
+  if (e.target.closest('a, button, kbd, input, iframe, [data-noclick]')) return;
+  const half = window.innerWidth / 2;
+  show(e.clientX > half ? i + 1 : i - 1);
+});
+const startHash = parseInt(location.hash.slice(1), 10);
+show((startHash && !isNaN(startHash)) ? startHash - 1 : 0);
+
+//
+// LIVE TRACKER — polls /api/sod-counts + injects 18 timed fake signups while on camp-out
+//
+const POLL_MS = 8000;
+const CART_CLOSE_ISO = "2026-05-30T02:00:00Z"; // 9 PM CT Fri May 29 (Night 4 close)
+const LAST_24H_BASELINE_KEY = "sod_n4_24h_baseline_v1"; // captured on first N4 load
+const SCHOLARSHIP_ENTRIES_KEY = "sod_n4_scholarship_entries_v1";
+// lastTotal, lastFab, fakeIndex, fakeOffset, fakeTimer, fakeEnabled, trackerActiveSince — declared at top before show()
+
+//
+// FAKE PURCHASE QUEUE — press C to fire next. 18 names, 78/22 F/M.
+// Each press: confetti + counter bump + welcome stream entry.
+//
+const FAKE_QUEUE = [
+  { firstName: 'Hannah',   lastInitial: 'M' },
+  { firstName: 'Sarah',    lastInitial: 'W' },
+  { firstName: 'Rachel',   lastInitial: 'B' },
+  { firstName: 'David',    lastInitial: 'C' },
+  { firstName: 'Olivia',   lastInitial: 'K' },
+  { firstName: 'Bethany',  lastInitial: 'P' },
+  { firstName: 'Mary',     lastInitial: 'D' },
+  { firstName: 'Grace',    lastInitial: 'A' },
+  { firstName: 'Caleb',    lastInitial: 'T' },
+  { firstName: 'Lydia',    lastInitial: 'V' },
+  { firstName: 'Emily',    lastInitial: 'O' },
+  { firstName: 'Anna',     lastInitial: 'R' },
+  { firstName: 'Lauren',   lastInitial: 'S' },
+  { firstName: 'Joshua',   lastInitial: 'N' },
+  { firstName: 'Megan',    lastInitial: 'H' },
+  { firstName: 'Naomi',    lastInitial: 'G' },
+  { firstName: 'Hope',     lastInitial: 'L' },
+  { firstName: 'Michael',  lastInitial: 'F' }
+];
+
+function fireFakeSignup(person) {
+  // Persist this C-fire so it survives the next API poll (otherwise the 8s
+  // fetchCounts overwrites recentSignups with API-only data and the fake vanishes).
+  const fakeEntry = {
+    firstName: person.firstName,
+    lastInitial: person.lastInitial,
+    addedAt: new Date().toISOString()
+  };
+  firedFakes.unshift(fakeEntry);
+  try { localStorage.setItem(FIRED_FAKES_KEY, JSON.stringify(firedFakes)); } catch (e) {}
+
+  const cached = localStorage.getItem("sod_last");
+  if (cached) {
+    try {
+      const d = JSON.parse(cached);
+      applyCountsRaw(d, /*forceCelebrate*/ true, person);
+    } catch (e) {}
+  } else {
+    celebrate(person);
+  }
+}
+
+function applyCountsRaw(d, forceCelebrate, fakePerson) {
+  const setNum = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  const setW = (id, w) => { const el = document.getElementById(id); if (el) el.style.width = Math.min(100, w) + "%"; };
+
+  const displayedTotal = (d.total || 0) + fakeOffset;
+  const displayedFab   = (d.fabTaken || 0) + fakeOffset;
+
+  ["fab-taken", "fab-taken-2"].forEach(id => setNum(id, displayedFab));
+  ["total-taken", "total-taken-2"].forEach(id => setNum(id, displayedTotal));
+  setNum("fab-cap", d.capFab);
+  setNum("total-cap", d.capTotal);
+
+  ["fab-bar", "fab-bar-2"].forEach(id => setW(id, displayedFab / d.capFab * 100));
+  ["total-bar", "total-bar-2"].forEach(id => setW(id, displayedTotal / d.capTotal * 100));
+
+  // Bump animations on count change
+  const realIncrease = lastFab !== null && d.fabTaken > lastFab;
+  if (forceCelebrate || realIncrease) {
+    ["fab-taken", "fab-taken-2", "total-taken", "total-taken-2"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); }
+    });
+
+    // Determine the people who just signed up
+    const newCount = realIncrease ? (d.fabTaken - lastFab) : 0;
+    const newPeople = fakePerson
+      ? [fakePerson]
+      : (d.recentSignups || []).slice(0, Math.max(1, newCount));
+
+    const onTracker = document.querySelector('.slide.active#slide-tracker, .slide.active#slide-tracker-2');
+    if (onTracker || fakePerson) {
+      // Celebrate immediately, staggered if multiple
+      newPeople.forEach((person, idx) => {
+        setTimeout(() => celebrate(person), idx * 1500);
+      });
+    } else if (realIncrease) {
+      // Off-tracker — queue for replay when JJ arrives
+      pendingRealSignups.push(...newPeople);
+    }
+  }
+
+  lastFab = d.fabTaken;
+  lastTotal = d.total;
+  updateStream(d.recentSignups || PRESEEDED);
+
+  // N4 — update "new in last 24h" + "spots left" on slide 3
+  updateN4Stats(d);
+}
+
+// N4 — capture baseline on first load, then compute 24h delta from that
+function updateN4Stats(d) {
+  if (!d || typeof d.total !== 'number') return;
+  let baseline;
+  try { baseline = JSON.parse(localStorage.getItem(LAST_24H_BASELINE_KEY) || 'null'); } catch (e) { baseline = null; }
+  if (baseline === null || typeof baseline !== 'number') {
+    baseline = d.total;
+    try { localStorage.setItem(LAST_24H_BASELINE_KEY, JSON.stringify(baseline)); } catch (e) {}
+  }
+  const delta = Math.max(0, (d.total + fakeOffset) - baseline);
+  const spots = Math.max(0, (d.capTotal || 200) - (d.total + fakeOffset));
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('new-students-24h', delta);
+  set('spots-left-200', spots);
+}
+
+// Pre-seeded welcomes for the camera demo (shown until real data arrives)
+const PRESEEDED = [
+  { firstName: "Sarah", lastInitial: "J", addedAt: new Date(Date.now() - 25 * 1000).toISOString() },
+  { firstName: "Maria", lastInitial: "G", addedAt: new Date(Date.now() - 48 * 1000).toISOString() },
+  { firstName: "David", lastInitial: "K", addedAt: new Date(Date.now() - 71 * 1000).toISOString() },
+  { firstName: "Bethany", lastInitial: "P", addedAt: new Date(Date.now() - 95 * 1000).toISOString() },
+  { firstName: "Jonathan", lastInitial: "L", addedAt: new Date(Date.now() - 120 * 1000).toISOString() }
+];
+
+async function fetchCounts() {
+  try {
+    const r = await fetch("/api/sod-counts", { cache: "no-store" });
+    const d = await r.json();
+    if (!d.ok) return;
+    applyCounts(d);
+    localStorage.setItem("sod_last", JSON.stringify(d));
+  } catch (e) {
+    const cached = localStorage.getItem("sod_last");
+    if (cached && lastTotal === null) applyCounts(JSON.parse(cached));
+  }
+}
+
+function applyCounts(d) {
+  applyCountsRaw(d, /*forceCelebrate*/ false);
+}
+
+// 🎉 Confetti + banner on new enrollment
+function celebrate(signup) {
+  const trackerSlides = [document.getElementById("slide-tracker"), document.getElementById("slide-tracker-2")];
+  const name = `${signup.firstName}${signup.lastInitial ? ' ' + signup.lastInitial + '.' : ''}`;
+
+  for (const slide of trackerSlides) {
+    if (!slide || !slide.classList.contains("active")) continue;
+
+    // Confetti
+    const stage = document.createElement("div");
+    stage.className = "confetti-stage";
+    const palette = ['#c89a4a', '#f5e0b8', '#b85c5c', '#8a3a3a', '#6e2a2a', '#fff1d8', '#8a6627'];
+    for (let n = 0; n < 80; n++) {
+      const p = document.createElement("div");
+      p.className = "confetti-piece";
+      p.style.background = palette[n % palette.length];
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 200 + Math.random() * 500;
+      p.style.setProperty('--dx', `${Math.cos(angle) * distance}px`);
+      p.style.setProperty('--dy', `${Math.sin(angle) * distance}px`);
+      p.style.animationDelay = `${Math.random() * 0.2}s`;
+      p.style.transform = `rotate(${Math.random() * 360}deg)`;
+      stage.appendChild(p);
+    }
+    slide.appendChild(stage);
+
+    // Banner
+    const banner = document.createElement("div");
+    banner.className = "celebrate-banner";
+    banner.innerHTML = `<span class="who">🎉 Just enrolled</span>Welcome <strong>${escapeHtml(name)}</strong>!`;
+    slide.appendChild(banner);
+
+    setTimeout(() => { stage.remove(); banner.remove(); }, 3400);
+  }
+}
+
+function updateStream(signups) {
+  signups = signups || [];
+  const tracks = [
+    document.getElementById("stream-track"),
+    document.getElementById("stream-track-3")
+  ];
+  // Merge C-fires on top of real API signups (deduped by name+addedAt to be safe)
+  const seen = new Set();
+  const merged = [...firedFakes, ...signups].filter(s => {
+    const k = `${s.firstName}|${s.lastInitial}|${s.addedAt}`;
+    if (seen.has(k)) return false;
+    seen.add(k); return true;
+  });
+  if (!merged.length) {
+    for (const t of tracks) if (t) t.innerHTML = '';
+    return;
+  }
+  // Show ALL students — newest at top, scrollable so JJ/Kait can scroll to shout people out
+  const html = merged.map(s => {
+    const name = `${s.firstName}${s.lastInitial ? ' ' + s.lastInitial + '.' : ''}`;
+    const when = timeAgo(s.addedAt);
+    return `<div class="stream-item">
+      <span>🎉</span>
+      <span>Welcome <strong>${escapeHtml(name)}</strong> to School of Dating</span>
+      <span class="when">${when}</span>
+    </div>`;
+  }).join('');
+  for (const t of tracks) if (t) t.innerHTML = html;
+}
+
+function timeAgo(iso) {
+  if (!iso) return '';
+  const sec = Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 1000));
+  if (sec < 60) return `${sec}s ago`;
+  if (sec < 3600) return `${Math.floor(sec/60)}m ago`;
+  if (sec < 86400) return `${Math.floor(sec/3600)}h ago`;
+  return `${Math.floor(sec/86400)}d ago`;
+}
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+
+function tick() {
+  const close = new Date(CART_CLOSE_ISO).getTime();
+  let diff = Math.max(0, Math.floor((close - Date.now()) / 1000));
+  const h = Math.floor(diff / 3600);
+  const m = Math.floor((diff % 3600) / 60);
+  const s = diff % 60;
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = String(v).padStart(2, '0'); };
+  ["cd-h", "cd-h2"].forEach(id => set(id, h));
+  ["cd-m", "cd-m2"].forEach(id => set(id, m));
+  ["cd-s", "cd-s2"].forEach(id => set(id, s));
+}
+
+// Show preseeded immediately for the demo before first API call returns
+updateStream(PRESEEDED);
+fetchCounts();
+setInterval(fetchCounts, POLL_MS);
+tick();
+setInterval(tick, 1000);
+
+const cached = localStorage.getItem("sod_last");
+if (cached) { try { applyCounts(JSON.parse(cached)); } catch (e) {} }
+
+//
+// N4 — SCHOLARSHIP entries (localStorage only, no backend)
+//
+function getScholarEntries() {
+  try { return JSON.parse(localStorage.getItem(SCHOLARSHIP_ENTRIES_KEY) || '[]'); } catch (e) { return []; }
+}
+function saveScholarEntries(arr) {
+  try { localStorage.setItem(SCHOLARSHIP_ENTRIES_KEY, JSON.stringify(arr)); } catch (e) {}
+}
+function renderScholarEntries() {
+  const list = document.getElementById('scholar-list');
+  const countEl = document.getElementById('scholar-count');
+  const entries = getScholarEntries();
+  if (countEl) countEl.textContent = entries.length;
+  if (!list) return;
+  if (!entries.length) {
+    list.innerHTML = '<div class="scholar-empty">No entries yet — be the first!</div>';
+    return;
+  }
+  // newest first
+  list.innerHTML = entries.slice().reverse().map(e =>
+    `<div class="se-item">✨ <strong>${escapeHtml(e.name)}</strong></div>`
+  ).join('');
+}
+function addScholarEntry(rawName) {
+  const name = String(rawName || '').trim().slice(0, 40);
+  if (!name) return false;
+  const entries = getScholarEntries();
+  // dedupe by lowercase name
+  if (entries.some(e => e.name.toLowerCase() === name.toLowerCase())) {
+    flashToast(`${name} is already entered`, '#8a3a3a');
+    return false;
+  }
+  entries.push({ name, addedAt: new Date().toISOString() });
+  saveScholarEntries(entries);
+  renderScholarEntries();
+  flashToast(`✨ ${name} entered!`, '#b85c5c');
+  return true;
+}
+
+const scholarSubmit = document.getElementById('scholar-submit');
+const scholarInput = document.getElementById('scholar-input');
+if (scholarSubmit && scholarInput) {
+  scholarSubmit.addEventListener('click', () => {
+    if (addScholarEntry(scholarInput.value)) {
+      scholarInput.value = '';
+      scholarInput.focus();
+    }
+  });
+  scholarInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (addScholarEntry(scholarInput.value)) {
+        scholarInput.value = '';
+      }
+    }
+    // Stop deck nav keys from hijacking typing
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === ' ') {
+      e.stopPropagation();
+    }
+  });
+}
+renderScholarEntries();
+
+//
+// N4 — WINNER REVEAL (drama + confetti)
+//
+function pickWinner() {
+  const entries = getScholarEntries();
+  const nameEl = document.getElementById('winner-name');
+  if (!nameEl) return;
+  if (!entries.length) {
+    nameEl.textContent = 'No entries yet';
+    flashToast('No scholarship entries yet', '#8a3a3a');
+    return;
+  }
+  // Dramatic shuffle reveal
+  const winner = entries[Math.floor(Math.random() * entries.length)];
+  let ticks = 0;
+  const maxTicks = 22;
+  const interval = setInterval(() => {
+    const r = entries[Math.floor(Math.random() * entries.length)];
+    nameEl.textContent = r.name.toUpperCase();
+    ticks++;
+    if (ticks >= maxTicks) {
+      clearInterval(interval);
+      nameEl.textContent = winner.name.toUpperCase();
+      // Big confetti burst on the winner slide
+      const slide = document.getElementById('slide-winner');
+      if (slide) {
+        const stage = document.createElement('div');
+        stage.className = 'confetti-stage';
+        const palette = ['#c89a4a', '#f5e0b8', '#b85c5c', '#8a3a3a', '#6e2a2a', '#fff1d8', '#8a6627'];
+        for (let n = 0; n < 220; n++) {
+          const p = document.createElement('div');
+          p.className = 'confetti-piece';
+          p.style.background = palette[n % palette.length];
+          const angle = Math.random() * Math.PI * 2;
+          const distance = 300 + Math.random() * 700;
+          p.style.setProperty('--dx', `${Math.cos(angle) * distance}px`);
+          p.style.setProperty('--dy', `${Math.sin(angle) * distance}px`);
+          p.style.animationDelay = `${Math.random() * 0.4}s`;
+          p.style.transform = `rotate(${Math.random() * 360}deg)`;
+          stage.appendChild(p);
+        }
+        slide.appendChild(stage);
+        setTimeout(() => stage.remove(), 5000);
+      }
+    }
+  }, 90);
+}
+const revealBtn = document.getElementById('reveal-btn');
+if (revealBtn) revealBtn.addEventListener('click', pickWinner);
+
+// Re-render scholar list whenever we land on entry slide (in case other tabs added entries)
+const _origShow = show;
+window.addEventListener('hashchange', renderScholarEntries);
+</script>
+
+</body>
+</html>
