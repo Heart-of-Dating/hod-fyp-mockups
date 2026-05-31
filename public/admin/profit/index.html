@@ -186,44 +186,6 @@
   </div>
 </div>
 
-<!-- REVENUE -->
-<h3>Revenue <span style="color:var(--muted-2);font-size:11px;font-weight:400;text-transform:none;letter-spacing:0;">— projection model (ad-spend based)</span></h3>
-<div class="card wide">
-  <div class="promo-row">
-    <label>SOD promo price:</label>
-    <select id="sod-price">
-      <option value="997" selected>$997 (default)</option>
-      <option value="1197">$1,197</option>
-      <option value="1397">$1,397</option>
-      <option value="1697">$1,697 (full)</option>
-    </select>
-    <label style="margin-left:18px;">Reg→VIP rates:</label>
-    <span class="sub" id="rates-display">paid — · org —</span>
-  </div>
-  <table>
-    <thead>
-      <tr><th>Line</th><th>Detail</th><th style="text-align:right;">Amount</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>VIP Buyers <span class="live-tag">LIVE</span></td>
-        <td class="note"><span id="rev-vip-count">—</span> @ $17 each</td>
-        <td class="amount" id="rev-vip">—</td>
-      </tr>
-      <tr>
-        <td>SOD Sales (projected)</td>
-        <td class="note"><span id="rev-sod-count">—</span> @ $<span id="rev-sod-price">997</span> · from VIP funnel + non-VIP</td>
-        <td class="amount" id="rev-sod">—</td>
-      </tr>
-      <tr class="total">
-        <td>Total Revenue</td>
-        <td></td>
-        <td class="amount" id="rev-total">—</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
 <!-- EXPENSES -->
 <h3>Expenses <span style="color:var(--muted-2);font-size:11px;font-weight:400;text-transform:none;letter-spacing:0;">— edit any number to update profit math</span></h3>
 <div class="card wide">
@@ -296,33 +258,8 @@
   </table>
 </div>
 
-<!-- SCENARIO COMPARE (from JJ's spreadsheet) -->
-<h3>Tracking vs. Plan</h3>
-<div class="scenarios">
-  <div class="scen-card" id="scen-us">
-    <div class="label us">Current Trajectory</div>
-    <div class="val" id="scen-us-rev">—</div>
-    <div class="sub-line"><b id="scen-us-sod">—</b> SOD · <span id="scen-us-net">—</span> net</div>
-  </div>
-  <div class="scen-card">
-    <div class="label">Doomsday (Kait)</div>
-    <div class="val">$156,537</div>
-    <div class="sub-line"><b>130</b> SOD · $114,802 net</div>
-  </div>
-  <div class="scen-card">
-    <div class="label">Must</div>
-    <div class="val">$202,683</div>
-    <div class="sub-line"><b>170</b> SOD · $157,868 net</div>
-  </div>
-  <div class="scen-card">
-    <div class="label">Sweet</div>
-    <div class="val">$272,652</div>
-    <div class="sub-line"><b>230</b> SOD · $218,217 net</div>
-  </div>
-</div>
-
 <p class="footer-note">
-  Live data refreshes every 90s. Edit any expense to recalculate. "Current Trajectory" projects SOD via live May reg→VIP rates (paid + organic), fall '25 VIP→SOD + non-VIP→SOD by promo price. Ad spend defaults to live Meta API FYP-to-date — bump the input higher if you want to model further scale.
+  All figures are ACTUALS. Revenue auto-refreshes every 90s from the live SOD enrollment count (AC tag 193) × $997 base + paid Pro upgrades. Contract revenue, not cash collected. Edit any expense to recalculate net + ROAS.
 </p>
 
 </div>
@@ -332,25 +269,17 @@ const $ = (id) => document.getElementById(id);
 const fmt = (n) => '$' + Math.round(n).toLocaleString();
 const fmtN = (n) => Math.round(n).toLocaleString();
 
-// Conversion math constants
-const SOD_RATES = {
-  997:  { vipSod: 0.051, nonVipSod: 0.0072 },
-  1197: { vipSod: 0.042, nonVipSod: 0.0055 },
-  1397: { vipSod: 0.035, nonVipSod: 0.0042 },
-  1697: { vipSod: 0.025, nonVipSod: 0.0030 },
-};
-const FALL_RATES = { paid: 0.0955, organic: 0.1617 };
 const TC_FEE_PCT = 0.03;
 
-let liveData = null;
-let sodPromo = 997;
-
-// Tonight's Actuals — real SOD count from live sod-counts API + corrected revenue model.
-// Contract revenue (not cash): every student paid >=$997; paid-Pro adds $1,500 delta.
-// PAID_PRO is hardcoded (~6 from ThriveCart) because AC's Pro tag is inflated by free trials.
+// ACTUALS revenue model (contract revenue, not cash):
+//  every SOD student paid >=$997; paid-Pro adds $1,500 delta.
+//  PAID_PRO is hardcoded (~6 from ThriveCart) because AC's Pro tag is
+//  inflated by 91 free-trial tags.
 const PAID_PRO = 6;
 const SOD_BASE = 997;
 const PRO_DELTA = 1500;
+let actualRevenue = 0;  // updated by pullActuals, consumed by recompute
+
 async function pullActuals() {
   try {
     const r = await fetch('/api/sod-counts', { cache: 'no-store' });
@@ -359,31 +288,13 @@ async function pullActuals() {
     const sod = d.total || 0;
     const sodRev = sod * SOD_BASE;
     const proRev = PAID_PRO * PRO_DELTA;
-    const fmt = n => '$' + Math.round(n).toLocaleString();
+    actualRevenue = sodRev + proRev;
     const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
     set('act-sod-count', sod);
     set('act-sod-rev', fmt(sodRev));
     set('act-pro-count', PAID_PRO);
     set('act-pro-rev', fmt(proRev));
-    set('act-total-rev', fmt(sodRev + proRev));
-  } catch (e) {}
-}
-
-async function pullData() {
-  try {
-    pullActuals();
-    const [d, m] = await Promise.all([
-      fetch('/api/dashboard').then(r => r.json()),
-      fetch('/api/meta-ads').then(r => r.json()),
-    ]);
-    liveData = { d, m };
-    if (!$('exp-adspend').dataset.userEdited) {
-      const lifeSpend = m?.lifetime?.spend || 0;
-      // Default to live spend if higher than seed; otherwise keep $35K seed
-      if (lifeSpend > 35000) {
-        $('exp-adspend').value = Math.round(lifeSpend);
-      }
-    }
+    set('act-total-rev', fmt(actualRevenue));
     $('updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
     recompute();
   } catch (e) {
@@ -391,68 +302,9 @@ async function pullData() {
   }
 }
 
-function projectVIPandSOD(d, m, promoPrice) {
-  // Live reg→VIP rates (fall back to fall '25 if not enough data)
-  const paidPct = parseFloat(d.vip?.paid_reg_to_vip_pct);
-  const orgPct = parseFloat(d.vip?.organic_reg_to_vip_pct);
-  const hasLivePaid = (d.vip?.paid >= 50) && !isNaN(paidPct) && paidPct > 0 && !d.channel?.paid_is_test;
-  const hasLiveOrg  = (d.vip?.organic >= 50) && !isNaN(orgPct) && orgPct > 0;
-  const ratePaid = hasLivePaid ? paidPct / 100 : FALL_RATES.paid;
-  const rateOrg  = hasLiveOrg ? orgPct / 100 : FALL_RATES.organic;
-
-  // Meta→AC inflation
-  const metaLeads = m?.pacing?.leads_to_date || 0;
-  const acPaid = d.channel?.paid || 0;
-  const inflation = (metaLeads > 100 && acPaid > 100) ? Math.max(1.0, metaLeads / acPaid) : 1.20;
-  const cpl = (m?.lifetime?.cpl) || 4.0;
-  const cplAc = cpl * inflation;
-
-  // Project paid leads from ad spend input
-  const adSpend = parseFloat($('exp-adspend').value) || 0;
-  const projectedPaid = cplAc > 0 ? adSpend / cplAc : 0;
-
-  // Project organic — extrapolate current org to event date
-  const orgToDate = d.channel?.organic || 0;
-  const paidProjectedFactor = acPaid > 0 ? projectedPaid / acPaid : 1;
-  const projectedOrg = orgToDate * Math.max(1, paidProjectedFactor);
-
-  // VIPs and SOD
-  const vipsPaid = projectedPaid * ratePaid;
-  const vipsOrg = projectedOrg * rateOrg;
-  const totalVIPs = vipsPaid + vipsOrg;
-  const totalLeads = projectedPaid + projectedOrg;
-  const nonVIP = Math.max(0, totalLeads - totalVIPs);
-
-  const rates = SOD_RATES[promoPrice] || SOD_RATES[997];
-  const sodFromVIP = totalVIPs * rates.vipSod;
-  const sodFromNonVIP = nonVIP * rates.nonVipSod;
-  const totalSOD = sodFromVIP + sodFromNonVIP;
-
-  return {
-    totalLeads, projectedPaid, projectedOrg, totalVIPs, totalSOD,
-    sodFromVIP, sodFromNonVIP, cplAc, ratePaid, rateOrg, inflation,
-  };
-}
-
 function recompute() {
-  if (!liveData) return;
-  const { d, m } = liveData;
-  const promo = sodPromo;
-  const proj = projectVIPandSOD(d, m, promo);
-
-  // VIP revenue — use current LIVE VIP buyers, not projected
-  // (we already have them; SOD projection projects forward but VIP $17 are realized)
-  const currentVIPs = d.vip?.total || 0;
-  const projectedVIPs = Math.round(proj.totalVIPs);
-  // Use whichever is higher: current actual OR projected (since projection includes future)
-  const finalVIPs = Math.max(currentVIPs, projectedVIPs);
-  const vipRevenue = finalVIPs * 17;
-
-  // SOD revenue
-  const sodRevenue = proj.totalSOD * promo;
-
-  // Total revenue
-  const totalRev = vipRevenue + sodRevenue;
+  // Revenue = ACTUALS (SOD count × $997 + paid Pro × $1,500 delta)
+  const totalRev = actualRevenue;
 
   // Expense inputs
   const expenseFields = ['adspend','james','social','speakers','coaches','influencer','ac','zoom','telnyx','misc'];
@@ -463,11 +315,12 @@ function recompute() {
   $('exp-tc-fees').textContent = fmt(tcFees);
   totalExp += tcFees;
 
-  // KPIs
+  // KPIs — all from ACTUALS
+  const adSpend = parseFloat($('exp-adspend').value)||0;
   $('kpi-revenue').textContent = fmt(totalRev);
-  $('kpi-revenue-sub').innerHTML = `<b>${fmt(vipRevenue)}</b> VIP + <b>${fmt(sodRevenue)}</b> SOD`;
+  $('kpi-revenue-sub').innerHTML = `actual SOD enrollment × $997 + paid Pro`;
   $('kpi-expenses').textContent = fmt(totalExp);
-  $('kpi-expenses-sub').innerHTML = `<b>${fmt(parseFloat($('exp-adspend').value)||0)}</b> ads + <b>${fmt(totalExp - (parseFloat($('exp-adspend').value)||0))}</b> other`;
+  $('kpi-expenses-sub').innerHTML = `<b>${fmt(adSpend)}</b> ads + <b>${fmt(totalExp - adSpend)}</b> other`;
 
   const netProfit = totalRev - totalExp;
   const margin = totalRev > 0 ? (netProfit/totalRev*100) : 0;
@@ -475,56 +328,38 @@ function recompute() {
   $('kpi-profit-sub').innerHTML = `<b>${margin.toFixed(1)}%</b> margin`;
   $('kpi-profit').style.color = netProfit > 50000 ? 'var(--green)' : netProfit > 0 ? 'var(--gold)' : 'var(--red)';
 
-  const adSpend = parseFloat($('exp-adspend').value)||0;
   const roas = adSpend > 0 ? (totalRev / adSpend) : 0;
   $('kpi-roas').textContent = roas.toFixed(2) + 'x';
-  $('kpi-roas-sub').innerHTML = `vs. <b>${(adSpend > 0 ? sodRevenue/adSpend : 0).toFixed(2)}x</b> on SOD-only`;
+  $('kpi-roas-sub').innerHTML = `revenue ÷ ad spend`;
   $('kpi-roas').style.color = roas > 5 ? 'var(--green)' : roas > 3 ? 'var(--blue)' : roas > 2 ? 'var(--gold)' : 'var(--red)';
-
-  // Revenue table
-  $('rev-vip-count').textContent = fmtN(finalVIPs);
-  $('rev-vip').textContent = fmt(vipRevenue);
-  $('rev-sod-count').textContent = Math.round(proj.totalSOD);
-  $('rev-sod-price').textContent = promo.toLocaleString();
-  $('rev-sod').textContent = fmt(sodRevenue);
-  $('rev-total').textContent = fmt(totalRev);
 
   // Expense total
   $('exp-total').textContent = fmt(totalExp);
-
-  // Rates display
-  $('rates-display').innerHTML =
-    `paid <b>${(proj.ratePaid*100).toFixed(1)}%</b> · org <b>${(proj.rateOrg*100).toFixed(1)}%</b> · Meta inflation ${proj.inflation.toFixed(2)}x · AC-truth CPL <b>$${proj.cplAc.toFixed(2)}</b>`;
-
-  // Scenario card
-  $('scen-us-rev').textContent = fmt(totalRev);
-  $('scen-us-sod').textContent = Math.round(proj.totalSOD);
-  $('scen-us-net').textContent = fmt(netProfit);
-  // Which scenario are we tracking towards?
-  const scenCard = document.querySelectorAll('.scen-card');
-  scenCard.forEach(c => c.classList.remove('active'));
-  let targetIdx = 0;
-  if (totalRev >= 272000) targetIdx = 3;
-  else if (totalRev >= 202000) targetIdx = 2;
-  else if (totalRev >= 156000) targetIdx = 1;
-  // Highlight current trajectory always
-  $('scen-us').classList.add('active');
 }
 
-// Wire input handlers
+// Wire expense input handlers
 ['adspend','james','social','speakers','coaches','influencer','ac','zoom','telnyx','misc'].forEach(f => {
   $('exp-'+f).addEventListener('input', () => {
     $('exp-'+f).dataset.userEdited = '1';
     recompute();
   });
 });
-$('sod-price').addEventListener('change', (e) => {
-  sodPromo = parseInt(e.target.value, 10);
-  recompute();
-});
 
-pullData();
-setInterval(pullData, 90000);
+// Pull live ad spend default from Meta (expense input only — no projections)
+async function pullAdSpend() {
+  try {
+    const m = await fetch('/api/meta-ads').then(r => r.json());
+    const lifeSpend = m?.lifetime?.spend || 0;
+    if (!$('exp-adspend').dataset.userEdited && lifeSpend > 35000) {
+      $('exp-adspend').value = Math.round(lifeSpend);
+      recompute();
+    }
+  } catch (e) {}
+}
+
+pullActuals();
+pullAdSpend();
+setInterval(pullActuals, 90000);
 </script>
 </body>
 </html>
