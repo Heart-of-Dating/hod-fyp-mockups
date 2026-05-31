@@ -156,8 +156,38 @@
   </div>
 </div>
 
+<!-- ACTUALS (live) — real SOD count from AC + corrected revenue model -->
+<h3>Tonight's Actuals <span style="color:var(--muted-2);font-size:11px;font-weight:400;text-transform:none;letter-spacing:0;">— live from ActiveCampaign + ThriveCart, contract revenue (not cash)</span></h3>
+<div class="card wide" style="border:2px solid var(--gold);">
+  <table>
+    <thead>
+      <tr><th>Line</th><th>Detail</th><th style="text-align:right;">Amount</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>SOD Students <span class="live-tag">LIVE</span></td>
+        <td class="note"><span id="act-sod-count">—</span> enrolled @ $997 base · <em>AC tag "School of Dating June 26"</em></td>
+        <td class="amount" id="act-sod-rev">—</td>
+      </tr>
+      <tr>
+        <td>Paid Pro Upgrades</td>
+        <td class="note"><span id="act-pro-count">6</span> @ +$1,500 delta · <em>ThriveCart paid "SOD PRO" (NOT the 91 free-trial tags)</em></td>
+        <td class="amount" id="act-pro-rev">—</td>
+      </tr>
+      <tr class="total">
+        <td>Total Contract Revenue</td>
+        <td class="note">140 cap → live</td>
+        <td class="amount green" id="act-total-rev">—</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="sub" style="margin-top:8px;padding:8px 10px;background:rgba(200,154,74,.08);border-radius:6px;">
+    ⚠️ <strong>Pro count correction:</strong> AC shows "93 Pro" but 91 of those got the Pro tag from the <em>free N3 fast-action trial</em>, not a paid upgrade. Real paid Pro ≈ 6 (ThriveCart $1,500 charges). Don't trust the raw AC Pro tag.
+  </div>
+</div>
+
 <!-- REVENUE -->
-<h3>Revenue</h3>
+<h3>Revenue <span style="color:var(--muted-2);font-size:11px;font-weight:400;text-transform:none;letter-spacing:0;">— projection model (ad-spend based)</span></h3>
 <div class="card wide">
   <div class="promo-row">
     <label>SOD promo price:</label>
@@ -315,8 +345,33 @@ const TC_FEE_PCT = 0.03;
 let liveData = null;
 let sodPromo = 997;
 
+// Tonight's Actuals — real SOD count from live sod-counts API + corrected revenue model.
+// Contract revenue (not cash): every student paid >=$997; paid-Pro adds $1,500 delta.
+// PAID_PRO is hardcoded (~6 from ThriveCart) because AC's Pro tag is inflated by free trials.
+const PAID_PRO = 6;
+const SOD_BASE = 997;
+const PRO_DELTA = 1500;
+async function pullActuals() {
+  try {
+    const r = await fetch('/api/sod-counts', { cache: 'no-store' });
+    const d = await r.json();
+    if (!d.ok) return;
+    const sod = d.total || 0;
+    const sodRev = sod * SOD_BASE;
+    const proRev = PAID_PRO * PRO_DELTA;
+    const fmt = n => '$' + Math.round(n).toLocaleString();
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('act-sod-count', sod);
+    set('act-sod-rev', fmt(sodRev));
+    set('act-pro-count', PAID_PRO);
+    set('act-pro-rev', fmt(proRev));
+    set('act-total-rev', fmt(sodRev + proRev));
+  } catch (e) {}
+}
+
 async function pullData() {
   try {
+    pullActuals();
     const [d, m] = await Promise.all([
       fetch('/api/dashboard').then(r => r.json()),
       fetch('/api/meta-ads').then(r => r.json()),
