@@ -174,9 +174,14 @@
         <td class="note"><span id="act-pro-count">6</span> @ +$1,500 delta · <em>ThriveCart paid "SOD PRO" (NOT the 91 free-trial tags)</em></td>
         <td class="amount" id="act-pro-rev">—</td>
       </tr>
+      <tr>
+        <td>VIP Tripwire <span class="live-tag">LIVE</span></td>
+        <td class="note"><span id="act-vip-count">—</span> buyers @ $17 · <em>4 nights replay Q&amp;A + Basics of Dating · AC tag "FYP VIP May 2026"</em></td>
+        <td class="amount" id="act-vip-rev">—</td>
+      </tr>
       <tr class="total">
         <td>Total Contract Revenue</td>
-        <td class="note">140 cap → live</td>
+        <td class="note">SOD + Pro + VIP</td>
         <td class="amount green" id="act-total-rev">—</td>
       </tr>
     </tbody>
@@ -215,9 +220,19 @@
         <td class="amount"><input type="number" id="exp-speakers" value="10000" step="500" /></td>
       </tr>
       <tr>
-        <td>SOD Coaches</td>
-        <td class="note">Sophia / Alana / Keyla + others through 16-week cohort</td>
-        <td class="amount"><input type="number" id="exp-coaches" value="15000" step="500" /></td>
+        <td>SOD Coaching — per student <span class="live-tag">LIVE</span></td>
+        <td class="note">$77 × <span id="coach-student-n">—</span> SOD students · variable, scales with enrollment</td>
+        <td class="amount" id="exp-coach-var">—</td>
+      </tr>
+      <tr>
+        <td>Coaching — Session Support</td>
+        <td class="note">Saturday sessions + Q&amp;As · fixed</td>
+        <td class="amount"><input type="number" id="exp-coach-fixed" value="1625" step="25" /></td>
+      </tr>
+      <tr>
+        <td>Pro Free-Trial Coaching (FAB Giveaway)</td>
+        <td class="note">$40 × 4 calls × ~91 N3 free-trial signups · 1 month free 1:1s · need ~10% trial→Pro to cover</td>
+        <td class="amount"><input type="number" id="exp-pro-trial" value="14560" step="100" /></td>
       </tr>
       <tr>
         <td>Influencer Marketing</td>
@@ -259,7 +274,7 @@
 </div>
 
 <p class="footer-note">
-  All figures are ACTUALS. Revenue auto-refreshes every 90s from the live SOD enrollment count (AC tag 193) × $997 base + paid Pro upgrades. Contract revenue, not cash collected. Edit any expense to recalculate net + ROAS.
+  All figures are ACTUALS. Revenue auto-refreshes every 90s: live SOD enrollment (AC tag 193) × $997 base + paid Pro upgrades + VIP tripwire buyers (AC tag "FYP VIP May 2026") × $17. Contract revenue, not cash collected. Edit any expense to recalculate net + ROAS.
 </p>
 
 </div>
@@ -278,22 +293,38 @@ const TC_FEE_PCT = 0.03;
 const PAID_PRO = 6;
 const SOD_BASE = 997;
 const PRO_DELTA = 1500;
+const VIP_PRICE = 17;   // FYP VIP tripwire: 4 nights replay Q&A + Basics of Dating
+const COACH_PER_STUDENT = 77;  // variable coaching cost per SOD student
 let actualRevenue = 0;  // updated by pullActuals, consumed by recompute
+let liveSodCount = 0;   // updated by pullActuals, used for variable coaching cost
 
 async function pullActuals() {
   try {
-    const r = await fetch('/api/sod-counts', { cache: 'no-store' });
-    const d = await r.json();
-    if (!d.ok) return;
-    const sod = d.total || 0;
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+
+    // SOD + Pro from sod-counts; VIP tripwire count from the main dashboard API
+    const [sodRes, dashRes] = await Promise.all([
+      fetch('/api/sod-counts', { cache: 'no-store' }).then(r => r.json()).catch(() => null),
+      fetch('/api/dashboard', { cache: 'no-store' }).then(r => r.json()).catch(() => null),
+    ]);
+    if (!sodRes || !sodRes.ok) return;
+
+    const sod = sodRes.total || 0;
+    liveSodCount = sod;
     const sodRev = sod * SOD_BASE;
     const proRev = PAID_PRO * PRO_DELTA;
-    actualRevenue = sodRev + proRev;
-    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+
+    const vipCount = (dashRes && dashRes.vip && dashRes.vip.total) ? dashRes.vip.total : 0;
+    const vipRev = vipCount * VIP_PRICE;
+
+    actualRevenue = sodRev + proRev + vipRev;
+
     set('act-sod-count', sod);
     set('act-sod-rev', fmt(sodRev));
     set('act-pro-count', PAID_PRO);
     set('act-pro-rev', fmt(proRev));
+    set('act-vip-count', vipCount ? fmtN(vipCount) : '—');
+    set('act-vip-rev', fmt(vipRev));
     set('act-total-rev', fmt(actualRevenue));
     $('updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
     recompute();
@@ -307,9 +338,14 @@ function recompute() {
   const totalRev = actualRevenue;
 
   // Expense inputs
-  const expenseFields = ['adspend','james','social','speakers','coaches','influencer','ac','zoom','telnyx','misc'];
+  const expenseFields = ['adspend','james','social','speakers','coach-fixed','pro-trial','influencer','ac','zoom','telnyx','misc'];
   let totalExp = 0;
   expenseFields.forEach(f => totalExp += parseFloat($('exp-'+f).value) || 0);
+  // Variable per-student coaching ($77 × live SOD count)
+  const coachVar = liveSodCount * COACH_PER_STUDENT;
+  $('coach-student-n').textContent = liveSodCount || '—';
+  $('exp-coach-var').textContent = fmt(coachVar);
+  totalExp += coachVar;
   // Auto TC fees
   const tcFees = totalRev * TC_FEE_PCT;
   $('exp-tc-fees').textContent = fmt(tcFees);
@@ -318,7 +354,7 @@ function recompute() {
   // KPIs — all from ACTUALS
   const adSpend = parseFloat($('exp-adspend').value)||0;
   $('kpi-revenue').textContent = fmt(totalRev);
-  $('kpi-revenue-sub').innerHTML = `actual SOD enrollment × $997 + paid Pro`;
+  $('kpi-revenue-sub').innerHTML = `SOD × $997 + paid Pro + VIP × $17`;
   $('kpi-expenses').textContent = fmt(totalExp);
   $('kpi-expenses-sub').innerHTML = `<b>${fmt(adSpend)}</b> ads + <b>${fmt(totalExp - adSpend)}</b> other`;
 
@@ -338,7 +374,7 @@ function recompute() {
 }
 
 // Wire expense input handlers
-['adspend','james','social','speakers','coaches','influencer','ac','zoom','telnyx','misc'].forEach(f => {
+['adspend','james','social','speakers','coach-fixed','pro-trial','influencer','ac','zoom','telnyx','misc'].forEach(f => {
   $('exp-'+f).addEventListener('input', () => {
     $('exp-'+f).dataset.userEdited = '1';
     recompute();
