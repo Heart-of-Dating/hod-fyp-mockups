@@ -317,7 +317,7 @@ src="https://www.facebook.com/tr?id=869575087492502&ev=PageView&noscript=1"
   <div class="container-narrow" style="max-width:720px;margin:0 auto;text-align:center;">
     <h2 style="margin-bottom:16px;font-family:'Fraunces',serif;font-weight:600;">Grab the Keep-Going Bundle</h2>
     <p class="muted" style="margin-bottom:32px;">Click below for secure checkout. Apple Pay supported. Instant access to the replay + Basics of Dating.</p>
-    <a href="PLACEHOLDER_TC_URL_ORGANIC" class="btn btn-primary tc-cta" data-tc-cta target="_blank" rel="noopener" style="font-size:18px;padding:18px 36px;">Open Secure Checkout — $17</a>
+    <a href="https://hod.thrivecart.com/keep-going/?passthrough[channel]=organic" class="btn btn-primary tc-cta" data-tc-cta target="_blank" rel="noopener" style="font-size:18px;padding:18px 36px;">Open Secure Checkout — $17</a>
     <p class="muted" style="margin-top:18px;font-size:13px;">7-day money-back guarantee · Secure checkout</p>
   </div>
 </section>
@@ -328,8 +328,8 @@ src="https://www.facebook.com/tr?id=869575087492502&ev=PageView&noscript=1"
 // Alana: paste the two $17 checkout URLs below; until then CTAs stay on the placeholder.
 (function(){
   var TC = {
-    paid:    'PLACEHOLDER_TC_URL_PAID',     // $17 · tags KeepGoing-Paid + KeepGoing-Overall
-    organic: 'PLACEHOLDER_TC_URL_ORGANIC'   // $17 · tags KeepGoing-Organic + KeepGoing-Overall
+    paid:    'https://hod.thrivecart.com/keep-going/?passthrough[channel]=paid',     // $17 · tags KeepGoing-Paid + KeepGoing-Overall
+    organic: 'https://hod.thrivecart.com/keep-going/?passthrough[channel]=organic'   // $17 · tags KeepGoing-Organic + KeepGoing-Overall
   };
   var params = new URLSearchParams(window.location.search);
   var srcRaw = (params.get('src') || params.get('utm_medium') || '').toLowerCase();
