@@ -1,0 +1,33 @@
+name: Deploy to Cloudflare Pages
+
+# Auto-deploys public/ to fyp.heartofdating.com on every push to main.
+# No more hand-running `wrangler pages deploy`. Runs on Node 22 (the local
+# Node-20 hang doesn't exist here). Only deploys changed files — wrangler
+# dedupes against what's already uploaded.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}   # lets you trigger a deploy manually from the Actions tab
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 7b868e14935cafbec1815d99b0f63de8
+          command: pages deploy public --project-name=hod-fyp --branch=main
