@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1600, initial-scale=1">
+<title>SOD · The Pain Cycle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600;700;800&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6f0;
+  --ink: #1d1815;
+  --ink-soft: #4a3f37;
+  --muted: #8a7e72;
+  --line: #e8dfd2;
+  --terra: #c47a6e;
+  --terra-deep: #a85a4e;
+  --terra-soft: #f4dad4;
+  --cream: #f3ebdc;
+  --paper: #fffaf2;
+  --dark: #1d1815;
+  --shadow: 0 30px 80px -30px rgba(40,28,18,.25);
+  --shadow-strong: 0 40px 100px -30px rgba(40,28,18,.4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  overflow: hidden;
+}
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 5vh 7vw;
+  flex-direction: column; justify-content: center;
+  opacity: 0; transition: opacity .35s ease;
+}
+.slide.active { display: flex; opacity: 1; }
+
+.eyebrow {
+  font-size: 0.85rem; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--terra-deep);
+  font-weight: 600; margin-bottom: 1.5rem;
+}
+.eyebrow .dot {
+  display: inline-block; width: 6px; height: 6px;
+  background: var(--terra); border-radius: 50%;
+  margin: 0 .8em; vertical-align: middle;
+}
+.script {
+  font-family: 'Caveat', cursive;
+  font-weight: 500;
+  font-style: italic;
+}
+h1.title {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: clamp(3.5rem, 7vw, 7.5rem);
+  line-height: 0.95; letter-spacing: -0.025em;
+}
+h1.title em { font-style: italic; font-weight: 400; color: var(--terra-deep); }
+h2.section {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  line-height: 1.0; letter-spacing: -0.02em;
+}
+h2.section em { font-style: italic; color: var(--terra-deep); font-weight: 400; }
+h3 {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 1; letter-spacing: -0.02em;
+}
+h3 em { font-style: italic; color: var(--terra-deep); }
+.lede {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  line-height: 1.35; font-weight: 300;
+  color: var(--ink-soft); max-width: 42ch;
+}
+.lede em { color: var(--terra-deep); font-style: italic; }
+.kicker {
+  font-size: 1.05rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--muted);
+  font-weight: 500;
+}
+.giant {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: clamp(4rem, 9vw, 10rem);
+  line-height: .9; letter-spacing: -0.04em;
+}
+.giant em { font-style: italic; font-weight: 400; color: var(--terra-deep); }
+
+.center { text-align: center; align-items: center; }
+.center .lede { margin: 0 auto; }
+.stack > * + * { margin-top: 1.5rem; }
+
+/* Themes */
+.theme-terra { background: var(--terra); color: #faf6f0; }
+.theme-terra h1, .theme-terra h2, .theme-terra h3, .theme-terra .lede, .theme-terra .giant { color: #faf6f0; }
+.theme-terra h1 em, .theme-terra h2 em, .theme-terra .giant em, .theme-terra h3 em { color: #fff1d8; }
+.theme-terra .eyebrow, .theme-terra .kicker { color: #fff1d8; }
+.theme-dark { background: #1d1815; color: var(--bg); }
+.theme-dark .lede, .theme-dark h1, .theme-dark h2, .theme-dark h3 { color: var(--bg); }
+.theme-dark .eyebrow { color: var(--terra); }
+.theme-dark h1 em, .theme-dark h2 em, .theme-dark .giant em, .theme-dark h3 em { color: var(--terra-soft); }
+.theme-cream { background: var(--cream); }
+
+/* Pull quote */
+.pull {
+  font-family: 'Fraunces', serif; font-style: italic;
+  font-weight: 300;
+  font-size: clamp(2rem, 3.5vw, 3.5rem);
+  line-height: 1.2; letter-spacing: -0.015em;
+  color: var(--ink); max-width: 26ch;
+}
+.pull em { color: var(--terra-deep); font-style: italic; }
+
+/* Two/four column */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; align-items: center; height: 100%; }
+.four-col { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2vw; align-items: start; }
+
+/* Bubble (LOVE / TRUST callouts) */
+.bubble {
+  display: inline-flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: var(--terra); color: #faf6f0;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 2.4rem;
+  letter-spacing: 0.04em;
+  box-shadow: var(--shadow);
+}
+.bubble .icon {
+  font-size: 2.2rem;
+  margin-bottom: .4rem;
+}
+.bubble-label {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.bubble-label strong {
+  display: block;
+  font-family: 'Fraunces', serif;
+  font-size: 1.6rem;
+  font-style: italic;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-top: .4rem;
+}
+
+/* Pain message list */
+.feels-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.feels-list li {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(1.6rem, 2.6vw, 2.6rem);
+  line-height: 1.15;
+  color: var(--ink-soft);
+}
+.feels-list li::before {
+  content: "—";
+  margin-right: .8rem;
+  color: var(--terra);
+}
+
+/* Coping mechanism box + words */
+.cope-box {
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  background: var(--terra);
+  color: #faf6f0;
+  padding: 1rem 2.4rem;
+  border-radius: 6px;
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: clamp(2rem, 3vw, 3rem);
+  letter-spacing: 0.04em;
+  box-shadow: var(--shadow);
+}
+.cope-words {
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+.cope-words li {
+  list-style: none;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: clamp(1.1rem, 1.6vw, 1.5rem);
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+}
+
+/* Characters trio */
+.trio {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2vw;
+  align-items: end;
+  margin-top: 3rem;
+}
+.trio .character {
+  text-align: center;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 2rem 1.5rem 1.5rem;
+  box-shadow: var(--shadow);
+}
+.trio .character .face {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  line-height: 1;
+}
+.trio .character .name {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.3rem, 1.8vw, 1.7rem);
+  color: var(--ink);
+  line-height: 1.1;
+  margin-bottom: .4rem;
+}
+.trio .character .src {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* Coping 4-col summary */
+.cope-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.6vw;
+  margin-top: 3rem;
+  width: 100%;
+}
+.cope-summary .col {
+  text-align: center;
+}
+.cope-summary .col .word-list {
+  list-style: none;
+  display: flex; flex-direction: column;
+  gap: .35rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+.cope-summary .col .cope-box {
+  font-size: clamp(1.2rem, 1.8vw, 1.8rem);
+  padding: .7rem 1.5rem;
+}
+
+/* Pain cycle WHEN/USUALLY two-col */
+.when-usually {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 3vw;
+  align-items: start;
+  width: 100%;
+  margin-top: 3rem;
+}
+.when-usually .head {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-style: italic;
+  font-size: clamp(1.6rem, 2.4vw, 2.4rem);
+  color: var(--terra-deep);
+  margin-bottom: 1.5rem;
+}
+.when-usually .list {
+  list-style: none;
+  display: flex; flex-direction: column;
+  gap: .8rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.1rem, 1.5vw, 1.4rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.when-usually .arrow {
+  font-size: 4rem;
+  color: var(--terra);
+  align-self: center;
+  margin-top: 3rem;
+}
+
+/* Circular pain cycle (Kait's) */
+.cycle-diagram {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  gap: 2vw;
+  align-items: start;
+  margin-top: 2rem;
+}
+.cycle-node {
+  background: var(--paper);
+  border: 1.5px solid var(--terra);
+  border-radius: 14px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.cycle-node .label {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.3rem, 1.8vw, 1.7rem);
+  color: var(--terra-deep);
+  margin-bottom: 1rem;
+}
+.cycle-node .list {
+  list-style: none;
+  display: flex; flex-direction: column;
+  gap: .4rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+.cycle-arrow {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem;
+  color: var(--terra);
+  margin-top: 5rem;
+}
+
+/* Stats grid (dopamine) */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2vw;
+  margin-top: 3rem;
+  width: 100%;
+}
+.stat-grid .stat {
+  text-align: center;
+  border-top: 2px solid var(--terra);
+  padding-top: 1.5rem;
+}
+.stat-grid .stat .num {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: clamp(2.2rem, 3.2vw, 3rem);
+  color: var(--terra-deep);
+  line-height: 1;
+  margin-bottom: .8rem;
+}
+.stat-grid .stat .lbl {
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* Big number badge */
+.step-num {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(8rem, 18vw, 22rem);
+  color: var(--terra-deep);
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  opacity: 0.9;
+}
+
+/* Activity slide */
+.activity {
+  display: flex; flex-direction: column;
+  gap: 1.8rem;
+  max-width: 56ch;
+}
+.activity .prompt {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: clamp(1.6rem, 2.4vw, 2.4rem);
+  line-height: 1.3;
+  color: var(--ink);
+}
+.activity .prompt em { color: var(--terra-deep); font-style: italic; }
+.activity .tag {
+  display: inline-block;
+  background: var(--terra-soft);
+  color: var(--terra-deep);
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  align-self: flex-start;
+}
+
+/* Scripture */
+.scripture-block {
+  max-width: 28ch;
+  margin: 0 auto;
+}
+.scripture-block .verse {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(2.5rem, 4.5vw, 4.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 2.5rem;
+}
+.scripture-block .ref {
+  font-size: 0.95rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--terra-deep);
+  font-weight: 600;
+}
+
+/* Decorative dotted border */
+.deco-dots {
+  position: absolute; left: 5vw; right: 5vw;
+  height: 12px;
+  background-image: radial-gradient(circle, var(--terra-deep) 1.5px, transparent 1.5px),
+                    radial-gradient(circle, var(--ink) 1.5px, transparent 1.5px);
+  background-size: 18px 6px, 18px 6px;
+  background-position: 0 0, 9px 6px;
+  background-repeat: repeat-x;
+  opacity: 0.55;
+}
+.deco-dots.top { top: 2vh; }
+.deco-dots.bottom { bottom: 2vh; }
+.theme-dark .deco-dots, .theme-terra .deco-dots { opacity: 0.4; }
+
+/* Progress + nav */
+.chrome {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 2rem; z-index: 100;
+  font-size: 0.78rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--muted);
+  font-weight: 500;
+}
+.progress {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 3px; background: var(--line); z-index: 100;
+}
+.progress > div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--terra), var(--terra-deep));
+  width: 0%; transition: width .35s ease;
+}
+.nav-hint kbd {
+  display: inline-block; padding: 2px 8px;
+  border: 1px solid var(--line); border-radius: 3px;
+  font-size: 0.7rem; margin: 0 2px;
+  color: var(--ink-soft); background: var(--paper);
+}
+
+</style>
+</head>
+<body>
+
+<div class="progress"><div id="bar"></div></div>
+
+<div class="deck" id="deck">
+
+<!-- 1. SECTION OPENER -->
+<section class="slide active center theme-dark">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra)">SOD · Phase 1 · Day 1</p>
+  <h1 class="giant" style="margin-top:1.5rem">The <em>Pain</em><br>Cycle.</h1>
+  <p class="lede" style="margin-top:3rem; max-width:32ch">Where past wounds quietly shape every dating pattern you have today.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 2. FRAME -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Now</div>
+  <h2 class="section" style="max-width:24ch">You heard our stories.<br>Now let's name <em>what's underneath.</em></h2>
+  <p class="lede" style="margin-top:2rem">Every story has a pattern. Every pattern has a cycle. Every cycle started somewhere.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 3. STEP 1 DIVIDER -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra-deep)">Step One</p>
+  <h1 class="giant" style="margin-top:1.5rem">The <em>Pain</em><br>Message.</h1>
+  <p class="lede" style="margin-top:2.5rem; max-width:34ch">Any part of your heart and mind that believes a lie.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 4. TWO QUESTIONS — LOVE / TRUST -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Every pain message ties back to one of two things</div>
+  <h2 class="section" style="margin-bottom:4rem">Love. Or <em>Trust.</em></h2>
+  <div style="display:flex; gap:5vw; justify-content:center; align-items:start">
+    <div>
+      <div class="bubble"><span class="icon">♥</span>LOVE</div>
+      <div class="bubble-label">Identity<strong>Who am I?</strong></div>
+    </div>
+    <div>
+      <div class="bubble"><span class="icon">⌘</span>TRUST</div>
+      <div class="bubble-label">Safety<strong>How am I?</strong></div>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 5. LOVE — IDENTITY -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">Questions of Love</div>
+      <h2 class="section">Who am <em>I?</em></h2>
+      <p class="lede" style="margin-top:1.5rem">When your identity is what's wounded, the pain messages sound like this.</p>
+    </div>
+    <div>
+      <ul class="feels-list">
+        <li>I feel unworthy.</li>
+        <li>I feel unloved.</li>
+        <li>I feel defective.</li>
+        <li>I feel not enough.</li>
+        <li>I feel unseen.</li>
+        <li>I feel like a failure.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 6. AFFIRMATION MACHINES -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <p class="pull">We are walking, breathing <em>affirmation-needy</em> machines.</p>
+  <p class="lede" style="margin-top:3rem">The dating app. The IG DM. The worship night.<br>All of it — trying to answer:</p>
+  <div style="display:flex; gap:3rem; justify-content:center; margin-top:2rem; font-family:'Fraunces', serif; font-style:italic; font-weight:400; font-size:clamp(1.8rem,3vw,2.8rem); color:var(--terra-deep)">
+    <span>Am I worthy?</span>
+    <span>Am I wanted?</span>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 7. DOPAMINE DROP -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">When the answer feels good</div>
+  <h2 class="section">A compliment is a <em>90-second</em> high.</h2>
+  <div class="stat-grid">
+    <div class="stat"><div class="num">0–10s</div><div class="lbl">Dopamine spike<br>pleasure, rush</div></div>
+    <div class="stat"><div class="num">10–60s</div><div class="lbl">Serotonin +<br>oxytocin</div></div>
+    <div class="stat"><div class="num">1–5m</div><div class="lbl">Tapers<br>back to baseline</div></div>
+    <div class="stat"><div class="num">Then</div><div class="lbl">Back to your<br>pain message</div></div>
+  </div>
+  <p class="lede" style="margin-top:3rem">Compliments don't heal pain messages. They just delay them.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 8. TRUST — SAFETY -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <ul class="feels-list">
+        <li>I feel alone.</li>
+        <li>I feel betrayed.</li>
+        <li>I feel abandoned.</li>
+        <li>I feel unsafe.</li>
+        <li>I feel out of control.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="eyebrow">Questions of Trust</div>
+      <h2 class="section">How am <em>I?</em></h2>
+      <p class="lede" style="margin-top:1.5rem">When your sense of safety is what's wounded, the pain messages sound like this.</p>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 9. ORIGINS -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Where they start</div>
+  <h2 class="section" style="max-width:22ch">Pain messages begin in your <em>family of origin.</em></h2>
+  <p class="lede" style="margin-top:2rem">Then they get reinforced by:</p>
+  <div style="display:flex; gap:3rem; justify-content:center; margin-top:1.5rem; font-family:'Fraunces',serif; font-weight:400; font-size:clamp(1.4rem,2vw,2rem); color:var(--ink-soft)">
+    <span>· Other people</span>
+    <span>· The world around you</span>
+    <span>· Every relationship after</span>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 10. TRANSITION -->
+<section class="slide center theme-terra">
+  <div class="deco-dots top"></div>
+  <p class="pull" style="color:#faf6f0; max-width:30ch">So what do we <em style="color:#fff1d8">do</em> when these messages get triggered?</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 11. STEP 2 DIVIDER -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra-deep)">Step Two</p>
+  <h1 class="giant" style="margin-top:1.5rem">How we <em>cope.</em></h1>
+  <p class="lede" style="margin-top:2.5rem; max-width:34ch">Four ways. Two fight. Two flight.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 12. FOUR COPING OVERVIEW -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">The four coping mechanisms</div>
+  <h2 class="section" style="margin-bottom:3.5rem">Which one is <em>yours?</em></h2>
+  <div style="display:flex; gap:1.5rem; flex-wrap:wrap; justify-content:center">
+    <div style="text-align:center"><div class="cope-box">BLAME</div><div style="margin-top:.8rem; font-size:0.85rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted)">fight</div></div>
+    <div style="text-align:center"><div class="cope-box">SHAME</div><div style="margin-top:.8rem; font-size:0.85rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted)">flight</div></div>
+    <div style="text-align:center"><div class="cope-box">CONTROL</div><div style="margin-top:.8rem; font-size:0.85rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted)">fight</div></div>
+    <div style="text-align:center"><div class="cope-box">ESCAPE</div><div style="margin-top:.8rem; font-size:0.85rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted)">flight</div></div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 13. BLAME WORDS -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">When you feel unloved</div>
+      <h2 class="section"><em>Blame.</em></h2>
+      <p class="lede" style="margin-top:1.5rem">You point the gun outward. They are the problem.</p>
+      <div class="cope-box" style="margin-top:2.5rem">BLAME · fight</div>
+    </div>
+    <div>
+      <ul class="cope-words">
+        <li>Fault-finding</li>
+        <li>Angry</li>
+        <li>Sarcastic</li>
+        <li>Arrogant</li>
+        <li>Aggressive</li>
+        <li>Threatening</li>
+        <li>Holds a grudge</li>
+        <li>Impatient</li>
+        <li>Withdraws</li>
+        <li>Defensive</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 14. BLAME ARCHETYPES -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Who's a Blamer?</div>
+  <h2 class="section">Familiar <em>faces.</em></h2>
+  <div class="trio">
+    <div class="character"><div class="face">👹</div><div class="name">Shrek</div><div class="src">when he's mad</div></div>
+    <div class="character"><div class="face">⚔︎</div><div class="name">Anakin</div><div class="src">"you turned her against me"</div></div>
+    <div class="character"><div class="face">💅</div><div class="name">Regina George</div><div class="src">mean girls</div></div>
+  </div>
+  <p class="lede" style="margin-top:2.5rem">Blamers refuse ownership. They deflect. They defend.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 15. SHAME WORDS -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">When you feel unloved</div>
+      <h2 class="section"><em>Shame.</em></h2>
+      <p class="lede" style="margin-top:1.5rem">You point the gun inward. You are the problem.</p>
+      <div class="cope-box" style="margin-top:2.5rem">SHAME · flight</div>
+    </div>
+    <div>
+      <ul class="cope-words">
+        <li>Negative</li>
+        <li>Hopeless</li>
+        <li>Inconsolable</li>
+        <li>Anxious</li>
+        <li>Self-critical</li>
+        <li>Depressed</li>
+        <li>Catastrophizes</li>
+        <li>Manipulates</li>
+        <li>Whiny / needy</li>
+        <li>Withdraws to pout</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 16. SHAME ARCHETYPES -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Who's in shame?</div>
+  <h2 class="section">Familiar <em>faces.</em></h2>
+  <div class="trio">
+    <div class="character"><div class="face">😢</div><div class="name">Sadness</div><div class="src">Inside Out</div></div>
+    <div class="character"><div class="face">🧦</div><div class="name">Dobby</div><div class="src">"Dobby is a bad elf"</div></div>
+    <div class="character"><div class="face">🐴</div><div class="name">Eeyore</div><div class="src">Hundred Acre Wood</div></div>
+  </div>
+  <p class="lede" style="margin-top:2.5rem">The gun barrel is focused on self.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 17. CONTROL WORDS -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">When you feel unsafe</div>
+      <h2 class="section"><em>Control.</em></h2>
+      <p class="lede" style="margin-top:1.5rem">If I can just manage everything, I won't have to feel it.</p>
+      <div class="cope-box" style="margin-top:2.5rem">CONTROL · fight</div>
+    </div>
+    <div>
+      <ul class="cope-words">
+        <li>Perform</li>
+        <li>Defensive</li>
+        <li>Judging</li>
+        <li>Critical</li>
+        <li>Controlling</li>
+        <li>Closed off</li>
+        <li>Demanding</li>
+        <li>Suspicious</li>
+        <li>Nagging</li>
+        <li>Over-functioning</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 18. CONTROL ARCHETYPES -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Who's in control?</div>
+  <h2 class="section">Familiar <em>faces.</em></h2>
+  <div class="trio">
+    <div class="character"><div class="face">😊</div><div class="name">Joy</div><div class="src">Inside Out</div></div>
+    <div class="character"><div class="face">🤠</div><div class="name">Woody</div><div class="src">Toy Story</div></div>
+    <div class="character"><div class="face">🐠</div><div class="name">Marlin</div><div class="src">Finding Nemo</div></div>
+  </div>
+  <p class="lede" style="margin-top:2.5rem">If I keep it tight, nothing will go wrong. (Spoiler.)</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 19. ESCAPE WORDS -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">When you feel unsafe</div>
+      <h2 class="section"><em>Escape.</em></h2>
+      <p class="lede" style="margin-top:1.5rem">If I just get out of here — or out of myself — I won't have to feel it.</p>
+      <div class="cope-box" style="margin-top:2.5rem">ESCAPE · flight</div>
+    </div>
+    <div>
+      <ul class="cope-words">
+        <li>Minimize</li>
+        <li>Irresponsible</li>
+        <li>Disconnected</li>
+        <li>Addicted</li>
+        <li>Numbed out</li>
+        <li>Unreliable</li>
+        <li>Secretive</li>
+        <li>Impulsive</li>
+        <li>Selfish</li>
+        <li>Avoidant</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 20. ESCAPE ARCHETYPES -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Who's escaping?</div>
+  <h2 class="section">Familiar <em>faces.</em></h2>
+  <div class="trio">
+    <div class="character"><div class="face">❄︎</div><div class="name">Elsa</div><div class="src">"Let it Go"</div></div>
+    <div class="character"><div class="face">📺</div><div class="name">Michael Scott</div><div class="src">when it gets real</div></div>
+    <div class="character"><div class="face">🏴‍☠️</div><div class="name">Jack Sparrow</div><div class="src">always leaving</div></div>
+  </div>
+  <p class="lede" style="margin-top:2.5rem">Numb it. Avoid it. Leave it. Survive it.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 21. YOUR PAIN MESSAGE SUMMARY -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow center" style="text-align:center; margin:0 auto 1rem">Your turn — identify yours</div>
+  <h2 class="section center" style="text-align:center">Your <em>pain message.</em></h2>
+  <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:3vw; align-items:center; margin-top:3rem">
+    <ul class="feels-list" style="text-align:right">
+      <li style="font-size:clamp(1.2rem,1.8vw,1.8rem)">I feel unworthy</li>
+      <li style="font-size:clamp(1.2rem,1.8vw,1.8rem)">I feel unloved</li>
+      <li style="font-size:clamp(1.2rem,1.8vw,1.8rem)">I feel defective</li>
+      <li style="font-size:clamp(1.2rem,1.8vw,1.8rem)">I feel not enough</li>
+      <li style="font-size:clamp(1.2rem,1.8vw,1.8rem)">I feel like a failure</li>
+    </ul>
+    <div style="display:flex; gap:1rem">
+      <div style="text-align:center"><div class="bubble" style="width:130px; height:130px; font-size:1.5rem">♥<br>LOVE</div></div>
+      <div style="text-align:center"><div class="bubble" style="width:130px; height:130px; font-size:1.5rem">⌘<br>TRUST</div></div>
+    </div>
+    <ul class="feels-list">
+      <li style="font-size:clamp(1.2rem,1.8vw,1.8rem)">I feel alone</li>
+      <li style="font-size:clamp(1.2rem,1.8vw,1.8rem)">I feel betrayed</li>
+      <li style="font-size:clamp(1.2rem,1.8vw,1.8rem)">I feel abandoned</li>
+      <li style="font-size:clamp(1.2rem,1.8vw,1.8rem)">I feel unsafe</li>
+      <li style="font-size:clamp(1.2rem,1.8vw,1.8rem)">I feel out of control</li>
+    </ul>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 22. YOUR COPING SUMMARY -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow center" style="text-align:center; margin:0 auto 1rem">Now identify your top one</div>
+  <h2 class="section center" style="text-align:center">Your <em>coping.</em></h2>
+  <div class="cope-summary">
+    <div class="col">
+      <ul class="word-list"><li>Angry</li><li>Sarcastic</li><li>Fault-finding</li><li>Aggressive</li><li>Holds grudge</li><li>Impatient</li><li>Defensive</li></ul>
+      <div class="cope-box">BLAME</div>
+    </div>
+    <div class="col">
+      <ul class="word-list"><li>Hopeless</li><li>Anxious</li><li>Self-critical</li><li>Catastrophizes</li><li>Manipulates</li><li>Whiny/needy</li><li>Withdraws to pout</li></ul>
+      <div class="cope-box">SHAME</div>
+    </div>
+    <div class="col">
+      <ul class="word-list"><li>Perform</li><li>Defensive</li><li>Judging</li><li>Controlling</li><li>Demanding</li><li>Suspicious</li><li>Over-function</li></ul>
+      <div class="cope-box">CONTROL</div>
+    </div>
+    <div class="col">
+      <ul class="word-list"><li>Minimize</li><li>Numbed out</li><li>Addicted</li><li>Unreliable</li><li>Secretive</li><li>Avoidant</li><li>Withdraws to escape</li></ul>
+      <div class="cope-box">ESCAPE</div>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 23. YEARS OF PRACTICE TRANSITION -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <p class="pull"><em>Years</em> of practice.<br>This is your old self.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 24. EPHESIANS 4 SCRIPTURE -->
+<section class="slide center theme-dark">
+  <div class="deco-dots top"></div>
+  <div class="scripture-block">
+    <p class="verse">"Put off your <em>old self,</em> which belongs to your former manner of life…"</p>
+    <p class="ref">— Ephesians 4:22</p>
+  </div>
+  <p class="lede" style="margin-top:4rem; max-width:36ch; text-align:center">These are the parts of your heart Jesus is desperate to touch.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 25. YOUR PAIN CYCLE — WHEN I FEEL / I USUALLY DO -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow center" style="text-align:center; margin:0 auto 1rem">Connect them</div>
+  <h2 class="section center" style="text-align:center">Your <em>pain cycle.</em></h2>
+  <div class="when-usually">
+    <div>
+      <div class="head">"When I feel…"</div>
+      <ul class="list">
+        <li>Unloved</li>
+        <li>Unseen / misunderstood</li>
+        <li>Out of control</li>
+        <li>Alone</li>
+        <li>Failure</li>
+        <li>Unsafe</li>
+      </ul>
+    </div>
+    <div class="arrow">→</div>
+    <div>
+      <div class="head">"I usually…"</div>
+      <ul class="list">
+        <li>Get anxious</li>
+        <li>Try to prove</li>
+        <li>Take control</li>
+        <li>Get negative / hopeless</li>
+        <li>People-please</li>
+        <li>Escape / numb out</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 26. KAIT'S PAIN CYCLE — CIRCULAR -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <h2 class="section center" style="text-align:center; margin-bottom:2rem">Kait's <em>pain cycle.</em></h2>
+  <div class="cycle-diagram">
+    <div class="cycle-node">
+      <div class="label">Kait feels</div>
+      <ul class="list">
+        <li style="color:var(--terra-deep)">Unseen / misunderstood</li>
+        <li>Unloved</li>
+        <li>Failure (too much / not enough)</li>
+        <li>Out of control</li>
+        <li>Alone</li>
+      </ul>
+    </div>
+    <div class="cycle-node">
+      <div class="label">Kait copes</div>
+      <ul class="list">
+        <li>Anxious</li>
+        <li>Angry</li>
+        <li>Over-explain / prove</li>
+        <li>Critical / control / demanding</li>
+        <li>Negative / hopeless</li>
+      </ul>
+    </div>
+    <div class="cycle-node">
+      <div class="label">Consequences</div>
+      <ul class="list">
+        <li>Defensive</li>
+        <li>Withdraw</li>
+        <li>Minimize</li>
+        <li>Arrogant / entitled</li>
+      </ul>
+    </div>
+  </div>
+  <p class="lede" style="margin-top:2.5rem; text-align:center">→ Which loops right back to the start. Years of reps.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 27. YOUR TURN — EXERCISE 1 -->
+<section class="slide theme-cream">
+  <div class="deco-dots top"></div>
+  <div class="activity center" style="margin:0 auto">
+    <span class="tag">Your turn</span>
+    <h2 class="section">Map <em>yours.</em></h2>
+    <p class="prompt">Think of a recent moment of pain in dating.</p>
+    <p class="prompt">What was the <em>message</em> you got — about yourself? about the relationship? about the situation?</p>
+    <p class="prompt">What did you <em>do</em> to cope?</p>
+    <p class="lede" style="margin-top:1rem">Write it down. Share one in the chat.</p>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 28. TRIGGERS DIVIDER -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra-deep)">Now let's talk about</p>
+  <h1 class="giant" style="margin-top:1.5rem"><em>Triggers.</em></h1>
+  <p class="lede" style="margin-top:2.5rem; max-width:34ch">The fuse that lights the whole cycle.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 29. TNT ANALOGY -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <p class="pull">A trigger is a <em>muscle.</em></p>
+  <p class="lede" style="margin-top:2rem; max-width:38ch">Exercised. Exercised. Exercised. Until your reaction comes <em>before</em> your thought.</p>
+  <div style="display:flex; gap:4rem; margin-top:4rem; justify-content:center">
+    <div style="text-align:center">
+      <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:clamp(1.5rem,2.2vw,2.2rem); color:var(--terra-deep); margin-bottom:.6rem">The fuse</div>
+      <div style="font-size:0.85rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted)">What sets you off</div>
+    </div>
+    <div style="text-align:center">
+      <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:clamp(1.5rem,2.2vw,2.2rem); color:var(--terra-deep); margin-bottom:.6rem">The reaction</div>
+      <div style="font-size:0.85rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted)">Loud · silent · covert</div>
+    </div>
+    <div style="text-align:center">
+      <div style="font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:clamp(1.5rem,2.2vw,2.2rem); color:var(--terra-deep); margin-bottom:.6rem">The shortener</div>
+      <div style="font-size:0.85rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted)">What chops your patience</div>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 30. INTERNAL TRIGGER SYMPTOMS -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Your body tells you first</div>
+  <h2 class="section">Listen for the <em>signal.</em></h2>
+  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem; margin-top:3rem; font-family:'Inter',sans-serif; font-weight:500; font-size:clamp(1rem,1.4vw,1.4rem); letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-soft)">
+    <div>· Racing heart</div>
+    <div>· Stress</div>
+    <div>· Anxiety</div>
+    <div>· Overwhelmed</div>
+    <div>· Anger</div>
+    <div>· Sadness</div>
+    <div>· Tension</div>
+    <div>· Lonely</div>
+    <div>· Abandoned</div>
+    <div>· Out of control</div>
+    <div>· Frustrated</div>
+    <div>· In pain</div>
+  </div>
+  <p class="lede" style="margin-top:3rem">Your body says: <em>"something's wrong here, we need help."</em></p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 31. COMMON DATING TRIGGERS -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">In dating specifically</div>
+  <h2 class="section">Your most <em>common</em> triggers.</h2>
+  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:.8rem 3vw; margin-top:3rem; font-family:'Fraunces',serif; font-weight:300; font-size:clamp(1.1rem,1.5vw,1.5rem); color:var(--ink-soft); line-height:1.4">
+    <div>— Being rejected</div>
+    <div>— Not texted back</div>
+    <div>— Being ignored or dismissed</div>
+    <div>— Being unavailable to</div>
+    <div>— Being judged or criticized</div>
+    <div>— Being too busy for</div>
+    <div>— Being controlled</div>
+    <div>— Being ghosted</div>
+    <div>— Being compared</div>
+    <div>— Being manipulated</div>
+    <div>— Their indecision</div>
+    <div>— Moving too fast</div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 32. YOUR TURN — EXERCISE 2 -->
+<section class="slide theme-cream">
+  <div class="deco-dots top"></div>
+  <div class="activity center" style="margin:0 auto">
+    <span class="tag">Your turn</span>
+    <h2 class="section">Name <em>three.</em></h2>
+    <p class="prompt">Pick your <em>3-5</em> most recent triggers from this week.</p>
+    <p class="prompt">Tie each one to your pain message.<br>Tie each one to your top coping mechanism.</p>
+    <p class="lede" style="margin-top:1rem">Share one in the chat.</p>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 33. CLOSE -->
+<section class="slide center theme-dark">
+  <div class="deco-dots top"></div>
+  <p class="pull" style="color:var(--bg)">Your pain cycle is <em style="color:var(--terra-soft)">not</em> your identity.</p>
+  <p class="pull" style="color:var(--bg); margin-top:2rem">It's your <em style="color:var(--terra-soft)">starting</em> point.</p>
+  <p class="lede" style="margin-top:4rem; max-width:40ch">Next session — how we move from <em>pain</em> to <em>peace.</em></p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 34. HOMEWORK -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <span class="tag" style="margin-bottom:2rem">Homework</span>
+  <h1 class="giant">Map your <em>full</em> Pain Cycle.</h1>
+  <div style="display:flex; flex-direction:column; gap:1rem; margin-top:3.5rem; max-width:42ch; text-align:center">
+    <p class="lede" style="margin:0">What's your pain message?</p>
+    <p class="lede" style="margin:0">What's your top coping mechanism?</p>
+    <p class="lede" style="margin:0">What triggered you this week — and how did it loop?</p>
+  </div>
+  <p class="kicker" style="margin-top:4rem; color:var(--terra-deep)">Bring it to next session.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+</div>
+
+<div class="chrome">
+  <div>SOD · Phase 1 · The Pain Cycle</div>
+  <div class="nav-hint"><span id="counter">01 / 34</span> · use <kbd>←</kbd> <kbd>→</kbd> or <kbd>space</kbd></div>
+</div>
+
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const bar = document.getElementById('bar');
+const counter = document.getElementById('counter');
+let i = 0;
+
+function show(n) {
+  i = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+  bar.style.width = ((i + 1) / slides.length * 100) + '%';
+  counter.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+  history.replaceState(null, '', '#' + (i + 1));
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+document.addEventListener('click', e => {
+  if (e.target.closest('a, button, kbd, input, iframe, [data-noclick]')) return;
+  const half = window.innerWidth / 2;
+  show(e.clientX > half ? i + 1 : i - 1);
+});
+
+const startHash = parseInt(location.hash.slice(1), 10);
+show((startHash && !isNaN(startHash)) ? startHash - 1 : 0);
+</script>
+
+</body>
+</html>
