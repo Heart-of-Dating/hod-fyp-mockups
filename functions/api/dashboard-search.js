@@ -81,6 +81,13 @@ export async function onRequestGet({ request, env }) {
       const isVip = relevantTags.some(t => /VIP May 2026/i.test(t));
       const smsOptin = relevantTags.some(t => /SMS_Optin_Yes/i.test(t));
 
+      // DEBUG 2026-06-16 Pierre: fetch raw fieldValues to confirm birth_year storage
+      let rawFields = null;
+      try {
+        const fvResp = await ac(env, `/contacts/${c.id}/fieldValues`);
+        rawFields = (fvResp.fieldValues || []).map(fv => ({ field: fv.field, value: fv.value }));
+      } catch (e) { rawFields = `error: ${e.message}`; }
+
       return {
         id: c.id,
         email: c.email,
@@ -93,6 +100,7 @@ export async function onRequestGet({ request, env }) {
         is_vip: isVip,
         sms_optin: smsOptin,
         tags: relevantTags,
+        fieldValues_debug: rawFields,
       };
     }));
 
