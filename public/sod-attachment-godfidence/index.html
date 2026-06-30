@@ -254,6 +254,64 @@ h3 em { font-style: italic; color: var(--terra-deep); }
   line-height: 1.3;
 }
 
+/* Iceberg illustration for Pain + Attachment connection */
+.iceberg-wrap {
+  position: relative;
+  width: min(1200px, 92vw);
+  margin: 2rem auto 0;
+  display: grid;
+  grid-template-columns: 1fr 520px 1fr;
+  gap: 1.5rem;
+  align-items: center;
+}
+.iceberg-svg {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 18px 30px rgba(40,28,18,.18));
+}
+.iceberg-label {
+  font-family: 'Fraunces', serif;
+  line-height: 1.3;
+}
+.iceberg-label .lbl-tag {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--terra-deep);
+  margin-bottom: 0.6rem;
+}
+.iceberg-label .lbl-tag em {
+  font-style: italic;
+  color: var(--terra-deep);
+  font-weight: 700;
+}
+.iceberg-label .lbl-text {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-style: italic;
+  font-size: clamp(1.3rem, 1.8vw, 1.7rem);
+  color: var(--ink);
+}
+.iceberg-label .lbl-sub {
+  display: inline-block;
+  margin-top: 0.4rem;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+  text-transform: none;
+}
+.iceberg-label.above {
+  text-align: right;
+}
+.iceberg-label.below {
+  text-align: left;
+}
+
 .conn-table {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -434,24 +492,59 @@ h3 em { font-style: italic; color: var(--terra-deep); }
   <div class="deco-dots bottom"></div>
 </section>
 
-<!-- 3. PAIN CYCLE × ATTACHMENT CONNECTION -->
+<!-- 3. VIDEO — ATTACHMENT THEORY EXPLAINER -->
+<section class="slide" style="padding:3vh 5vw">
+  <div class="deco-dots top"></div>
+  <div style="display:grid; grid-template-columns:minmax(380px, 28ch) 1fr; gap:4vw; align-items:center; max-width:1500px; margin:0 auto; height:100%; width:100%">
+    <div>
+      <div class="eyebrow">Watch · 7.5 min</div>
+      <h2 class="section" style="font-size:clamp(2rem, 3.5vw, 3.5rem); line-height:1.05">Attachment <em>theory</em> — the basics.</h2>
+      <p class="lede" style="margin-top:2rem; font-size:clamp(1.1rem, 1.5vw, 1.5rem)">Before we go deep, watch this primer. We'll unpack the 3 insecure styles and the secure path after.</p>
+    </div>
+    <div style="aspect-ratio:16/9; width:100%; max-height:78vh; border-radius:16px; overflow:hidden; box-shadow:var(--shadow-strong); background:#000; border:6px solid #1d1815">
+      <iframe src="https://www.youtube.com/embed/WjOowWxOXCg?start=253&rel=0" style="width:100%; height:100%; border:none; display:block" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 4. PAIN CYCLE × ATTACHMENT — ICEBERG -->
 <section class="slide center">
   <div class="deco-dots top"></div>
   <div class="eyebrow">Phase 1 callback</div>
   <h2 class="section" style="text-align:center">Two lenses. <em>Same engine.</em></h2>
-  <div class="conn-table">
-    <div class="conn-col">
-      <div class="col-label">Attachment Style</div>
-      <div class="col-q">"What do I <em>fear</em> in relationships?"</div>
-      <div class="col-body">Your default wiring for connection + safety. Set in childhood. Activated under stress.</div>
+  <div class="iceberg-wrap">
+    <!-- Above-water labels -->
+    <div class="iceberg-label above">
+      <div class="lbl-tag">What you <em>DO</em></div>
+      <div class="lbl-text">Pain Cycle coping<br><span class="lbl-sub">Blame · Shame · Control · Escape</span></div>
     </div>
-    <div class="conn-col">
-      <div class="col-label">Pain Cycle</div>
-      <div class="col-q">"What do I <em>do</em> when that fear gets triggered?"</div>
-      <div class="col-body">The coping you reach for — Blame, Shame, Control, or Escape.</div>
+    <!-- Iceberg SVG -->
+    <svg class="iceberg-svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+      <!-- Iceberg tip (above water) -->
+      <polygon points="370,90 430,90 470,295 330,295"
+               fill="#fffaf2" stroke="var(--terra-deep)" stroke-width="2"/>
+      <!-- Detail line on tip -->
+      <polyline points="395,150 415,200 380,250" stroke="var(--terra)" stroke-width="1.5" fill="none" opacity="0.45"/>
+      <!-- Water — wavy line at 300 -->
+      <path d="M 0 300 Q 80 290 160 300 T 320 300 T 480 300 T 640 300 T 800 300 L 800 320 Q 720 310 640 320 T 480 320 T 320 320 T 160 320 T 0 320 Z"
+            fill="var(--terra)" opacity="0.5"/>
+      <path d="M 0 300 Q 80 290 160 300 T 320 300 T 480 300 T 640 300 T 800 300"
+            stroke="var(--terra-deep)" stroke-width="2" fill="none"/>
+      <!-- Iceberg below water (much bigger) -->
+      <polygon points="330,300 470,300 555,510 245,510"
+               fill="var(--terra-soft)" stroke="var(--terra-deep)" stroke-width="2" opacity="0.95"/>
+      <!-- Below-water shadow detail -->
+      <polygon points="330,300 470,300 510,400 290,400"
+               fill="var(--terra)" opacity="0.15"/>
+    </svg>
+    <!-- Below-water labels -->
+    <div class="iceberg-label below">
+      <div class="lbl-tag">What you <em>FEAR</em></div>
+      <div class="lbl-text">Attachment style<br><span class="lbl-sub">Set in childhood · Activated under stress · The deep wiring</span></div>
     </div>
   </div>
-  <p class="lede" style="margin-top:2rem; text-align:center; font-size:1.2rem">You are <em>not</em> being labeled. You can show up in more than one style.</p>
+  <p class="lede" style="margin-top:1.5rem; text-align:center; font-size:1.1rem">You are <em>not</em> being labeled. You can show up in more than one style.</p>
   <div class="deco-dots bottom"></div>
 </section>
 
@@ -752,7 +845,7 @@ h3 em { font-style: italic; color: var(--terra-deep); }
 
 <div class="chrome">
   <div>SOD · Phase 1 · Attachment & Godfidence</div>
-  <div class="nav-hint"><span id="counter">01 / 19</span> · use <kbd>←</kbd> <kbd>→</kbd> or <kbd>space</kbd></div>
+  <div class="nav-hint"><span id="counter">01 / 20</span> · use <kbd>←</kbd> <kbd>→</kbd> or <kbd>space</kbd></div>
 </div>
 
 <script>
