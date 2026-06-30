@@ -254,62 +254,74 @@ h3 em { font-style: italic; color: var(--terra-deep); }
   line-height: 1.3;
 }
 
-/* Iceberg illustration for Pain + Attachment connection */
-.iceberg-wrap {
-  position: relative;
+/* Two question cards (Attachment → Pain Cycle) */
+.qa-pair {
   width: min(1200px, 92vw);
-  margin: 2rem auto 0;
+  margin: 3rem auto 0;
   display: grid;
-  grid-template-columns: 1fr 520px 1fr;
-  gap: 1.5rem;
-  align-items: center;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 2rem;
+  align-items: stretch;
 }
-.iceberg-svg {
-  width: 100%;
-  height: auto;
-  filter: drop-shadow(0 18px 30px rgba(40,28,18,.18));
+.qa-card {
+  background: var(--paper);
+  border: 1.5px solid var(--terra);
+  border-radius: 18px;
+  padding: 2.5rem 2.2rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
-.iceberg-label {
-  font-family: 'Fraunces', serif;
-  line-height: 1.3;
-}
-.iceberg-label .lbl-tag {
+.qa-tag {
   font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  font-size: 0.75rem;
-  letter-spacing: 0.28em;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--terra-deep);
-  margin-bottom: 0.6rem;
+  margin-bottom: 1.4rem;
 }
-.iceberg-label .lbl-tag em {
+.qa-q {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: clamp(1.8rem, 2.6vw, 2.6rem);
+  line-height: 1.15;
+  color: var(--ink);
+  margin-bottom: 1.4rem;
+  letter-spacing: -0.015em;
+}
+.qa-q em {
   font-style: italic;
   color: var(--terra-deep);
-  font-weight: 700;
 }
-.iceberg-label .lbl-text {
+.qa-a {
   font-family: 'Fraunces', serif;
-  font-weight: 500;
-  font-style: italic;
-  font-size: clamp(1.3rem, 1.8vw, 1.7rem);
-  color: var(--ink);
-}
-.iceberg-label .lbl-sub {
-  display: inline-block;
-  margin-top: 0.4rem;
-  font-family: 'Inter', sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 0.85rem;
-  letter-spacing: 0.05em;
+  font-weight: 300;
+  font-size: clamp(1rem, 1.3vw, 1.25rem);
+  line-height: 1.45;
   color: var(--ink-soft);
-  text-transform: none;
 }
-.iceberg-label.above {
-  text-align: right;
+.qa-a em {
+  font-style: italic;
+  color: var(--terra-deep);
 }
-.iceberg-label.below {
-  text-align: left;
+.qa-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-width: 120px;
+}
+.qa-arrow-label {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: clamp(1.3rem, 1.6vw, 1.6rem);
+  color: var(--terra-deep);
+  font-style: italic;
+  letter-spacing: 0.01em;
 }
 
 .conn-table {
@@ -492,59 +504,47 @@ h3 em { font-style: italic; color: var(--terra-deep); }
   <div class="deco-dots bottom"></div>
 </section>
 
-<!-- 3. VIDEO — ATTACHMENT THEORY EXPLAINER -->
-<section class="slide" style="padding:3vh 5vw">
+<!-- 3. VIDEO — full-screen, no other text -->
+<section class="slide" style="padding:3vh 4vw; justify-content:center; align-items:center">
   <div class="deco-dots top"></div>
-  <div style="display:grid; grid-template-columns:minmax(380px, 28ch) 1fr; gap:4vw; align-items:center; max-width:1500px; margin:0 auto; height:100%; width:100%">
-    <div>
-      <div class="eyebrow">Watch · 7.5 min</div>
-      <h2 class="section" style="font-size:clamp(2rem, 3.5vw, 3.5rem); line-height:1.05">Attachment <em>theory</em> — the basics.</h2>
-      <p class="lede" style="margin-top:2rem; font-size:clamp(1.1rem, 1.5vw, 1.5rem)">Before we go deep, watch this primer. We'll unpack the 3 insecure styles and the secure path after.</p>
-    </div>
-    <div style="aspect-ratio:16/9; width:100%; max-height:78vh; border-radius:16px; overflow:hidden; box-shadow:var(--shadow-strong); background:#000; border:6px solid #1d1815">
-      <iframe src="https://www.youtube.com/embed/WjOowWxOXCg?start=253&rel=0" style="width:100%; height:100%; border:none; display:block" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </div>
+  <div style="aspect-ratio:16/9; width:100%; max-width:1500px; max-height:88vh; border-radius:18px; overflow:hidden; box-shadow:var(--shadow-strong); background:#000; border:6px solid #1d1815">
+    <iframe src="https://www.youtube.com/embed/WjOowWxOXCg?start=253&rel=0" style="width:100%; height:100%; border:none; display:block" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
   </div>
   <div class="deco-dots bottom"></div>
 </section>
 
-<!-- 4. PAIN CYCLE × ATTACHMENT — ICEBERG -->
+<!-- 4. PAIN CYCLE × ATTACHMENT — TWO QUESTIONS -->
 <section class="slide center">
   <div class="deco-dots top"></div>
   <div class="eyebrow">Phase 1 callback</div>
-  <h2 class="section" style="text-align:center">Two lenses. <em>Same engine.</em></h2>
-  <div class="iceberg-wrap">
-    <!-- Above-water labels -->
-    <div class="iceberg-label above">
-      <div class="lbl-tag">What you <em>DO</em></div>
-      <div class="lbl-text">Pain Cycle coping<br><span class="lbl-sub">Blame · Shame · Control · Escape</span></div>
+  <h2 class="section" style="text-align:center">Two questions. <em>Same engine.</em></h2>
+
+  <div class="qa-pair">
+    <!-- Attachment card -->
+    <div class="qa-card">
+      <div class="qa-tag">Attachment Style</div>
+      <p class="qa-q">"What do I <em>fear</em><br>in relationships?"</p>
+      <p class="qa-a">Your default wiring — set in childhood, activated under stress.</p>
     </div>
-    <!-- Iceberg SVG -->
-    <svg class="iceberg-svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-      <!-- Iceberg tip (above water) -->
-      <polygon points="370,90 430,90 470,295 330,295"
-               fill="#fffaf2" stroke="var(--terra-deep)" stroke-width="2"/>
-      <!-- Detail line on tip -->
-      <polyline points="395,150 415,200 380,250" stroke="var(--terra)" stroke-width="1.5" fill="none" opacity="0.45"/>
-      <!-- Water — wavy line at 300 -->
-      <path d="M 0 300 Q 80 290 160 300 T 320 300 T 480 300 T 640 300 T 800 300 L 800 320 Q 720 310 640 320 T 480 320 T 320 320 T 160 320 T 0 320 Z"
-            fill="var(--terra)" opacity="0.5"/>
-      <path d="M 0 300 Q 80 290 160 300 T 320 300 T 480 300 T 640 300 T 800 300"
-            stroke="var(--terra-deep)" stroke-width="2" fill="none"/>
-      <!-- Iceberg below water (much bigger) -->
-      <polygon points="330,300 470,300 555,510 245,510"
-               fill="var(--terra-soft)" stroke="var(--terra-deep)" stroke-width="2" opacity="0.95"/>
-      <!-- Below-water shadow detail -->
-      <polygon points="330,300 470,300 510,400 290,400"
-               fill="var(--terra)" opacity="0.15"/>
-    </svg>
-    <!-- Below-water labels -->
-    <div class="iceberg-label below">
-      <div class="lbl-tag">What you <em>FEAR</em></div>
-      <div class="lbl-text">Attachment style<br><span class="lbl-sub">Set in childhood · Activated under stress · The deep wiring</span></div>
+
+    <!-- Connector arrow -->
+    <div class="qa-arrow">
+      <svg viewBox="0 0 100 40" width="100%" height="40">
+        <line x1="5" y1="20" x2="90" y2="20" stroke="var(--terra)" stroke-width="2.5" stroke-linecap="round"/>
+        <polygon points="80,12 95,20 80,28" fill="var(--terra)"/>
+      </svg>
+      <span class="qa-arrow-label">triggers</span>
+    </div>
+
+    <!-- Pain Cycle card -->
+    <div class="qa-card">
+      <div class="qa-tag">Pain Cycle</div>
+      <p class="qa-q">"What do I <em>do</em><br>when triggered?"</p>
+      <p class="qa-a">The coping you reach for — <em>Blame · Shame · Control · Escape.</em></p>
     </div>
   </div>
-  <p class="lede" style="margin-top:1.5rem; text-align:center; font-size:1.1rem">You are <em>not</em> being labeled. You can show up in more than one style.</p>
+
+  <p class="lede" style="margin-top:2.5rem; text-align:center; font-size:1.1rem">You are <em>not</em> being labeled. You can show up in more than one style.</p>
   <div class="deco-dots bottom"></div>
 </section>
 
