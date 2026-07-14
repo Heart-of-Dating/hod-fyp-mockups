@@ -4,13 +4,12 @@
 
 # SOD uniform slide URLs (2026-07-14): decks live at /sod/session-N/
 /sod-pain-cycle/* /sod/session-1/:splat 301
-/sod-type-attraction/* /sod/session-5/:splat 301
+/sod-type-attraction/* /sod/session-4/:splat 301
 /sod-calendar/* /sod/calendar/:splat 301
 # Not-yet-built sessions land on the hub (302 TEMP — DELETE the line when that session's deck ships,
 # or the redirect will shadow the new static files)
 /sod/session-2/ /sod/sessions/ 302
 /sod/session-3/ /sod/sessions/ 302
-/sod/session-4/ /sod/sessions/ 302
 /sod/session-6/ /sod/sessions/ 302
 /sod/session-7/ /sod/sessions/ 302
 /sod/session-8/ /sod/sessions/ 302

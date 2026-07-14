@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1600, initial-scale=1">
-<title>SOD · Type &amp; Attraction</title>
+<title>SOD · Red Flags, Dealbreakers &amp; Non-Negotiables</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,6 +21,9 @@
   --cream: #f3ebdc;
   --paper: #fffaf2;
   --dark: #1d1815;
+  --flag-red: #b0483c;
+  --flag-orange: #d18f4a;
+  --flag-green: #7d9a6f;
   --shadow: 0 30px 80px -30px rgba(40,28,18,.25);
   --shadow-strong: 0 40px 100px -30px rgba(40,28,18,.4);
 }
@@ -119,33 +122,6 @@ h3 em { font-style: italic; color: var(--terra-deep); }
 /* Two column */
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; align-items: center; height: 100%; }
 
-/* Bubble */
-.bubble {
-  display: inline-flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  background: var(--terra); color: #faf6f0;
-  width: 200px; height: 200px;
-  border-radius: 50%;
-  font-family: 'Fraunces', serif;
-  font-weight: 600;
-  font-size: 2.4rem;
-  letter-spacing: 0.04em;
-  box-shadow: var(--shadow);
-}
-.bubble .icon { font-size: 2.2rem; margin-bottom: .4rem; }
-.bubble-label {
-  text-align: center; margin-top: 1.5rem;
-  font-size: 0.85rem; letter-spacing: 0.18em;
-  text-transform: uppercase; color: var(--muted);
-}
-.bubble-label strong {
-  display: block;
-  font-family: 'Fraunces', serif;
-  font-size: 1.6rem; font-style: italic; font-weight: 400;
-  text-transform: none; letter-spacing: -0.01em;
-  color: var(--ink); margin-top: .4rem;
-}
-
 /* Feels list */
 .feels-list {
   list-style: none;
@@ -165,26 +141,6 @@ h3 em { font-style: italic; color: var(--terra-deep); }
   color: var(--terra);
 }
 .feels-list.small li { font-size: clamp(1.2rem, 1.9vw, 1.9rem); }
-
-/* Stats grid */
-.stat-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2vw; margin-top: 3rem; width: 100%;
-}
-.stat-grid.three { grid-template-columns: repeat(3, 1fr); }
-.stat-grid .stat { text-align: center; border-top: 2px solid var(--terra); padding-top: 1.5rem; }
-.stat-grid .stat .num {
-  font-family: 'Fraunces', serif; font-weight: 300;
-  font-size: clamp(2.2rem, 3.2vw, 3rem);
-  color: var(--terra-deep); line-height: 1;
-  margin-bottom: .8rem;
-}
-.stat-grid .stat .lbl {
-  font-size: 0.9rem; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--muted);
-  font-weight: 500; line-height: 1.3;
-}
 
 /* Big number badge */
 .step-num {
@@ -216,21 +172,6 @@ h3 em { font-style: italic; color: var(--terra-deep); }
   align-self: flex-start;
 }
 .center .tag { align-self: center; }
-
-/* Scripture */
-.scripture-block { max-width: 30ch; margin: 0 auto; }
-.scripture-block .verse {
-  font-family: 'Fraunces', serif; font-style: italic;
-  font-weight: 300;
-  font-size: clamp(2.5rem, 4.5vw, 4.5rem);
-  line-height: 1.2; letter-spacing: -0.02em;
-  margin-bottom: 2.5rem;
-}
-.scripture-block .ref {
-  font-size: 0.95rem; letter-spacing: 0.28em;
-  text-transform: uppercase; color: var(--terra-deep);
-  font-weight: 600;
-}
 
 /* Decorative dotted border */
 .deco-dots {
@@ -274,128 +215,104 @@ h3 em { font-style: italic; color: var(--terra-deep); }
 
 /* ============ Session-specific components ============ */
 
-/* Iceberg — 5 layers of attraction */
-.iceberg { width: min(760px, 60vw); margin: 2.5rem auto 0; }
-.iceberg .layer {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 1.1rem 2rem;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  font-family: 'Fraunces', serif;
-  font-size: clamp(1.3rem, 2vw, 1.9rem);
-  box-shadow: var(--shadow);
-}
-.iceberg .layer .pct {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.78rem; letter-spacing: 0.16em;
-  text-transform: uppercase; font-weight: 600;
-  opacity: .75;
-}
-.iceberg .layer.surface { background: var(--paper); border: 1.5px solid var(--terra); color: var(--ink); }
-.iceberg .waterline {
-  display: flex; align-items: center; gap: 1rem;
-  margin: 1.2rem 0;
-  color: var(--muted);
-  font-size: 0.78rem; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 600;
-}
-.iceberg .waterline::before, .iceberg .waterline::after {
-  content: ""; flex: 1; height: 0;
-  border-top: 2px dashed var(--terra);
-  opacity: .6;
-}
-.iceberg .layer.deep-1 { background: var(--terra-soft); color: var(--terra-deep); }
-.iceberg .layer.deep-2 { background: #ecbfb5; color: #8c4034; }
-.iceberg .layer.deep-3 { background: var(--terra); color: #faf6f0; }
-.iceberg .layer.deep-4 { background: var(--terra-deep); color: #faf6f0; }
-
-/* Layer detail header */
-.layer-head { display: flex; align-items: baseline; gap: 2rem; margin-bottom: 2rem; }
-.layer-head .n {
-  font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
-  font-size: clamp(4rem, 7vw, 7rem);
-  color: var(--terra); line-height: .9;
-}
-
-/* Halo illustration */
-.halo-fig { position: relative; width: 300px; height: 320px; margin: 0 auto; }
-.halo-fig .ring {
-  position: absolute; top: 0; left: 50%; transform: translateX(-50%) rotate(-6deg);
-  width: 170px; height: 44px;
-  border: 7px solid #e3b23c;
-  border-radius: 50%;
-  box-shadow: 0 12px 40px -12px rgba(227,178,60,.7);
-}
-.halo-fig .head {
-  position: absolute; top: 62px; left: 50%; transform: translateX(-50%);
-  width: 130px; height: 130px; border-radius: 50%;
-  background: var(--terra); box-shadow: var(--shadow);
-}
-.halo-fig .body {
-  position: absolute; top: 200px; left: 50%; transform: translateX(-50%);
-  width: 210px; height: 120px;
-  border-radius: 110px 110px 0 0;
-  background: var(--terra-soft);
-}
-.halo-fig .q {
-  position: absolute;
-  font-family: 'Fraunces', serif; font-style: italic;
-  color: var(--terra-deep);
-  font-size: 1.15rem; white-space: nowrap;
-}
-
-/* Scorecards */
-.scorecards { display: grid; grid-template-columns: 1fr 1fr; gap: 3vw; width: min(1100px, 82vw); margin: 2.5rem auto 0; }
-.scorecard {
+/* Big three cards */
+.big-three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2vw; width: min(1250px, 86vw); margin: 3rem auto 0; }
+.big-three .bt {
   background: var(--paper); border: 1px solid var(--line);
-  border-radius: 16px; padding: 2rem 2.2rem;
-  box-shadow: var(--shadow);
-  text-align: left;
+  border-radius: 16px; padding: 2.2rem 2rem;
+  box-shadow: var(--shadow); text-align: left;
 }
-.scorecard.win { border: 1.5px solid var(--terra); }
-.scorecard h4 {
-  font-family: 'Fraunces', serif; font-weight: 400; font-style: italic;
-  font-size: 1.5rem; margin-bottom: 1.4rem; color: var(--ink);
+.big-three .bt .n {
+  font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
+  font-size: 3rem; color: var(--terra); line-height: 1;
 }
-.scorecard .row { display: grid; grid-template-columns: 9.5rem 1fr 2rem; align-items: center; gap: 1rem; margin-bottom: .7rem; }
-.scorecard .row .lbl { font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
-.scorecard .row .bar { height: 10px; background: var(--cream); border-radius: 99px; overflow: hidden; }
-.scorecard .row .bar > i { display: block; height: 100%; background: linear-gradient(90deg, var(--terra), var(--terra-deep)); border-radius: 99px; }
-.scorecard .row .val { font-family: 'Fraunces', serif; font-size: 1.15rem; color: var(--ink-soft); text-align: right; }
-.scorecard .total {
-  display: flex; justify-content: space-between; align-items: baseline;
-  border-top: 1.5px solid var(--line);
-  margin-top: 1.4rem; padding-top: 1.2rem;
+.big-three .bt h4 {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: 1.6rem; margin: 1rem 0 .8rem; color: var(--ink);
 }
-.scorecard .total .sum { font-family: 'Fraunces', serif; font-size: 1.5rem; color: var(--ink); }
-.scorecard .total .pct { font-family: 'Fraunces', serif; font-style: italic; font-size: 2.1rem; }
-.scorecard.win .total .pct { color: var(--terra-deep); }
-.scorecard.lose .total .pct { color: var(--muted); }
-.scorecard .verdict {
-  margin-top: .9rem;
-  font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; font-weight: 700;
-}
-.scorecard.win .verdict { color: var(--terra-deep); }
-.scorecard.lose .verdict { color: var(--muted); }
+.big-three .bt p { font-size: 1rem; line-height: 1.5; color: var(--ink-soft); }
 
-/* Equation strip */
-.equation {
-  display: flex; align-items: center; justify-content: center;
-  gap: 1.2vw; margin-top: 3rem; flex-wrap: wrap;
+/* Flag path (red → orange → green) */
+.flag-path { display: flex; align-items: center; justify-content: center; gap: 1.5vw; margin-top: 3.5rem; }
+.flag-path .stop {
+  display: flex; flex-direction: column; align-items: center; gap: 1.1rem;
+  min-width: 200px;
 }
-.equation .term {
-  background: var(--paper); border: 1.5px solid var(--terra);
-  border-radius: 12px;
-  padding: 1rem 1.4rem;
-  font-family: 'Fraunces', serif; font-style: italic;
-  font-size: clamp(1.1rem, 1.6vw, 1.6rem);
-  color: var(--terra-deep);
+.flag-path .dot {
+  width: 130px; height: 130px; border-radius: 50%;
+  box-shadow: var(--shadow);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3rem;
+}
+.flag-path .stop .lbl {
+  font-family: 'Fraunces', serif; font-size: 1.5rem; font-style: italic;
+}
+.flag-path .stop .sub { font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; text-align: center; line-height: 1.5; }
+.flag-path .arrow { font-family: 'Fraunces', serif; font-size: 3rem; color: var(--muted); font-weight: 300; padding-bottom: 5rem; }
+.dot.red { background: var(--flag-red); }
+.dot.orange { background: var(--flag-orange); }
+.dot.green { background: var(--flag-green); }
+
+/* Mapping table (pain message → character) */
+.map-table { width: min(1100px, 84vw); margin: 2.5rem auto 0; }
+.map-table .mrow {
+  display: grid; grid-template-columns: 1fr 4rem 1.2fr; align-items: center;
+  gap: 1rem; padding: 1.05rem 1.8rem; margin-bottom: 10px;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 12px;
   box-shadow: var(--shadow);
 }
-.equation .op {
-  font-family: 'Fraunces', serif; font-weight: 300;
-  font-size: clamp(1.6rem, 2.4vw, 2.4rem);
-  color: var(--muted);
+.map-table .mrow .from {
+  font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
+  font-size: clamp(1.2rem, 1.8vw, 1.8rem); color: var(--ink-soft);
 }
+.map-table .mrow .arr { text-align: center; font-family: 'Fraunces', serif; font-size: 1.8rem; color: var(--terra); }
+.map-table .mrow .to {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: clamp(1.2rem, 1.8vw, 1.8rem); color: var(--terra-deep);
+}
+.map-table .mrow .to small { display:block; font-family:'Inter',sans-serif; font-size:.82rem; color:var(--muted); font-weight:500; margin-top:.3rem; font-style: normal; }
+
+/* Compare cards (weak vs strong) */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 3vw; width: min(1050px, 80vw); margin: 2.5rem auto 0; }
+.compare .cmp {
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: 16px; padding: 2rem 2.4rem;
+  box-shadow: var(--shadow); text-align: left;
+}
+.compare .cmp.strong-card { border: 1.5px solid var(--terra); }
+.compare .cmp h4 {
+  font-family: 'Fraunces', serif; font-weight: 400; font-style: italic;
+  font-size: 1.5rem; margin-bottom: 1.3rem;
+}
+.compare .cmp.weak-card h4 { color: var(--muted); }
+.compare .cmp.strong-card h4 { color: var(--terra-deep); }
+.compare .cmp ul { list-style: none; display: flex; flex-direction: column; gap: .8rem; }
+.compare .cmp li {
+  font-family: 'Fraunces', serif; font-size: clamp(1.15rem, 1.7vw, 1.7rem);
+  color: var(--ink-soft);
+}
+.compare .cmp.weak-card li { text-decoration: line-through; text-decoration-color: var(--terra); text-decoration-thickness: 1.5px; color: var(--muted); }
+.compare .cmp li::before { content: "— "; color: var(--terra); }
+
+/* Filter framework steps */
+.filter-steps { display: flex; flex-direction: column; gap: 1.1rem; width: min(900px, 78vw); margin: 3rem auto 0; }
+.filter-steps .fstep {
+  display: grid; grid-template-columns: 5rem 1fr auto; align-items: center; gap: 1.6rem;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 14px;
+  padding: 1.4rem 2.2rem; box-shadow: var(--shadow); text-align: left;
+}
+.filter-steps .fstep .fn {
+  font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
+  font-size: 2.6rem; color: var(--terra); line-height: 1;
+}
+.filter-steps .fstep .fq { font-family: 'Fraunces', serif; font-size: clamp(1.3rem, 2vw, 2rem); color: var(--ink); }
+.filter-steps .fstep .fa {
+  font-size: .8rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 700;
+  padding: .45rem 1.1rem; border-radius: 999px; white-space: nowrap;
+}
+.fa.stop-a { background: #f2d3cd; color: var(--flag-red); }
+.fa.curious-a { background: #f3e2c8; color: #9c6526; }
+.fa.force-a { background: #e2e8d9; color: #5c7550; }
 </style>
 </head>
 <body>
@@ -407,404 +324,526 @@ h3 em { font-style: italic; color: var(--terra-deep); }
 <!-- 1. OPENER -->
 <section class="slide active center theme-dark">
   <div class="deco-dots top"></div>
-  <p class="kicker" style="color:var(--terra)">SOD · Week 2 · Day 2 · Session 4</p>
-  <h1 class="giant" style="margin-top:1.5rem">Type &amp;<br><em>Attraction.</em></h1>
-  <p class="lede" style="margin-top:3rem; max-width:34ch">What you've been attracted to — and what deserves your attraction instead.</p>
+  <p class="kicker" style="color:var(--terra)">SOD · Week 3 · Day 1 · Session 5</p>
+  <h1 class="giant" style="margin-top:1.5rem">Red flags, dealbreakers<br>&amp; <em>non-negotiables.</em></h1>
+  <p class="lede" style="margin-top:3rem; max-width:34ch">Tonight we get <em>super</em> tactical.</p>
   <div class="deco-dots bottom"></div>
 </section>
 
-<!-- WHAT IS TYPE — DIVIDER -->
-<section class="slide center theme-cream">
-  <div class="deco-dots top"></div>
-  <p class="kicker" style="color:var(--terra-deep)">Part One</p>
-  <h1 class="giant" style="margin-top:1.5rem">What is<br><em>type?</em></h1>
-  <p class="lede" style="margin-top:2.5rem; max-width:38ch">Everything we've learned about our parts of self and attachment wounds goes <em>hand in hand</em> with this.</p>
-  <div class="deco-dots bottom"></div>
-</section>
-
-<!-- 5. ACTIVITY 1 -->
-<section class="slide theme-cream">
-  <div class="deco-dots top"></div>
-  <div class="activity center" style="margin:0 auto">
-    <span class="tag">Activity · Workbook pg 57</span>
-    <h2 class="section">"They're not my <em>type.</em>"</h2>
-    <p class="prompt">Ever said it? Picture your <em>"type"</em> in your head.</p>
-    <p class="prompt">Write out what they are like —<br>include <em>as many details</em> as possible.</p>
-  </div>
-  <div class="deco-dots bottom"></div>
-</section>
-
-<!-- TYPE = MEDICATION -->
-<section class="slide">
-  <div class="deco-dots top"></div>
-  <div class="two-col">
-    <div>
-      <div class="eyebrow">Where type comes from</div>
-      <h2 class="section">Type can come from <em>childhood wounding.</em></h2>
-    </div>
-    <div class="stack">
-      <p class="lede">Deficits you didn't get from your parents or caretakers.</p>
-      <p class="lede">You're drawn — <em>subconsciously</em> — to something you believe will medicate your pain.</p>
-      <p class="lede">It's one of the biggest ways we <em>medicate</em> later in life from the wounds we carried as a child.</p>
-    </div>
-  </div>
-  <div class="deco-dots bottom"></div>
-</section>
-
-<!-- PREFERENCES DIVIDER -->
-<section class="slide center theme-cream">
-  <div class="deco-dots top"></div>
-  <p class="kicker" style="color:var(--terra-deep)">Part Two</p>
-  <h1 class="giant" style="margin-top:1.5rem">Preferences vs.<br><em>non-negotiables.</em></h1>
-  <div class="deco-dots bottom"></div>
-</section>
-
-<!-- 10. PREFERENCES POINTS -->
-<section class="slide">
-  <div class="deco-dots top"></div>
-  <div class="two-col">
-    <div>
-      <div class="eyebrow">Hold them loosely</div>
-      <h2 class="section">A preference is not a <em>deal breaker.</em></h2>
-      <p class="lede" style="margin-top:1.5rem">You can absolutely have preferences. But are your preferences quietly becoming non-negotiables?</p>
-    </div>
-    <div>
-      <ul class="feels-list small">
-        <li>A preference should mean exactly that — a preference.</li>
-        <li>Preferences dictated by wounding or lack lead to disappointment.</li>
-        <li>Honest question: has your type actually worked out for you?</li>
-        <li>Or has it left you more disappointed and heartbroken?</li>
-      </ul>
-    </div>
-  </div>
-  <div class="deco-dots bottom"></div>
-</section>
-
-<!-- NO HUMAN -->
+<!-- 2. GROUND RULE -->
 <section class="slide center theme-terra">
   <div class="deco-dots top"></div>
-  <p class="pull" style="max-width:30ch">No human on earth can <em style="color:#fff1d8">save you</em> from your pain or <em style="color:#fff1d8">complete</em> you.</p>
-  <p class="lede" style="margin-top:3rem; max-width:40ch">And a side note — type isn't just preferences. Type is, and should be, made up of their <em style="color:#fff1d8">character, spirit, and soul.</em></p>
+  <p class="kicker" style="margin-bottom:2rem">Hear this clearly, first</p>
+  <p class="pull" style="max-width:28ch">Pain Cycle work does <em style="color:#fff1d8">not</em> go on these lists.</p>
+  <div style="margin-top:3rem; max-width:48ch">
+    <ul class="feels-list small" style="text-align:left; color:#faf6f0">
+      <li style="color:#fdece7">Your triggers don't become dealbreakers.</li>
+      <li style="color:#fdece7">Your coping mechanisms don't become a wishlist for what they should manage.</li>
+      <li style="color:#fdece7">Your pain message doesn't become a job description for a future partner.</li>
+    </ul>
+  </div>
+  <p class="lede" style="margin-top:2.5rem; max-width:36ch">Pain Cycle work stays <em style="color:#fff1d8">your</em> work — regardless of who they are or how they show up.</p>
   <div class="deco-dots bottom"></div>
 </section>
 
-<!-- 13. FAMILIAR -->
+<!-- 3. WHY PAIN CYCLE THEN -->
 <section class="slide">
   <div class="deco-dots top"></div>
   <div class="two-col">
     <div>
-      <div class="eyebrow">Why we keep going back</div>
-      <h2 class="section">We're addicted to the very thing that <em>wounds us.</em></h2>
+      <div class="eyebrow">So why bring it up at all?</div>
+      <h2 class="section">Pain Cycle gives you the eyes to build <em>clean lists.</em></h2>
+      <p class="lede" style="margin-top:1.5rem">It helps you separate <em>"this activates my wound"</em> from <em>"this is who they are."</em></p>
     </div>
-    <div class="stack">
-      <p class="lede">Why? Because it's <em>familiar.</em></p>
-      <p class="lede">Logically, you know it isn't working. But the neural pathways are worn in — even the neglect feels like home.</p>
+    <div>
+      <ul class="feels-list small">
+        <li>Without that separation, your dealbreaker list grows to 30 items.</li>
+        <li>Your red flag list scares you out of every relationship.</li>
+        <li>Your non-negotiables become <em>"a partner who manages me."</em></li>
+        <li>Short lists. That describe <em>them</em> — not your relationship to them.</li>
+      </ul>
     </div>
   </div>
   <div class="deco-dots bottom"></div>
 </section>
 
-<!-- WRONG PEOPLE DIVIDER -->
+<!-- 4. DIVIDER: DEALBREAKERS -->
 <section class="slide center theme-cream">
   <div class="deco-dots top"></div>
-  <p class="kicker" style="color:var(--terra-deep)">Part Three</p>
-  <h1 class="giant" style="margin-top:1.5rem">Dating the<br><em>wrong</em> people.</h1>
-  <p class="pull" style="margin-top:3rem; font-size:clamp(1.6rem,2.6vw,2.6rem); max-width:34ch">"Why do the people I want never want me — and the people I don't want always like me?"</p>
+  <p class="kicker" style="color:var(--terra-deep)">Part One · Hard stops</p>
+  <h1 class="giant" style="margin-top:1.5rem"><em>Dealbreakers.</em></h1>
+  <p class="lede" style="margin-top:2.5rem; max-width:36ch">"Things I will <em>not</em> tolerate."</p>
   <div class="deco-dots bottom"></div>
 </section>
 
-<!-- 16. UNAVAILABLE = ALLURING -->
+<!-- 5. WHAT IS A DEALBREAKER -->
 <section class="slide">
   <div class="deco-dots top"></div>
   <div class="two-col">
     <div>
-      <div class="eyebrow">What's happening · one of two things</div>
-      <h2 class="section">Unavailable feels <em>alluring.</em></h2>
-      <p class="lede" style="margin-top:1.5rem">With attachment wounds, we're drawn to what we can't have. It works in marketing — and it works in dating.</p>
+      <div class="eyebrow">Definition</div>
+      <h2 class="section">What is a <em>dealbreaker?</em></h2>
     </div>
-    <div>
-      <ul class="feels-list small">
-        <li>Unattainable reads as more worthy, more valuable.</li>
-        <li>Mystery makes us fill in the blanks.</li>
-        <li>"They're probably so godly."</li>
-        <li>"Such a leader. Such an amazing partner."</li>
-        <li>…just because they're unavailable.</li>
-      </ul>
+    <div class="stack">
+      <p class="lede">A circumstance or behavior you <em>know</em> you don't want in a long-term relationship.</p>
+      <p class="lede">It should be based on your <em>values.</em></p>
+      <p class="lede">They're unique to each person — but there's a rule of thumb worth going by.</p>
     </div>
   </div>
   <div class="deco-dots bottom"></div>
 </section>
 
-<!-- HALO EFFECT -->
-<section class="slide">
+<!-- 6. TOP 3 -->
+<section class="slide center">
   <div class="deco-dots top"></div>
-  <div class="two-col">
-    <div>
-      <div class="eyebrow">What's happening · continued</div>
-      <h2 class="section">The <em>halo</em> effect.</h2>
-      <ul class="feels-list" style="margin-top:2rem">
-        <li>We see somebody who matches the <em>fantasy</em> of our type…</li>
-        <li>…so we assign a perfect life behind their physical appearance.</li>
-      </ul>
+  <div class="eyebrow">The rule of thumb</div>
+  <h2 class="section">Our top <em>three.</em></h2>
+  <div class="big-three">
+    <div class="bt">
+      <div class="n">1</div>
+      <h4>Spiritual incompatibility</h4>
+      <p>Not in a committed, <strong>growing</strong> relationship with Christ.</p>
     </div>
-    <div style="text-align:center">
-      <div class="halo-fig">
-        <div class="ring"></div>
-        <div class="head"></div>
-        <div class="body"></div>
-        <span class="q" style="top:70px; left:-70px">so godly…</span>
-        <span class="q" style="top:130px; right:-90px">such a leader…</span>
-        <span class="q" style="top:250px; left:-96px">amazing partner…</span>
-      </div>
-      <p class="kicker" style="margin-top:2.5rem">The perfect life we invented for them</p>
+    <div class="bt">
+      <div class="n">2</div>
+      <h4>Moral &amp; safety</h4>
+      <p>Any form of abuse — emotional, verbal, physical. Active addiction or major habitual sin.</p>
+    </div>
+    <div class="bt">
+      <div class="n">3</div>
+      <h4>Vision misalignment</h4>
+      <p>Your visions for life don't line up. They don't want kids — and you do.</p>
     </div>
   </div>
   <div class="deco-dots bottom"></div>
 </section>
 
-<!-- LOW SELF-ESTEEM -->
-<section class="slide">
-  <div class="deco-dots top"></div>
-  <div class="two-col">
-    <div>
-      <div class="eyebrow">What's happening · the second thing</div>
-      <h2 class="section">Low <em>self-esteem.</em></h2>
-      <p class="lede" style="margin-top:1.5rem">We chase people "out of our league" or "hard to get" to fill a void — to feel more attractive, more worthy, more loved, more successful… more <em>enough.</em></p>
-    </div>
-    <div>
-      <ul class="feels-list small">
-        <li>So we start <em>performing</em> to get them to like us.</li>
-        <li>Waving our hands in front of their face — <em>see me, love me, accept me.</em></li>
-        <li>Always marketing ourselves. Selling ourselves.</li>
-        <li>We can't make mistakes. We can't be too much ourselves.</li>
-        <li>And the self-fulfilling prophecy: when we chase the unattainable and <em>don't</em> get it, it reinforces all the negative things we believe about ourselves.</li>
-      </ul>
-    </div>
-  </div>
-  <div class="deco-dots bottom"></div>
-</section>
-
-<!-- RETHINK YES + ACTIVITY -->
-<section class="slide theme-cream">
-  <div class="deco-dots top"></div>
-  <div class="activity center" style="margin:0 auto">
-    <span class="tag">What to do instead · one · Activity</span>
-    <h2 class="section">Rethink your <em>yes.</em></h2>
-    <p class="prompt">Picture your last <em>crush</em> — someone you asked out, dated, or simply fantasized about.</p>
-    <p class="prompt">Why were you <em>truly</em> interested in them?<br>Was your why based on <em>fantasy</em> — or reality?</p>
-    <p class="prompt">Did you overlook, or fill in the blanks about, their <em>character?</em></p>
-  </div>
-  <div class="deco-dots bottom"></div>
-</section>
-
-<!-- RETHINK NO + ACTIVITY -->
-<section class="slide theme-cream">
-  <div class="deco-dots top"></div>
-  <div class="activity center" style="margin:0 auto">
-    <span class="tag">What to do instead · two · Activity</span>
-    <h2 class="section">Rethink your <em>no.</em></h2>
-    <p class="prompt">A "no" isn't only when someone asks you out. You silently reject people all the time — on the app, at church, at an event.</p>
-    <p class="prompt">Picture someone you've <em>rejected</em> — verbally, or just internally. Why were you <em>not</em> interested? What's the <em>quality</em> of your qualifications?</p>
-    <p class="prompt">Is there a chance you can <em>challenge yourself</em> here?</p>
-  </div>
-  <div class="deco-dots bottom"></div>
-</section>
-
-<!-- 24. 5 LAYERS DIVIDER -->
+<!-- 7. IF YOU HAVE TO GUESS -->
 <section class="slide center theme-dark">
   <div class="deco-dots top"></div>
-  <p class="kicker" style="color:var(--terra)">Part Four</p>
-  <h1 class="giant" style="margin-top:1.5rem">The 5 layers of<br><em>attraction.</em></h1>
-  <p class="lede" style="margin-top:2.5rem">Attraction has many buckets. It's an <em>equation.</em></p>
+  <p class="kicker" style="color:var(--terra)">On the spiritual one</p>
+  <p class="pull" style="max-width:24ch; color:var(--bg)">If you have to <em style="color:var(--terra-soft)">guess…</em><br>it's not it.</p>
   <div class="deco-dots bottom"></div>
 </section>
 
-<!-- 25. ICEBERG -->
-<section class="slide center">
-  <div class="deco-dots top"></div>
-  <div class="eyebrow">Most people only ever check the surface</div>
-  <div class="iceberg">
-    <div class="layer surface"><span>Physical</span><span class="pct">What you see first</span></div>
-    <div class="waterline">beneath the surface</div>
-    <div class="layer deep-1"><span>Personality</span><span class="pct">The friendship</span></div>
-    <div class="layer deep-2"><span>Intellectual</span><span class="pct">The conversation</span></div>
-    <div class="layer deep-3"><span>Emotional</span><span class="pct">The safety</span></div>
-    <div class="layer deep-4"><span>Spiritual</span><span class="pct">The Jesus in them</span></div>
-  </div>
-  <div class="deco-dots bottom"></div>
-</section>
-
-<!-- 26. EMOTIONAL -->
+<!-- 8. NOT DEALBREAKERS -->
 <section class="slide">
   <div class="deco-dots top"></div>
   <div class="two-col">
     <div>
-      <div class="layer-head"><span class="n">1</span><h2 class="section">Emotional<br><em>attraction.</em></h2></div>
-      <p class="lede">Vulnerability. Emotional safety.</p>
-      <p class="lede" style="margin-top:1.2rem">And remember — emotionally <em>intelligent</em> is not the same as emotionally <em>healthy.</em></p>
+      <div class="eyebrow">Check your list</div>
+      <h2 class="section">What <em>isn't</em> a dealbreaker.</h2>
+      <p class="lede" style="margin-top:1.5rem">Some things end up on the list that shouldn't necessarily be there.</p>
     </div>
     <div>
       <ul class="feels-list small">
-        <li>Do you feel seen?</li>
-        <li>Do you feel known?</li>
-        <li>Can you share your feelings safely?</li>
-        <li>Can you share your past safely?</li>
-        <li>Can you have hard conversations with them?</li>
+        <li><em>Politics</em> — values matter; party affiliation often doesn't.</li>
+        <li><em>Location</em> — distance can be solved if everything else fits.</li>
+        <li><em>Height.</em></li>
+        <li><em>Debt</em> — depends on why, and what they're doing about it.</li>
+        <li><em>Past relationships, been married before</em> — the pattern matters, not the resume.</li>
       </ul>
     </div>
   </div>
   <div class="deco-dots bottom"></div>
 </section>
 
-<!-- 27. SPIRITUAL -->
-<section class="slide">
-  <div class="deco-dots top"></div>
-  <div class="two-col">
-    <div>
-      <div class="layer-head"><span class="n">2</span><h2 class="section">Spiritual<br><em>attraction.</em></h2></div>
-      <p class="lede">Being attracted to the <em>Jesus</em> in them.</p>
-    </div>
-    <div class="center" style="display:flex; flex-direction:column; align-items:center">
-      <h1 class="giant">46<em>%</em></h1>
-      <p class="lede" style="margin-top:1.5rem; text-align:center; max-width:30ch">of Christians surveyed said spiritual attraction was the <em>most important</em> kind.</p>
-      <p class="kicker" style="margin-top:1.5rem">Debra Fileta · Love in Every Season</p>
-    </div>
-  </div>
-  <div class="deco-dots bottom"></div>
-</section>
-
-<!-- 28. INTELLECTUAL -->
-<section class="slide">
-  <div class="deco-dots top"></div>
-  <div class="two-col">
-    <div>
-      <div class="layer-head"><span class="n">3</span><h2 class="section">Intellectual<br><em>attraction.</em></h2></div>
-      <p class="lede">The desire to connect on a more <em>cerebral</em> level.</p>
-    </div>
-    <div>
-      <ul class="feels-list small">
-        <li>You want to spend time with them because of what you talk about.</li>
-        <li>They make you think about things in new and challenging ways.</li>
-        <li>For some, intellectual attraction is the doorway to emotional and romantic attraction.</li>
-        <li>Different people fill different roles and needs in our lives.</li>
-      </ul>
-    </div>
-  </div>
-  <div class="deco-dots bottom"></div>
-</section>
-
-<!-- 29. PERSONALITY -->
-<section class="slide">
-  <div class="deco-dots top"></div>
-  <div class="two-col">
-    <div>
-      <div class="layer-head"><span class="n">4</span><h2 class="section">Personality<br><em>attraction.</em></h2></div>
-      <p class="lede">This is the <em>friendship</em> part of the relationship.</p>
-    </div>
-    <div>
-      <ul class="feels-list small">
-        <li>How they act, behave, communicate, think, socialize — their patterns and passions.</li>
-        <li>You must understand <em>your own</em> personality in this.</li>
-        <li>Kait: "I used to want the guy who'd talk feelings for hours — until I realized staying stuck in feelings crushed my soul."</li>
-      </ul>
-    </div>
-  </div>
-  <div class="deco-dots bottom"></div>
-</section>
-
-<!-- 30. PHYSICAL -->
-<section class="slide">
-  <div class="deco-dots top"></div>
-  <div class="two-col">
-    <div>
-      <div class="layer-head"><span class="n">5</span><h2 class="section">Physical<br><em>attraction.</em></h2></div>
-      <p class="lede">The first one we see — because it's the easiest.</p>
-      <p class="lede" style="margin-top:1.2rem">Some of us have carried a <em>picture</em> of who we'd end up with. Ladies — maybe he was really muscular. Guys — the digital age has sold you unrealistic expectations of women.</p>
-    </div>
-    <div>
-      <ul class="feels-list small">
-        <li>Sometimes there's a spark. Many times it's a slow flame that takes time.</li>
-        <li>You can become drawn to someone through <em>time.</em></li>
-        <li>Be realistic — people have real bodies, and bodies change.</li>
-        <li>Beauty is fluid. In the Victorian era, pale skin and major curves were the standard.</li>
-      </ul>
-    </div>
-  </div>
-  <div class="deco-dots bottom"></div>
-</section>
-
-<!-- THE EQUATION -->
-<section class="slide center">
-  <div class="deco-dots top"></div>
-  <div class="eyebrow">Rank your attraction · 0 = nothing · 5 = fully</div>
-  <h2 class="section">Score all <em>five</em> layers.</h2>
-  <div class="equation">
-    <span class="term">Emotional</span><span class="op">+</span>
-    <span class="term">Spiritual</span><span class="op">+</span>
-    <span class="term">Intellectual</span><span class="op">+</span>
-    <span class="term">Personality</span><span class="op">+</span>
-    <span class="term">Physical</span>
-    <span class="op">=</span>
-    <span class="term" style="background:var(--terra); color:#faf6f0; border-color:var(--terra-deep)">/ 25</span>
-  </div>
-  <p class="lede" style="margin-top:3rem">A perfect score is 25 out of 25.<br>We suggest at least <em>70% overall.</em></p>
-  <div class="deco-dots bottom"></div>
-</section>
-
-<!-- 33. WORKED EXAMPLE -->
-<section class="slide center">
-  <div class="deco-dots top"></div>
-  <div class="eyebrow">Real coaching client · two people they were dating</div>
-  <div class="scorecards">
-    <div class="scorecard win">
-      <h4>Person A</h4>
-      <div class="row"><span class="lbl">Physical</span><span class="bar"><i style="width:60%"></i></span><span class="val">3</span></div>
-      <div class="row"><span class="lbl">Emotional</span><span class="bar"><i style="width:80%"></i></span><span class="val">4</span></div>
-      <div class="row"><span class="lbl">Spiritual</span><span class="bar"><i style="width:100%"></i></span><span class="val">5</span></div>
-      <div class="row"><span class="lbl">Personality</span><span class="bar"><i style="width:100%"></i></span><span class="val">5</span></div>
-      <div class="row"><span class="lbl">Intellectual</span><span class="bar"><i style="width:40%"></i></span><span class="val">2</span></div>
-      <div class="total"><span class="sum">19 / 25</span><span class="pct">76%</span></div>
-      <div class="verdict">Above the 70% line</div>
-    </div>
-    <div class="scorecard lose">
-      <h4>Person B</h4>
-      <div class="row"><span class="lbl">Physical</span><span class="bar"><i style="width:40%"></i></span><span class="val">2</span></div>
-      <div class="row"><span class="lbl">Emotional</span><span class="bar"><i style="width:60%"></i></span><span class="val">3</span></div>
-      <div class="row"><span class="lbl">Spiritual</span><span class="bar"><i style="width:80%"></i></span><span class="val">4</span></div>
-      <div class="row"><span class="lbl">Personality</span><span class="bar"><i style="width:80%"></i></span><span class="val">4</span></div>
-      <div class="row"><span class="lbl">Intellectual</span><span class="bar"><i style="width:40%"></i></span><span class="val">2</span></div>
-      <div class="total"><span class="sum">15 / 25</span><span class="pct">60%</span></div>
-      <div class="verdict">Below the line</div>
-    </div>
-  </div>
-  <div class="deco-dots bottom"></div>
-</section>
-
-<!-- 34. WHERE ARE YOU -->
+<!-- 9. SECURE PERSON TEST -->
 <section class="slide center theme-terra">
   <div class="deco-dots top"></div>
-  <p class="pull" style="max-width:30ch">When you're dating someone, always consider where you are in <em style="color:#fff1d8">all</em> the layers of attraction.</p>
+  <p class="kicker" style="margin-bottom:2rem">The secure person test</p>
+  <p class="pull" style="max-width:30ch">Would a fully healed, fully secure person <em style="color:#fff1d8">also</em> call this a dealbreaker?</p>
+  <div style="margin-top:3rem; max-width:44ch">
+    <p class="lede" style="margin:0 auto">If <em style="color:#fff1d8">yes</em> → list it.</p>
+    <p class="lede" style="margin:1.2rem auto 0">If only <em style="color:#fff1d8">you</em> would, because it touches your wound → that's pain cycle homework, not a partner filter.</p>
+  </div>
   <div class="deco-dots bottom"></div>
 </section>
 
-<!-- 35. HOMEWORK -->
+<!-- 10. ACTIVITY DEALBREAKERS -->
+<section class="slide theme-cream">
+  <div class="deco-dots top"></div>
+  <div class="activity center" style="margin:0 auto">
+    <span class="tag">Activity</span>
+    <h2 class="section">Build <em>your</em> dealbreakers list.</h2>
+    <p class="prompt">Three to five. No more.</p>
+    <p class="prompt" style="color:var(--ink-soft)">Too long = <em>nothing's</em> actually a dealbreaker.</p>
+    <p class="prompt">Run every item through the secure person test before it makes the cut.</p>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 11. DIVIDER: RED FLAGS -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra-deep)">Part Two · Proceed with caution</p>
+  <h1 class="giant" style="margin-top:1.5rem">Red <em>flags.</em></h1>
+  <p class="lede" style="margin-top:2.5rem; max-width:36ch">Pause and <em>investigate.</em></p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 12. WHAT IS A RED FLAG -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">Definition</div>
+      <h2 class="section">A sign to pause — not a reason to <em>run.</em></h2>
+      <p class="lede" style="margin-top:1.5rem">And the reality is… we <em>all</em> have red flags to some extent.</p>
+    </div>
+    <div>
+      <ul class="feels-list small">
+        <li>Behaviors worth investigating that <em>might</em> reveal character issues.</li>
+        <li>A sign to pause, ask questions, and get more information.</li>
+        <li>Not automatically a reason to walk away.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 13. TWO MISTAKES -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Two big mistakes</div>
+  <h2 class="section">Most people do <em>one</em> of these.</h2>
+  <div class="compare" style="margin-top:3rem">
+    <div class="cmp weak-card" style="text-align:center">
+      <h4 style="text-decoration:none">Eliminate instantly</h4>
+      <p class="lede" style="font-size:clamp(1.1rem,1.6vw,1.6rem); margin:0 auto">See one red flag at the start and cut the person off. Big mistake.</p>
+    </div>
+    <div class="cmp weak-card" style="text-align:center">
+      <h4 style="text-decoration:none">Ignore entirely</h4>
+      <p class="lede" style="font-size:clamp(1.1rem,1.6vw,1.6rem); margin:0 auto">Pretend the flags aren't there because you like them. Also a big mistake.</p>
+    </div>
+  </div>
+  <p class="lede" style="margin:3rem auto 0; max-width:38ch">We're going to talk about <em>both.</em></p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 14. RED ORANGE GREEN -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">The biggest caveat on red flags</div>
+  <h2 class="section">Many red flags can <em>change color.</em></h2>
+  <div class="flag-path">
+    <div class="stop">
+      <div class="dot red">🚩</div>
+      <span class="lbl">Red</span>
+      <span class="sub">Pause ·<br>investigate</span>
+    </div>
+    <span class="arrow">→</span>
+    <div class="stop">
+      <div class="dot orange">⚠️</div>
+      <span class="lbl">Orange</span>
+      <span class="sub">Aware ·<br>working on it</span>
+    </div>
+    <span class="arrow">→</span>
+    <div class="stop">
+      <div class="dot green">✓</div>
+      <span class="lbl">Green</span>
+      <span class="sub">Changed ·<br>through time</span>
+    </div>
+  </div>
+  <p class="lede" style="margin:3rem auto 0; max-width:40ch">…<em>if</em> the person is willing to work on them. Here's how.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 15. STEP 1 ASK -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="step-num">1</div>
+      <h2 class="section" style="margin-top:1rem">Ask questions. Get <em>curious.</em></h2>
+    </div>
+    <div>
+      <ul class="feels-list small">
+        <li>This takes <em>courage.</em></li>
+        <li>Without the conversation, you're making up a story in your mind — and <em>assuming.</em></li>
+        <li>Talking about red flags can actually bring <em>connection.</em></li>
+        <li>Sometimes these conversations bring you <em>closer.</em></li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 16. STEP 2 RESPONSE -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="step-num">2</div>
+      <h2 class="section" style="margin-top:1rem">Watch how they <em>respond.</em></h2>
+    </div>
+    <div>
+      <ul class="feels-list small">
+        <li>Are they defensive?</li>
+        <li>Do they not see it as a problem?</li>
+        <li>Or — do they already have <em>awareness</em> about it?</li>
+        <li>Are they already <em>working</em> on this thing?</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 17. STEP 3 TIME -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="step-num">3</div>
+      <h2 class="section" style="margin-top:1rem">Observe through <em>time.</em></h2>
+      <p class="lede" style="margin-top:1.5rem">Does it actively change? Defensive + doesn't see the problem = a red flag that may become a <em>dealbreaker.</em></p>
+    </div>
+    <div>
+      <ul class="feels-list small">
+        <li>You want them to change it because they <em>actually want to.</em></li>
+        <li>Not because they're trying to win you over.</li>
+        <li>Otherwise it won't last — or it breeds <em>resentment.</em></li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 18. LITMUS -->
+<section class="slide center theme-dark">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra)">The litmus question</p>
+  <p class="pull" style="max-width:26ch; color:var(--bg); margin-top:2rem">"Would they change this thing… even if <em style="color:var(--terra-soft)">I</em> was not in their life?"</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 19. MAJOR RED FLAGS -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">Worth investigating</div>
+      <h2 class="section">Some <em>major</em> red flags.</h2>
+    </div>
+    <div>
+      <ul class="feels-list small">
+        <li>Pride — a lack of <em>humility.</em></li>
+        <li>Doesn't have godly friendships.</li>
+        <li>Mainly friends with the opposite gender — flirty friendships.</li>
+        <li>Doesn't have boundaries, or respect them — emotional, spiritual, physical.</li>
+        <li>Dismissive of <em>growth.</em></li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 20. ACTIVITY RED FLAGS -->
+<section class="slide theme-cream">
+  <div class="deco-dots top"></div>
+  <div class="activity center" style="margin:0 auto">
+    <span class="tag">Activity</span>
+    <h2 class="section">Build <em>your</em> red flags list.</h2>
+    <p class="prompt">Three to five.</p>
+    <p class="prompt" style="color:var(--ink-soft)">Too long = you're scanning for <em>fear,</em> not discernment.</p>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 21. DIVIDER: NON-NEGOTIABLES -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra-deep)">Part Three · What you're looking for</p>
+  <h1 class="giant" style="margin-top:1.5rem"><em>Non-negotiables.</em></h1>
+  <p class="lede" style="margin-top:2.5rem; max-width:38ch">"Things I am <em>intentionally</em> looking for."</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 22. PROTECT VS RECOGNIZE -->
+<section class="slide center theme-terra">
+  <div class="deco-dots top"></div>
+  <p class="pull" style="max-width:28ch">Dealbreakers protect you from the <em style="color:#fff1d8">wrong</em> person.<br><br>Non-negotiables help you recognize the <em style="color:#fff1d8">right</em> one.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 23. WHAT THEY ARE -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">Definition</div>
+      <h2 class="section">Character-based. Not <em>preference-based.</em></h2>
+      <p class="lede" style="margin-top:1.5rem">The test for every item: <em>"Would this quality bring me closer to God, and line up with the values I have for my life?"</em></p>
+    </div>
+    <div>
+      <ul class="feels-list small">
+        <li>The core qualities you're intentionally looking for in a partner.</li>
+        <li>They reflect what matters most in your life and future.</li>
+        <li>They help you recognize the right person — not just avoid the wrong one.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 24. WHAT THEY ARE NOT + HOW MANY -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">What they are not</div>
+      <h2 class="section">Preferences aren't <em>foundations.</em></h2>
+      <ul class="feels-list small" style="margin-top:2rem">
+        <li>Physical traits — height, looks, style.</li>
+        <li>Status traits — money, job title, popularity.</li>
+        <li>Hyper-specific preferences — <em>"must love X hobby."</em></li>
+      </ul>
+    </div>
+    <div>
+      <div class="eyebrow">How many?</div>
+      <h2 class="section"><em>Five</em> or less.</h2>
+      <ul class="feels-list small" style="margin-top:2rem">
+        <li>Too many = an unrealistic checklist.</li>
+        <li>Too few = a lack of clarity.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 25. NOT WHAT THEY DO FOR YOU -->
+<section class="slide center theme-dark">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra)">Hear me on this</p>
+  <p class="pull" style="max-width:30ch; color:var(--bg)">Non-negotiables are <em style="color:var(--terra-soft)">not</em> what a partner will do for you. They're character they embody — with you, with their friends, or alone at <em style="color:var(--terra-soft)">11pm on a Tuesday.</em></p>
+  <p class="lede" style="margin:3rem auto 0; max-width:42ch">It's not their job to soothe you, regulate you, or prevent your triggers. That's anxious attachment dressed up as a wishlist. But their character either <em style="color:var(--terra-soft)">feeds</em> your old lies — or <em style="color:var(--terra-soft)">starves</em> them.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 26. PROMPT 1: PAIN MESSAGE -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Prompt one · from your pain message</div>
+  <h3>What character makes the lie <em>harder to believe?</em></h3>
+  <div class="map-table">
+    <div class="mrow"><span class="from">"I am unloved"</span><span class="arr">→</span><span class="to">Faithful · Consistent</span></div>
+    <div class="mrow"><span class="from">"I am unsafe"</span><span class="arr">→</span><span class="to">Integrity · Trustworthy</span></div>
+    <div class="mrow"><span class="from">"I am forgotten / unseen"</span><span class="arr">→</span><span class="to">Attentive · Present</span></div>
+    <div class="mrow"><span class="from">"I am unworthy"</span><span class="arr">→</span><span class="to">Honoring · Humble</span></div>
+    <div class="mrow"><span class="from">"I am out of control"</span><span class="arr">→</span><span class="to">Steady · Self-led</span></div>
+  </div>
+  <p class="lede" style="margin:2.2rem auto 0; max-width:44ch">Every one of these is a <em>character</em> trait. Faithful at work. Steady with roommates. Integrity with their boss. The trait is <em>them</em> — not what they do for you.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 27. PROMPT 2: COPING -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Prompt two · from your coping mechanism</div>
+  <h3>What character gives your growth work <em>room to breathe?</em></h3>
+  <div class="map-table">
+    <div class="mrow"><span class="from">Control</span><span class="arr">→</span><span class="to">Grounded · Trusting<small>A person who trusts God doesn't need to control outcomes</small></span></div>
+    <div class="mrow"><span class="from">Escape</span><span class="arr">→</span><span class="to">Patient · Steadfast<small>A person who doesn't run when things get hard</small></span></div>
+    <div class="mrow"><span class="from">Shame</span><span class="arr">→</span><span class="to">Encouraging · Honest<small>Honesty that doesn't punish your sensitivity</small></span></div>
+    <div class="mrow"><span class="from">Blame</span><span class="arr">→</span><span class="to">Humble · Teachable<small>Modeling the ownership you're growing in</small></span></div>
+  </div>
+  <p class="lede" style="margin:2.2rem auto 0; max-width:44ch">Not to <em>manage</em> your coping — you're asking that their character not make <em>your</em> growth work harder.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 28. PROMPT 3: VALUES -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">Prompt three · from your core values</div>
+      <h2 class="section">Translate your top three values into <em>character.</em></h2>
+      <p class="lede" style="margin-top:1.5rem">If you value <em>"growth"</em> → their trait is <em>"teachable."</em></p>
+    </div>
+    <div>
+      <div class="eyebrow">Watch your personality type</div>
+      <ul class="feels-list small">
+        <li><em>Hopeless Romantic / Safety Seeker</em> — throwing out the list for a person.</li>
+        <li><em>Lone Wolf / Overthinker / Intentional</em> — way too many things on the bill that <em>no one</em> can measure up to.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 29. WEAK VS STRONG -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">The difference</div>
+  <h2 class="section">Weak vs. <em>strong.</em></h2>
+  <div class="compare">
+    <div class="cmp weak-card">
+      <h4>Weak — preference-based</h4>
+      <ul>
+        <li>"Tall"</li>
+        <li>"Funny"</li>
+        <li>"Successful"</li>
+        <li>"Musician"</li>
+      </ul>
+    </div>
+    <div class="cmp strong-card">
+      <h4>Strong — character-based</h4>
+      <ul>
+        <li>Growing relationship with God</li>
+        <li>Emotionally healthy · self-aware</li>
+        <li>Growth-minded · teachable</li>
+        <li>Honoring</li>
+        <li>Communicates honestly</li>
+      </ul>
+    </div>
+  </div>
+  <p class="lede" style="margin:2.5rem auto 0; max-width:42ch">Non-negotiables aren't about finding a <em>perfect person</em> — they're about identifying the right <em>foundation.</em></p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 30. ACTIVITY NON-NEGOTIABLES -->
+<section class="slide theme-cream">
+  <div class="deco-dots top"></div>
+  <div class="activity center" style="margin:0 auto">
+    <span class="tag">Activity</span>
+    <h2 class="section">Establish <em>the list.</em></h2>
+    <p class="prompt">Your five non-negotiable <em>qualities.</em></p>
+    <p class="prompt" style="color:var(--ink-soft)">Should be <em>five.</em> Character, not preference. Run each through the prompts.</p>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 31. FINAL FILTER -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Put it all together</div>
+  <h2 class="section">The final filter <em>framework.</em></h2>
+  <div class="filter-steps">
+    <div class="fstep"><span class="fn">1</span><span class="fq">Are there any dealbreakers?</span><span class="fa stop-a">If yes → stop</span></div>
+    <div class="fstep"><span class="fn">2</span><span class="fq">Are there red flags?</span><span class="fa curious-a">Get curious</span></div>
+    <div class="fstep"><span class="fn">3</span><span class="fq">Do they have my non-negotiables?</span><span class="fa force-a">If no → don't force it</span></div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 32. HOMEWORK -->
 <section class="slide center theme-cream">
   <div class="deco-dots top"></div>
   <span class="tag" style="margin-bottom:2rem">Homework</span>
-  <h1 class="giant">Attraction exercise<br>&amp; <em>reflection.</em></h1>
-  <div style="display:flex; flex-direction:column; gap:1rem; margin-top:3.5rem; max-width:46ch; text-align:center">
-    <p class="lede" style="margin:0">Score someone you're interested in — or your last crush — across all 5 layers.</p>
-    <p class="lede" style="margin:0">Then reflect: is your attraction built on reality, or on blanks you filled in?</p>
+  <h1 class="giant">Three lists,<br><em>finalized.</em></h1>
+  <div style="display:flex; flex-direction:column; gap:1rem; margin-top:3.5rem; max-width:48ch; text-align:center">
+    <p class="lede" style="margin:0">Finalize your Dealbreakers (3–5), Red Flags (3–5), and Non-Negotiables (5 max).</p>
+    <p class="lede" style="margin:0"><em>Pray</em> over all three lists.</p>
+    <p class="lede" style="margin:0">Share with your BOA or accountability person for feedback — and share in Mighty Networks.</p>
   </div>
-  <p class="kicker" style="margin-top:4rem; color:var(--terra-deep)">Bring it to the next session</p>
   <div class="deco-dots bottom"></div>
 </section>
 
 </div>
 
 <div class="chrome">
-  <div>SOD · Week 2 · Type &amp; Attraction</div>
-  <div class="nav-hint"><span id="counter">01 / 25</span> · use <kbd>←</kbd> <kbd>→</kbd> or <kbd>space</kbd></div>
+  <div>SOD · Week 3 · Red Flags, Dealbreakers &amp; Non-Negotiables</div>
+  <div class="nav-hint"><span id="counter">01 / 32</span> · use <kbd>←</kbd> <kbd>→</kbd> or <kbd>space</kbd></div>
 </div>
 
 <script>

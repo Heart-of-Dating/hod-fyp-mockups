@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1600, initial-scale=1">
+<title>SOD · Type &amp; Attraction</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600;700;800&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6f0;
+  --ink: #1d1815;
+  --ink-soft: #4a3f37;
+  --muted: #8a7e72;
+  --line: #e8dfd2;
+  --terra: #c47a6e;
+  --terra-deep: #a85a4e;
+  --terra-soft: #f4dad4;
+  --cream: #f3ebdc;
+  --paper: #fffaf2;
+  --dark: #1d1815;
+  --shadow: 0 30px 80px -30px rgba(40,28,18,.25);
+  --shadow-strong: 0 40px 100px -30px rgba(40,28,18,.4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  overflow: hidden;
+}
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 5vh 7vw;
+  flex-direction: column; justify-content: center;
+  opacity: 0; transition: opacity .35s ease;
+}
+.slide.active { display: flex; opacity: 1; }
+
+.eyebrow {
+  font-size: 0.85rem; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--terra-deep);
+  font-weight: 600; margin-bottom: 1.5rem;
+}
+.script {
+  font-family: 'Caveat', cursive;
+  font-weight: 500;
+  font-style: italic;
+}
+h1.title {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: clamp(3.5rem, 7vw, 7.5rem);
+  line-height: 0.95; letter-spacing: -0.025em;
+}
+h1.title em { font-style: italic; font-weight: 400; color: var(--terra-deep); }
+h2.section {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  line-height: 1.0; letter-spacing: -0.02em;
+}
+h2.section em { font-style: italic; color: var(--terra-deep); font-weight: 400; }
+h3 {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 1; letter-spacing: -0.02em;
+}
+h3 em { font-style: italic; color: var(--terra-deep); }
+.lede {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  line-height: 1.35; font-weight: 300;
+  color: var(--ink-soft); max-width: 42ch;
+}
+.lede em { color: var(--terra-deep); font-style: italic; }
+.kicker {
+  font-size: 1.05rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--muted);
+  font-weight: 500;
+}
+.giant {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: clamp(4rem, 9vw, 10rem);
+  line-height: .9; letter-spacing: -0.04em;
+}
+.giant em { font-style: italic; font-weight: 400; color: var(--terra-deep); }
+
+.center { text-align: center; align-items: center; }
+.center .lede { margin: 0 auto; }
+.stack > * + * { margin-top: 1.5rem; }
+
+/* Themes */
+.theme-terra { background: var(--terra); color: #faf6f0; }
+.theme-terra h1, .theme-terra h2, .theme-terra h3, .theme-terra .lede, .theme-terra .giant { color: #faf6f0; }
+.theme-terra h1 em, .theme-terra h2 em, .theme-terra .giant em, .theme-terra h3 em { color: #fff1d8; }
+.theme-terra .eyebrow, .theme-terra .kicker { color: #fff1d8; }
+.theme-dark { background: #1d1815; color: var(--bg); }
+.theme-dark .lede, .theme-dark h1, .theme-dark h2, .theme-dark h3 { color: var(--bg); }
+.theme-dark .eyebrow { color: var(--terra); }
+.theme-dark h1 em, .theme-dark h2 em, .theme-dark .giant em, .theme-dark h3 em { color: var(--terra-soft); }
+.theme-cream { background: var(--cream); }
+
+/* Pull quote */
+.pull {
+  font-family: 'Fraunces', serif; font-style: italic;
+  font-weight: 300;
+  font-size: clamp(2rem, 3.5vw, 3.5rem);
+  line-height: 1.2; letter-spacing: -0.015em;
+  color: var(--ink); max-width: 26ch;
+}
+.pull em { color: var(--terra-deep); font-style: italic; }
+
+/* Two column */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; align-items: center; height: 100%; }
+
+/* Bubble */
+.bubble {
+  display: inline-flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: var(--terra); color: #faf6f0;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 2.4rem;
+  letter-spacing: 0.04em;
+  box-shadow: var(--shadow);
+}
+.bubble .icon { font-size: 2.2rem; margin-bottom: .4rem; }
+.bubble-label {
+  text-align: center; margin-top: 1.5rem;
+  font-size: 0.85rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--muted);
+}
+.bubble-label strong {
+  display: block;
+  font-family: 'Fraunces', serif;
+  font-size: 1.6rem; font-style: italic; font-weight: 400;
+  text-transform: none; letter-spacing: -0.01em;
+  color: var(--ink); margin-top: .4rem;
+}
+
+/* Feels list */
+.feels-list {
+  list-style: none;
+  display: flex; flex-direction: column;
+  gap: 1rem;
+}
+.feels-list li {
+  font-family: 'Fraunces', serif;
+  font-weight: 300; font-style: italic;
+  font-size: clamp(1.6rem, 2.6vw, 2.6rem);
+  line-height: 1.15;
+  color: var(--ink-soft);
+}
+.feels-list li::before {
+  content: "—";
+  margin-right: .8rem;
+  color: var(--terra);
+}
+.feels-list.small li { font-size: clamp(1.2rem, 1.9vw, 1.9rem); }
+
+/* Stats grid */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2vw; margin-top: 3rem; width: 100%;
+}
+.stat-grid.three { grid-template-columns: repeat(3, 1fr); }
+.stat-grid .stat { text-align: center; border-top: 2px solid var(--terra); padding-top: 1.5rem; }
+.stat-grid .stat .num {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: clamp(2.2rem, 3.2vw, 3rem);
+  color: var(--terra-deep); line-height: 1;
+  margin-bottom: .8rem;
+}
+.stat-grid .stat .lbl {
+  font-size: 0.9rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted);
+  font-weight: 500; line-height: 1.3;
+}
+
+/* Big number badge */
+.step-num {
+  font-family: 'Fraunces', serif;
+  font-style: italic; font-weight: 300;
+  font-size: clamp(8rem, 18vw, 22rem);
+  color: var(--terra-deep);
+  line-height: 0.85; letter-spacing: -0.05em;
+  opacity: 0.9;
+}
+
+/* Activity slide */
+.activity {
+  display: flex; flex-direction: column;
+  gap: 1.8rem; max-width: 56ch;
+}
+.activity .prompt {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: clamp(1.6rem, 2.4vw, 2.4rem);
+  line-height: 1.3; color: var(--ink);
+}
+.activity .prompt em { color: var(--terra-deep); font-style: italic; }
+.activity .tag, .tag {
+  display: inline-block;
+  background: var(--terra-soft); color: var(--terra-deep);
+  padding: 0.4rem 1rem; border-radius: 999px;
+  font-size: 0.8rem; letter-spacing: 0.2em;
+  text-transform: uppercase; font-weight: 700;
+  align-self: flex-start;
+}
+.center .tag { align-self: center; }
+
+/* Scripture */
+.scripture-block { max-width: 30ch; margin: 0 auto; }
+.scripture-block .verse {
+  font-family: 'Fraunces', serif; font-style: italic;
+  font-weight: 300;
+  font-size: clamp(2.5rem, 4.5vw, 4.5rem);
+  line-height: 1.2; letter-spacing: -0.02em;
+  margin-bottom: 2.5rem;
+}
+.scripture-block .ref {
+  font-size: 0.95rem; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--terra-deep);
+  font-weight: 600;
+}
+
+/* Decorative dotted border */
+.deco-dots {
+  position: absolute; left: 5vw; right: 5vw;
+  height: 12px;
+  background-image: radial-gradient(circle, var(--terra-deep) 1.5px, transparent 1.5px),
+                    radial-gradient(circle, var(--ink) 1.5px, transparent 1.5px);
+  background-size: 18px 6px, 18px 6px;
+  background-position: 0 0, 9px 6px;
+  background-repeat: repeat-x;
+  opacity: 0.55;
+}
+.deco-dots.top { top: 2vh; }
+.deco-dots.bottom { bottom: 2vh; }
+.theme-dark .deco-dots, .theme-terra .deco-dots { opacity: 0.4; }
+
+/* Progress + nav */
+.chrome {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 2rem; z-index: 100;
+  font-size: 0.78rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--muted);
+  font-weight: 500;
+}
+.progress {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 3px; background: var(--line); z-index: 100;
+}
+.progress > div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--terra), var(--terra-deep));
+  width: 0%; transition: width .35s ease;
+}
+.nav-hint kbd {
+  display: inline-block; padding: 2px 8px;
+  border: 1px solid var(--line); border-radius: 3px;
+  font-size: 0.7rem; margin: 0 2px;
+  color: var(--ink-soft); background: var(--paper);
+}
+
+/* ============ Session-specific components ============ */
+
+/* Iceberg — 5 layers of attraction */
+.iceberg { width: min(760px, 60vw); margin: 2.5rem auto 0; }
+.iceberg .layer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.1rem 2rem;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.3rem, 2vw, 1.9rem);
+  box-shadow: var(--shadow);
+}
+.iceberg .layer .pct {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem; letter-spacing: 0.16em;
+  text-transform: uppercase; font-weight: 600;
+  opacity: .75;
+}
+.iceberg .layer.surface { background: var(--paper); border: 1.5px solid var(--terra); color: var(--ink); }
+.iceberg .waterline {
+  display: flex; align-items: center; gap: 1rem;
+  margin: 1.2rem 0;
+  color: var(--muted);
+  font-size: 0.78rem; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 600;
+}
+.iceberg .waterline::before, .iceberg .waterline::after {
+  content: ""; flex: 1; height: 0;
+  border-top: 2px dashed var(--terra);
+  opacity: .6;
+}
+.iceberg .layer.deep-1 { background: var(--terra-soft); color: var(--terra-deep); }
+.iceberg .layer.deep-2 { background: #ecbfb5; color: #8c4034; }
+.iceberg .layer.deep-3 { background: var(--terra); color: #faf6f0; }
+.iceberg .layer.deep-4 { background: var(--terra-deep); color: #faf6f0; }
+
+/* Layer detail header */
+.layer-head { display: flex; align-items: baseline; gap: 2rem; margin-bottom: 2rem; }
+.layer-head .n {
+  font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
+  font-size: clamp(4rem, 7vw, 7rem);
+  color: var(--terra); line-height: .9;
+}
+
+/* Halo illustration */
+.halo-fig { position: relative; width: 300px; height: 320px; margin: 0 auto; }
+.halo-fig .ring {
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%) rotate(-6deg);
+  width: 170px; height: 44px;
+  border: 7px solid #e3b23c;
+  border-radius: 50%;
+  box-shadow: 0 12px 40px -12px rgba(227,178,60,.7);
+}
+.halo-fig .head {
+  position: absolute; top: 62px; left: 50%; transform: translateX(-50%);
+  width: 130px; height: 130px; border-radius: 50%;
+  background: var(--terra); box-shadow: var(--shadow);
+}
+.halo-fig .body {
+  position: absolute; top: 200px; left: 50%; transform: translateX(-50%);
+  width: 210px; height: 120px;
+  border-radius: 110px 110px 0 0;
+  background: var(--terra-soft);
+}
+.halo-fig .q {
+  position: absolute;
+  font-family: 'Fraunces', serif; font-style: italic;
+  color: var(--terra-deep);
+  font-size: 1.15rem; white-space: nowrap;
+}
+
+/* Scorecards */
+.scorecards { display: grid; grid-template-columns: 1fr 1fr; gap: 3vw; width: min(1100px, 82vw); margin: 2.5rem auto 0; }
+.scorecard {
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: 16px; padding: 2rem 2.2rem;
+  box-shadow: var(--shadow);
+  text-align: left;
+}
+.scorecard.win { border: 1.5px solid var(--terra); }
+.scorecard h4 {
+  font-family: 'Fraunces', serif; font-weight: 400; font-style: italic;
+  font-size: 1.5rem; margin-bottom: 1.4rem; color: var(--ink);
+}
+.scorecard .row { display: grid; grid-template-columns: 9.5rem 1fr 2rem; align-items: center; gap: 1rem; margin-bottom: .7rem; }
+.scorecard .row .lbl { font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.scorecard .row .bar { height: 10px; background: var(--cream); border-radius: 99px; overflow: hidden; }
+.scorecard .row .bar > i { display: block; height: 100%; background: linear-gradient(90deg, var(--terra), var(--terra-deep)); border-radius: 99px; }
+.scorecard .row .val { font-family: 'Fraunces', serif; font-size: 1.15rem; color: var(--ink-soft); text-align: right; }
+.scorecard .total {
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-top: 1.5px solid var(--line);
+  margin-top: 1.4rem; padding-top: 1.2rem;
+}
+.scorecard .total .sum { font-family: 'Fraunces', serif; font-size: 1.5rem; color: var(--ink); }
+.scorecard .total .pct { font-family: 'Fraunces', serif; font-style: italic; font-size: 2.1rem; }
+.scorecard.win .total .pct { color: var(--terra-deep); }
+.scorecard.lose .total .pct { color: var(--muted); }
+.scorecard .verdict {
+  margin-top: .9rem;
+  font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; font-weight: 700;
+}
+.scorecard.win .verdict { color: var(--terra-deep); }
+.scorecard.lose .verdict { color: var(--muted); }
+
+/* Equation strip */
+.equation {
+  display: flex; align-items: center; justify-content: center;
+  gap: 1.2vw; margin-top: 3rem; flex-wrap: wrap;
+}
+.equation .term {
+  background: var(--paper); border: 1.5px solid var(--terra);
+  border-radius: 12px;
+  padding: 1rem 1.4rem;
+  font-family: 'Fraunces', serif; font-style: italic;
+  font-size: clamp(1.1rem, 1.6vw, 1.6rem);
+  color: var(--terra-deep);
+  box-shadow: var(--shadow);
+}
+.equation .op {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: clamp(1.6rem, 2.4vw, 2.4rem);
+  color: var(--muted);
+}
+</style>
+</head>
+<body>
+
+<div class="progress"><div id="bar"></div></div>
+
+<div class="deck" id="deck">
+
+<!-- 1. OPENER -->
+<section class="slide active center theme-dark">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra)">SOD · Week 2 · Day 2 · Session 4</p>
+  <h1 class="giant" style="margin-top:1.5rem">Type &amp;<br><em>Attraction.</em></h1>
+  <p class="lede" style="margin-top:3rem; max-width:34ch">What you've been attracted to — and what deserves your attraction instead.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- WHAT IS TYPE — DIVIDER -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra-deep)">Part One</p>
+  <h1 class="giant" style="margin-top:1.5rem">What is<br><em>type?</em></h1>
+  <p class="lede" style="margin-top:2.5rem; max-width:38ch">Everything we've learned about our parts of self and attachment wounds goes <em>hand in hand</em> with this.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 5. ACTIVITY 1 -->
+<section class="slide theme-cream">
+  <div class="deco-dots top"></div>
+  <div class="activity center" style="margin:0 auto">
+    <span class="tag">Activity · Workbook pg 57</span>
+    <h2 class="section">"They're not my <em>type.</em>"</h2>
+    <p class="prompt">Ever said it? Picture your <em>"type"</em> in your head.</p>
+    <p class="prompt">Write out what they are like —<br>include <em>as many details</em> as possible.</p>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- TYPE = MEDICATION -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">Where type comes from</div>
+      <h2 class="section">Type can come from <em>childhood wounding.</em></h2>
+    </div>
+    <div class="stack">
+      <p class="lede">Deficits you didn't get from your parents or caretakers.</p>
+      <p class="lede">You're drawn — <em>subconsciously</em> — to something you believe will medicate your pain.</p>
+      <p class="lede">It's one of the biggest ways we <em>medicate</em> later in life from the wounds we carried as a child.</p>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- PREFERENCES DIVIDER -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra-deep)">Part Two</p>
+  <h1 class="giant" style="margin-top:1.5rem">Preferences vs.<br><em>non-negotiables.</em></h1>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 10. PREFERENCES POINTS -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">Hold them loosely</div>
+      <h2 class="section">A preference is not a <em>deal breaker.</em></h2>
+      <p class="lede" style="margin-top:1.5rem">You can absolutely have preferences. But are your preferences quietly becoming non-negotiables?</p>
+    </div>
+    <div>
+      <ul class="feels-list small">
+        <li>A preference should mean exactly that — a preference.</li>
+        <li>Preferences dictated by wounding or lack lead to disappointment.</li>
+        <li>Honest question: has your type actually worked out for you?</li>
+        <li>Or has it left you more disappointed and heartbroken?</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- NO HUMAN -->
+<section class="slide center theme-terra">
+  <div class="deco-dots top"></div>
+  <p class="pull" style="max-width:30ch">No human on earth can <em style="color:#fff1d8">save you</em> from your pain or <em style="color:#fff1d8">complete</em> you.</p>
+  <p class="lede" style="margin-top:3rem; max-width:40ch">And a side note — type isn't just preferences. Type is, and should be, made up of their <em style="color:#fff1d8">character, spirit, and soul.</em></p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 13. FAMILIAR -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">Why we keep going back</div>
+      <h2 class="section">We're addicted to the very thing that <em>wounds us.</em></h2>
+    </div>
+    <div class="stack">
+      <p class="lede">Why? Because it's <em>familiar.</em></p>
+      <p class="lede">Logically, you know it isn't working. But the neural pathways are worn in — even the neglect feels like home.</p>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- WRONG PEOPLE DIVIDER -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra-deep)">Part Three</p>
+  <h1 class="giant" style="margin-top:1.5rem">Dating the<br><em>wrong</em> people.</h1>
+  <p class="pull" style="margin-top:3rem; font-size:clamp(1.6rem,2.6vw,2.6rem); max-width:34ch">"Why do the people I want never want me — and the people I don't want always like me?"</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 16. UNAVAILABLE = ALLURING -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">What's happening · one of two things</div>
+      <h2 class="section">Unavailable feels <em>alluring.</em></h2>
+      <p class="lede" style="margin-top:1.5rem">With attachment wounds, we're drawn to what we can't have. It works in marketing — and it works in dating.</p>
+    </div>
+    <div>
+      <ul class="feels-list small">
+        <li>Unattainable reads as more worthy, more valuable.</li>
+        <li>Mystery makes us fill in the blanks.</li>
+        <li>"They're probably so godly."</li>
+        <li>"Such a leader. Such an amazing partner."</li>
+        <li>…just because they're unavailable.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- HALO EFFECT -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">What's happening · continued</div>
+      <h2 class="section">The <em>halo</em> effect.</h2>
+      <ul class="feels-list" style="margin-top:2rem">
+        <li>We see somebody who matches the <em>fantasy</em> of our type…</li>
+        <li>…so we assign a perfect life behind their physical appearance.</li>
+      </ul>
+    </div>
+    <div style="text-align:center">
+      <div class="halo-fig">
+        <div class="ring"></div>
+        <div class="head"></div>
+        <div class="body"></div>
+        <span class="q" style="top:70px; left:-70px">so godly…</span>
+        <span class="q" style="top:130px; right:-90px">such a leader…</span>
+        <span class="q" style="top:250px; left:-96px">amazing partner…</span>
+      </div>
+      <p class="kicker" style="margin-top:2.5rem">The perfect life we invented for them</p>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- LOW SELF-ESTEEM -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">What's happening · the second thing</div>
+      <h2 class="section">Low <em>self-esteem.</em></h2>
+      <p class="lede" style="margin-top:1.5rem">We chase people "out of our league" or "hard to get" to fill a void — to feel more attractive, more worthy, more loved, more successful… more <em>enough.</em></p>
+    </div>
+    <div>
+      <ul class="feels-list small">
+        <li>So we start <em>performing</em> to get them to like us.</li>
+        <li>Waving our hands in front of their face — <em>see me, love me, accept me.</em></li>
+        <li>Always marketing ourselves. Selling ourselves.</li>
+        <li>We can't make mistakes. We can't be too much ourselves.</li>
+        <li>And the self-fulfilling prophecy: when we chase the unattainable and <em>don't</em> get it, it reinforces all the negative things we believe about ourselves.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- RETHINK YES + ACTIVITY -->
+<section class="slide theme-cream">
+  <div class="deco-dots top"></div>
+  <div class="activity center" style="margin:0 auto">
+    <span class="tag">What to do instead · one · Activity</span>
+    <h2 class="section">Rethink your <em>yes.</em></h2>
+    <p class="prompt">Picture your last <em>crush</em> — someone you asked out, dated, or simply fantasized about.</p>
+    <p class="prompt">Why were you <em>truly</em> interested in them?<br>Was your why based on <em>fantasy</em> — or reality?</p>
+    <p class="prompt">Did you overlook, or fill in the blanks about, their <em>character?</em></p>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- RETHINK NO + ACTIVITY -->
+<section class="slide theme-cream">
+  <div class="deco-dots top"></div>
+  <div class="activity center" style="margin:0 auto">
+    <span class="tag">What to do instead · two · Activity</span>
+    <h2 class="section">Rethink your <em>no.</em></h2>
+    <p class="prompt">A "no" isn't only when someone asks you out. You silently reject people all the time — on the app, at church, at an event.</p>
+    <p class="prompt">Picture someone you've <em>rejected</em> — verbally, or just internally. Why were you <em>not</em> interested? What's the <em>quality</em> of your qualifications?</p>
+    <p class="prompt">Is there a chance you can <em>challenge yourself</em> here?</p>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 24. 5 LAYERS DIVIDER -->
+<section class="slide center theme-dark">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra)">Part Four</p>
+  <h1 class="giant" style="margin-top:1.5rem">The 5 layers of<br><em>attraction.</em></h1>
+  <p class="lede" style="margin-top:2.5rem">Attraction has many buckets. It's an <em>equation.</em></p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 25. ICEBERG -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Most people only ever check the surface</div>
+  <div class="iceberg">
+    <div class="layer surface"><span>Physical</span><span class="pct">What you see first</span></div>
+    <div class="waterline">beneath the surface</div>
+    <div class="layer deep-1"><span>Personality</span><span class="pct">The friendship</span></div>
+    <div class="layer deep-2"><span>Intellectual</span><span class="pct">The conversation</span></div>
+    <div class="layer deep-3"><span>Emotional</span><span class="pct">The safety</span></div>
+    <div class="layer deep-4"><span>Spiritual</span><span class="pct">The Jesus in them</span></div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 26. EMOTIONAL -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="layer-head"><span class="n">1</span><h2 class="section">Emotional<br><em>attraction.</em></h2></div>
+      <p class="lede">Vulnerability. Emotional safety.</p>
+      <p class="lede" style="margin-top:1.2rem">And remember — emotionally <em>intelligent</em> is not the same as emotionally <em>healthy.</em></p>
+    </div>
+    <div>
+      <ul class="feels-list small">
+        <li>Do you feel seen?</li>
+        <li>Do you feel known?</li>
+        <li>Can you share your feelings safely?</li>
+        <li>Can you share your past safely?</li>
+        <li>Can you have hard conversations with them?</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 27. SPIRITUAL -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="layer-head"><span class="n">2</span><h2 class="section">Spiritual<br><em>attraction.</em></h2></div>
+      <p class="lede">Being attracted to the <em>Jesus</em> in them.</p>
+    </div>
+    <div class="center" style="display:flex; flex-direction:column; align-items:center">
+      <h1 class="giant">46<em>%</em></h1>
+      <p class="lede" style="margin-top:1.5rem; text-align:center; max-width:30ch">of Christians surveyed said spiritual attraction was the <em>most important</em> kind.</p>
+      <p class="kicker" style="margin-top:1.5rem">Debra Fileta · Love in Every Season</p>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 28. INTELLECTUAL -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="layer-head"><span class="n">3</span><h2 class="section">Intellectual<br><em>attraction.</em></h2></div>
+      <p class="lede">The desire to connect on a more <em>cerebral</em> level.</p>
+    </div>
+    <div>
+      <ul class="feels-list small">
+        <li>You want to spend time with them because of what you talk about.</li>
+        <li>They make you think about things in new and challenging ways.</li>
+        <li>For some, intellectual attraction is the doorway to emotional and romantic attraction.</li>
+        <li>Different people fill different roles and needs in our lives.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 29. PERSONALITY -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="layer-head"><span class="n">4</span><h2 class="section">Personality<br><em>attraction.</em></h2></div>
+      <p class="lede">This is the <em>friendship</em> part of the relationship.</p>
+    </div>
+    <div>
+      <ul class="feels-list small">
+        <li>How they act, behave, communicate, think, socialize — their patterns and passions.</li>
+        <li>You must understand <em>your own</em> personality in this.</li>
+        <li>Kait: "I used to want the guy who'd talk feelings for hours — until I realized staying stuck in feelings crushed my soul."</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 30. PHYSICAL -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="layer-head"><span class="n">5</span><h2 class="section">Physical<br><em>attraction.</em></h2></div>
+      <p class="lede">The first one we see — because it's the easiest.</p>
+      <p class="lede" style="margin-top:1.2rem">Some of us have carried a <em>picture</em> of who we'd end up with. Ladies — maybe he was really muscular. Guys — the digital age has sold you unrealistic expectations of women.</p>
+    </div>
+    <div>
+      <ul class="feels-list small">
+        <li>Sometimes there's a spark. Many times it's a slow flame that takes time.</li>
+        <li>You can become drawn to someone through <em>time.</em></li>
+        <li>Be realistic — people have real bodies, and bodies change.</li>
+        <li>Beauty is fluid. In the Victorian era, pale skin and major curves were the standard.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- THE EQUATION -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Rank your attraction · 0 = nothing · 5 = fully</div>
+  <h2 class="section">Score all <em>five</em> layers.</h2>
+  <div class="equation">
+    <span class="term">Emotional</span><span class="op">+</span>
+    <span class="term">Spiritual</span><span class="op">+</span>
+    <span class="term">Intellectual</span><span class="op">+</span>
+    <span class="term">Personality</span><span class="op">+</span>
+    <span class="term">Physical</span>
+    <span class="op">=</span>
+    <span class="term" style="background:var(--terra); color:#faf6f0; border-color:var(--terra-deep)">/ 25</span>
+  </div>
+  <p class="lede" style="margin-top:3rem">A perfect score is 25 out of 25.<br>We suggest at least <em>70% overall.</em></p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 33. WORKED EXAMPLE -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Real coaching client · two people they were dating</div>
+  <div class="scorecards">
+    <div class="scorecard win">
+      <h4>Person A</h4>
+      <div class="row"><span class="lbl">Physical</span><span class="bar"><i style="width:60%"></i></span><span class="val">3</span></div>
+      <div class="row"><span class="lbl">Emotional</span><span class="bar"><i style="width:80%"></i></span><span class="val">4</span></div>
+      <div class="row"><span class="lbl">Spiritual</span><span class="bar"><i style="width:100%"></i></span><span class="val">5</span></div>
+      <div class="row"><span class="lbl">Personality</span><span class="bar"><i style="width:100%"></i></span><span class="val">5</span></div>
+      <div class="row"><span class="lbl">Intellectual</span><span class="bar"><i style="width:40%"></i></span><span class="val">2</span></div>
+      <div class="total"><span class="sum">19 / 25</span><span class="pct">76%</span></div>
+      <div class="verdict">Above the 70% line</div>
+    </div>
+    <div class="scorecard lose">
+      <h4>Person B</h4>
+      <div class="row"><span class="lbl">Physical</span><span class="bar"><i style="width:40%"></i></span><span class="val">2</span></div>
+      <div class="row"><span class="lbl">Emotional</span><span class="bar"><i style="width:60%"></i></span><span class="val">3</span></div>
+      <div class="row"><span class="lbl">Spiritual</span><span class="bar"><i style="width:80%"></i></span><span class="val">4</span></div>
+      <div class="row"><span class="lbl">Personality</span><span class="bar"><i style="width:80%"></i></span><span class="val">4</span></div>
+      <div class="row"><span class="lbl">Intellectual</span><span class="bar"><i style="width:40%"></i></span><span class="val">2</span></div>
+      <div class="total"><span class="sum">15 / 25</span><span class="pct">60%</span></div>
+      <div class="verdict">Below the line</div>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 34. WHERE ARE YOU -->
+<section class="slide center theme-terra">
+  <div class="deco-dots top"></div>
+  <p class="pull" style="max-width:30ch">When you're dating someone, always consider where you are in <em style="color:#fff1d8">all</em> the layers of attraction.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 35. HOMEWORK -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <span class="tag" style="margin-bottom:2rem">Homework</span>
+  <h1 class="giant">Attraction exercise<br>&amp; <em>reflection.</em></h1>
+  <div style="display:flex; flex-direction:column; gap:1rem; margin-top:3.5rem; max-width:46ch; text-align:center">
+    <p class="lede" style="margin:0">Score someone you're interested in — or your last crush — across all 5 layers.</p>
+    <p class="lede" style="margin:0">Then reflect: is your attraction built on reality, or on blanks you filled in?</p>
+  </div>
+  <p class="kicker" style="margin-top:4rem; color:var(--terra-deep)">Bring it to the next session</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+</div>
+
+<div class="chrome">
+  <div>SOD · Week 2 · Type &amp; Attraction</div>
+  <div class="nav-hint"><span id="counter">01 / 25</span> · use <kbd>←</kbd> <kbd>→</kbd> or <kbd>space</kbd></div>
+</div>
+
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const bar = document.getElementById('bar');
+const counter = document.getElementById('counter');
+let i = 0;
+
+function show(n) {
+  i = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+  bar.style.width = ((i + 1) / slides.length * 100) + '%';
+  counter.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+  history.replaceState(null, '', '#' + (i + 1));
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+document.addEventListener('click', e => {
+  if (e.target.closest('a, button, kbd, input, iframe, [data-noclick]')) return;
+  const half = window.innerWidth / 2;
+  show(e.clientX > half ? i + 1 : i - 1);
+});
+
+const startHash = parseInt(location.hash.slice(1), 10);
+show((startHash && !isNaN(startHash)) ? startHash - 1 : 0);
+</script>
+
+</body>
+</html>
