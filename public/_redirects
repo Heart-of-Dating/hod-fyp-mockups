@@ -1,3 +1,23 @@
 # /FYPN[1-4] and /FYPVIP short-link redirects are now handled by Pages Functions
 # (functions/FYPN1.js etc) so we can log click events to Analytics Engine
 # before issuing the 302. See functions/_lib/click-redirect.js for shared logic.
+
+# SOD uniform slide URLs (2026-07-14): decks live at /sod/session-N/
+/sod-pain-cycle/* /sod/session-1/:splat 301
+/sod-type-attraction/* /sod/session-5/:splat 301
+/sod-calendar/* /sod/calendar/:splat 301
+# Not-yet-built sessions land on the hub (302 TEMP — DELETE the line when that session's deck ships,
+# or the redirect will shadow the new static files)
+/sod/session-2/ /sod/sessions/ 302
+/sod/session-3/ /sod/sessions/ 302
+/sod/session-4/ /sod/sessions/ 302
+/sod/session-6/ /sod/sessions/ 302
+/sod/session-7/ /sod/sessions/ 302
+/sod/session-8/ /sod/sessions/ 302
+/sod/session-9/ /sod/sessions/ 302
+/sod/session-11/ /sod/sessions/ 302
+/sod/session-12/ /sod/sessions/ 302
+/sod/session-13/ /sod/sessions/ 302
+/sod/session-14/ /sod/sessions/ 302
+/sod/session-15/ /sod/sessions/ 302
+/sod/session-16/ /sod/sessions/ 302
