@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1600, initial-scale=1">
+<title>SOD · Attachment Styles & Godfidence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600;700;800&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6f0;
+  --ink: #1d1815;
+  --ink-soft: #4a3f37;
+  --muted: #8a7e72;
+  --line: #e8dfd2;
+  --terra: #c47a6e;
+  --terra-deep: #a85a4e;
+  --terra-soft: #f4dad4;
+  --cream: #f3ebdc;
+  --paper: #fffaf2;
+  --dark: #1d1815;
+  --shadow: 0 30px 80px -30px rgba(40,28,18,.25);
+  --shadow-strong: 0 40px 100px -30px rgba(40,28,18,.4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  overflow: hidden;
+}
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 5vh 7vw;
+  flex-direction: column; justify-content: center;
+  opacity: 0; transition: opacity .35s ease;
+}
+.slide.active { display: flex; opacity: 1; }
+
+.eyebrow {
+  font-size: 0.85rem; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--terra-deep);
+  font-weight: 600; margin-bottom: 1.5rem;
+}
+.eyebrow .dot {
+  display: inline-block; width: 6px; height: 6px;
+  background: var(--terra); border-radius: 50%;
+  margin: 0 .8em; vertical-align: middle;
+}
+h1.title {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: clamp(3.5rem, 7vw, 7.5rem);
+  line-height: 0.95; letter-spacing: -0.025em;
+}
+h1.title em { font-style: italic; font-weight: 400; color: var(--terra-deep); }
+h2.section {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  line-height: 1.0; letter-spacing: -0.02em;
+}
+h2.section em { font-style: italic; color: var(--terra-deep); font-weight: 400; }
+h3 {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 1; letter-spacing: -0.02em;
+}
+h3 em { font-style: italic; color: var(--terra-deep); }
+.lede {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  line-height: 1.35; font-weight: 300;
+  color: var(--ink-soft); max-width: 42ch;
+}
+.lede em { color: var(--terra-deep); font-style: italic; }
+.kicker {
+  font-size: 1.05rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--muted);
+  font-weight: 500;
+}
+.giant {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: clamp(4rem, 9vw, 10rem);
+  line-height: .9; letter-spacing: -0.04em;
+}
+.giant em { font-style: italic; font-weight: 400; color: var(--terra-deep); }
+
+.center { text-align: center; align-items: center; }
+.center .lede { margin: 0 auto; }
+.stack > * + * { margin-top: 1.5rem; }
+
+.theme-terra { background: var(--terra); color: #faf6f0; }
+.theme-terra h1, .theme-terra h2, .theme-terra h3, .theme-terra .lede, .theme-terra .giant { color: #faf6f0; }
+.theme-terra h1 em, .theme-terra h2 em, .theme-terra .giant em, .theme-terra h3 em { color: #fff1d8; }
+.theme-terra .eyebrow, .theme-terra .kicker { color: #fff1d8; }
+.theme-dark { background: #1d1815; color: var(--bg); }
+.theme-dark .lede, .theme-dark h1, .theme-dark h2, .theme-dark h3 { color: var(--bg); }
+.theme-dark .eyebrow { color: var(--terra); }
+.theme-dark h1 em, .theme-dark h2 em, .theme-dark .giant em, .theme-dark h3 em { color: var(--terra-soft); }
+.theme-cream { background: var(--cream); }
+
+.pull {
+  font-family: 'Fraunces', serif; font-style: italic;
+  font-weight: 300;
+  font-size: clamp(2rem, 3.5vw, 3.5rem);
+  line-height: 1.2; letter-spacing: -0.015em;
+  color: var(--ink); max-width: 26ch;
+}
+.pull em { color: var(--terra-deep); font-style: italic; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; align-items: center; height: 100%; }
+
+.seq {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-top: 1rem;
+  flex-wrap: nowrap;
+}
+.seq .step {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: clamp(1.4rem, 2.2vw, 2rem);
+  letter-spacing: -0.01em;
+  color: var(--terra-deep);
+  padding: 0.8rem 1.4rem;
+  background: var(--paper);
+  border: 1.5px solid var(--terra);
+  border-radius: 10px;
+  white-space: nowrap;
+}
+.seq .arrow {
+  font-size: 1.6rem;
+  color: var(--terra);
+  font-weight: 300;
+}
+
+.looks-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+.looks-list li {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(1.2rem, 1.7vw, 1.7rem);
+  line-height: 1.3;
+  color: var(--ink-soft);
+}
+.looks-list li::before {
+  content: "—";
+  margin-right: .7rem;
+  color: var(--terra);
+}
+
+.cope-box {
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  background: var(--terra);
+  color: #faf6f0;
+  padding: 0.7rem 1.6rem;
+  border-radius: 6px;
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: clamp(1.3rem, 1.8vw, 1.8rem);
+  letter-spacing: 0.04em;
+  box-shadow: var(--shadow);
+}
+
+.pain-peace-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-top: 1rem;
+}
+.pain-peace-list li {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 2rem;
+  align-items: center;
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: clamp(1.2rem, 1.7vw, 1.7rem);
+}
+.pain-peace-list .from {
+  text-align: right;
+  color: var(--ink-soft);
+}
+.pain-peace-list .from em {
+  font-style: italic;
+  color: var(--terra-deep);
+}
+.pain-peace-list .ar {
+  color: var(--terra);
+  font-weight: 300;
+  font-size: 1.4rem;
+}
+.pain-peace-list .to {
+  color: var(--ink);
+  font-weight: 600;
+}
+.pain-peace-list .to em {
+  font-style: italic;
+  font-weight: 500;
+}
+
+.styles-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.6vw;
+  margin-top: 3rem;
+  width: 100%;
+}
+.style-card {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 1.6rem 1.3rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.style-card .name {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-style: italic;
+  font-size: clamp(1.3rem, 1.8vw, 1.7rem);
+  color: var(--terra-deep);
+  margin-bottom: 0.7rem;
+}
+.style-card .seq-mini {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  line-height: 1.4;
+  margin-bottom: 0.8rem;
+}
+.style-card .drive {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.3;
+}
+
+/* Two question cards (Attachment → Pain Cycle) */
+.qa-pair {
+  width: min(1200px, 92vw);
+  margin: 3rem auto 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 2rem;
+  align-items: stretch;
+}
+.qa-card {
+  background: var(--paper);
+  border: 1.5px solid var(--terra);
+  border-radius: 18px;
+  padding: 2.5rem 2.2rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.qa-tag {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--terra-deep);
+  margin-bottom: 1.4rem;
+}
+.qa-q {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: clamp(1.8rem, 2.6vw, 2.6rem);
+  line-height: 1.15;
+  color: var(--ink);
+  margin-bottom: 1.4rem;
+  letter-spacing: -0.015em;
+}
+.qa-q em {
+  font-style: italic;
+  color: var(--terra-deep);
+}
+.qa-a {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: clamp(1rem, 1.3vw, 1.25rem);
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+.qa-a em {
+  font-style: italic;
+  color: var(--terra-deep);
+}
+.qa-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-width: 120px;
+}
+.qa-arrow-label {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: clamp(1.3rem, 1.6vw, 1.6rem);
+  color: var(--terra-deep);
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
+.conn-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 3rem;
+  width: 100%;
+  max-width: 1100px;
+}
+.conn-col {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 2rem 2rem;
+  box-shadow: var(--shadow);
+}
+.conn-col .col-label {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  color: var(--terra-deep);
+  margin-bottom: 0.6rem;
+}
+.conn-col .col-q {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: clamp(1.2rem, 1.6vw, 1.5rem);
+  color: var(--ink);
+  margin-bottom: 1.2rem;
+  line-height: 1.3;
+}
+.conn-col .col-body {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.scripture-block {
+  max-width: min(900px, 80vw);
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+.scripture-block .verse {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(2rem, 3.6vw, 3.6rem);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin-bottom: 2.5rem;
+  max-width: 24ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+.scripture-block .ref {
+  font-size: 0.95rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--terra-deep);
+  font-weight: 600;
+}
+
+.activity {
+  display: flex; flex-direction: column;
+  gap: 1.6rem;
+  max-width: 60ch;
+}
+.activity .prompt {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 2.2vw, 2.2rem);
+  line-height: 1.3;
+  color: var(--ink);
+}
+.activity .prompt em { color: var(--terra-deep); font-style: italic; }
+.activity .tag {
+  display: inline-block;
+  background: var(--terra-soft);
+  color: var(--terra-deep);
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  align-self: flex-start;
+}
+
+.god-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem 2rem;
+  max-width: 700px;
+  margin: 2.5rem auto 0;
+  counter-reset: god;
+}
+.god-list li {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(1.1rem, 1.5vw, 1.4rem);
+  color: var(--ink-soft);
+  border-bottom: 1.5px dashed var(--line);
+  padding: 0.6rem 0;
+  counter-increment: god;
+}
+.god-list li::before {
+  content: counter(god) ".";
+  color: var(--terra-deep);
+  font-weight: 600;
+  font-style: normal;
+  margin-right: 0.8rem;
+  font-family: 'Fraunces', serif;
+}
+
+.deco-dots {
+  position: absolute; left: 5vw; right: 5vw;
+  height: 12px;
+  background-image: radial-gradient(circle, var(--terra-deep) 1.5px, transparent 1.5px),
+                    radial-gradient(circle, var(--ink) 1.5px, transparent 1.5px);
+  background-size: 18px 6px, 18px 6px;
+  background-position: 0 0, 9px 6px;
+  background-repeat: repeat-x;
+  opacity: 0.55;
+}
+.deco-dots.top { top: 2vh; }
+.deco-dots.bottom { bottom: 2vh; }
+.theme-dark .deco-dots, .theme-terra .deco-dots { opacity: 0.4; }
+
+.chrome {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 2rem; z-index: 100;
+  font-size: 0.78rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--muted);
+  font-weight: 500;
+}
+.progress {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 3px; background: var(--line); z-index: 100;
+}
+.progress > div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--terra), var(--terra-deep));
+  width: 0%; transition: width .35s ease;
+}
+.nav-hint kbd {
+  display: inline-block; padding: 2px 8px;
+  border: 1px solid var(--line); border-radius: 3px;
+  font-size: 0.7rem; margin: 0 2px;
+  color: var(--ink-soft); background: var(--paper);
+}
+
+</style>
+</head>
+<body>
+
+<div class="progress"><div id="bar"></div></div>
+
+<div class="deck" id="deck">
+
+<!-- 1. SECTION OPENER -->
+<section class="slide active center theme-dark">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra)">SOD · Phase 1 · Week 2</p>
+  <h1 class="giant" style="margin-top:1.5rem">Attachment<br>& <em>Godfidence.</em></h1>
+  <p class="lede" style="margin-top:3rem; max-width:34ch">How you wire for connection — and the truth God says about who you are.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 2. BRENE BROWN FRAME -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <p class="pull">"Our connection with other people is only as solid and deep as we are <em>connected to ourselves.</em>"</p>
+  <p class="kicker" style="margin-top:2.5rem; color:var(--terra-deep)">— Brené Brown</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 3. VIDEO — full-screen, no other text -->
+<section class="slide" style="padding:3vh 4vw; justify-content:center; align-items:center">
+  <div class="deco-dots top"></div>
+  <div style="aspect-ratio:16/9; width:100%; max-width:1500px; max-height:88vh; border-radius:18px; overflow:hidden; box-shadow:var(--shadow-strong); background:#000; border:6px solid #1d1815">
+    <iframe src="https://www.youtube.com/embed/WjOowWxOXCg?start=253&rel=0" style="width:100%; height:100%; border:none; display:block" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 4. PAIN CYCLE × ATTACHMENT — TWO QUESTIONS -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Phase 1 callback</div>
+  <h2 class="section" style="text-align:center">Two questions. <em>Same engine.</em></h2>
+
+  <div class="qa-pair">
+    <!-- Attachment card -->
+    <div class="qa-card">
+      <div class="qa-tag">Attachment Style</div>
+      <p class="qa-q">"What do I <em>fear</em><br>in relationships?"</p>
+      <p class="qa-a">Your default wiring — set in childhood, activated under stress.</p>
+    </div>
+
+    <!-- Connector arrow -->
+    <div class="qa-arrow">
+      <svg viewBox="0 0 100 40" width="100%" height="40">
+        <line x1="5" y1="20" x2="90" y2="20" stroke="var(--terra)" stroke-width="2.5" stroke-linecap="round"/>
+        <polygon points="80,12 95,20 80,28" fill="var(--terra)"/>
+      </svg>
+      <span class="qa-arrow-label">triggers</span>
+    </div>
+
+    <!-- Pain Cycle card -->
+    <div class="qa-card">
+      <div class="qa-tag">Pain Cycle</div>
+      <p class="qa-q">"What do I <em>do</em><br>when triggered?"</p>
+      <p class="qa-a">The coping you reach for — <em>Blame · Shame · Control · Escape.</em></p>
+    </div>
+  </div>
+
+  <p class="lede" style="margin-top:2.5rem; text-align:center; font-size:1.1rem">You are <em>not</em> being labeled. You can show up in more than one style.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 4. ANXIOUS - DEEP DIVE -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Style 1</div>
+  <h2 class="section"><em>Anxious.</em></h2>
+  <p class="lede" style="margin-top:1rem">Driven by a deep craving for connection. Acts fast to soothe the feeling.</p>
+  <div class="seq" style="margin-top:2rem">
+    <div class="step">Feel</div><div class="arrow">→</div>
+    <div class="step">Do</div><div class="arrow">→</div>
+    <div class="step">Think</div>
+  </div>
+  <div class="two-col" style="margin-top:2.5rem; height:auto">
+    <div>
+      <p class="kicker" style="color:var(--terra-deep); margin-bottom:1rem">What it looks like</p>
+      <ul class="looks-list">
+        <li>Needing constant reassurance</li>
+        <li>Over-explaining, over-texting</li>
+        <li>Emotionally intense or reactive</li>
+        <li>Investigating, overthinking</li>
+        <li>Escalating when feeling insecure</li>
+      </ul>
+    </div>
+    <div>
+      <p class="kicker" style="color:var(--terra-deep); margin-bottom:1rem">Primary coping</p>
+      <div style="display:flex; gap:0.8rem; flex-wrap:wrap; margin-bottom:1.5rem">
+        <div class="cope-box">SHAME</div>
+        <div class="cope-box">CONTROL</div>
+      </div>
+      <p class="lede" style="font-size:1.1rem">When those don't work — spills into <em>BLAME.</em></p>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 5. AVOIDANT - DEEP DIVE -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Style 2</div>
+  <h2 class="section"><em>Avoidant.</em></h2>
+  <p class="lede" style="margin-top:1rem">Driven by a deep need for independence and self-protection. Thinks first, feels later.</p>
+  <div class="seq" style="margin-top:2rem">
+    <div class="step">Think</div><div class="arrow">→</div>
+    <div class="step">Do</div><div class="arrow">→</div>
+    <div class="step">Feel later</div>
+  </div>
+  <div class="two-col" style="margin-top:2.5rem; height:auto">
+    <div>
+      <p class="kicker" style="color:var(--terra-deep); margin-bottom:1rem">What it looks like</p>
+      <ul class="looks-list">
+        <li>Pulling away when things get serious</li>
+        <li>Avoiding hard conversations</li>
+        <li>Struggling to express needs</li>
+        <li>Keeping options open</li>
+        <li>Feeling overwhelmed by closeness</li>
+      </ul>
+    </div>
+    <div>
+      <p class="kicker" style="color:var(--terra-deep); margin-bottom:1rem">Primary coping</p>
+      <div style="display:flex; gap:0.8rem; flex-wrap:wrap; margin-bottom:1.5rem">
+        <div class="cope-box">ESCAPE</div>
+      </div>
+      <p class="lede" style="font-size:1.1rem">Uses <em>BLAME</em> to justify the distance: "they're too needy."</p>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 6. DISORGANIZED - DEEP DIVE -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Style 3</div>
+  <h2 class="section"><em>Disorganized.</em> <span style="font-size:0.65em; color:var(--muted)">(Ambivalent)</span></h2>
+  <p class="lede" style="margin-top:1rem">The most internally conflicted style. Wants closeness AND fears it — at the same time.</p>
+  <div class="seq" style="margin-top:2rem">
+    <div class="step">Think</div><div class="arrow">↔</div>
+    <div class="step">Feel</div><div class="arrow">↔</div>
+    <div class="step">Think</div><div class="arrow">→</div>
+    <div class="step">Do</div>
+  </div>
+  <div class="two-col" style="margin-top:2.5rem; height:auto">
+    <div>
+      <p class="kicker" style="color:var(--terra-deep); margin-bottom:1rem">What it looks like</p>
+      <ul class="looks-list">
+        <li>Pulled in two directions at once</li>
+        <li>Overanalyzing for long stretches</li>
+        <li>Second-guessing constantly</li>
+        <li>Inconsistent reactions</li>
+        <li>Hot then cold in the same hour</li>
+      </ul>
+    </div>
+    <div>
+      <p class="kicker" style="color:var(--terra-deep); margin-bottom:1rem">Coping — cycles through all four</p>
+      <div style="display:flex; gap:0.6rem; flex-wrap:wrap; margin-bottom:1.5rem">
+        <div class="cope-box" style="font-size:1rem; padding:0.5rem 1rem">BLAME</div>
+        <div class="cope-box" style="font-size:1rem; padding:0.5rem 1rem">SHAME</div>
+        <div class="cope-box" style="font-size:1rem; padding:0.5rem 1rem">CONTROL</div>
+        <div class="cope-box" style="font-size:1rem; padding:0.5rem 1rem">ESCAPE</div>
+      </div>
+      <p class="lede" style="font-size:1.1rem"><em>All four — often in the same situation.</em></p>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 7. SECURE - DEEP DIVE -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Style 4 — the goal</div>
+  <h2 class="section"><em>Secure.</em></h2>
+  <p class="lede" style="margin-top:1rem">Not about never getting triggered — about what you DO when you are. Feel, think, then act.</p>
+  <div class="seq" style="margin-top:2rem">
+    <div class="step">Feel</div><div class="arrow">↔</div>
+    <div class="step">Think</div><div class="arrow">↔</div>
+    <div class="step">Do</div>
+  </div>
+  <div class="two-col" style="margin-top:2.5rem; height:auto">
+    <div>
+      <p class="kicker" style="color:var(--terra-deep); margin-bottom:1rem">What it looks like</p>
+      <ul class="looks-list">
+        <li>Stays in the conversation</li>
+        <li>Names what's hard out loud</li>
+        <li>Takes ownership without spiraling</li>
+        <li>Communicates needs clearly</li>
+        <li>Doesn't fear conflict</li>
+      </ul>
+    </div>
+    <div>
+      <p class="kicker" style="color:var(--terra-deep); margin-bottom:1rem">Moves toward</p>
+      <p class="pull" style="font-size:1.8rem; max-width:14ch">The <em>Peace</em> Cycle.</p>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 8. 4 STYLES OVERVIEW SUMMARY -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">The four attachment styles</div>
+  <h2 class="section">Each one moves <em>differently.</em></h2>
+  <div class="styles-grid">
+    <div class="style-card">
+      <div class="name">Anxious</div>
+      <div class="seq-mini">Feel → Do → Think</div>
+      <div class="drive">Craves connection</div>
+    </div>
+    <div class="style-card">
+      <div class="name">Avoidant</div>
+      <div class="seq-mini">Think → Do → Feel</div>
+      <div class="drive">Protects independence</div>
+    </div>
+    <div class="style-card">
+      <div class="name">Disorganized</div>
+      <div class="seq-mini">Think ↔ Feel → Do</div>
+      <div class="drive">Wants AND fears closeness</div>
+    </div>
+    <div class="style-card">
+      <div class="name">Secure</div>
+      <div class="seq-mini">Feel ↔ Think ↔ Do</div>
+      <div class="drive">Stays in the conversation</div>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 9. INSECURE → PEACE CYCLE TRANSFORMATION -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow center" style="text-align:center; margin:0 auto 1rem">From pain → peace</div>
+  <h2 class="section center" style="text-align:center">The <em>secure</em> shift.</h2>
+  <ul class="pain-peace-list" style="max-width:1100px; margin:3rem auto 0">
+    <li><span class="from">Instead of <em>blame</em></span><span class="ar">→</span><span class="to">They take <em>ownership</em></span></li>
+    <li><span class="from">Instead of <em>shame</em></span><span class="ar">→</span><span class="to">They choose <em>honesty and vulnerability</em></span></li>
+    <li><span class="from">Instead of <em>control</em></span><span class="ar">→</span><span class="to">They practice <em>trust and flexibility</em></span></li>
+    <li><span class="from">Instead of <em>escape</em></span><span class="ar">→</span><span class="to">They choose <em>engagement</em></span></li>
+  </ul>
+  <p class="lede" style="margin-top:2.5rem; text-align:center; font-size:1.2rem">Same emotions. Different choice.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 10. YOU CAN BE MORE THAN ONE -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <p class="pull">You can be <em>more than one</em> attachment style — but you often have a <em>primary.</em></p>
+  <p class="lede" style="margin-top:2.5rem; max-width:42ch">Different people. Different situations. Different parts of your story. The goal isn't a label — it's <em>awareness.</em></p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 11. ACTIVITY — ATTACHMENT QUIZ -->
+<section class="slide theme-cream">
+  <div class="deco-dots top"></div>
+  <div class="activity center" style="margin:0 auto">
+    <span class="tag">Your turn</span>
+    <h2 class="section">Take the <em>quiz.</em></h2>
+    <p class="prompt">11 questions in your workbook.</p>
+    <p class="prompt">Pick the answer that feels most like <em>you</em> — not the version of you that you wish you were.</p>
+    <p class="lede" style="margin-top:1rem">Most of you will score across 2–3 styles. That's information, not a label.</p>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 12. GODFIDENCE SECTION DIVIDER -->
+<section class="slide center theme-dark">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra)">Part Two</p>
+  <h1 class="giant" style="margin-top:1.5rem"><em>Godfidence.</em></h1>
+  <p class="lede" style="margin-top:3rem; max-width:36ch">The truth God says about you — claimed daily.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 13. GODFIDENCE DEFINITION -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Definition</div>
+  <h2 class="section" style="max-width:24ch">Confidence in the <em>God-image</em> of your being.</h2>
+  <p class="lede" style="margin-top:2.5rem; max-width:44ch">The belief that the unique traits and abilities in you came from God — and you carry them into every relationship.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 14. GODFIDENCE LIST — THE ACTIVITY -->
+<section class="slide theme-cream">
+  <div class="deco-dots top"></div>
+  <div class="activity center" style="margin:0 auto; max-width:50ch">
+    <span class="tag">Your turn</span>
+    <h2 class="section">The <em>Godfidence</em> List.</h2>
+    <p class="prompt">Write <em>10</em> qualities God created in YOU that you bring into every relationship.</p>
+    <p class="lede" style="margin-top:1rem">Get to 2, 4, 6 — beginning IS the win. We'll keep building it.</p>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 15. PSALM 139 SCRIPTURE -->
+<section class="slide center theme-dark">
+  <div class="deco-dots top"></div>
+  <div class="scripture-block">
+    <p class="verse">"I am <em>fearfully</em> and <em>wonderfully</em> made."</p>
+    <p class="ref">— Psalm 139:14</p>
+  </div>
+  <p class="lede" style="margin-top:3.5rem; max-width:38ch; text-align:center">More verses in your workbook: Ephesians 2:10 · Matthew 6:26 · Lamentations 3:22-23 · Isaiah 54:10</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 16. LISA BEVERE — UNIQUELY NOT EQUALLY -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <p class="pull">God loves you <em>uniquely</em> — not equally.</p>
+  <p class="kicker" style="margin-top:2.5rem; color:var(--terra-deep)">— Lisa Bevere · Without Rival</p>
+  <p class="lede" style="margin-top:3rem; max-width:38ch">There is something only YOU bring. Your Godfidence list names it.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 17. SAMPLE GODFIDENCE LIST -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <h2 class="section center" style="text-align:center">Examples to get you <em>started.</em></h2>
+  <ul class="god-list">
+    <li>I am compassionate</li>
+    <li>I am loyal</li>
+    <li>I see people deeply</li>
+    <li>I bring joy to a room</li>
+    <li>I love hard</li>
+    <li>I'm honest</li>
+    <li>I'm steady</li>
+    <li>I make people feel safe</li>
+    <li>I'm a great listener</li>
+    <li>I bring courage to my circle</li>
+  </ul>
+  <p class="lede" style="margin-top:2.5rem; text-align:center; font-size:1.1rem">Yours will be different. That's the point.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 18. DAILY PRACTICE -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">The daily practice</div>
+  <h2 class="section" style="max-width:24ch">Read it <em>before</em> every date.</h2>
+  <p class="lede" style="margin-top:2.5rem; max-width:42ch">Before the first message. Before the meeting. Before the spiral. <em>Your Godfidence list goes with you.</em></p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 19. HOMEWORK -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <span class="tag" style="margin-bottom:2rem">Homework</span>
+  <h1 class="giant">Build your <em>list.</em></h1>
+  <div style="display:flex; flex-direction:column; gap:1rem; margin-top:3.5rem; max-width:46ch; text-align:center">
+    <p class="lede" style="margin:0">Ask 3 friends: <em>"What do I bring to your life?"</em></p>
+    <p class="lede" style="margin:0">Add their answers to your list.</p>
+    <p class="lede" style="margin:0">Pray over it.</p>
+    <p class="lede" style="margin:0">Read it every day before Phase 2.</p>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+</div>
+
+<div class="chrome">
+  <div>SOD · Phase 1 · Attachment & Godfidence</div>
+  <div class="nav-hint"><span id="counter">01 / 20</span> · use <kbd>←</kbd> <kbd>→</kbd> or <kbd>space</kbd></div>
+</div>
+
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const bar = document.getElementById('bar');
+const counter = document.getElementById('counter');
+let i = 0;
+
+function show(n) {
+  i = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+  bar.style.width = ((i + 1) / slides.length * 100) + '%';
+  counter.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+  history.replaceState(null, '', '#' + (i + 1));
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+document.addEventListener('click', e => {
+  if (e.target.closest('a, button, kbd, input, iframe, [data-noclick]')) return;
+  const half = window.innerWidth / 2;
+  show(e.clientX > half ? i + 1 : i - 1);
+});
+
+const startHash = parseInt(location.hash.slice(1), 10);
+show((startHash && !isNaN(startHash)) ? startHash - 1 : 0);
+</script>
+
+</body>
+</html>
