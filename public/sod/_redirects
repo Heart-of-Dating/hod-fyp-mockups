@@ -1,6 +1,5 @@
 # hod-sod project (root = sod.heartofdating.com). Unbuilt session decks land on the hub.
 # 302 TEMP — delete a line when that session's deck ships or it will shadow the new static files.
-/session-2/ /sessions/ 302
 /session-3/ /sessions/ 302
 /session-6/ /sessions/ 302
 /session-7/ /sessions/ 302
