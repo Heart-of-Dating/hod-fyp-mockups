@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1600, initial-scale=1">
+<title>SOD · The Peace Cycle</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600;700;800&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6f0;
+  --ink: #1d1815;
+  --ink-soft: #4a3f37;
+  --muted: #8a7e72;
+  --line: #e8dfd2;
+  --terra: #c47a6e;
+  --terra-deep: #a85a4e;
+  --terra-soft: #f4dad4;
+  --sage: #7d9a6f;
+  --sage-deep: #5c7550;
+  --sage-soft: #dfe7d6;
+  --cream: #f3ebdc;
+  --paper: #fffaf2;
+  --dark: #1d1815;
+  --shadow: 0 30px 80px -30px rgba(40,28,18,.25);
+  --shadow-strong: 0 40px 100px -30px rgba(40,28,18,.4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  overflow: hidden;
+}
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 5vh 7vw;
+  flex-direction: column; justify-content: center;
+  opacity: 0; transition: opacity .35s ease;
+}
+.slide.active { display: flex; opacity: 1; }
+
+.eyebrow {
+  font-size: 0.85rem; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--terra-deep);
+  font-weight: 600; margin-bottom: 1.5rem;
+}
+h1.title { font-family: 'Fraunces', serif; font-weight: 300; font-size: clamp(3.5rem, 7vw, 7.5rem); line-height: 0.95; letter-spacing: -0.025em; }
+h1.title em { font-style: italic; font-weight: 400; color: var(--terra-deep); }
+h2.section { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(2.5rem, 5vw, 5rem); line-height: 1.0; letter-spacing: -0.02em; }
+h2.section em { font-style: italic; color: var(--terra-deep); font-weight: 400; }
+h3 { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(2rem, 4vw, 4rem); line-height: 1; letter-spacing: -0.02em; }
+h3 em { font-style: italic; color: var(--terra-deep); }
+.lede {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  line-height: 1.35; font-weight: 300;
+  color: var(--ink-soft); max-width: 42ch;
+}
+.lede em { color: var(--terra-deep); font-style: italic; }
+.kicker { font-size: 1.05rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.giant { font-family: 'Fraunces', serif; font-weight: 300; font-size: clamp(4rem, 9vw, 10rem); line-height: .9; letter-spacing: -0.04em; }
+.giant em { font-style: italic; font-weight: 400; color: var(--terra-deep); }
+
+.center { text-align: center; align-items: center; }
+.center .lede { margin: 0 auto; }
+.stack > * + * { margin-top: 1.5rem; }
+
+/* Themes */
+.theme-terra { background: var(--terra); color: #faf6f0; }
+.theme-terra h1, .theme-terra h2, .theme-terra h3, .theme-terra .lede, .theme-terra .giant { color: #faf6f0; }
+.theme-terra h1 em, .theme-terra h2 em, .theme-terra .giant em, .theme-terra h3 em { color: #fff1d8; }
+.theme-terra .eyebrow, .theme-terra .kicker { color: #fff1d8; }
+.theme-sage { background: var(--sage); color: #f7faf4; }
+.theme-sage h1, .theme-sage h2, .theme-sage h3, .theme-sage .lede, .theme-sage .giant { color: #f7faf4; }
+.theme-sage h1 em, .theme-sage h2 em, .theme-sage .giant em, .theme-sage h3 em { color: #eef4e6; }
+.theme-sage .eyebrow, .theme-sage .kicker { color: #eef4e6; }
+.theme-dark { background: #1d1815; color: var(--bg); }
+.theme-dark .lede, .theme-dark h1, .theme-dark h2, .theme-dark h3 { color: var(--bg); }
+.theme-dark .eyebrow { color: var(--terra); }
+.theme-dark h1 em, .theme-dark h2 em, .theme-dark .giant em, .theme-dark h3 em { color: var(--terra-soft); }
+.theme-cream { background: var(--cream); }
+
+/* Pull quote */
+.pull { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: clamp(2rem, 3.5vw, 3.5rem); line-height: 1.2; letter-spacing: -0.015em; color: var(--ink); max-width: 26ch; }
+.pull em { color: var(--terra-deep); font-style: italic; }
+
+/* Two column */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; align-items: center; height: 100%; }
+
+/* Feels list */
+.feels-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+.feels-list li { font-family: 'Fraunces', serif; font-weight: 300; font-style: italic; font-size: clamp(1.6rem, 2.6vw, 2.6rem); line-height: 1.15; color: var(--ink-soft); }
+.feels-list li::before { content: "—"; margin-right: .8rem; color: var(--terra); }
+.feels-list.small li { font-size: clamp(1.2rem, 1.9vw, 1.9rem); }
+
+/* Step number badge */
+.step-num { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: clamp(8rem, 18vw, 22rem); color: var(--terra-deep); line-height: 0.85; letter-spacing: -0.05em; opacity: 0.9; }
+
+/* Activity slide */
+.activity { display: flex; flex-direction: column; gap: 1.8rem; max-width: 56ch; }
+.activity .prompt { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(1.6rem, 2.4vw, 2.4rem); line-height: 1.3; color: var(--ink); }
+.activity .prompt em { color: var(--terra-deep); font-style: italic; }
+.tag { display: inline-block; background: var(--terra-soft); color: var(--terra-deep); padding: 0.4rem 1rem; border-radius: 999px; font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; align-self: flex-start; }
+.center .tag { align-self: center; }
+
+/* Decorative dotted border */
+.deco-dots { position: absolute; left: 5vw; right: 5vw; height: 12px; background-image: radial-gradient(circle, var(--terra-deep) 1.5px, transparent 1.5px), radial-gradient(circle, var(--ink) 1.5px, transparent 1.5px); background-size: 18px 6px, 18px 6px; background-position: 0 0, 9px 6px; background-repeat: repeat-x; opacity: 0.55; }
+.deco-dots.top { top: 2vh; }
+.deco-dots.bottom { bottom: 2vh; }
+.theme-dark .deco-dots, .theme-terra .deco-dots, .theme-sage .deco-dots { opacity: 0.4; }
+
+/* Progress + nav */
+.chrome { position: fixed; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 2rem; z-index: 100; font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: var(--line); z-index: 100; }
+.progress > div { height: 100%; background: linear-gradient(90deg, var(--terra), var(--sage)); width: 0%; transition: width .35s ease; }
+.nav-hint kbd { display: inline-block; padding: 2px 8px; border: 1px solid var(--line); border-radius: 3px; font-size: 0.7rem; margin: 0 2px; color: var(--ink-soft); background: var(--paper); }
+
+/* ============ Session-specific components ============ */
+
+/* Scripture block */
+.scripture-block { max-width: 34ch; margin: 0 auto; }
+.scripture-block .verse { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: clamp(1.5rem, 2.6vw, 2.6rem); line-height: 1.25; margin-bottom: 1rem; }
+.scripture-block .ref { font-size: 0.8rem; letter-spacing: 0.22em; text-transform: uppercase; color: #fff1d8; font-weight: 600; display: block; margin-bottom: 2.2rem; }
+
+/* Steps rail (the 4 steps) */
+.steps-rail { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.6vw; width: min(1250px, 88vw); margin: 3rem auto 0; }
+.steps-rail .st { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 2rem 1.6rem; box-shadow: var(--shadow); text-align: left; }
+.steps-rail .st .n { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 2.6rem; color: var(--terra); line-height: 1; }
+.steps-rail .st h4 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 1.4rem; margin: .9rem 0 .5rem; color: var(--ink); }
+.steps-rail .st p { font-size: .92rem; line-height: 1.45; color: var(--ink-soft); }
+
+/* Pain -> Peace map */
+.map-table { width: min(1050px, 84vw); margin: 2.5rem auto 0; }
+.map-table .mrow { display: grid; grid-template-columns: 1fr 4rem 1.3fr; align-items: center; gap: 1rem; padding: 1.05rem 1.8rem; margin-bottom: 10px; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+.map-table .mrow .from { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: clamp(1.2rem, 1.8vw, 1.8rem); color: var(--terra-deep); }
+.map-table .mrow .arr { text-align: center; font-family: 'Fraunces', serif; font-size: 1.8rem; color: var(--sage-deep); }
+.map-table .mrow .to { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(1.2rem, 1.8vw, 1.8rem); color: var(--sage-deep); }
+.map-table .mrow .to small { display:block; font-family:'Inter',sans-serif; font-size:.82rem; color:var(--muted); font-weight:500; margin-top:.3rem; font-style: normal; }
+
+/* Source triad */
+.triad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2vw; width: min(1150px, 86vw); margin: 3rem auto 0; }
+.triad .src { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 2.2rem 2rem; box-shadow: var(--shadow); text-align: left; }
+.triad .src.hero { border: 1.5px solid var(--sage); }
+.triad .src .n { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 3rem; color: var(--sage-deep); line-height: 1; }
+.triad .src h4 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 1.5rem; margin: .9rem 0 .7rem; color: var(--ink); }
+.triad .src p { font-size: 1rem; line-height: 1.5; color: var(--ink-soft); }
+
+/* Transformation slide: two feels columns */
+.trans { display: grid; grid-template-columns: 1fr 1fr; gap: 4vw; align-items: center; height: 100%; }
+.trans .headline { font-family: 'Fraunces', serif; font-size: clamp(2rem, 3.4vw, 3.4rem); line-height: 1.05; }
+.trans .from-word { color: var(--terra-deep); font-style: italic; }
+.trans .to-word { color: var(--sage-deep); font-style: italic; }
+.words { list-style: none; display: flex; flex-wrap: wrap; gap: .7rem; }
+.words li { font-family: 'Fraunces', serif; font-size: clamp(1.1rem, 1.6vw, 1.6rem); color: var(--sage-deep); background: var(--sage-soft); border-radius: 999px; padding: .35rem 1.1rem; }
+</style>
+</head>
+<body>
+
+<div class="progress"><div id="bar"></div></div>
+
+<div class="deck" id="deck">
+
+<!-- 1. OPENER -->
+<section class="slide active center theme-dark">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra)">SOD · Week 1 · Day 2 · Session 2</p>
+  <h1 class="giant" style="margin-top:1.5rem">The Peace<br><em>Cycle.</em></h1>
+  <p class="lede" style="margin-top:3rem; max-width:34ch">Last time we named the pain. Tonight we learn to <em>answer</em> it.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 2. FROM PAIN TO PEACE -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra-deep)">The question</p>
+  <h1 class="giant" style="margin-top:1.5rem">How do you move from<br><em>pain</em> to <em>peace?</em></h1>
+  <p class="lede" style="margin-top:2.5rem; max-width:40ch">Even if your circumstances don't change, <em>you</em> can. You are actually instructed by God to emotionally self-regulate.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 3. NOT POWERLESS -->
+<section class="slide center theme-terra">
+  <div class="deco-dots top"></div>
+  <p class="pull" style="max-width:24ch; color:#faf6f0">You are <em style="color:#fff1d8">not</em> powerless.</p>
+  <p class="lede" style="margin-top:2.5rem; max-width:34ch">God calls you to <em style="color:#fff1d8">self-control.</em> Key word: self. Your regulation does not depend on other people.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 4. SCRIPTURE -->
+<section class="slide center theme-sage">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="margin-bottom:2.2rem; color:#eef4e6">What Scripture says</p>
+  <div class="scripture-block">
+    <p class="verse">"A man without self-control is like a city broken into and left without walls."</p>
+    <span class="ref">Proverbs 25:28</span>
+    <p class="verse">"Whoever is slow to anger is better than the mighty, and he who rules his spirit than he who takes a city."</p>
+    <span class="ref">Proverbs 16:32</span>
+    <p class="verse">"God gave us a spirit not of fear but of power and love and self-control."</p>
+    <span class="ref" style="margin-bottom:0">2 Timothy 1:7</span>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 5. SELF-CONTROL IS HARD -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">A fair warning</div>
+      <h2 class="section">Self-control does not come <em>naturally.</em></h2>
+    </div>
+    <div>
+      <ul class="feels-list">
+        <li>It takes a lot of effort.</li>
+        <li>It is <em>not</em> popular.</li>
+        <li>And it is the doorway to everything else.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 6. WHY WE COPE -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">Remember the Pain Cycle</div>
+      <h2 class="section">Every cope is protecting a <em>belief.</em></h2>
+      <p class="lede" style="margin-top:1.5rem">When you blame, shame, control, or escape, your brain believes you are <em>unloved</em> or <em>unsafe</em> — and copes to protect you.</p>
+    </div>
+    <div class="center">
+      <p class="pull" style="font-size:clamp(1.8rem,3vw,3rem)">The Peace Cycle asks one question: <em>is that pain message true?</em></p>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 7. DIVIDER: 4 STEPS -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra-deep)">The path</p>
+  <h1 class="giant" style="margin-top:1.5rem">Four <em>steps.</em></h1>
+  <div class="steps-rail">
+    <div class="st"><div class="n">1</div><h4>Name the feeling</h4><p>Say what you feel. Out loud. Your words have power.</p></div>
+    <div class="st"><div class="n">2</div><h4>Identify your default</h4><p>Name what you're normally tempted to do in the moment.</p></div>
+    <div class="st"><div class="n">3</div><h4>Replace with truth</h4><p>Instead, choose what you are going to believe.</p></div>
+    <div class="st"><div class="n">4</div><h4>Choose a new action</h4><p>Because of that truth, here is what you'll do differently.</p></div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 8. STEP 1 -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div><div class="step-num">1</div><h2 class="section" style="margin-top:1rem">Name the <em>feeling.</em></h2></div>
+    <div><ul class="feels-list"><li>Say what you feel.</li><li>Name it out loud.</li><li>Your words have <em>power.</em></li></ul></div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 9. STEP 2 -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div><div class="step-num">2</div><h2 class="section" style="margin-top:1rem">Name your <em>default.</em></h2></div>
+    <div><ul class="feels-list"><li>Say what you normally do.</li><li>In the moment, what are you <em>tempted</em> to reach for?</li><li>Blame, shame, control, or escape?</li></ul></div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 10. STEP 3 -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div><div class="step-num">3</div><h2 class="section" style="margin-top:1rem">Replace with <em>truth.</em></h2></div>
+    <div>
+      <p class="lede">Is our pain message <em>true?</em></p>
+      <p class="lede" style="margin-top:1.2rem">How do we know? That's the burning question.</p>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 11. WHERE TRUTH COMES FROM -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Where we get the truth about our pain messages</div>
+  <h2 class="section">Three <em>sources.</em></h2>
+  <div class="triad">
+    <div class="src"><div class="n">1</div><h4>Other people</h4><p>What do the people who love you actually say about these messages?</p></div>
+    <div class="src"><div class="n">2</div><h4>God &amp; Scripture</h4><p>What does God say about your pain message? As a Christian, this is our most authoritative truth.</p></div>
+    <div class="src hero"><div class="n">3</div><h4>Yourself</h4><p>The most powerful of all. As an adult, you can give yourself a new message about who you are.</p></div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 12. YOU HAVE THE CHOICE -->
+<section class="slide center theme-terra">
+  <div class="deco-dots top"></div>
+  <p class="pull" style="max-width:26ch; color:#faf6f0">You have the <em style="color:#fff1d8">choice</em> to decide what you let stand.</p>
+  <p class="lede" style="margin-top:2.5rem; max-width:36ch">As an adult, you can learn to give yourself a new message about who you are.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 13. THE REAL TEST -->
+<section class="slide center theme-dark">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra)">Here is the whole thing</p>
+  <p class="pull" style="max-width:30ch; color:var(--bg); margin-top:1.5rem">The test isn't <em style="color:var(--terra-soft)">do we believe the truth.</em> It's whether we believe it in the <em style="color:var(--terra-soft)">moment of pain.</em></p>
+  <p class="lede" style="margin-top:2.5rem; max-width:42ch">When you connect to truth in a moment of pain, the truth sets you free by speaking directly to the pain in the moment.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 14. ACTIVITY: IS IT TRUE -->
+<section class="slide theme-cream">
+  <div class="deco-dots top"></div>
+  <div class="activity center" style="margin:0 auto">
+    <span class="tag">In-class exercise</span>
+    <h2 class="section">From pain to peace — <em>your turn.</em></h2>
+    <p class="prompt">Go to the pain moment. Imagine God, and a close friend you love.</p>
+    <p class="prompt">Is it true that you are <em>(your pain message)?</em></p>
+    <p class="prompt">What do these people say about that?</p>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 15. STEP 4 DIVIDER -->
+<section class="slide center theme-sage">
+  <div class="deco-dots top"></div>
+  <div class="step-num" style="color:#eef4e6">4</div>
+  <h2 class="section" style="margin-top:1rem; color:#f7faf4">Choose a new <em style="color:#eef4e6">action.</em></h2>
+  <p class="lede" style="margin-top:2rem; max-width:38ch; color:#f7faf4">Because you believe a new truth, you can show up as a new person. Here is what that looks like.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 16. BLAME -> NURTURE -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="trans">
+    <div>
+      <div class="eyebrow">Instead of the fight</div>
+      <p class="headline"><span class="from-word">Blame</span><br>becomes<br><span class="to-word">Nurture.</span></p>
+    </div>
+    <ul class="words">
+      <li>Love</li><li>Encourage</li><li>Accept</li><li>Support</li><li>Be kind</li><li>Listen</li><li>Be patient</li><li>Be compassionate</li>
+    </ul>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 17. SHAME -> SELF-VALUE -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="trans">
+    <div>
+      <div class="eyebrow">Instead of the flight</div>
+      <p class="headline"><span class="from-word">Shame</span><br>becomes<br><span class="to-word">Self-Value.</span></p>
+    </div>
+    <ul class="words">
+      <li>Value self</li><li>Respect self</li><li>Remain positive</li><li>Stay humble</li><li>Offer optimism</li><li>Be hopeful</li><li>Be self-aware</li><li>Display confidence</li>
+    </ul>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 18. CONTROL -> BALANCE -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="trans">
+    <div>
+      <div class="eyebrow">Instead of the fight</div>
+      <p class="headline"><span class="from-word">Control</span><br>becomes<br><span class="to-word">Balance.</span></p>
+      <p class="lede" style="margin-top:1.2rem; font-style:italic">Every little thing is gonna be alright.</p>
+    </div>
+    <ul class="words">
+      <li>Be vulnerable</li><li>Open</li><li>Appreciate</li><li>Imperfect</li><li>Flexible</li><li>Relaxed</li><li>Spontaneous</li><li>Let things go</li>
+    </ul>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 19. ESCAPE -> CONNECT -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="trans">
+    <div>
+      <div class="eyebrow">Instead of the flight</div>
+      <p class="headline"><span class="from-word">Escape</span><br>becomes<br><span class="to-word">Connect.</span></p>
+    </div>
+    <ul class="words">
+      <li>Responsible</li><li>Reliable</li><li>Self-controlled</li><li>Connected</li><li>Intimate</li><li>Faithful</li><li>Forthcoming</li><li>A planner</li><li>Honest — no ghosting</li>
+    </ul>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 20. THIS COULD BE YOU -->
+<section class="slide center theme-terra">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="margin-bottom:1.5rem">The new you in Jesus</p>
+  <p class="pull" style="max-width:28ch; color:#faf6f0">Look at these actions. This could be <em style="color:#fff1d8">you.</em></p>
+  <p class="lede" style="margin-top:2.2rem; max-width:40ch">Jesus wants this for you. So does the body of Christ, your people, your family. Because you believe a new truth.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 21. FOUR STEPS RESTATED -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Put it together</div>
+  <h2 class="section">Say it in <em>four lines.</em></h2>
+  <div class="map-table" style="max-width:760px; margin-top:2.5rem">
+    <div class="mrow" style="grid-template-columns:1fr"><span class="from" style="color:var(--ink)"><strong style="font-style:normal; color:var(--terra-deep)">1 · </strong>Say what you feel — name it out loud.</span></div>
+    <div class="mrow" style="grid-template-columns:1fr"><span class="from" style="color:var(--ink)"><strong style="font-style:normal; color:var(--terra-deep)">2 · </strong>Say what you normally do in the moment.</span></div>
+    <div class="mrow" style="grid-template-columns:1fr"><span class="from" style="color:var(--ink)"><strong style="font-style:normal; color:var(--sage-deep)">3 · </strong>Say the truth — "Instead, I am choosing to believe…"</span></div>
+    <div class="mrow" style="grid-template-columns:1fr"><span class="from" style="color:var(--ink)"><strong style="font-style:normal; color:var(--sage-deep)">4 · </strong>Say what you'll do differently — "Because of this truth…"</span></div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 22. KEY REMINDER -->
+<section class="slide center theme-dark">
+  <div class="deco-dots top"></div>
+  <p class="pull" style="max-width:30ch; color:var(--bg)">The Peace Cycle does not <em style="color:var(--terra-soft)">remove</em> the pain. It changes your <em style="color:var(--terra-soft)">response</em> to it.</p>
+  <p class="lede" style="margin-top:2.5rem; max-width:38ch">You can choose truth in the very moment of pain. That is the whole freedom.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 23. HOMEWORK -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <span class="tag" style="margin-bottom:2rem">Homework</span>
+  <h1 class="giant">Practice the <em>peace.</em></h1>
+  <div style="display:flex; flex-direction:column; gap:1rem; margin-top:3.5rem; max-width:46ch; text-align:center">
+    <p class="lede" style="margin:0">Identify your default coping mechanism, and write your common pain message.</p>
+    <p class="lede" style="margin:0">Replace it with <em>truth.</em></p>
+    <p class="lede" style="margin:0">Then practice a new response the next time the moment comes.</p>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+</div>
+
+<div class="chrome">
+  <div>SOD · Week 1 · The Peace Cycle</div>
+  <div class="nav-hint"><span id="counter">01 / 23</span> · use <kbd>←</kbd> <kbd>→</kbd> or <kbd>space</kbd></div>
+</div>
+
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const bar = document.getElementById('bar');
+const counter = document.getElementById('counter');
+let i = 0;
+function show(n) {
+  i = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+  bar.style.width = ((i + 1) / slides.length * 100) + '%';
+  counter.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+  history.replaceState(null, '', '#' + (i + 1));
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+document.addEventListener('click', e => {
+  if (e.target.closest('a, button, kbd, input, iframe, [data-noclick]')) return;
+  const half = window.innerWidth / 2;
+  show(e.clientX > half ? i + 1 : i - 1);
+});
+const startHash = parseInt(location.hash.slice(1), 10);
+show((startHash && !isNaN(startHash)) ? startHash - 1 : 0);
+</script>
+
+</body>
+</html>

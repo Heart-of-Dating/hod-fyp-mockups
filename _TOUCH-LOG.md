@@ -40,3 +40,4 @@ YYYY-MM-DD HH:MM TZ — <Agent> edited <path> (<one-line summary>)
 2026-07-14 17:05 CDT — Bandit built SOD Session 5 deck (Red Flags, Dealbreakers & Non-Negotiables, 32 slides) at /sod/session-5/; remapped Type & Attraction to /sod/session-4/; hub updated
 2026-07-14 17:40 CDT — Bandit staged sod.heartofdating.com migration: new hod-sod Pages project (root=public/sod), relative-link fixes so decks work on both fyp+sod domains, sod _redirects; awaiting domain attach
 2026-07-14 — Bandit re-homed Banjo's Attachment Styles & Godfidence deck from session-2 to session-3 (JJ's real teaching numbering); session-2 reverted to unbuilt; hub + both _redirects updated; deployed both projects
+2026-07-14 — Bandit built SOD Session 2 (The Peace Cycle, Meghan Eaken / Wk1 D2) from curriculum doc; 23-slide deck house style w/ sage accent; removed session-2 redirect, hub card live; deployed both projects
