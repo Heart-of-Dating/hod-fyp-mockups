@@ -8,7 +8,7 @@
 /sod-calendar/* /sod/calendar/:splat 301
 # Not-yet-built sessions land on the hub (302 TEMP — DELETE the line when that session's deck ships,
 # or the redirect will shadow the new static files)
-/sod/session-3/ /sod/sessions/ 302
+/sod/session-2/ /sod/sessions/ 302
 /sod/session-6/ /sod/sessions/ 302
 /sod/session-7/ /sod/sessions/ 302
 /sod/session-8/ /sod/sessions/ 302
