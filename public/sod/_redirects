@@ -2,7 +2,6 @@
 # 302 TEMP — delete a line when that session's deck ships or it will shadow the new static files.
 /session-6/ /sessions/ 302
 /session-8/ /sessions/ 302
-/session-9/ /sessions/ 302
 /session-11/ /sessions/ 302
 /session-12/ /sessions/ 302
 /session-13/ /sessions/ 302

@@ -10,7 +10,6 @@
 # or the redirect will shadow the new static files)
 /sod/session-6/ /sod/sessions/ 302
 /sod/session-8/ /sod/sessions/ 302
-/sod/session-9/ /sod/sessions/ 302
 /sod/session-11/ /sod/sessions/ 302
 /sod/session-12/ /sod/sessions/ 302
 /sod/session-13/ /sod/sessions/ 302

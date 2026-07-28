@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1600, initial-scale=1">
+<title>SOD · Dating Challenge + Online Dating</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600;700;800&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6f0;
+  --ink: #1d1815;
+  --ink-soft: #4a3f37;
+  --muted: #8a7e72;
+  --line: #e8dfd2;
+  --terra: #c47a6e;
+  --terra-deep: #a85a4e;
+  --terra-soft: #f4dad4;
+  --sage: #7d9a6f;
+  --sage-deep: #5c7550;
+  --sage-soft: #dfe7d6;
+  --cream: #f3ebdc;
+  --paper: #fffaf2;
+  --dark: #1d1815;
+  --shadow: 0 30px 80px -30px rgba(40,28,18,.25);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: 'Inter', system-ui, sans-serif; font-feature-settings: "ss01", "cv11"; overflow: hidden; }
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide { position: absolute; inset: 0; display: none; padding: 5vh 7vw; flex-direction: column; justify-content: center; opacity: 0; transition: opacity .35s ease; }
+.slide.active { display: flex; opacity: 1; }
+
+.eyebrow { font-size: 0.85rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--terra-deep); font-weight: 600; margin-bottom: 1.5rem; }
+h1.title { font-family: 'Fraunces', serif; font-weight: 300; font-size: clamp(3.5rem, 7vw, 7.5rem); line-height: 0.95; letter-spacing: -0.025em; }
+h2.section { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(2.5rem, 5vw, 5rem); line-height: 1.0; letter-spacing: -0.02em; }
+h2.section em { font-style: italic; color: var(--terra-deep); font-weight: 400; }
+h3 { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(2rem, 4vw, 4rem); line-height: 1; letter-spacing: -0.02em; }
+h3 em { font-style: italic; color: var(--terra-deep); }
+.lede { font-family: 'Fraunces', serif; font-size: clamp(1.4rem, 2vw, 2rem); line-height: 1.35; font-weight: 300; color: var(--ink-soft); max-width: 42ch; }
+.lede em { color: var(--terra-deep); font-style: italic; }
+.kicker { font-size: 1.05rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.giant { font-family: 'Fraunces', serif; font-weight: 300; font-size: clamp(4rem, 9vw, 10rem); line-height: .9; letter-spacing: -0.04em; }
+.giant em { font-style: italic; font-weight: 400; color: var(--terra-deep); }
+
+.center { text-align: center; align-items: center; }
+.center .lede { margin: 0 auto; }
+.stack > * + * { margin-top: 1.5rem; }
+
+.theme-terra { background: var(--terra); color: #faf6f0; }
+.theme-terra h1, .theme-terra h2, .theme-terra h3, .theme-terra .lede, .theme-terra .giant { color: #faf6f0; }
+.theme-terra h1 em, .theme-terra h2 em, .theme-terra .giant em, .theme-terra h3 em { color: #fff1d8; }
+.theme-terra .eyebrow, .theme-terra .kicker { color: #fff1d8; }
+.theme-sage { background: var(--sage); color: #f7faf4; }
+.theme-sage h1, .theme-sage h2, .theme-sage h3, .theme-sage .lede, .theme-sage .giant { color: #f7faf4; }
+.theme-sage h1 em, .theme-sage h2 em, .theme-sage .giant em, .theme-sage h3 em { color: #eef4e6; }
+.theme-sage .eyebrow, .theme-sage .kicker { color: #eef4e6; }
+.theme-dark { background: #1d1815; color: var(--bg); }
+.theme-dark .lede, .theme-dark h1, .theme-dark h2, .theme-dark h3 { color: var(--bg); }
+.theme-dark .eyebrow { color: var(--terra); }
+.theme-dark h1 em, .theme-dark h2 em, .theme-dark .giant em, .theme-dark h3 em { color: var(--terra-soft); }
+.theme-cream { background: var(--cream); }
+
+.pull { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: clamp(2rem, 3.5vw, 3.5rem); line-height: 1.2; letter-spacing: -0.015em; color: var(--ink); max-width: 26ch; }
+.pull em { color: var(--terra-deep); font-style: italic; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; align-items: center; height: 100%; }
+
+.feels-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+.feels-list li { font-family: 'Fraunces', serif; font-weight: 300; font-style: italic; font-size: clamp(1.6rem, 2.6vw, 2.6rem); line-height: 1.15; color: var(--ink-soft); }
+.feels-list li::before { content: "—"; margin-right: .8rem; color: var(--terra); }
+.feels-list.small li { font-size: clamp(1.15rem, 1.8vw, 1.8rem); }
+.feels-list.tiny li { font-size: clamp(1rem, 1.5vw, 1.5rem); gap:.6rem; }
+
+.step-num { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: clamp(8rem, 18vw, 22rem); color: var(--terra-deep); line-height: 0.85; letter-spacing: -0.05em; opacity: 0.9; }
+
+.activity { display: flex; flex-direction: column; gap: 1.8rem; max-width: 56ch; }
+.activity .prompt { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(1.6rem, 2.4vw, 2.4rem); line-height: 1.3; color: var(--ink); }
+.activity .prompt em { color: var(--terra-deep); font-style: italic; }
+.tag { display: inline-block; background: var(--terra-soft); color: var(--terra-deep); padding: 0.4rem 1rem; border-radius: 999px; font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; align-self: flex-start; }
+.center .tag { align-self: center; }
+
+.deco-dots { position: absolute; left: 5vw; right: 5vw; height: 12px; background-image: radial-gradient(circle, var(--terra-deep) 1.5px, transparent 1.5px), radial-gradient(circle, var(--ink) 1.5px, transparent 1.5px); background-size: 18px 6px, 18px 6px; background-position: 0 0, 9px 6px; background-repeat: repeat-x; opacity: 0.55; }
+.deco-dots.top { top: 2vh; }
+.deco-dots.bottom { bottom: 2vh; }
+.theme-dark .deco-dots, .theme-terra .deco-dots, .theme-sage .deco-dots { opacity: 0.4; }
+
+.chrome { position: fixed; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 2rem; z-index: 100; font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: var(--line); z-index: 100; }
+.progress > div { height: 100%; background: linear-gradient(90deg, var(--terra), var(--terra-deep)); width: 0%; transition: width .35s ease; }
+.nav-hint kbd { display: inline-block; padding: 2px 8px; border: 1px solid var(--line); border-radius: 3px; font-size: 0.7rem; margin: 0 2px; color: var(--ink-soft); background: var(--paper); }
+
+/* Cards */
+.big-three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2vw; width: min(1250px, 86vw); margin: 3rem auto 0; }
+.big-three.four { grid-template-columns: repeat(4, 1fr); }
+.big-three .bt { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 2.2rem 2rem; box-shadow: var(--shadow); text-align: left; }
+.big-three .bt .n { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 3rem; color: var(--terra); line-height: 1; }
+.big-three .bt h4 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 1.5rem; margin: 1rem 0 .8rem; color: var(--ink); }
+.big-three .bt p { font-size: .98rem; line-height: 1.5; color: var(--ink-soft); }
+
+/* Buckets grid */
+.buckets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.4vw; width: min(1300px, 88vw); margin: 3rem auto 0; }
+.buckets .bk { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 1.5rem 1.4rem; box-shadow: var(--shadow); text-align: left; }
+.buckets .bk .n { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 2rem; color: var(--terra); line-height: 1; }
+.buckets .bk h4 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 1.25rem; margin: .7rem 0 .4rem; color: var(--ink); }
+.buckets .bk p { font-size: .85rem; line-height: 1.45; color: var(--ink-soft); }
+
+/* Compare cards */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 3vw; width: min(1100px, 84vw); margin: 2.5rem auto 0; }
+.compare .cmp { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 2rem 2.4rem; box-shadow: var(--shadow); text-align: left; }
+.compare .cmp.strong-card { border: 1.5px solid var(--sage); }
+.compare .cmp.weak-card { border: 1.5px solid var(--terra); }
+.compare .cmp h4 { font-family: 'Fraunces', serif; font-weight: 400; font-style: italic; font-size: 1.5rem; margin-bottom: 1.3rem; }
+.compare .cmp.weak-card h4 { color: var(--terra-deep); }
+.compare .cmp.strong-card h4 { color: var(--sage-deep); }
+.compare .cmp ul { list-style: none; display: flex; flex-direction: column; gap: .65rem; }
+.compare .cmp li { font-family: 'Fraunces', serif; font-size: clamp(1.02rem, 1.45vw, 1.45rem); color: var(--ink-soft); }
+.compare .cmp li::before { content: "— "; color: var(--terra); }
+.compare .cmp.strong-card li::before { color: var(--sage); }
+
+/* Myth rows */
+.map-table { width: min(1100px, 84vw); margin: 2.5rem auto 0; }
+.map-table .mrow { display: grid; grid-template-columns: 1fr 4rem 1.3fr; align-items: center; gap: 1rem; padding: 1rem 1.8rem; margin-bottom: 10px; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+.map-table .mrow .from { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: clamp(1.15rem, 1.7vw, 1.7rem); color: var(--terra-deep); }
+.map-table .mrow .arr { text-align: center; font-family: 'Fraunces', serif; font-size: 1.8rem; color: var(--sage-deep); }
+.map-table .mrow .to { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(1.1rem, 1.6vw, 1.6rem); color: var(--ink); }
+
+/* Script blocks */
+.script-block { background: var(--paper); border: 1.5px solid var(--terra); border-radius: 16px; padding: 2rem 2.4rem; box-shadow: var(--shadow); max-width: 62ch; margin: 2rem auto 0; text-align: left; }
+.script-block p { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: clamp(1.2rem, 1.8vw, 1.8rem); line-height: 1.45; color: var(--ink-soft); }
+.script-block .lbl { font-family: 'Inter', sans-serif; font-style: normal; font-size: .75rem; letter-spacing: .18em; text-transform: uppercase; font-weight: 700; color: var(--terra-deep); margin-bottom: .8rem; }
+
+/* App pills */
+.pills { display: flex; flex-wrap: wrap; gap: .8rem; justify-content: center; max-width: 900px; margin: 2.5rem auto 0; }
+.pills span { font-family: 'Fraunces', serif; font-size: clamp(1.1rem, 1.7vw, 1.7rem); background: var(--paper); border: 1px solid var(--line); border-radius: 999px; padding: .55rem 1.5rem; box-shadow: var(--shadow); color: var(--ink); }
+.pills span.hero { border: 1.5px solid var(--terra); color: var(--terra-deep); }
+</style>
+</head>
+<body>
+
+<div class="progress"><div id="bar"></div></div>
+
+<div class="deck" id="deck">
+
+<!-- 1. OPENER -->
+<section class="slide active center theme-dark">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra)">SOD · Week 5 · Day 1 · Session 9</p>
+  <h1 class="giant" style="margin-top:1.5rem">Dating Challenge<br>+ <em>Online Dating.</em></h1>
+  <p class="lede" style="margin-top:3rem; max-width:36ch">Fun fact: Kait and JJ met on a <em>dating challenge.</em> Tonight, yours begins.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 2. DIVIDER: CHALLENGE -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra-deep)">Part One</p>
+  <h1 class="giant" style="margin-top:1.5rem">The Dating<br><em>Challenge.</em></h1>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 3. TWO GOALS -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">The mission</div>
+  <h2 class="section">Two goals. One <em>weekly rhythm.</em></h2>
+  <div class="big-three">
+    <div class="bt"><div class="n">1</div><h4>Get your numbers up</h4><p>More real interactions with real people. Volume changes everything.</p></div>
+    <div class="bt"><div class="n">2</div><h4>Practice dating</h4><p>Dating is a skill. Skills need reps, not theory.</p></div>
+    <div class="bt"><div class="n">→</div><h4>Weekly: meet 3 new people</h4><p>Enough interaction that you would want to go out with them, and they know enough about you to want to go out with you.</p></div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 4. THE CATCH -->
+<section class="slide center theme-terra">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="margin-bottom:2rem">Here is the catch</p>
+  <p class="pull" style="max-width:28ch">You don't <em style="color:#fff1d8">have</em> to go out with any of them.</p>
+  <p class="lede" style="margin-top:2.5rem; max-width:38ch">You don't even have to be that interested. It's not about values yet. If a date happens, great. If it doesn't, it is <em style="color:#fff1d8">still a win.</em></p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 5. HEART GOALS -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Underneath the practical goals</div>
+  <h2 class="section">The heart <em>goals.</em></h2>
+  <div class="big-three">
+    <div class="bt"><div class="n">1</div><h4>Connect with yourself</h4><p>Notice what comes up in your body and your thoughts as you meet people. Be specific.</p></div>
+    <div class="bt"><div class="n">2</div><h4>Build confidence</h4><p>Find ease in talking with the other gender at an emotional level, not just a work or intellectual one.</p></div>
+    <div class="bt"><div class="n">3</div><h4>Lower the stakes</h4><p>Rewrite the script that takes dating SO seriously. It can feel like a scavenger hunt. You can do this.</p></div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 6. THE MUSCLE -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">Why this works</div>
+      <h2 class="section">We're working a <em>muscle.</em></h2>
+    </div>
+    <div>
+      <ul class="feels-list small">
+        <li>Many of us connect with the opposite gender just fine at work or in the group chat.</li>
+        <li>Emotional connection is a different muscle, and it's the one dating actually uses.</li>
+        <li>As you go, analyze what's happening <em>inside</em> you. What's in your body? What are your thoughts doing?</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 7. SHARE + JOURNAL -->
+<section class="slide center theme-sage">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="margin-bottom:1.5rem; color:#eef4e6">Accountability</p>
+  <p class="pull" style="max-width:30ch; color:#f7faf4">Every Monday, share your <em style="color:#eef4e6">3 people</em> with the group.</p>
+  <p class="lede" style="margin-top:2.5rem; max-width:40ch; color:#f7faf4">Who you met, how you met them, and what you learned about yourself. Track it in the <em style="color:#eef4e6">Dating Journal</em> at the back of your workbook.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 8. 8 WAYS -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Where do I even meet people?</div>
+  <h2 class="section">8 ways to meet <em>people.</em></h2>
+  <div class="buckets">
+    <div class="bk"><div class="n">1</div><h4>Your normal life</h4><p>Coffee shops, the gym, the grocery store, the dog park. Just be more open, present, and aware.</p></div>
+    <div class="bk"><div class="n">2</div><h4>Pick up a hobby</h4><p>Dancing, a book club, a league, that thing you've always felt the nudge for.</p></div>
+    <div class="bk"><div class="n">3</div><h4>At church</h4><p>Or another church nearby. Go to other churches' events. We're one body of Christ.</p></div>
+    <div class="bk"><div class="n">4</div><h4>Go to events</h4><p>Accept invitations where you don't know everyone. Conferences, Meetup.com, professional events.</p></div>
+    <div class="bk"><div class="n">5</div><h4>Serve or volunteer</h4><p>Great people are serving. Church, food pantry, nonprofits. The skies are endless.</p></div>
+    <div class="bk"><div class="n">6</div><h4>Ask for a setup</h4><p>Ask a few trusted friends. Stay open. Don't hand them your entire list. Just go for it.</p></div>
+    <div class="bk"><div class="n">7</div><h4>Online</h4><p>Tonight's Part Two. Cast the wide net.</p></div>
+    <div class="bk"><div class="n">8</div><h4>Social media</h4><p>It counts. Real connection starts in a lot of places now.</p></div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 9. TOP OF MIND -->
+<section class="slide center theme-dark">
+  <div class="deco-dots top"></div>
+  <p class="pull" style="max-width:30ch; color:var(--bg)">Nobody invites you to things if you are not <em style="color:var(--terra-soft)">top of mind.</em></p>
+  <p class="lede" style="margin-top:2.5rem; max-width:38ch">Assert yourself. The right community will welcome it.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 10. ACTIVITY -->
+<section class="slide theme-cream">
+  <div class="deco-dots top"></div>
+  <div class="activity center" style="margin:0 auto">
+    <span class="tag">Activity</span>
+    <h2 class="section">Make <em>your</em> list.</h2>
+    <p class="prompt">From the 8 ways, write a list of the places around you where <em>you</em> could meet people in the next month.</p>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 11. DIVIDER: ONLINE -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra-deep)">Part Two</p>
+  <h1 class="giant" style="margin-top:1.5rem">Online<br><em>dating.</em></h1>
+  <p class="lede" style="margin-top:2.5rem; max-width:38ch">Scale of 1 to 10: how has online dating gone for you? 10 is amazing. 1 is "I deleted it last night for the 7th time."</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 12. MINDSET FIRST -->
+<section class="slide center theme-terra">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="margin-bottom:2rem">Read this twice</p>
+  <p class="pull" style="max-width:30ch">Unless you renew your mindset, online dating will <em style="color:#fff1d8">not</em> get better for you.</p>
+  <p class="lede" style="margin-top:2.5rem; max-width:40ch">If you're not open to renewing your mindset, don't get online. "This is going to suck" is a <em style="color:#fff1d8">self-fulfilling prophecy.</em></p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 13. SCARCITY -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">Remember the mindset reset</div>
+      <h2 class="section">Scarcity sees <em>scarcity.</em></h2>
+      <p class="lede" style="margin-top:1.5rem">And when you only see scarcity, you miss the <em>abundance</em> that is always available to you.</p>
+    </div>
+    <div>
+      <ul class="feels-list small">
+        <li>Disappointment is guaranteed. Ghosting is guaranteed.</li>
+        <li>But you get to choose how you <em>respond.</em> Not react. Respond.</li>
+        <li>Chat: are you open to seeing online dating in a new way?</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 14. MYTHS -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Let's debunk them</div>
+  <h2 class="section">The online dating <em>myths.</em></h2>
+  <div class="map-table">
+    <div class="mrow"><span class="from">"It's not biblical"</span><span class="arr">→</span><span class="to">God works through people meeting. The medium isn't the message.</span></div>
+    <div class="mrow"><span class="from">"It doesn't work"</span><span class="arr">→</span><span class="to">It hasn't worked <em>for you, so far.</em> Often the expectations were the problem.</span></div>
+    <div class="mrow"><span class="from">"It takes too much time"</span><span class="arr">→</span><span class="to">10 minutes in the morning, 10 at night. You make time for what matters.</span></div>
+    <div class="mrow"><span class="from">"It's desperate"</span><span class="arr">→</span><span class="to">Is going to a job fair desperate? It's just showing up where the people are.</span></div>
+    <div class="mrow"><span class="from">"It's hookups only"</span><span class="arr">→</span><span class="to">Yes and no. Your profile and your clarity filter for you.</span></div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 15. 4 REMINDERS -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">The expectations reset</div>
+  <h2 class="section">Four <em>reminders.</em></h2>
+  <div class="big-three four">
+    <div class="bt"><div class="n">1</div><h4>Cast a wide net</h4><p>And embrace that God can work through online dating.</p></div>
+    <div class="bt"><div class="n">2</div><h4>Reduce the pressure</h4><p>Trust the process. Have fun. Hold it loosely.</p></div>
+    <div class="bt"><div class="n">3</div><h4>Lowest stakes in dating</h4><p>A stranger on the internet not replying to message three should not break your heart. Think "introductory dating service."</p></div>
+    <div class="bt"><div class="n">4</div><h4>80% won't convert</h4><p>Most matches never become first dates or quality dating situations. That's normal, not failure.</p></div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 16. JERKS + ENERGY -->
+<section class="slide center theme-dark">
+  <div class="deco-dots top"></div>
+  <p class="pull" style="max-width:32ch; color:var(--bg)">The more you sit in the negative energy of the jerks and the jerkettes, the more you will <em style="color:var(--terra-soft)">attract</em> them.</p>
+  <p class="lede" style="margin-top:2.5rem; max-width:42ch">Pen pals will text you into oblivion if you let them. You have the power to not let them. Don't let people pretending to be someone they're not steal your peace.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 17. DIVIDER: PROFILE -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra-deep)">Part Three</p>
+  <h1 class="giant" style="margin-top:1.5rem">Set up your<br><em>profile.</em></h1>
+  <p class="lede" style="margin-top:2.5rem; max-width:36ch">Grab your <em>Online Dating Bonus Guide:</em> mindset, app, setup, method.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 18. APPS -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Where to be</div>
+  <h2 class="section">The <em>apps</em> we recommend.</h2>
+  <div class="pills">
+    <span class="hero">Hinge</span>
+    <span class="hero">ARK Dating</span>
+    <span>Bumble</span>
+    <span>Holy</span>
+    <span>Salt</span>
+    <span>Coffee Meets Bagel</span>
+    <span>Christian Mingle</span>
+    <span>Upward</span>
+    <span>ChristianCafe</span>
+  </div>
+  <p class="lede" style="margin:2.5rem auto 0; max-width:44ch">Not every app is great for your location. All have solid <em>free</em> offerings. Start unpaid, with <em>two apps</em> at a time.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 19. PHOTOS NOT -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Photos</div>
+  <h2 class="section">What <em>not</em> to post.</h2>
+  <div class="compare">
+    <div class="cmp weak-card">
+      <h4>Retire these</h4>
+      <ul>
+        <li>Photos with the opposite gender (especially exes)</li>
+        <li>Distant, blurry, or old photos (2+ years)</li>
+        <li>Group photos (one max)</li>
+        <li>Work or LinkedIn photos</li>
+        <li>Every photo in sunglasses or a hat</li>
+      </ul>
+    </div>
+    <div class="cmp weak-card">
+      <h4>Also these</h4>
+      <ul>
+        <li>Cropped photos and emoji-covered faces. Are you Batman?</li>
+        <li>Bathroom, gym, or car selfies</li>
+        <li>Heavy filters and intense expressions</li>
+        <li>No babies. No fish. No dead animals.</li>
+        <li>No bathing suits</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 20. PHOTOS YES -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Photos</div>
+  <h2 class="section">What <em>to</em> post.</h2>
+  <div class="compare">
+    <div class="cmp strong-card">
+      <h4>The formula</h4>
+      <ul>
+        <li>First photo: half-body, smiling, great light, great angle</li>
+        <li>Photos doing what you love</li>
+        <li>Variety: close-up, action, travel, dressier, everyday</li>
+        <li>At least one full-body shot</li>
+      </ul>
+    </div>
+    <div class="cmp strong-card">
+      <h4>The standard</h4>
+      <ul>
+        <li>Clear and crisp, natural light</li>
+        <li>A dressier one (think wedding, cocktail hour)</li>
+        <li>Photos that show your personality AND your values</li>
+        <li>The right person will love all of you. Show up as you.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 21. BIO -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Your bio</div>
+  <h2 class="section">Three <em>rules.</em></h2>
+  <div class="big-three">
+    <div class="bt"><div class="n">1</div><h4>Captivate curiosity</h4><p>Give them a reason to reach out. Ask a question they can answer. Two truths and a lie is fun. NO generic comma lists.</p></div>
+    <div class="bt"><div class="n">2</div><h4>Be clear on what you want</h4><p>You're looking for a Christian and a relationship. You are not looking for a pen pal.</p></div>
+    <div class="bt"><div class="n">3</div><h4>Keep it playful</h4><p>Show personality. Overrated takes, fun hills to die on. This is not a job interview.</p></div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 22. GET OFF THE APP -->
+<section class="slide center theme-terra">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="margin-bottom:2rem">The golden rule</p>
+  <p class="pull" style="max-width:24ch">Get off the app. <em style="color:#fff1d8">Five messages to meet.</em></p>
+  <p class="lede" style="margin-top:2.5rem; max-width:36ch">48 hours to a few days. The app is the introduction, not the relationship.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 23. PEN PAL SIGNS -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <div class="two-col">
+    <div>
+      <div class="eyebrow">Know the signs</div>
+      <h2 class="section">The texting <em>pen pal.</em></h2>
+    </div>
+    <div>
+      <ul class="feels-list tiny">
+        <li>Never initiates an in-person meetup or a phone call.</li>
+        <li>Promises a first date but never follows up. Hot and cold, but always comes back around.</li>
+        <li>Texts you their life story and starts vulnerable conversations without ever meeting.</li>
+        <li>Makes you feel special, then goes silent for days.</li>
+        <li>Questions you if you don't respond fast enough.</li>
+        <li>You constantly doubt the connection during your time apart.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 24. WOMEN SCRIPT -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">For the ladies · moving to a call or date</div>
+  <h2 class="section">The open, honest <em>script.</em></h2>
+  <div class="script-block">
+    <div class="lbl">Word for word</div>
+    <p>"Hey, it feels so encouraging to connect with someone I feel so good talking to here online. Yet for me, I'm not someone who feels great texting a lot. A phone call would feel so great for me. What do you think?"</p>
+  </div>
+  <p class="lede" style="margin:2rem auto 0; max-width:44ch">Not comfortable sharing your number yet? Suggest a Zoom. And if he agrees: <em>"What time or day were you thinking?"</em> If he never follows through, name it kindly, and hold your standard of follow-through.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 25. MEN REACH OUT -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">For the men · reaching out</div>
+  <h2 class="section">Four rules for the <em>first message.</em></h2>
+  <div class="big-three four">
+    <div class="bt"><div class="n">1</div><h4>~90 characters</h4><p>Short and sweet beats a novel. Every time.</p></div>
+    <div class="bt"><div class="n">2</div><h4>Be specific</h4><p>Name something real from her profile that stood out to you.</p></div>
+    <div class="bt"><div class="n">3</div><h4>Be curious</h4><p>"You mention…" "Good taste." "Curious what…"</p></div>
+    <div class="bt"><div class="n">4</div><h4>Watch your grammar</h4><p>Bad spelling is a huge turn-off. "haha" and "lol" in moderation are fine.</p></div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 26. MEN TO DATE -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">For the men · from the app to the date</div>
+  <h2 class="section">Call it a <em>date.</em></h2>
+  <div class="script-block">
+    <div class="lbl">Word for word</div>
+    <p>"Hey, I've really enjoyed connecting with you. I'd love to get to know you better. Would you be open to going out on a date with me sometime? :)"</p>
+  </div>
+  <p class="lede" style="margin:2rem auto 0; max-width:46ch">Not a hangout. A <em>date.</em> Then suggest a day and time right away: "Are you free Tuesday at 6?" Follow up with the plan so she can prepare. A phone or Zoom call first is a great option that helps her feel safe.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 27. HOMEWORK -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <span class="tag" style="margin-bottom:2rem">Homework</span>
+  <h1 class="giant">Get out <em>there.</em></h1>
+  <div style="display:flex; flex-direction:column; gap:1rem; margin-top:3.5rem; max-width:46ch; text-align:center">
+    <p class="lede" style="margin:0">Re-do your online dating profile with tonight's rules.</p>
+    <p class="lede" style="margin:0">Start meeting <em>3 new people a week.</em></p>
+    <p class="lede" style="margin:0">Start your Dating Journal, and share your three on Monday.</p>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+</div>
+
+<div class="chrome">
+  <div>SOD · Week 5 · Dating Challenge + Online Dating</div>
+  <div class="nav-hint"><span id="counter">01 / 27</span> · use <kbd>←</kbd> <kbd>→</kbd> or <kbd>space</kbd></div>
+</div>
+
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const bar = document.getElementById('bar');
+const counter = document.getElementById('counter');
+let i = 0;
+function show(n) {
+  i = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+  bar.style.width = ((i + 1) / slides.length * 100) + '%';
+  counter.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+  history.replaceState(null, '', '#' + (i + 1));
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+document.addEventListener('click', e => {
+  if (e.target.closest('a, button, kbd, input, iframe, [data-noclick]')) return;
+  const half = window.innerWidth / 2;
+  show(e.clientX > half ? i + 1 : i - 1);
+});
+const startHash = parseInt(location.hash.slice(1), 10);
+show((startHash && !isNaN(startHash)) ? startHash - 1 : 0);
+</script>
+
+</body>
+</html>
