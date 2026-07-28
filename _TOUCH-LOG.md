@@ -43,3 +43,4 @@ YYYY-MM-DD HH:MM TZ — <Agent> edited <path> (<one-line summary>)
 2026-07-14 — Bandit built SOD Session 2 (The Peace Cycle, Meghan Eaken / Wk1 D2) from curriculum doc; 23-slide deck house style w/ sage accent; removed session-2 redirect, hub card live; deployed both projects
 2026-07-28 — Bandit published Session 7 (Feminine & Masculine Nature, Banjo-built) into uniform scheme at /sod/session-7/; removed redirects, hub card live; deployed both projects
 2026-07-28 — Bandit built + published SOD Session 9 deck (Dating Challenge + Online Dating, 27 slides) from JJ's session outline; redirects removed, hub live; deployed both projects
+2026-07-28 — Bandit applied JJ's live edits to Session 9 deck (27→24: cut top-of-mind, mindset-warning, jerks slides; reworded reminder 3 + women's script; dropped Week 5 label); redeployed both
