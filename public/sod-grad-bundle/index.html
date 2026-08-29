@@ -231,6 +231,132 @@ h2.section em { font-style: italic; color: var(--terra-deep); font-weight: 400; 
   line-height: 1.4;
 }
 
+/* Two-tier grid */
+.tier-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin: 2rem auto 0;
+  width: min(1300px, 92vw);
+  align-items: stretch;
+}
+.tier-card {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 18px;
+  padding: 2.2rem 2rem 2rem;
+  position: relative;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+.tier-card.recommend {
+  border: 2.5px solid var(--terra-deep);
+  box-shadow: var(--shadow-strong);
+  background: linear-gradient(180deg, #fffaf2 0%, var(--paper) 100%);
+}
+.tier-star {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--terra-deep);
+  color: #fffaf2;
+  padding: 0.4rem 1.2rem;
+  border-radius: 999px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.tier-num {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+}
+.tier-card.recommend .tier-num { color: var(--terra-deep); }
+.tier-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: clamp(1.8rem, 2.6vw, 2.4rem);
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 1rem;
+  letter-spacing: -0.01em;
+}
+.tier-price {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: clamp(2.4rem, 3.6vw, 3.4rem);
+  color: var(--terra-deep);
+  line-height: 1;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.02em;
+}
+.tier-price em { font-style: italic; font-weight: 400; }
+.tier-price .tier-per {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+  margin-left: 0.4rem;
+  text-transform: none;
+}
+.tier-tag {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--terra);
+  margin-bottom: 1.2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px dashed var(--line);
+}
+.tier-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.tier-list li {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: clamp(0.95rem, 1.15vw, 1.15rem);
+  line-height: 1.4;
+  color: var(--ink-soft);
+  padding-left: 1.2rem;
+  position: relative;
+}
+.tier-list li strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+.tier-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--terra);
+  font-weight: 700;
+}
+.tier-footnote {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 1.5rem;
+}
+.tier-footnote em { color: var(--terra-deep); font-style: italic; }
+
 /* Price callout */
 .price-card {
   background: var(--paper);
@@ -351,37 +477,38 @@ h2.section em { font-style: italic; color: var(--terra-deep); font-weight: 400; 
   <div class="deco-dots bottom"></div>
 </section>
 
-<!-- 3. HERE'S WHAT HAPPENS -->
+<!-- 3. FIRE HOSE — the real problem -->
 <section class="slide center">
   <div class="deco-dots top"></div>
-  <p class="pull">Here's what happens the <em>day after graduation.</em></p>
-  <p class="lede" style="margin-top:2.5rem; max-width:44ch">The Zoom calls end. The coaches go quiet. Life comes back. And most people quietly <em>slip.</em></p>
+  <p class="pull">You just drank from a <em>fire hose.</em></p>
+  <p class="lede" style="margin-top:2.5rem; max-width:48ch">Pain cycle · Attachment styles · PEARL · Godfidence · Boundaries · Non-negotiables · Communication · Feminine energy · Board of Advisors…</p>
+  <p class="pull" style="margin-top:2.5rem; font-size:clamp(1.6rem, 2.4vw, 2.4rem); max-width:32ch">Knowing it isn't the same as <em>doing</em> it.</p>
   <div class="deco-dots bottom"></div>
 </section>
 
-<!-- 4. MOST vs TOP 20% -->
+<!-- 4. KNOW vs APPLY — where transformation actually lives -->
 <section class="slide">
   <div class="deco-dots top"></div>
-  <h2 class="section center" style="text-align:center">Two paths from <em>here.</em></h2>
+  <h2 class="section center" style="text-align:center">Where transformation <em>actually happens.</em></h2>
   <div class="compare">
     <div class="compare-col">
       <div class="tag">Most people</div>
-      <h3>Momentum <em>dies</em> in the quiet.</h3>
+      <h3>They <em>know</em> the frameworks.</h3>
       <ul>
-        <li>Homework becomes optional</li>
-        <li>Godfidence list stops being read</li>
-        <li>Old pain cycle patterns creep back</li>
-        <li>Dating slows or stops entirely</li>
+        <li>Can name their pain cycle · can't spot it in the moment</li>
+        <li>Know PEARL · freeze when he texts back cold</li>
+        <li>Have a Godfidence list · forget to read it before dates</li>
+        <li>Stuck between "is this a red flag?" and "am I spiraling?"</li>
       </ul>
     </div>
     <div class="compare-col win">
       <div class="tag">The top 20%</div>
-      <h3>They keep <em>one anchor</em> in place.</h3>
+      <h3>They <em>apply</em> it — with someone in their corner.</h3>
       <ul>
-        <li>Weekly (or biweekly) accountability</li>
-        <li>Real-time feedback on their dating life</li>
-        <li>A coach who knows their story</li>
-        <li>Momentum through months 2 and 3</li>
+        <li>Text their coach mid-spiral: "is this me or him?"</li>
+        <li>Process the actual date within 24 hours, not next month</li>
+        <li>Translate theory into what to say tomorrow</li>
+        <li>Build the muscle while it's still fresh</li>
       </ul>
     </div>
   </div>
@@ -392,57 +519,65 @@ h2.section em { font-style: italic; color: var(--terra-deep); font-weight: 400; 
 <section class="slide center theme-cream">
   <div class="deco-dots top"></div>
   <div class="eyebrow">A limited-time graduation offer</div>
-  <h1 class="giant" style="margin-top:1rem">The <em>Post-SOD</em><br>Coaching Bundle.</h1>
+  <h1 class="giant" style="margin-top:1rem"><em>Two</em> ways to keep<br>a coach in your corner.</h1>
   <p class="lede" style="margin-top:2.5rem; max-width:38ch">Your coach. Your dating challenge. The <em>next two months</em> — with support.</p>
   <div class="deco-dots bottom"></div>
 </section>
 
-<!-- 6. WHAT'S IN THE BUNDLE -->
+<!-- 6. TWO TIERS SIDE BY SIDE -->
 <section class="slide">
   <div class="deco-dots top"></div>
-  <h2 class="section center" style="text-align:center">What's <em>in it.</em></h2>
-  <div class="included">
-    <div class="include-card">
-      <div class="num">[X]</div>
-      <div class="title">1:1 Coaching Sessions</div>
-      <div class="desc">With the coach who already knows your story, your patterns, your pain cycle.</div>
+  <h2 class="section center" style="text-align:center; margin-bottom:1rem">Pick your <em>tier.</em></h2>
+  <div class="tier-grid">
+    <!-- TIER 1 -->
+    <div class="tier-card">
+      <div class="tier-num">Tier 1</div>
+      <h3 class="tier-title">Text Support</h3>
+      <div class="tier-price"><em>$99</em><span class="tier-per">/month</span></div>
+      <div class="tier-tag">NEW · never offered before</div>
+      <ul class="tier-list">
+        <li>A coach in your pocket all challenge long</li>
+        <li>Text + voice-memo your real dating questions</li>
+        <li>Process dates in real time · stay accountable</li>
+        <li>Async replies within 24 hrs (Mon–Fri)</li>
+        <li>Billed monthly · only for the challenge duration</li>
+      </ul>
     </div>
-    <div class="include-card">
-      <div class="num">2</div>
-      <div class="title">Months of Support</div>
-      <div class="desc">Timed to cover months 2 and 3 of your dating challenge — the make-or-break window.</div>
-    </div>
-    <div class="include-card">
-      <div class="num">∞</div>
-      <div class="title">Momentum</div>
-      <div class="desc">Real-time application to actual dating situations. No more solo interpretation.</div>
+    <!-- TIER 2 -->
+    <div class="tier-card recommend">
+      <div class="tier-star">⭐ Recommended</div>
+      <div class="tier-num">Tier 2</div>
+      <h3 class="tier-title">Full Support</h3>
+      <div class="tier-price"><em>$499</em><span class="tier-per">today, then $99/mo</span></div>
+      <div class="tier-tag">Everything in Text Support, plus…</div>
+      <ul class="tier-list">
+        <li><strong>5 private 1:1 coaching sessions</strong> with your coach</li>
+        <li>Go deep on patterns · build your game plan</li>
+        <li>Everything in Tier 1 text support included</li>
+        <li>First month of text bundled into the $499</li>
+        <li>Then $99/mo through end of challenge</li>
+      </ul>
     </div>
   </div>
-  <p class="lede" style="margin-top:2.5rem; text-align:center; font-size:1.1rem"><em>Kait note:</em> confirm [X] session count + swap in real numbers before presenting.</p>
+  <p class="tier-footnote">Jayme (Senior Coach) — Tier 2 is <em>$549 today,</em> then $99/mo.</p>
   <div class="deco-dots bottom"></div>
 </section>
 
-<!-- 7. INVESTMENT / PRICING -->
-<section class="slide center theme-cream">
-  <div class="deco-dots top"></div>
-  <div class="eyebrow">Graduation-day pricing</div>
-  <h2 class="section" style="max-width:20ch">Your <em>First FIBS</em> price.</h2>
-  <div class="price-card">
-    <span class="tag">Today only</span>
-    <div class="strike">$[REGULAR PRICE]</div>
-    <div class="amount"><em>$[GRAD PRICE]</em></div>
-    <div class="caption">The lowest we ever offer the bundle.</div>
-  </div>
-  <p class="lede" style="margin-top:2.5rem; max-width:42ch"><em>Kait note:</em> drop in the two prices before you go live.</p>
-  <div class="deco-dots bottom"></div>
-</section>
-
-<!-- 8. WHY NOW -->
+<!-- 7. KAIT'S FRAMING QUOTE -->
 <section class="slide center">
   <div class="deco-dots top"></div>
-  <p class="pull">Why <em>now?</em></p>
-  <p class="lede" style="margin-top:2.5rem; max-width:44ch">Because you just did the hardest month. You know your pain cycle. You know your attachment style. You have your Godfidence list.</p>
-  <p class="lede" style="margin-top:1.5rem; max-width:44ch"><em>This is when it gets USED — or it starts fading.</em></p>
+  <p class="pull" style="max-width:32ch">"You've done the <em>work</em> — but you're only a month into your challenge.</p>
+  <p class="pull" style="margin-top:1.5rem; max-width:34ch">The people who <em>transform</em> aren't the ones who learned the most —</p>
+  <p class="pull" style="margin-top:1.5rem; max-width:34ch">they're the ones who <em>didn't go it alone</em> when it got real."</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 8. ENROLLMENT DEADLINE -->
+<section class="slide center theme-terra">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow" style="color:#fff1d8">Enrollment closes</div>
+  <h1 class="giant" style="margin-top:1rem"><em>Tuesday</em><br>Sept 8.</h1>
+  <p class="lede" style="margin-top:3rem; max-width:36ch; color:#fff1d8">Spots limited by each coach's availability. Once your coach's roster is full, that's it.</p>
   <div class="deco-dots bottom"></div>
 </section>
 
@@ -450,8 +585,8 @@ h2.section em { font-style: italic; color: var(--terra-deep); font-weight: 400; 
 <section class="slide center">
   <div class="deco-dots top"></div>
   <div class="eyebrow">How to grab it</div>
-  <h2 class="section" style="max-width:22ch">Your coach will <em>DM you</em> your link.</h2>
-  <p class="lede" style="margin-top:2.5rem; max-width:42ch">Each coach has their own bundle link. Watch your DMs after the call — grab it before the offer closes tonight.</p>
+  <h2 class="section" style="max-width:22ch">Your coach will <em>DM you</em> your links.</h2>
+  <p class="lede" style="margin-top:2.5rem; max-width:44ch">Each coach messages their own students with both tier links after the call. Watch your Mighty Networks DM's — grab your tier before Tuesday.</p>
   <div class="deco-dots bottom"></div>
 </section>
 
