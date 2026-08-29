@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1600, initial-scale=1">
+<title>SOD Graduation · Post-Coaching Bundle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600;700;800&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6f0;
+  --ink: #1d1815;
+  --ink-soft: #4a3f37;
+  --muted: #8a7e72;
+  --line: #e8dfd2;
+  --terra: #c47a6e;
+  --terra-deep: #a85a4e;
+  --terra-soft: #f4dad4;
+  --cream: #f3ebdc;
+  --paper: #fffaf2;
+  --shadow: 0 30px 80px -30px rgba(40,28,18,.25);
+  --shadow-strong: 0 40px 100px -30px rgba(40,28,18,.4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  overflow: hidden;
+}
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 5vh 7vw;
+  flex-direction: column; justify-content: center;
+  opacity: 0; transition: opacity .35s ease;
+}
+.slide.active { display: flex; opacity: 1; }
+
+.eyebrow {
+  font-size: 0.85rem; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--terra-deep);
+  font-weight: 600; margin-bottom: 1.5rem;
+}
+h1.title {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: clamp(3.5rem, 7vw, 7.5rem);
+  line-height: 0.95; letter-spacing: -0.025em;
+}
+h1.title em { font-style: italic; font-weight: 400; color: var(--terra-deep); }
+h2.section {
+  font-family: 'Fraunces', serif; font-weight: 400;
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  line-height: 1.0; letter-spacing: -0.02em;
+}
+h2.section em { font-style: italic; color: var(--terra-deep); font-weight: 400; }
+.lede {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  line-height: 1.35; font-weight: 300;
+  color: var(--ink-soft); max-width: 46ch;
+}
+.lede em { color: var(--terra-deep); font-style: italic; }
+.kicker {
+  font-size: 1.05rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--muted);
+  font-weight: 500;
+}
+.giant {
+  font-family: 'Fraunces', serif; font-weight: 300;
+  font-size: clamp(4rem, 9vw, 10rem);
+  line-height: .9; letter-spacing: -0.04em;
+}
+.giant em { font-style: italic; font-weight: 400; color: var(--terra-deep); }
+.center { text-align: center; align-items: center; }
+.center .lede { margin: 0 auto; }
+
+.theme-dark { background: #1d1815; color: var(--bg); }
+.theme-dark .lede, .theme-dark h1, .theme-dark h2, .theme-dark h3 { color: var(--bg); }
+.theme-dark .eyebrow { color: var(--terra); }
+.theme-dark h1 em, .theme-dark h2 em, .theme-dark .giant em { color: var(--terra-soft); }
+.theme-cream { background: var(--cream); }
+.theme-terra { background: var(--terra); color: #faf6f0; }
+.theme-terra h1, .theme-terra h2, .theme-terra h3, .theme-terra .lede, .theme-terra .giant { color: #faf6f0; }
+.theme-terra h1 em, .theme-terra h2 em, .theme-terra .giant em { color: #fff1d8; }
+.theme-terra .eyebrow, .theme-terra .kicker { color: #fff1d8; }
+
+.pull {
+  font-family: 'Fraunces', serif; font-style: italic;
+  font-weight: 300;
+  font-size: clamp(2rem, 3.5vw, 3.5rem);
+  line-height: 1.2; letter-spacing: -0.015em;
+  color: var(--ink); max-width: 26ch;
+}
+.pull em { color: var(--terra-deep); font-style: italic; }
+
+/* Progress bar visual for the "3 months" reality */
+.progress-bar {
+  width: min(880px, 82vw);
+  margin: 3rem auto 0;
+  background: var(--paper);
+  border: 2px solid var(--terra);
+  border-radius: 999px;
+  height: 60px;
+  padding: 6px;
+  position: relative;
+  box-shadow: var(--shadow);
+}
+.progress-bar-fill {
+  width: 33.33%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--terra), var(--terra-deep));
+  border-radius: 999px;
+}
+.progress-labels {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: min(880px, 82vw);
+  margin: 1rem auto 0;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: center;
+}
+.progress-labels .done { color: var(--terra-deep); }
+.progress-labels .todo { color: var(--muted); font-weight: 500; }
+
+/* Two-column comparison (most people / top 20%) */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-top: 3rem;
+  width: min(1100px, 90vw);
+  margin-left: auto;
+  margin-right: auto;
+}
+.compare-col {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+}
+.compare-col.win { border-color: var(--terra); box-shadow: var(--shadow); }
+.compare-col .tag {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+.compare-col.win .tag { color: var(--terra-deep); }
+.compare-col h3 {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: clamp(1.6rem, 2.2vw, 2.2rem);
+  line-height: 1.15;
+  color: var(--ink);
+  margin-bottom: 1.4rem;
+}
+.compare-col h3 em { font-style: italic; color: var(--terra-deep); }
+.compare-col ul {
+  list-style: none;
+  display: flex; flex-direction: column;
+  gap: 0.8rem;
+}
+.compare-col ul li {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(1rem, 1.35vw, 1.3rem);
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+.compare-col ul li::before {
+  content: "—";
+  margin-right: 0.6rem;
+  color: var(--terra);
+}
+
+/* What's included cards */
+.included {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+  width: min(1200px, 92vw);
+  margin-left: auto;
+  margin-right: auto;
+}
+.include-card {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.include-card .num {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(3rem, 4.5vw, 4rem);
+  color: var(--terra-deep);
+  line-height: 1;
+  margin-bottom: 0.6rem;
+}
+.include-card .title {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: clamp(1.2rem, 1.6vw, 1.5rem);
+  color: var(--ink);
+  margin-bottom: 0.6rem;
+  line-height: 1.2;
+}
+.include-card .desc {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+/* Price callout */
+.price-card {
+  background: var(--paper);
+  border: 2px solid var(--terra);
+  border-radius: 20px;
+  padding: 3rem 3rem;
+  text-align: center;
+  box-shadow: var(--shadow-strong);
+  width: min(600px, 85vw);
+  margin: 2.5rem auto 0;
+}
+.price-card .strike {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 1.2rem;
+  color: var(--muted);
+  text-decoration: line-through;
+  margin-bottom: 0.6rem;
+}
+.price-card .amount {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: clamp(4rem, 6.5vw, 6rem);
+  color: var(--terra-deep);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.price-card .amount em { font-style: italic; }
+.price-card .caption {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1.4rem;
+  color: var(--ink-soft);
+  margin-top: 1.2rem;
+}
+.price-card .tag {
+  display: inline-block;
+  background: var(--terra-soft);
+  color: var(--terra-deep);
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 1.4rem;
+}
+
+/* Decorative dotted border */
+.deco-dots {
+  position: absolute; left: 5vw; right: 5vw;
+  height: 12px;
+  background-image: radial-gradient(circle, var(--terra-deep) 1.5px, transparent 1.5px),
+                    radial-gradient(circle, var(--ink) 1.5px, transparent 1.5px);
+  background-size: 18px 6px, 18px 6px;
+  background-position: 0 0, 9px 6px;
+  background-repeat: repeat-x;
+  opacity: 0.55;
+}
+.deco-dots.top { top: 2vh; }
+.deco-dots.bottom { bottom: 2vh; }
+.theme-dark .deco-dots, .theme-terra .deco-dots { opacity: 0.4; }
+
+/* Nav */
+.chrome {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 2rem; z-index: 100;
+  font-size: 0.78rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--muted);
+  font-weight: 500;
+}
+.progress {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 3px; background: var(--line); z-index: 100;
+}
+.progress > div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--terra), var(--terra-deep));
+  width: 0%; transition: width .35s ease;
+}
+.nav-hint kbd {
+  display: inline-block; padding: 2px 8px;
+  border: 1px solid var(--line); border-radius: 3px;
+  font-size: 0.7rem; margin: 0 2px;
+  color: var(--ink-soft); background: var(--paper);
+}
+</style>
+</head>
+<body>
+
+<div class="progress"><div id="bar"></div></div>
+
+<div class="deck" id="deck">
+
+<!-- 1. CONGRATS OPENER -->
+<section class="slide active center theme-dark">
+  <div class="deco-dots top"></div>
+  <p class="kicker" style="color:var(--terra)">SOD · Graduation Day</p>
+  <h1 class="giant" style="margin-top:1.5rem">You <em>did</em><br>the work.</h1>
+  <p class="lede" style="margin-top:3rem; max-width:36ch">Now let's talk about what comes next — before the momentum fades.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 2. THE 3-MONTH TRUTH -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">The dating challenge — a reality check</div>
+  <h2 class="section" style="max-width:22ch">You've done <em>one</em> of three months.</h2>
+  <div class="progress-bar"><div class="progress-bar-fill"></div></div>
+  <div class="progress-labels">
+    <div class="done">Month 1 ✓<br><span style="font-size:0.75rem; font-weight:500; letter-spacing:0.08em">Inside SOD</span></div>
+    <div class="todo">Month 2<br><span style="font-size:0.75rem; letter-spacing:0.08em">Coming</span></div>
+    <div class="todo">Month 3<br><span style="font-size:0.75rem; letter-spacing:0.08em">Coming</span></div>
+  </div>
+  <p class="lede" style="margin-top:3rem">You're 33% through the challenge.<br>The next two months are where the transformation <em>actually happens.</em></p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 3. HERE'S WHAT HAPPENS -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <p class="pull">Here's what happens the <em>day after graduation.</em></p>
+  <p class="lede" style="margin-top:2.5rem; max-width:44ch">The Zoom calls end. The coaches go quiet. Life comes back. And most people quietly <em>slip.</em></p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 4. MOST vs TOP 20% -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <h2 class="section center" style="text-align:center">Two paths from <em>here.</em></h2>
+  <div class="compare">
+    <div class="compare-col">
+      <div class="tag">Most people</div>
+      <h3>Momentum <em>dies</em> in the quiet.</h3>
+      <ul>
+        <li>Homework becomes optional</li>
+        <li>Godfidence list stops being read</li>
+        <li>Old pain cycle patterns creep back</li>
+        <li>Dating slows or stops entirely</li>
+      </ul>
+    </div>
+    <div class="compare-col win">
+      <div class="tag">The top 20%</div>
+      <h3>They keep <em>one anchor</em> in place.</h3>
+      <ul>
+        <li>Weekly (or biweekly) accountability</li>
+        <li>Real-time feedback on their dating life</li>
+        <li>A coach who knows their story</li>
+        <li>Momentum through months 2 and 3</li>
+      </ul>
+    </div>
+  </div>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 5. THE OFFER TITLE -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">A limited-time graduation offer</div>
+  <h1 class="giant" style="margin-top:1rem">The <em>Post-SOD</em><br>Coaching Bundle.</h1>
+  <p class="lede" style="margin-top:2.5rem; max-width:38ch">Your coach. Your dating challenge. The <em>next two months</em> — with support.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 6. WHAT'S IN THE BUNDLE -->
+<section class="slide">
+  <div class="deco-dots top"></div>
+  <h2 class="section center" style="text-align:center">What's <em>in it.</em></h2>
+  <div class="included">
+    <div class="include-card">
+      <div class="num">[X]</div>
+      <div class="title">1:1 Coaching Sessions</div>
+      <div class="desc">With the coach who already knows your story, your patterns, your pain cycle.</div>
+    </div>
+    <div class="include-card">
+      <div class="num">2</div>
+      <div class="title">Months of Support</div>
+      <div class="desc">Timed to cover months 2 and 3 of your dating challenge — the make-or-break window.</div>
+    </div>
+    <div class="include-card">
+      <div class="num">∞</div>
+      <div class="title">Momentum</div>
+      <div class="desc">Real-time application to actual dating situations. No more solo interpretation.</div>
+    </div>
+  </div>
+  <p class="lede" style="margin-top:2.5rem; text-align:center; font-size:1.1rem"><em>Kait note:</em> confirm [X] session count + swap in real numbers before presenting.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 7. INVESTMENT / PRICING -->
+<section class="slide center theme-cream">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">Graduation-day pricing</div>
+  <h2 class="section" style="max-width:20ch">Your <em>First FIBS</em> price.</h2>
+  <div class="price-card">
+    <span class="tag">Today only</span>
+    <div class="strike">$[REGULAR PRICE]</div>
+    <div class="amount"><em>$[GRAD PRICE]</em></div>
+    <div class="caption">The lowest we ever offer the bundle.</div>
+  </div>
+  <p class="lede" style="margin-top:2.5rem; max-width:42ch"><em>Kait note:</em> drop in the two prices before you go live.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 8. WHY NOW -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <p class="pull">Why <em>now?</em></p>
+  <p class="lede" style="margin-top:2.5rem; max-width:44ch">Because you just did the hardest month. You know your pain cycle. You know your attachment style. You have your Godfidence list.</p>
+  <p class="lede" style="margin-top:1.5rem; max-width:44ch"><em>This is when it gets USED — or it starts fading.</em></p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 9. HOW TO GET IT -->
+<section class="slide center">
+  <div class="deco-dots top"></div>
+  <div class="eyebrow">How to grab it</div>
+  <h2 class="section" style="max-width:22ch">Your coach will <em>DM you</em> your link.</h2>
+  <p class="lede" style="margin-top:2.5rem; max-width:42ch">Each coach has their own bundle link. Watch your DMs after the call — grab it before the offer closes tonight.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+<!-- 10. CLOSE / CTA -->
+<section class="slide center theme-terra">
+  <div class="deco-dots top"></div>
+  <p class="pull" style="color:#faf6f0">Don't lose the <em style="color:#fff1d8">momentum</em> in the quiet after this.</p>
+  <p class="lede" style="margin-top:3rem; max-width:38ch">Two more months. Your coach in your corner. This is how the top 20% actually finish the challenge.</p>
+  <div class="deco-dots bottom"></div>
+</section>
+
+</div>
+
+<div class="chrome">
+  <div>SOD Graduation · Post-Coaching Bundle</div>
+  <div class="nav-hint"><span id="counter">01 / 10</span> · use <kbd>←</kbd> <kbd>→</kbd> or <kbd>space</kbd></div>
+</div>
+
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const bar = document.getElementById('bar');
+const counter = document.getElementById('counter');
+let i = 0;
+
+function show(n) {
+  i = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+  bar.style.width = ((i + 1) / slides.length * 100) + '%';
+  counter.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+  history.replaceState(null, '', '#' + (i + 1));
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+document.addEventListener('click', e => {
+  if (e.target.closest('a, button, kbd, input, iframe, [data-noclick]')) return;
+  const half = window.innerWidth / 2;
+  show(e.clientX > half ? i + 1 : i - 1);
+});
+const startHash = parseInt(location.hash.slice(1), 10);
+show((startHash && !isNaN(startHash)) ? startHash - 1 : 0);
+</script>
+
+</body>
+</html>
